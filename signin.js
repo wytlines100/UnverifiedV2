@@ -1,6 +1,6 @@
-const buttons = document.querySelectorAll('.chakra-button.css-5ov7ui');
+const buttons1 = document.querySelectorAll('.chakra-button.css-5ov7ui');
 
-buttons.forEach(button => {
+buttons1.forEach(button => {
   button.style.padding = '8px 16px';
   button.style.backgroundColor = 'rgba(211, 211, 211, 0.4)';
   button.style.color = 'white';
