@@ -1,74 +1,15 @@
 // ==UserScript==
-// @name         UnverifiedV2
+// @name         client w good gui
 // @namespace    http://tampermonkey.net/
-// @version      2.0
-// @description  :D
-// @author       wytlines, DeadFish7
+// @version      1.9
+// @description  lols
+// @author       wytlines
 // @match        https://miniblox.io/*
 // @grant        none
 // ==/UserScript==
 
 (function() {
     'use strict';
-
-		// TODO: loading screen mask + smooth initialization reveal
-
-		// ===== Main Screen Edits =====
-		function setBG(bg) {
-			let b1 = document.querySelector('img.chakra-image.css-rkihvp');
-			if (b1) b1.src = bg;
-			let b2 = document.querySelector('.chakra-image.css-mohuzh');
-			if (b2) b2.src = bg;
-		}
-		function visuallyRemove(a) {
-			if (!a) return;
-			a.style.opacity = 0;
-			a.style.zIndex = -1;
-		}
-
-		// === Grab Menu Buttons ===
-		let playButton = document.querySelector('.chakra-button.css-cuh8pi');
-		playButton.click();
-
-		let exitButton = null;
-		let kitpvpButton = null;
-		let skywarsButton = null;
-		let doublesButton = null;
-		let quadsButton = null;
-		let survivalButton = null;
-
-		function addUnverifiedMainMenuButtons() {
-			let unverified_skywarsButton = skywarsButton;
-			unverified_skywarsButton.style.zIndex = 9999;
-			unverified_skywarsButton.style.position = 'absolute';
-			unverified_skywarsButton.style.top = '50%';
-			unverified_skywarsButton.style.left = '50%';
-			document.body.appendChild(unverified_skywarsButton);
-		}
-
-		let menuSearchInterval = setInterval(() => {
-			exitButton = document.querySelectorAll('.chakra-button.css-1axaj8o')[1];
-			skywarsButton = document.querySelector('.css-rsqc3q');
-			if (exitButton && skywarsButton) {
-				clearInterval(menuSearchInterval);
-				exitButton.click();
-				addUnverifiedMainMenuButtons();
-			}
-		}, 100);
-
-		// === Edit Interval ===
-		let mainscreenEditInterval = setInterval(() => {
-			document.title = 'UnverifiedV2';
-			// Background img
-			setBG('https://w0.peakpx.com/wallpaper/810/395/HD-wallpaper-landscape-minecraft-shaders-minecraft.jpg');
-			// Miniblox logo
-			visuallyRemove(document.querySelector('.chakra-image.css-1je8qb9'));
-			// Discord button
-			visuallyRemove(document.querySelector('.chakra-stack.css-7kkhgi'));
-		}, 5) ;
-
-		// ===== =====
-
 
     const style = document.createElement('style');
     style.innerHTML = `
@@ -175,7 +116,7 @@
     document.body.appendChild(ui);
 
     const title = document.createElement("h2");
-    title.textContent = "UnverifiedV2";
+    title.textContent = "Unverified Client";
     title.style.fontSize = "36px";
     title.style.color = "#e74c3c";
     title.style.fontFamily = 'MinibloxFont, sans-serif';
@@ -204,6 +145,7 @@
 
     function createModule(name, description) {
         const moduleContainer = document.createElement("div");
+        moduleContainer.style.backgroundColor = "#2c3e50";
         moduleContainer.style.padding = "20px";
         moduleContainer.style.borderRadius = "10px";
         moduleContainer.style.boxShadow = "0 0 10px rgba(0, 0, 0, 0.5)";
@@ -389,160 +331,6 @@
         }
     });
 
-    const keystrokesModule = createModule("Keystrokes", "Displays the keys you press in real-time.");
-
-    let isKeystrokesActive = false;
-
-    keystrokesModule.addEventListener("click", () => {
-        isKeystrokesActive = !isKeystrokesActive;
-
-        if (isKeystrokesActive) {
-            (function () {
-                'use strict';
-
-                const getValue = (key, fallback) => {
-                    const value = localStorage.getItem(key);
-                    return value !== null ? parseInt(value, 10) : fallback;
-                };
-
-                const setValue = (key, value) => {
-                    localStorage.setItem(key, value);
-                };
-
-                const keystrokescontainer = document.createElement('div');
-                keystrokescontainer.style.zIndex = '10000';
-                keystrokescontainer.style.width = '300px';
-                keystrokescontainer.style.height = '230px';
-                keystrokescontainer.style.position = 'fixed';
-                keystrokescontainer.style.left = getValue('left', window.innerWidth / 2) + 'px';
-                keystrokescontainer.style.top = getValue('top', window.innerHeight / 2) + 'px';
-                keystrokescontainer.style.opacity = '100%';
-                keystrokescontainer.style.boxShadow = 'none';
-                keystrokescontainer.style.backgroundColor = 'transparent';
-
-                
-                keystrokescontainer.style.position = 'fixed';
-                keystrokescontainer.style.transform = 'translate(-50%, -50%)';
-                keystrokescontainer.style.display = 'flex';
-                keystrokescontainer.style.flexDirection = 'column';
-                keystrokescontainer.style.alignItems = 'center';
-
-                keystrokescontainer.style.userSelect = 'none';
-
-                document.body.appendChild(keystrokescontainer);
-
-                let isDragging = false;
-
-                keystrokescontainer.addEventListener('mousedown', (event) => {
-                    if (event.target.nodeName !== 'INPUT') {
-                        isDragging = true;
-                    }
-                });
-
-                document.addEventListener('mousemove', (event) => {
-                    if (isDragging) {
-                        const left = event.clientX;
-                        const top = event.clientY;
-
-                        keystrokescontainer.style.left = left + 'px';
-                        keystrokescontainer.style.top = top + 'px';
-
-                        setValue('left', left);
-                        setValue('top', top);
-                    }
-                });
-
-                document.addEventListener('mouseup', () => {
-                    isDragging = false;
-                });
-
-                const createKey = (text, style = {}) => {
-                    const key = document.createElement('div');
-                    key.textContent = text;
-                    Object.assign(key.style, {
-                        position: 'absolute',
-                        color: '#ffffff',
-                        fontWeight: 'bold',
-                        borderRadius: '0',
-                        backgroundColor: 'rgba(128, 128, 128, 0.7)',
-                        border: '3px solid #333333',
-                        fontSize: '18px',
-                        height: '50px',
-                        width: '50px',
-                        textAlign: 'center',
-                        lineHeight: '50px',
-                        fontFamily: 'Roboto Mono, monospace',
-                        zIndex: '10000',
-                        ...style
-                    });
-                    return key;
-                };
-
-                
-                const wkey = createKey('W', { top: '0px', left: '125px' });
-                const akey = createKey('A', { top: '55px', left: '70px' });
-                const skey = createKey('S', { top: '55px', left: '125px' });
-                const dkey = createKey('D', { top: '55px', left: '180px' });
-
-                const lmb = createKey('LMB', {
-                    top: '110px', left: '30px', width: '79px'
-                });
-                const rmb = createKey('RMB', {
-                    top: '110px', left: '190px', width: '79px'
-                });
-                const space = createKey('_____', {
-                    top: '170px', left: '70px', width: '160px'
-                });
-
-                keystrokescontainer.append(wkey, akey, skey, dkey, lmb, rmb, space);
-
-                const downColor = '#8B0000';
-                const upColor = 'rgba(128, 128, 128, 0.7)';
-
-                document.addEventListener('keydown', (event) => {
-                    switch (event.code) {
-                        case 'KeyW': wkey.style.backgroundColor = downColor; break;
-                        case 'KeyS': skey.style.backgroundColor = downColor; break;
-                        case 'KeyA': akey.style.backgroundColor = downColor; break;
-                        case 'KeyD': dkey.style.backgroundColor = downColor; break;
-                        case 'Space': space.style.backgroundColor = downColor; break;
-                    }
-                });
-
-                document.addEventListener('keyup', (event) => {
-                    switch (event.code) {
-                        case 'KeyW': wkey.style.backgroundColor = upColor; break;
-                        case 'KeyS': skey.style.backgroundColor = upColor; break;
-                        case 'KeyA': akey.style.backgroundColor = upColor; break;
-                        case 'KeyD': dkey.style.backgroundColor = upColor; break;
-                        case 'Space': space.style.backgroundColor = upColor; break;
-                    }
-                });
-
-                document.addEventListener('mousedown', (event) => {
-                    if (event.button === 0) {
-                        lmb.style.backgroundColor = downColor;
-                    } else if (event.button === 2) {
-                        rmb.style.backgroundColor = downColor;
-                    }
-                });
-
-                document.addEventListener('mouseup', (event) => {
-                    if (event.button === 0) {
-                        lmb.style.backgroundColor = upColor;
-                    } else if (event.button === 2) {
-                        rmb.style.backgroundColor = upColor;
-                    }
-                });
-            })();
-
-
-        } else {
-            // 🔼 INSERT your "off" code here
-            console.log("Keystrokes module disabled");
-        }
-    });
-
     createModule("Keystrokes", "Displays the keys you press in real-time.");
     createModule("FPS Counter", "Shows the frames per second (FPS) of the game.");
     createModule("CPS Counter", "Counts how many times you click per second.");
@@ -551,7 +339,6 @@
     createModule("Armor HUD", "Displays the current armor stats of your character.");
     createModule("FPS Booster", "Changes settings to improve FPS");
     createModule("Render Dist. Bypasser", "Allow you to change your render distance past the limit.");
-    createModule("Session Information", "Display information about your session such as => amount of clicks, amount of key presss.");
 
     const closeButton = document.createElement("button");
     closeButton.textContent = "Close UI";
@@ -564,49 +351,6 @@
     closeButton.style.marginTop = "20px";
     closeButton.style.cursor = "pointer";
     ui.appendChild(closeButton);
-
-    const ThemesDropdown = document.createElement("select");
-
-    ThemesDropdown.style.backgroundColor = "#e74c3c";
-    ThemesDropdown.style.color = "white";
-    ThemesDropdown.style.border = "none";
-    ThemesDropdown.style.borderRadius = "5px";
-    ThemesDropdown.style.padding = "10px 20px";
-    ThemesDropdown.style.fontSize = "18px";
-    ThemesDropdown.style.marginTop = "20px";
-    ThemesDropdown.style.cursor = "pointer";
-    
-    // Define themes with names and background image URLs
-    const themes = [
-        { name: "test1", image: "none" },
-        { name: "test2", image: "https://media1.tenor.com/m/mn2d2liDsmUAAAAC/ichigo-bleach.gif" },
-        { name: "test3", image: "https://wallpaperaccess.com/full/174768.jpg" },
-        { name: "test4", image: "https://wallpaperaccess.com/full/185084.jpg" },
-        { name: "test5", image: "https://wallpaperaccess.com/full/317501.jpg" }
-    ];
-    
-    // Populate dropdown with theme options
-    themes.forEach(theme => {
-        const option = document.createElement("option");
-        option.value = theme.image;
-        option.textContent = theme.name;
-        ThemesDropdown.appendChild(option);
-    });
-    
-    // On theme change, set UI background image
-    ThemesDropdown.addEventListener("change", (e) => {
-        const image = e.target.value;
-        if (image === "none") {
-            ui.style.background = ""; // Reset
-        } else {
-            ui.style.backgroundImage = `url(${image})`;
-            ui.style.backgroundSize = "cover";
-            ui.style.backgroundPosition = "center";            
-        }
-    });
-    
-    ui.appendChild(ThemesDropdown);
-    
 
     let uiVisible = false;
     function toggleUI() {
@@ -638,31 +382,19 @@
         uiVisible = false;
     });
 
-		// === Initialized Notif ===
     const initializedNotification = document.createElement("div");
     initializedNotification.classList.add('initialized-notification');
     initializedNotification.textContent = "Unverified Client Initialized";
     document.body.appendChild(initializedNotification);
+
     setTimeout(() => {
         initializedNotification.style.top = "10px";
         initializedNotification.style.opacity = "1";
     }, 10);
+
     setTimeout(() => {
         initializedNotification.style.top = "-50px";
         initializedNotification.style.opacity = "0";
     }, 2000);
 
-})();
-
-(function() {
-    'use strict';
-
-    const originalRAF = window.requestAnimationFrame;
-    window.requestAnimationFrame = function(callback) {
-        return setTimeout(function() {
-            callback(performance.now());
-        }, 0);
-    };
-
-    console.log('Client Status: Great');
 })();
