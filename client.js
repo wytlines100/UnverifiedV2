@@ -11,9 +11,426 @@
 (function() {
     'use strict';
 
-		// TODO: loading screen mask + smooth initialization reveal
+		// ===== Intro Loading Screen =====
+		const container = document.createElement("div");
+		Object.assign(container.style, {
+			position: "fixed",
+			top: 0, left: 0, width: "100vw", height: "100vh",
+			display: "flex", alignItems: "center", justifyContent: "center", flexDirection: "column",
+			backgroundColor: "black",
+			overflow: "hidden", zIndex: 9999,
+		});
+		document.body.appendChild(container);
+		const check = document.createElement("div");
+		check.textContent = "✓";
+		Object.assign(check.style, {
+			color: "red", fontSize: "5rem", opacity: 0,
+			transition: "opacity 1s ease, transform 1s ease",
+		});
+		const text1 = document.createElement("div");
+		text1.textContent = "UnverifiedV2";
+		Object.assign(text1.style, {
+			color: "red", fontSize: "50px", opacity: 0,
+			transition: "opacity 0.8s ease",
+		});
+		const text2 = document.createElement("div");
+		text2.textContent = "By wytlines & DeadFish7";
+		Object.assign(text2.style, {
+			color: "red", fontSize: "30px", opacity: 0, transition: "opacity 0.8s ease",
+		});
+		const circle = document.createElement("div");
+		Object.assign(circle.style, {
+			width: "100px",
+			height: "100px",
+			backgroundColor: "black",
+			border: "2px solid red",
+			borderRadius: "50%",
+			display: "flex",
+			alignItems: "center",
+			justifyContent: "center",
+			opacity: 0,
+			transition: "opacity 1s ease, transform 1s ease",
+		});
+		circle.appendChild(check);
+		container.appendChild(circle);
+		container.appendChild(text1);
+		container.appendChild(text2);
+		// Sequence
+		setTimeout(() => {
+			circle.style.opacity = 1;
+			check.style.opacity = 1;
+		}, 500);
+		setTimeout(() => {
+			check.style.transform = "rotate(180deg)";
+		}, 2300);
+		setTimeout(() => {
+			text1.style.opacity = 1;
+		}, 2500);
+		setTimeout(() => {
+			text2.style.opacity = 1;
+		}, 4000);
+		setTimeout(() => {
+			container.style.transition = "opacity 1s ease";
+			container.style.opacity = 0;
+		}, 6000);
+		setTimeout(() => {
+			container.remove();
+		}, 7000);
 
-		// ===== Main Screen Edits =====
+		// ===== Main Screen Styling =====
+		let mainScreenEditInterval = setInterval( () => {
+		const buttons4 = document.querySelectorAll('.chakra-button.css-cuh8pi'); // play button
+		buttons4.forEach(button => {
+			button.style.padding = '20px 40px';
+			button.style.backgroundColor = 'rgba(211, 211, 211, 0.4)';
+			button.style.color = 'white';
+			button.style.border = '1px solid #D3D3D3';
+			button.style.borderRadius = '12px';
+			button.style.fontSize = '22px';
+			button.style.cursor = 'pointer';
+			button.style.transition = 'background-color 0.3s ease, transform 0.2s ease, box-shadow 0.3s ease';
+			button.style.outline = 'none';
+			button.style.boxShadow = 'none';
+			button.addEventListener('focus', () => {
+				button.style.outline = '2px solid #B0B0B0';
+				button.style.boxShadow = '0 0 5px rgba(176, 176, 176, 0.6)';
+			});
+			button.addEventListener('blur', () => {
+				button.style.outline = 'none';
+				button.style.boxShadow = 'none';
+			});
+			button.addEventListener('mouseover', () => {
+				button.style.backgroundColor = 'rgba(185, 185, 185, 0.4)';
+				button.style.transform = 'scale(1.15)';
+			});
+			button.addEventListener('mouseout', () => {
+				button.style.backgroundColor = 'rgba(211, 211, 211, 0.4)';
+				button.style.transform = 'scale(1)';
+			});
+			button.addEventListener('mousedown', () => {
+				button.style.outline = '2px solid #B0B0B0';
+				button.style.boxShadow = '0 0 5px rgba(176, 176, 176, 0.6)';
+			});
+			button.addEventListener('mouseup', () => {
+				button.style.outline = '2px solid #B0B0B0';
+				button.style.boxShadow = '0 0 5px rgba(176, 176, 176, 0.6)';
+			});
+		});
+		const buttons = document.querySelectorAll('.chakra-button.css-32lhf4'); // left buttons
+		buttons.forEach(button => {
+			button.style.padding = '10px 20px';
+			button.style.backgroundColor = 'rgba(211, 211, 211, 0.4)';
+			button.style.color = 'white';
+			button.style.border = '1px solid #D3D3D3';
+			button.style.borderRadius = '8px';
+			button.style.fontSize = '16px';
+			button.style.cursor = 'pointer';
+			button.style.transition = 'background-color 0.3s ease, transform 0.2s ease, box-shadow 0.3s ease';
+			button.style.outline = 'none';
+			button.style.boxShadow = 'none';
+			button.addEventListener('focus', () => {
+				button.style.outline = '2px solid #B0B0B0';
+				button.style.boxShadow = '0 0 5px rgba(176, 176, 176, 0.6)';
+			});
+			button.addEventListener('blur', () => {
+				button.style.outline = 'none';
+				button.style.boxShadow = 'none';
+			});
+			button.addEventListener('mouseover', () => {
+				button.style.backgroundColor = 'rgba(185, 185, 185, 0.4)';
+				button.style.transform = 'scale(1.05)';
+			});
+			button.addEventListener('mouseout', () => {
+				button.style.backgroundColor = 'rgba(211, 211, 211, 0.4)';
+				button.style.transform = 'scale(1)';
+			});
+			button.addEventListener('mousedown', () => {
+				button.style.outline = '2px solid #B0B0B0';
+				button.style.boxShadow = '0 0 5px rgba(176, 176, 176, 0.6)';
+			});
+			button.addEventListener('mouseup', () => {
+				button.style.outline = '2px solid #B0B0B0';
+				button.style.boxShadow = '0 0 5px rgba(176, 176, 176, 0.6)';
+			});
+		});
+		const buttons1 = document.querySelectorAll('.chakra-button.css-5ov7ui');  // signin button
+		buttons1.forEach(button => {
+			button.style.padding = '8px 16px';
+			button.style.backgroundColor = 'rgba(211, 211, 211, 0.4)';
+			button.style.color = 'white';
+			button.style.border = '1px solid #D3D3D3';
+			button.style.borderRadius = '6px';
+			button.style.fontSize = '14px';
+			button.style.cursor = 'pointer';
+			button.style.transition = 'background-color 0.3s ease, transform 0.2s ease, box-shadow 0.3s ease';
+			button.style.outline = 'none';
+			button.style.boxShadow = 'none';
+			button.addEventListener('focus', () => {
+				button.style.outline = '2px solid #B0B0B0';
+				button.style.boxShadow = '0 0 5px rgba(176, 176, 176, 0.6)';
+			});
+			button.addEventListener('blur', () => {
+				button.style.outline = 'none';
+				button.style.boxShadow = 'none';
+			});
+			button.addEventListener('mouseover', () => {
+				button.style.backgroundColor = 'rgba(185, 185, 185, 0.4)';
+				button.style.transform = 'scale(1.05)';
+			});
+			button.addEventListener('mouseout', () => {
+				button.style.backgroundColor = 'rgba(211, 211, 211, 0.4)';
+				button.style.transform = 'scale(1)';
+			});
+			button.addEventListener('mousedown', () => {
+				button.style.outline = '2px solid #B0B0B0';
+				button.style.boxShadow = '0 0 5px rgba(176, 176, 176, 0.6)';
+			});
+			button.addEventListener('mouseup', () => {
+				button.style.outline = '2px solid #B0B0B0';
+				button.style.boxShadow = '0 0 5px rgba(176, 176, 176, 0.6)';
+			});
+		});
+		const buttons2 = document.querySelectorAll('.chakra-button.css-5ov7ui');  // signin box
+		buttons2.forEach(button => {
+			button.style.padding = '8px 16px';
+			button.style.backgroundColor = 'rgba(211, 211, 211, 0.4)';
+			button.style.color = 'white';
+			button.style.border = '1px solid #D3D3D3';
+			button.style.borderRadius = '6px';
+			button.style.fontSize = '14px';
+			button.style.cursor = 'pointer';
+			button.style.transition = 'background-color 0.3s ease, transform 0.2s ease, box-shadow 0.3s ease';
+			button.style.outline = 'none';
+			button.style.boxShadow = 'none';
+			button.addEventListener('focus', () => {
+				button.style.outline = '2px solid #B0B0B0';
+				button.style.boxShadow = '0 0 5px rgba(176, 176, 176, 0.6)';
+			});
+			button.addEventListener('blur', () => {
+				button.style.outline = 'none';
+				button.style.boxShadow = 'none';
+			});
+			button.addEventListener('mouseover', () => {
+				button.style.backgroundColor = 'rgba(185, 185, 185, 0.4)';
+				button.style.transform = 'scale(1.05)';
+			});
+			button.addEventListener('mouseout', () => {
+				button.style.backgroundColor = 'rgba(211, 211, 211, 0.4)';
+				button.style.transform = 'scale(1)';
+			});
+			button.addEventListener('mousedown', () => {
+				button.style.outline = '2px solid #B0B0B0';
+				button.style.boxShadow = '0 0 5px rgba(176, 176, 176, 0.6)';
+			});
+			button.addEventListener('mouseup', () => {
+				button.style.outline = '2px solid #B0B0B0';
+				button.style.boxShadow = '0 0 5px rgba(176, 176, 176, 0.6)';
+			});
+		});
+		const customizeButtons = document.querySelectorAll('.chakra-button.css-18wnugv');
+		customizeButtons.forEach(button => {
+			button.style.padding = '8px 16px';
+			button.style.backgroundColor = 'rgba(211, 211, 211, 0.4)';
+			button.style.color = 'white';
+			button.style.border = '1px solid #D3D3D3';
+			button.style.borderRadius = '6px';
+			button.style.fontSize = '14px';
+			button.style.cursor = 'pointer';
+			button.style.transition = 'background-color 0.3s ease, transform 0.2s ease, box-shadow 0.3s ease';
+			button.style.outline = 'none';
+			button.style.boxShadow = 'none';
+			button.addEventListener('focus', () => {
+				button.style.outline = '2px solid #B0B0B0';
+				button.style.boxShadow = '0 0 5px rgba(176, 176, 176, 0.6)';
+			});
+			button.addEventListener('blur', () => {
+				button.style.outline = 'none';
+				button.style.boxShadow = 'none';
+			});
+			button.addEventListener('mouseover', () => {
+				button.style.backgroundColor = 'rgba(185, 185, 185, 0.4)';
+				button.style.transform = 'scale(1.05)';
+			});
+			button.addEventListener('mouseout', () => {
+				button.style.backgroundColor = 'rgba(211, 211, 211, 0.4)';
+				button.style.transform = 'scale(1)';
+			});
+			button.addEventListener('mousedown', () => {
+				button.style.outline = '2px solid #B0B0B0';
+				button.style.boxShadow = '0 0 5px rgba(176, 176, 176, 0.6)';
+			});
+			button.addEventListener('mouseup', () => {
+				button.style.outline = '2px solid #B0B0B0';
+				button.style.boxShadow = '0 0 5px rgba(176, 176, 176, 0.6)';
+			});
+		});
+		const dailyButtons = document.querySelectorAll('.chakra-button.css-he6upe');
+		dailyButtons.forEach(button => {
+			button.style.padding = '8px 16px';
+			button.style.backgroundColor = 'rgba(211, 211, 211, 0.4)';
+			button.style.color = 'white';
+			button.style.border = '1px solid #D3D3D3';
+			button.style.borderRadius = '6px';
+			button.style.fontSize = '14px';
+			button.style.cursor = 'pointer';
+			button.style.transition = 'background-color 0.3s ease, transform 0.2s ease, box-shadow 0.3s ease';
+			button.style.outline = 'none';
+			button.style.boxShadow = 'none';
+			button.addEventListener('focus', () => {
+				button.style.outline = '2px solid #B0B0B0';
+				button.style.boxShadow = '0 0 5px rgba(176, 176, 176, 0.6)';
+			});
+			button.addEventListener('blur', () => {
+				button.style.outline = 'none';
+				button.style.boxShadow = 'none';
+			});
+			button.addEventListener('mouseover', () => {
+				button.style.backgroundColor = 'rgba(185, 185, 185, 0.4)';
+				button.style.transform = 'scale(1.05)';
+			});
+			button.addEventListener('mouseout', () => {
+				button.style.backgroundColor = 'rgba(211, 211, 211, 0.4)';
+				button.style.transform = 'scale(1)';
+			});
+			button.addEventListener('mousedown', () => {
+				button.style.outline = '2px solid #B0B0B0';
+				button.style.boxShadow = '0 0 5px rgba(176, 176, 176, 0.6)';
+			});
+			button.addEventListener('mouseup', () => {
+				button.style.outline = '2px solid #B0B0B0';
+				button.style.boxShadow = '0 0 5px rgba(176, 176, 176, 0.6)';
+			});
+		});
+		const freeCoinButtons = document.querySelectorAll('.chakra-button.css-1dkorm4');
+		freeCoinButtons.forEach(button => {
+			button.style.padding = '8px 16px';
+			button.style.backgroundColor = 'rgba(211, 211, 211, 0.4)';
+			button.style.color = 'white';
+			button.style.border = '1px solid #D3D3D3';
+			button.style.borderRadius = '6px';
+			button.style.fontSize = '14px';
+			button.style.cursor = 'pointer';
+			button.style.transition = 'background-color 0.3s ease, transform 0.2s ease, box-shadow 0.3s ease';
+			button.style.outline = 'none';
+			button.style.boxShadow = 'none';
+			button.addEventListener('focus', () => {
+				button.style.outline = '2px solid #B0B0B0';
+				button.style.boxShadow = '0 0 5px rgba(176, 176, 176, 0.6)';
+			});
+			button.addEventListener('blur', () => {
+				button.style.outline = 'none';
+				button.style.boxShadow = 'none';
+			});
+			button.addEventListener('mouseover', () => {
+				button.style.backgroundColor = 'rgba(185, 185, 185, 0.4)';
+				button.style.transform = 'scale(1.05)';
+			});
+			button.addEventListener('mouseout', () => {
+				button.style.backgroundColor = 'rgba(211, 211, 211, 0.4)';
+				button.style.transform = 'scale(1)';
+			});
+			button.addEventListener('mousedown', () => {
+				button.style.outline = '2px solid #B0B0B0';
+				button.style.boxShadow = '0 0 5px rgba(176, 176, 176, 0.6)';
+			});
+			button.addEventListener('mouseup', () => {
+				button.style.outline = '2px solid #B0B0B0';
+				button.style.boxShadow = '0 0 5px rgba(176, 176, 176, 0.6)';
+			});
+		});
+		const userInfoBoxex = document.querySelectorAll('.css-10y588r');
+		userInfoBoxex.forEach(box => {
+			box.style.padding = '8px 16px';
+			box.style.backgroundColor = 'rgba(211, 211, 211, 0.4)';
+			box.style.color = 'white';
+			box.style.border = '1px solid #D3D3D3';
+			box.style.borderRadius = '6px';
+			box.style.fontSize = '14px';
+			box.style.cursor = 'pointer';
+			box.style.transition = 'background-color 0.3s ease, transform 0.2s ease, box-shadow 0.3s ease';
+			box.style.outline = 'none';
+			box.style.boxShadow = 'none';
+			box.addEventListener('focus', () => {
+				box.style.outline = '2px solid #B0B0B0';
+				box.style.boxShadow = '0 0 5px rgba(176, 176, 176, 0.6)';
+			});
+			box.addEventListener('blur', () => {
+				box.style.outline = 'none';
+				box.style.boxShadow = 'none';
+			});
+			box.addEventListener('mouseover', () => {
+				box.style.backgroundColor = 'rgba(185, 185, 185, 0.4)';
+				box.style.transform = 'scale(1.05)';
+			});
+			box.addEventListener('mouseout', () => {
+				box.style.backgroundColor = 'rgba(211, 211, 211, 0.4)';
+				box.style.transform = 'scale(1)';
+			});
+			box.addEventListener('mousedown', () => {
+				box.style.outline = '2px solid #B0B0B0';
+				box.style.boxShadow = '0 0 5px rgba(176, 176, 176, 0.6)';
+			});
+			box.addEventListener('mouseup', () => {
+				box.style.outline = '2px solid #B0B0B0';
+				box.style.boxShadow = '0 0 5px rgba(176, 176, 176, 0.6)';
+			});
+		});
+		const playerCustomizationDivs = document.querySelectorAll('.css-1r00ojm');
+		playerCustomizationDivs.forEach(d => {
+		});
+		const leaveGameButtons = document.querySelectorAll('button.chakra-button.css-livqej');
+		leaveGameButtons.forEach(button => {
+			button.style.padding = '8px 16px';
+			button.style.backgroundColor = 'rgba(211, 211, 211, 0.4)';
+			button.style.color = 'white';
+			button.style.border = '1px solid #D3D3D3';
+			button.style.borderRadius = '6px';
+			button.style.fontSize = '14px';
+			button.style.cursor = 'pointer';
+			button.style.transition = 'background-color 0.3s ease, transform 0.2s ease, box-shadow 0.3s ease';
+			button.style.outline = 'none';
+			button.style.boxShadow = 'none';
+			button.addEventListener('focus', () => {
+				button.style.outline = '2px solid #B0B0B0';
+				button.style.boxShadow = '0 0 5px rgba(176, 176, 176, 0.6)';
+			});
+			button.addEventListener('blur', () => {
+				button.style.outline = 'none';
+				button.style.boxShadow = 'none';
+			});
+			button.addEventListener('mouseover', () => {
+				button.style.backgroundColor = 'rgba(185, 185, 185, 0.4)';
+				button.style.transform = 'scale(1.05)';
+			});
+			button.addEventListener('mouseout', () => {
+				button.style.backgroundColor = 'rgba(211, 211, 211, 0.4)';
+				button.style.transform = 'scale(1)';
+			});
+			button.addEventListener('mousedown', () => {
+				button.style.outline = '2px solid #B0B0B0';
+				button.style.boxShadow = '0 0 5px rgba(176, 176, 176, 0.6)';
+			});
+			button.addEventListener('mouseup', () => {
+				button.style.outline = '2px solid #B0B0B0';
+				button.style.boxShadow = '0 0 5px rgba(176, 176, 176, 0.6)';
+			});
+		});
+		// TODO: add same button theme to all menus; player decoration, escape in-game menu, etc.
+
+		// Document title
+		document.title = 'UnverifiedV2';
+		// Background img
+		setBG('https://w0.peakpx.com/wallpaper/810/395/HD-wallpaper-landscape-minecraft-shaders-minecraft.jpg');
+		// Miniblox logo
+		visuallyRemove(document.querySelector('.chakra-image.css-1je8qb9'));
+		// Discord button
+		visuallyRemove(document.querySelector('.chakra-stack.css-7kkhgi'));
+
+		// === End Main Screen Edit Interval ===
+		}, 500);  
+		// TODO: only use one efficient main interval for looping main screen, pause / cancel when ingame
+		// potentially use event listeners as well to call run
+
 		function setBG(bg) {
 			let b1 = document.querySelector('img.chakra-image.css-rkihvp');
 			if (b1) b1.src = bg;
@@ -26,47 +443,113 @@
 			a.style.zIndex = -1;
 		}
 
-		// === Grab Menu Buttons ===
-		let playButton = document.querySelector('.chakra-button.css-cuh8pi');
-		playButton.click();
-
-		let exitButton = null;
-		let kitpvpButton = null;
-		let skywarsButton = null;
-		let doublesButton = null;
-		let quadsButton = null;
-		let survivalButton = null;
-
-		function addUnverifiedMainMenuButtons() {
-			let unverified_skywarsButton = skywarsButton;
-			unverified_skywarsButton.style.zIndex = 9999;
-			unverified_skywarsButton.style.position = 'absolute';
-			unverified_skywarsButton.style.top = '50%';
-			unverified_skywarsButton.style.left = '50%';
-			document.body.appendChild(unverified_skywarsButton);
+		// === Shortcut Menu Buttons ===  // TODO: WIP
+		function getPlayButton() {
+		  return document.querySelector('.chakra-button.css-cuh8pi');
 		}
-
-		let menuSearchInterval = setInterval(() => {
-			exitButton = document.querySelectorAll('.chakra-button.css-1axaj8o')[1];
-			skywarsButton = document.querySelector('.css-rsqc3q');
-			if (exitButton && skywarsButton) {
-				clearInterval(menuSearchInterval);
-				exitButton.click();
-				addUnverifiedMainMenuButtons();
-			}
-		}, 100);
-
-		// === Edit Interval ===
-		let mainscreenEditInterval = setInterval(() => {
-			document.title = 'UnverifiedV2';
-			// Background img
-			setBG('https://w0.peakpx.com/wallpaper/810/395/HD-wallpaper-landscape-minecraft-shaders-minecraft.jpg');
-			// Miniblox logo
-			visuallyRemove(document.querySelector('.chakra-image.css-1je8qb9'));
-			// Discord button
-			visuallyRemove(document.querySelector('.chakra-stack.css-7kkhgi'));
-		}, 5) ;
-
+		function getExitButton() {
+			// called when on games page; exit button -> main screen
+			return document.querySelectorAll('.chakra-button.css-1axaj8o')[1];
+		}
+		function getKitPVPButton() {
+			return document.querySelector('.css-1idq8wm .chakra-text');
+		}
+		function getSkywarsButton() {
+		  return document.querySelector('.css-rsqc3q');
+		}
+		function getDoublesButton() {
+		  return document.querySelector('.css-6umr0e .chakra-text');
+		}
+		function getQuadsButton() {
+		  return document.querySelector('.css-sbvzy .chakra-text');
+		}
+		// Add shortcut menu
+		const container1 = document.createElement("div");
+		Object.assign(container1.style, {
+			position: "absolute",
+			top: "80%",
+			left: "50%",
+			transform: "translate(-50%, -50%)",
+			padding: "20px",
+			borderRadius: "12px",
+			display: "flex",
+			flexDirection: "row",
+			gap: "10px",
+			alignItems: "center",
+			zIndex: "99"
+		});
+		const onclicks = [
+			() => {
+				getPlayButton().click();
+				setTimeout(() => getKitPVPButton().click(), 50);
+				document.body.removeChild(container1);  // TODO: re-add when mainscreen
+			},
+			() => {
+				getPlayButton().click();
+				setTimeout(() => getSkywarsButton().click(), 50);
+				document.body.removeChild(container1);
+			},
+			() => {
+				getPlayButton().click();
+				setTimeout(() => getDoublesButton().click(), 50);
+				document.body.removeChild(container1);
+			},
+			() => {
+				getPlayButton().click();
+				setTimeout(() => getQuadsButton().click(), 50);
+				document.body.removeChild(container1);
+			},
+		];
+		let i = 0;
+		["KitPVP", "Skywars", "Doubles", "Quads"].forEach(label => {
+			const button = document.createElement("button");
+			button.textContent = label;
+			Object.assign(button.style, {
+				padding: "10px 20px",
+				color: "#fff",
+				border: "none",
+				borderRadius: "6px",
+				cursor: "pointer",
+				fontSize: "16px"
+			});
+			button.style.padding = '8px 16px';
+			button.style.backgroundColor = 'rgba(211, 211, 211, 0.4)';
+			button.style.color = 'white';
+			button.style.border = '1px solid #D3D3D3';
+			button.style.borderRadius = '6px';
+			button.style.fontSize = '14px';
+			button.style.cursor = 'pointer';
+			button.style.transition = 'background-color 0.3s ease, transform 0.2s ease, box-shadow 0.3s ease';
+			button.style.outline = 'none';
+			button.style.boxShadow = 'none';
+			button.addEventListener('focus', () => {
+				button.style.outline = '2px solid #B0B0B0';
+				button.style.boxShadow = '0 0 5px rgba(176, 176, 176, 0.6)';
+			});
+			button.addEventListener('blur', () => {
+				button.style.outline = 'none';
+				button.style.boxShadow = 'none';
+			});
+			button.addEventListener('mouseover', () => {
+				button.style.backgroundColor = 'rgba(185, 185, 185, 0.4)';
+				button.style.transform = 'scale(1.05)';
+			});
+			button.addEventListener('mouseout', () => {
+				button.style.backgroundColor = 'rgba(211, 211, 211, 0.4)';
+				button.style.transform = 'scale(1)';
+			});
+			button.addEventListener('mousedown', () => {
+				button.style.outline = '2px solid #B0B0B0';
+				button.style.boxShadow = '0 0 5px rgba(176, 176, 176, 0.6)';
+			});
+			button.addEventListener('mouseup', () => {
+				button.style.outline = '2px solid #B0B0B0';
+				button.style.boxShadow = '0 0 5px rgba(176, 176, 176, 0.6)';
+			});
+			button.onclick = onclicks[i++];
+			container1.appendChild(button);
+		});
+		document.body.appendChild(container1);
 		// ===== =====
 
 
@@ -136,7 +619,8 @@
             left: 50%;
             transform: translateX(-50%);
             padding: 10px 20px;
-            background-color: #34495e;
+            background-color: #black;
+						border: 1px solid white;
             border-radius: 10px;
             z-index: 10000;
             opacity: 0;
@@ -641,7 +1125,7 @@
 		// === Initialized Notif ===
     const initializedNotification = document.createElement("div");
     initializedNotification.classList.add('initialized-notification');
-    initializedNotification.textContent = "Unverified Client Initialized";
+    initializedNotification.textContent = "UnverifiedV2 Initialized";
     document.body.appendChild(initializedNotification);
     setTimeout(() => {
         initializedNotification.style.top = "10px";
