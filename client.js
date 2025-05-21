@@ -78,359 +78,6 @@
 		}, 7000);
 
 		// ===== Main Screen Styling =====
-		let mainScreenEditInterval = setInterval( () => {
-		const buttons4 = document.querySelectorAll('.chakra-button.css-cuh8pi'); // play button
-		buttons4.forEach(button => {
-			button.style.padding = '20px 40px';
-			button.style.backgroundColor = 'rgba(211, 211, 211, 0.4)';
-			button.style.color = 'white';
-			button.style.border = '1px solid #D3D3D3';
-			button.style.borderRadius = '12px';
-			button.style.fontSize = '22px';
-			button.style.cursor = 'pointer';
-			button.style.transition = 'background-color 0.3s ease, transform 0.2s ease, box-shadow 0.3s ease';
-			button.style.outline = 'none';
-			button.style.boxShadow = 'none';
-			button.addEventListener('focus', () => {
-				button.style.outline = '2px solid #B0B0B0';
-				button.style.boxShadow = '0 0 5px rgba(176, 176, 176, 0.6)';
-			});
-			button.addEventListener('blur', () => {
-				button.style.outline = 'none';
-				button.style.boxShadow = 'none';
-			});
-			button.addEventListener('mouseover', () => {
-				button.style.backgroundColor = 'rgba(185, 185, 185, 0.4)';
-				button.style.transform = 'scale(1.15)';
-			});
-			button.addEventListener('mouseout', () => {
-				button.style.backgroundColor = 'rgba(211, 211, 211, 0.4)';
-				button.style.transform = 'scale(1)';
-			});
-			button.addEventListener('mousedown', () => {
-				button.style.outline = '2px solid #B0B0B0';
-				button.style.boxShadow = '0 0 5px rgba(176, 176, 176, 0.6)';
-			});
-			button.addEventListener('mouseup', () => {
-				button.style.outline = '2px solid #B0B0B0';
-				button.style.boxShadow = '0 0 5px rgba(176, 176, 176, 0.6)';
-			});
-		});
-		const buttons = document.querySelectorAll('.chakra-button.css-32lhf4'); // left buttons
-		buttons.forEach(button => {
-			button.style.padding = '10px 20px';
-			button.style.backgroundColor = 'rgba(211, 211, 211, 0.4)';
-			button.style.color = 'white';
-			button.style.border = '1px solid #D3D3D3';
-			button.style.borderRadius = '8px';
-			button.style.fontSize = '16px';
-			button.style.cursor = 'pointer';
-			button.style.transition = 'background-color 0.3s ease, transform 0.2s ease, box-shadow 0.3s ease';
-			button.style.outline = 'none';
-			button.style.boxShadow = 'none';
-			button.addEventListener('focus', () => {
-				button.style.outline = '2px solid #B0B0B0';
-				button.style.boxShadow = '0 0 5px rgba(176, 176, 176, 0.6)';
-			});
-			button.addEventListener('blur', () => {
-				button.style.outline = 'none';
-				button.style.boxShadow = 'none';
-			});
-			button.addEventListener('mouseover', () => {
-				button.style.backgroundColor = 'rgba(185, 185, 185, 0.4)';
-				button.style.transform = 'scale(1.05)';
-			});
-			button.addEventListener('mouseout', () => {
-				button.style.backgroundColor = 'rgba(211, 211, 211, 0.4)';
-				button.style.transform = 'scale(1)';
-			});
-			button.addEventListener('mousedown', () => {
-				button.style.outline = '2px solid #B0B0B0';
-				button.style.boxShadow = '0 0 5px rgba(176, 176, 176, 0.6)';
-			});
-			button.addEventListener('mouseup', () => {
-				button.style.outline = '2px solid #B0B0B0';
-				button.style.boxShadow = '0 0 5px rgba(176, 176, 176, 0.6)';
-			});
-		});
-		const buttons1 = document.querySelectorAll('.chakra-button.css-5ov7ui');  // signin button
-		buttons1.forEach(button => {
-			button.style.padding = '8px 16px';
-			button.style.backgroundColor = 'rgba(211, 211, 211, 0.4)';
-			button.style.color = 'white';
-			button.style.border = '1px solid #D3D3D3';
-			button.style.borderRadius = '6px';
-			button.style.fontSize = '14px';
-			button.style.cursor = 'pointer';
-			button.style.transition = 'background-color 0.3s ease, transform 0.2s ease, box-shadow 0.3s ease';
-			button.style.outline = 'none';
-			button.style.boxShadow = 'none';
-			button.addEventListener('focus', () => {
-				button.style.outline = '2px solid #B0B0B0';
-				button.style.boxShadow = '0 0 5px rgba(176, 176, 176, 0.6)';
-			});
-			button.addEventListener('blur', () => {
-				button.style.outline = 'none';
-				button.style.boxShadow = 'none';
-			});
-			button.addEventListener('mouseover', () => {
-				button.style.backgroundColor = 'rgba(185, 185, 185, 0.4)';
-				button.style.transform = 'scale(1.05)';
-			});
-			button.addEventListener('mouseout', () => {
-				button.style.backgroundColor = 'rgba(211, 211, 211, 0.4)';
-				button.style.transform = 'scale(1)';
-			});
-			button.addEventListener('mousedown', () => {
-				button.style.outline = '2px solid #B0B0B0';
-				button.style.boxShadow = '0 0 5px rgba(176, 176, 176, 0.6)';
-			});
-			button.addEventListener('mouseup', () => {
-				button.style.outline = '2px solid #B0B0B0';
-				button.style.boxShadow = '0 0 5px rgba(176, 176, 176, 0.6)';
-			});
-		});
-		const buttons2 = document.querySelectorAll('.chakra-button.css-5ov7ui');  // signin box
-		buttons2.forEach(button => {
-			button.style.padding = '8px 16px';
-			button.style.backgroundColor = 'rgba(211, 211, 211, 0.4)';
-			button.style.color = 'white';
-			button.style.border = '1px solid #D3D3D3';
-			button.style.borderRadius = '6px';
-			button.style.fontSize = '14px';
-			button.style.cursor = 'pointer';
-			button.style.transition = 'background-color 0.3s ease, transform 0.2s ease, box-shadow 0.3s ease';
-			button.style.outline = 'none';
-			button.style.boxShadow = 'none';
-			button.addEventListener('focus', () => {
-				button.style.outline = '2px solid #B0B0B0';
-				button.style.boxShadow = '0 0 5px rgba(176, 176, 176, 0.6)';
-			});
-			button.addEventListener('blur', () => {
-				button.style.outline = 'none';
-				button.style.boxShadow = 'none';
-			});
-			button.addEventListener('mouseover', () => {
-				button.style.backgroundColor = 'rgba(185, 185, 185, 0.4)';
-				button.style.transform = 'scale(1.05)';
-			});
-			button.addEventListener('mouseout', () => {
-				button.style.backgroundColor = 'rgba(211, 211, 211, 0.4)';
-				button.style.transform = 'scale(1)';
-			});
-			button.addEventListener('mousedown', () => {
-				button.style.outline = '2px solid #B0B0B0';
-				button.style.boxShadow = '0 0 5px rgba(176, 176, 176, 0.6)';
-			});
-			button.addEventListener('mouseup', () => {
-				button.style.outline = '2px solid #B0B0B0';
-				button.style.boxShadow = '0 0 5px rgba(176, 176, 176, 0.6)';
-			});
-		});
-		const customizeButtons = document.querySelectorAll('.chakra-button.css-18wnugv');
-		customizeButtons.forEach(button => {
-			button.style.padding = '8px 16px';
-			button.style.backgroundColor = 'rgba(211, 211, 211, 0.4)';
-			button.style.color = 'white';
-			button.style.border = '1px solid #D3D3D3';
-			button.style.borderRadius = '6px';
-			button.style.fontSize = '14px';
-			button.style.cursor = 'pointer';
-			button.style.transition = 'background-color 0.3s ease, transform 0.2s ease, box-shadow 0.3s ease';
-			button.style.outline = 'none';
-			button.style.boxShadow = 'none';
-			button.addEventListener('focus', () => {
-				button.style.outline = '2px solid #B0B0B0';
-				button.style.boxShadow = '0 0 5px rgba(176, 176, 176, 0.6)';
-			});
-			button.addEventListener('blur', () => {
-				button.style.outline = 'none';
-				button.style.boxShadow = 'none';
-			});
-			button.addEventListener('mouseover', () => {
-				button.style.backgroundColor = 'rgba(185, 185, 185, 0.4)';
-				button.style.transform = 'scale(1.05)';
-			});
-			button.addEventListener('mouseout', () => {
-				button.style.backgroundColor = 'rgba(211, 211, 211, 0.4)';
-				button.style.transform = 'scale(1)';
-			});
-			button.addEventListener('mousedown', () => {
-				button.style.outline = '2px solid #B0B0B0';
-				button.style.boxShadow = '0 0 5px rgba(176, 176, 176, 0.6)';
-			});
-			button.addEventListener('mouseup', () => {
-				button.style.outline = '2px solid #B0B0B0';
-				button.style.boxShadow = '0 0 5px rgba(176, 176, 176, 0.6)';
-			});
-		});
-		const dailyButtons = document.querySelectorAll('.chakra-button.css-he6upe');
-		dailyButtons.forEach(button => {
-			button.style.padding = '8px 16px';
-			button.style.backgroundColor = 'rgba(211, 211, 211, 0.4)';
-			button.style.color = 'white';
-			button.style.border = '1px solid #D3D3D3';
-			button.style.borderRadius = '6px';
-			button.style.fontSize = '14px';
-			button.style.cursor = 'pointer';
-			button.style.transition = 'background-color 0.3s ease, transform 0.2s ease, box-shadow 0.3s ease';
-			button.style.outline = 'none';
-			button.style.boxShadow = 'none';
-			button.addEventListener('focus', () => {
-				button.style.outline = '2px solid #B0B0B0';
-				button.style.boxShadow = '0 0 5px rgba(176, 176, 176, 0.6)';
-			});
-			button.addEventListener('blur', () => {
-				button.style.outline = 'none';
-				button.style.boxShadow = 'none';
-			});
-			button.addEventListener('mouseover', () => {
-				button.style.backgroundColor = 'rgba(185, 185, 185, 0.4)';
-				button.style.transform = 'scale(1.05)';
-			});
-			button.addEventListener('mouseout', () => {
-				button.style.backgroundColor = 'rgba(211, 211, 211, 0.4)';
-				button.style.transform = 'scale(1)';
-			});
-			button.addEventListener('mousedown', () => {
-				button.style.outline = '2px solid #B0B0B0';
-				button.style.boxShadow = '0 0 5px rgba(176, 176, 176, 0.6)';
-			});
-			button.addEventListener('mouseup', () => {
-				button.style.outline = '2px solid #B0B0B0';
-				button.style.boxShadow = '0 0 5px rgba(176, 176, 176, 0.6)';
-			});
-		});
-		const freeCoinButtons = document.querySelectorAll('.chakra-button.css-1dkorm4');
-		freeCoinButtons.forEach(button => {
-			button.style.padding = '8px 16px';
-			button.style.backgroundColor = 'rgba(211, 211, 211, 0.4)';
-			button.style.color = 'white';
-			button.style.border = '1px solid #D3D3D3';
-			button.style.borderRadius = '6px';
-			button.style.fontSize = '14px';
-			button.style.cursor = 'pointer';
-			button.style.transition = 'background-color 0.3s ease, transform 0.2s ease, box-shadow 0.3s ease';
-			button.style.outline = 'none';
-			button.style.boxShadow = 'none';
-			button.addEventListener('focus', () => {
-				button.style.outline = '2px solid #B0B0B0';
-				button.style.boxShadow = '0 0 5px rgba(176, 176, 176, 0.6)';
-			});
-			button.addEventListener('blur', () => {
-				button.style.outline = 'none';
-				button.style.boxShadow = 'none';
-			});
-			button.addEventListener('mouseover', () => {
-				button.style.backgroundColor = 'rgba(185, 185, 185, 0.4)';
-				button.style.transform = 'scale(1.05)';
-			});
-			button.addEventListener('mouseout', () => {
-				button.style.backgroundColor = 'rgba(211, 211, 211, 0.4)';
-				button.style.transform = 'scale(1)';
-			});
-			button.addEventListener('mousedown', () => {
-				button.style.outline = '2px solid #B0B0B0';
-				button.style.boxShadow = '0 0 5px rgba(176, 176, 176, 0.6)';
-			});
-			button.addEventListener('mouseup', () => {
-				button.style.outline = '2px solid #B0B0B0';
-				button.style.boxShadow = '0 0 5px rgba(176, 176, 176, 0.6)';
-			});
-		});
-		const userInfoBoxex = document.querySelectorAll('.css-10y588r');
-		userInfoBoxex.forEach(box => {
-			box.style.padding = '8px 16px';
-			box.style.backgroundColor = 'rgba(211, 211, 211, 0.4)';
-			box.style.color = 'white';
-			box.style.border = '1px solid #D3D3D3';
-			box.style.borderRadius = '6px';
-			box.style.fontSize = '14px';
-			box.style.cursor = 'pointer';
-			box.style.transition = 'background-color 0.3s ease, transform 0.2s ease, box-shadow 0.3s ease';
-			box.style.outline = 'none';
-			box.style.boxShadow = 'none';
-			box.addEventListener('focus', () => {
-				box.style.outline = '2px solid #B0B0B0';
-				box.style.boxShadow = '0 0 5px rgba(176, 176, 176, 0.6)';
-			});
-			box.addEventListener('blur', () => {
-				box.style.outline = 'none';
-				box.style.boxShadow = 'none';
-			});
-			box.addEventListener('mouseover', () => {
-				box.style.backgroundColor = 'rgba(185, 185, 185, 0.4)';
-				box.style.transform = 'scale(1.05)';
-			});
-			box.addEventListener('mouseout', () => {
-				box.style.backgroundColor = 'rgba(211, 211, 211, 0.4)';
-				box.style.transform = 'scale(1)';
-			});
-			box.addEventListener('mousedown', () => {
-				box.style.outline = '2px solid #B0B0B0';
-				box.style.boxShadow = '0 0 5px rgba(176, 176, 176, 0.6)';
-			});
-			box.addEventListener('mouseup', () => {
-				box.style.outline = '2px solid #B0B0B0';
-				box.style.boxShadow = '0 0 5px rgba(176, 176, 176, 0.6)';
-			});
-		});
-		const playerCustomizationDivs = document.querySelectorAll('.css-1r00ojm');
-		playerCustomizationDivs.forEach(d => {
-		});
-		const leaveGameButtons = document.querySelectorAll('button.chakra-button.css-livqej');
-		leaveGameButtons.forEach(button => {
-			button.style.padding = '8px 16px';
-			button.style.backgroundColor = 'rgba(211, 211, 211, 0.4)';
-			button.style.color = 'white';
-			button.style.border = '1px solid #D3D3D3';
-			button.style.borderRadius = '6px';
-			button.style.fontSize = '14px';
-			button.style.cursor = 'pointer';
-			button.style.transition = 'background-color 0.3s ease, transform 0.2s ease, box-shadow 0.3s ease';
-			button.style.outline = 'none';
-			button.style.boxShadow = 'none';
-			button.addEventListener('focus', () => {
-				button.style.outline = '2px solid #B0B0B0';
-				button.style.boxShadow = '0 0 5px rgba(176, 176, 176, 0.6)';
-			});
-			button.addEventListener('blur', () => {
-				button.style.outline = 'none';
-				button.style.boxShadow = 'none';
-			});
-			button.addEventListener('mouseover', () => {
-				button.style.backgroundColor = 'rgba(185, 185, 185, 0.4)';
-				button.style.transform = 'scale(1.05)';
-			});
-			button.addEventListener('mouseout', () => {
-				button.style.backgroundColor = 'rgba(211, 211, 211, 0.4)';
-				button.style.transform = 'scale(1)';
-			});
-			button.addEventListener('mousedown', () => {
-				button.style.outline = '2px solid #B0B0B0';
-				button.style.boxShadow = '0 0 5px rgba(176, 176, 176, 0.6)';
-			});
-			button.addEventListener('mouseup', () => {
-				button.style.outline = '2px solid #B0B0B0';
-				button.style.boxShadow = '0 0 5px rgba(176, 176, 176, 0.6)';
-			});
-		});
-		// TODO: add same button theme to all menus; player decoration, escape in-game menu, etc.
-
-		// Document title
-		document.title = 'UnverifiedV2';
-		// Background img
-		setBG('https://w0.peakpx.com/wallpaper/810/395/HD-wallpaper-landscape-minecraft-shaders-minecraft.jpg');
-		// Miniblox logo
-		visuallyRemove(document.querySelector('.chakra-image.css-1je8qb9'));
-		// Discord button
-		visuallyRemove(document.querySelector('.chakra-stack.css-7kkhgi'));
-
-		// === End Main Screen Edit Interval ===
-		}, 500);  
-		// TODO: only use one efficient main interval for looping main screen, pause / cancel when ingame
-		// potentially use event listeners as well to call run
-
 		function setBG(bg) {
 			let b1 = document.querySelector('img.chakra-image.css-rkihvp');
 			if (b1) b1.src = bg;
@@ -442,6 +89,69 @@
 			a.style.opacity = 0;
 			a.style.zIndex = -1;
 		}
+		function styleMainScreen() {
+		  const elements = [
+				...document.querySelectorAll('.chakra-button.css-cuh8pi'),  // play button
+				...document.querySelectorAll('.chakra-button.css-32lhf4'),  // left menu buttons
+				...document.querySelectorAll('.chakra-button.css-5ov7ui'),  // signin button
+				...document.querySelectorAll('.chakra-button.css-5ov7ui'),  // signin box
+				...document.querySelectorAll('.chakra-button.css-18wnugv'), // customize button
+				...document.querySelectorAll('.chakra-button.css-he6upe'),  // daily button
+				...document.querySelectorAll('.chakra-button.css-1dkorm4'), // free coin button
+				...document.querySelectorAll('.css-10y588r'),               // user info box
+				...document.querySelectorAll('button.chakra-button.css-livqej'), // leave game button
+				// TODO: add same button theme to all menus; player decoration, escape in-game menu, etc.
+			];
+			elements.forEach(e => {
+				e.style.padding = '20px 40px';
+				e.style.backgroundColor = 'rgba(211, 211, 211, 0.4)';
+				e.style.color = 'white';
+				e.style.border = '1px solid #D3D3D3';
+				e.style.borderRadius = '12px';
+				e.style.fontSize = '22px';
+				e.style.cursor = 'pointer';
+				e.style.transition = 'background-color 0.3s ease, transform 0.2s ease, box-shadow 0.3s ease';
+				e.style.outline = 'none';
+				e.style.boxShadow = 'none';
+				e.addEventListener('focus', () => {
+					e.style.outline = '2px solid #B0B0B0';
+					e.style.boxShadow = '0 0 5px rgba(176, 176, 176, 0.6)';
+				});
+				e.addEventListener('blur', () => {
+					e.style.outline = 'none';
+					e.style.boxShadow = 'none';
+				});
+				e.addEventListener('mouseover', () => {
+					e.style.backgroundColor = 'rgba(185, 185, 185, 0.4)';
+					e.style.transform = 'scale(1.15)';
+				});
+				e.addEventListener('mouseout', () => {
+					e.style.backgroundColor = 'rgba(211, 211, 211, 0.4)';
+					e.style.transform = 'scale(1)';
+				});
+				e.addEventListener('mousedown', () => {
+					e.style.outline = '2px solid #B0B0B0';
+					e.style.boxShadow = '0 0 5px rgba(176, 176, 176, 0.6)';
+				});
+				e.addEventListener('mouseup', () => {
+					e.style.outline = '2px solid #B0B0B0';
+					e.style.boxShadow = '0 0 5px rgba(176, 176, 176, 0.6)';
+				});
+			});
+			// Document title
+			document.title = 'UnverifiedV2';
+			// Background img
+			setBG('https://w0.peakpx.com/wallpaper/810/395/HD-wallpaper-landscape-minecraft-shaders-minecraft.jpg');
+			// Miniblox logo
+			visuallyRemove(document.querySelector('.chakra-image.css-1je8qb9'));
+			// Discord button
+			visuallyRemove(document.querySelector('.chakra-stack.css-7kkhgi'));
+		}
+		let mainScreenStyleInterval = setInterval(() => {
+			styleMainScreen();
+		}, 500);  
+		// TODO: only use one efficient main interval for looping main screen, pause / cancel when ingame
+		// potentially use event listeners as well to call run
 
 		// === Shortcut Menu Buttons ===  // TODO: WIP
 		function getPlayButton() {
@@ -552,7 +262,7 @@
 		document.body.appendChild(container1);
 		// ===== =====
 
-
+		// ===== Client Interface Creation =====
     const style = document.createElement('style');
     style.innerHTML = `
         @font-face {
@@ -619,7 +329,7 @@
             left: 50%;
             transform: translateX(-50%);
             padding: 10px 20px;
-            background-color: #black;
+            background-color: black;
 						border: 1px solid white;
             border-radius: 10px;
             z-index: 10000;
@@ -630,8 +340,9 @@
             font-family: 'MinibloxFont', sans-serif;
             font-size: 16px;
             color: #e74c3c;
-            background-color: #34495e;
+            background-color: black;
             padding: 10px 20px;
+						border: 1px solid white;
             border-radius: 10px;
             margin-bottom: 10px;
             box-shadow: 0 0 10px rgba(0, 0, 0, 0.5);
@@ -1135,18 +846,21 @@
         initializedNotification.style.top = "-50px";
         initializedNotification.style.opacity = "0";
     }, 2000);
+		// === ===
 
+		// ===== =====
 })();
 
+// ===== Client Status =====
 (function() {
     'use strict';
-
     const originalRAF = window.requestAnimationFrame;
     window.requestAnimationFrame = function(callback) {
         return setTimeout(function() {
             callback(performance.now());
         }, 0);
     };
-
     console.log('Client Status: Great');
 })();
+// ===== =====
+
