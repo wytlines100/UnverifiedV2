@@ -3,7 +3,7 @@
 // @namespace    http://tampermonkey.net/
 // @version      2.0
 // @description  :D
-// @author       wytlines, DeadFish7
+// @author       wytlines, DeadFish7, andreypidd, jet
 // @match        https://miniblox.io/*
 // @grant        none
 // ==/UserScript==
@@ -34,7 +34,7 @@
 			transition: "opacity 0.8s ease",
 		});
 		const text2 = document.createElement("div");
-		text2.textContent = "By wytlines & DeadFish7";
+		text2.textContent = "By wytlines, DeadFish7, andreypidd, jet";
 		Object.assign(text2.style, {
 			color: "red", fontSize: "30px", opacity: 0, transition: "opacity 0.8s ease",
 		});
