@@ -24,19 +24,25 @@
 		const check = document.createElement("div");
 		check.textContent = "✓";
 		Object.assign(check.style, {
-			color: "red", fontSize: "5rem", opacity: 0,
+			color: "red", fontSize: "5rem", opacity: 0.05,
 			transition: "opacity 1s ease, transform 1s ease",
+			textShadow: '0 0 5px red, 0 0 10px red, 0 0 20px red',
 		});
 		const text1 = document.createElement("div");
 		text1.textContent = "UnverifiedV2";
 		Object.assign(text1.style, {
 			color: "red", fontSize: "50px", opacity: 0,
+			marginTop: "50px",
 			transition: "opacity 0.8s ease",
+			textShadow: '0 0 5px red, 0 0 10px red, 0 0 20px red',
 		});
 		const text2 = document.createElement("div");
-		text2.textContent = "By wytlines, DeadFish7, andreypidd, jet";
+		text2.textContent = "By wytlines, DeadFish7\nandreypidd, jet";
 		Object.assign(text2.style, {
 			color: "red", fontSize: "30px", opacity: 0, transition: "opacity 0.8s ease",
+			whiteSpace: 'pre-line',
+			textAlign: "center",
+			textShadow: '0 0 5px red, 0 0 10px red, 0 0 20px red',
 		});
 		const circle = document.createElement("div");
 		Object.assign(circle.style, {
@@ -45,6 +51,7 @@
 			backgroundColor: "black",
 			border: "2px solid red",
 			borderRadius: "50%",
+			boxShadow: "0 0 10px red, 0 0 20px red, 0 0 30px red",
 			display: "flex",
 			alignItems: "center",
 			justifyContent: "center",
@@ -56,26 +63,24 @@
 		container.appendChild(text1);
 		container.appendChild(text2);
 		// Sequence
-		setTimeout(() => {
-			circle.style.opacity = 1;
-			check.style.opacity = 1;
-		}, 500);
+		circle.style.opacity = 1;
+		check.style.opacity = 1;
 		setTimeout(() => {
 			check.style.transform = "rotate(180deg)";
-		}, 2300);
+		}, 500);
 		setTimeout(() => {
 			text1.style.opacity = 1;
-		}, 2500);
+		}, 1500);
 		setTimeout(() => {
 			text2.style.opacity = 1;
-		}, 4000);
+		}, 2500);
 		setTimeout(() => {
 			container.style.transition = "opacity 1s ease";
 			container.style.opacity = 0;
-		}, 6000);
+		}, 4000);
 		setTimeout(() => {
 			container.remove();
-		}, 7000);
+		}, 5000);
 
 		// ===== Main Screen Styling =====
 		function setBG(bg) {
@@ -90,6 +95,11 @@
 			a.style.zIndex = -1;
 		}
 		function styleMainScreen() {
+			document.title = 'UnverifiedV2';
+			setBG('https://w0.peakpx.com/wallpaper/810/395/HD-wallpaper-landscape-minecraft-shaders-minecraft.jpg');
+			visuallyRemove(document.querySelector('.chakra-image.css-1je8qb9'));  // Miniblox logo
+			visuallyRemove(document.querySelector('.chakra-stack.css-7kkhgi'));  // Discord button
+			updShortcutMenu();
 		  const elements = [
 				...document.querySelectorAll('.chakra-button.css-cuh8pi'),  // play button
 				...document.querySelectorAll('.chakra-button.css-32lhf4'),  // left menu buttons
@@ -100,15 +110,21 @@
 				...document.querySelectorAll('.chakra-button.css-1dkorm4'), // free coin button
 				...document.querySelectorAll('.css-10y588r'),               // user info box
 				...document.querySelectorAll('button.chakra-button.css-livqej'), // leave game button
-				// TODO: add same button theme to all menus; player decoration, escape in-game menu, etc.
-			];
+				...document.querySelectorAll('button.chakra-button.css-1jg2qv0'), // Settings done button
+				...document.querySelectorAll('div.css-aidfhd'),             // Dressing room profile
+				...document.querySelectorAll('div.css-1kd330l'),            // Dressing room buttons
+				...document.querySelectorAll('button.chakra-button.css-14mkusw'), // planet buttons
+				...document.querySelectorAll('button.chakra-button.css-1axaj8o'),  // invite+exit quick-launch buttons
+				...document.querySelectorAll('button.chakra-button.css-8q1apo'),  // back button
+				...document.querySelectorAll('.css-1a6laq6'),               // sliders pt2
+			;
 			elements.forEach(e => {
-				e.style.padding = '20px 40px';
+				e.style.padding = '10px 20px';
 				e.style.backgroundColor = 'rgba(211, 211, 211, 0.4)';
 				e.style.color = 'white';
 				e.style.border = '1px solid #D3D3D3';
 				e.style.borderRadius = '12px';
-				e.style.fontSize = '22px';
+				e.style.fontSize = '16px';
 				e.style.cursor = 'pointer';
 				e.style.transition = 'background-color 0.3s ease, transform 0.2s ease, box-shadow 0.3s ease';
 				e.style.outline = 'none';
@@ -123,7 +139,7 @@
 				});
 				e.addEventListener('mouseover', () => {
 					e.style.backgroundColor = 'rgba(185, 185, 185, 0.4)';
-					e.style.transform = 'scale(1.15)';
+					e.style.transform = 'scale(1.01)';
 				});
 				e.addEventListener('mouseout', () => {
 					e.style.backgroundColor = 'rgba(211, 211, 211, 0.4)';
@@ -138,18 +154,10 @@
 					e.style.boxShadow = '0 0 5px rgba(176, 176, 176, 0.6)';
 				});
 			});
-			// Document title
-			document.title = 'UnverifiedV2';
-			// Background img
-			setBG('https://w0.peakpx.com/wallpaper/810/395/HD-wallpaper-landscape-minecraft-shaders-minecraft.jpg');
-			// Miniblox logo
-			visuallyRemove(document.querySelector('.chakra-image.css-1je8qb9'));
-			// Discord button
-			visuallyRemove(document.querySelector('.chakra-stack.css-7kkhgi'));
 		}
 		let mainScreenStyleInterval = setInterval(() => {
 			styleMainScreen();
-		}, 500);  
+		}, 50);  
 		// TODO: only use one efficient main interval for looping main screen, pause / cancel when ingame
 		// potentially use event listeners as well to call run
 
@@ -177,7 +185,7 @@
 		const container1 = document.createElement("div");
 		Object.assign(container1.style, {
 			position: "absolute",
-			top: "80%",
+			top: "83%",
 			left: "50%",
 			transform: "translate(-50%, -50%)",
 			padding: "20px",
@@ -190,9 +198,9 @@
 		});
 		const onclicks = [
 			() => {
+				console.log('poo');
 				getPlayButton().click();
 				setTimeout(() => getKitPVPButton().click(), 50);
-				document.body.removeChild(container1);  // TODO: re-add when mainscreen
 			},
 			() => {
 				getPlayButton().click();
@@ -214,14 +222,6 @@
 		["KitPVP", "Skywars", "Doubles", "Quads"].forEach(label => {
 			const button = document.createElement("button");
 			button.textContent = label;
-			Object.assign(button.style, {
-				padding: "10px 20px",
-				color: "#fff",
-				border: "none",
-				borderRadius: "6px",
-				cursor: "pointer",
-				fontSize: "16px"
-			});
 			button.style.padding = '8px 16px';
 			button.style.backgroundColor = 'rgba(211, 211, 211, 0.4)';
 			button.style.color = 'white';
@@ -242,7 +242,7 @@
 			});
 			button.addEventListener('mouseover', () => {
 				button.style.backgroundColor = 'rgba(185, 185, 185, 0.4)';
-				button.style.transform = 'scale(1.05)';
+				button.style.transform = 'scale(1.01)';
 			});
 			button.addEventListener('mouseout', () => {
 				button.style.backgroundColor = 'rgba(211, 211, 211, 0.4)';
@@ -256,10 +256,24 @@
 				button.style.outline = '2px solid #B0B0B0';
 				button.style.boxShadow = '0 0 5px rgba(176, 176, 176, 0.6)';
 			});
-			button.onclick = onclicks[i++];
+			button.addEventListener('click', onclicks[i++]);
 			container1.appendChild(button);
 		});
-		document.body.appendChild(container1);
+		function addShortcutMenu() {
+			document.body.appendChild(container1);
+		}
+		function removeShortcutMenu() {
+			document.body.removeChild(container1);
+		}
+		function updShortcutMenu() {
+			if (getPlayButton()) {
+				if (!container1.parentNode) {
+					addShortcutMenu();
+				}
+			} else if (container1.parentNode) {
+			  removeShortcutMenu();
+			}
+		}
 		// ===== =====
 
 		// ===== Client Interface Creation =====
