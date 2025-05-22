@@ -31,13 +31,13 @@
 		const text1 = document.createElement("div");
 		text1.textContent = "UnverifiedV2";
 		Object.assign(text1.style, {
-			color: "red", fontSize: "50px", opacity: 0,
+			color: "red", fontSize: "60px", opacity: 0,
 			marginTop: "50px",
 			transition: "opacity 0.8s ease",
 			textShadow: '0 0 5px red, 0 0 10px red, 0 0 20px red',
 		});
 		const text2 = document.createElement("div");
-		text2.textContent = "By wytlines, DeadFish7\nandreypidd, jet";
+		text2.textContent = "\nBy wytlines, DeadFish7\nandreypidd, jet";
 		Object.assign(text2.style, {
 			color: "red", fontSize: "30px", opacity: 0, transition: "opacity 0.8s ease",
 			whiteSpace: 'pre-line',
@@ -70,19 +70,19 @@
 		}, 500);
 		setTimeout(() => {
 			text1.style.opacity = 1;
-		}, 1500);
+		}, 1000);
 		setTimeout(() => {
 			text2.style.opacity = 1;
-		}, 2500);
+		}, 1500);
 		setTimeout(() => {
 			container.style.transition = "opacity 1s ease";
 			container.style.opacity = 0;
-		}, 4000);
+		}, 2500);
 		setTimeout(() => {
 			container.remove();
-		}, 5000);
+		}, 3000);
 
-		// ===== Main Screen Styling =====
+		// ===== Unverified Styling =====
 		function setBG(bg) {
 			let b1 = document.querySelector('img.chakra-image.css-rkihvp');
 			if (b1) b1.src = bg;
@@ -94,13 +94,79 @@
 			a.style.opacity = 0;
 			a.style.zIndex = -1;
 		}
-		function styleMainScreen() {
+		function addUnverifiedBanner() {
+		  if (!document.getElementById('unverified-banner')) {
+			  const e = document.createElement('div');
+				e.textContent = 'UnverifiedV2\n\nBy wytlines, DeadFish7, andreypidd, jet'
+				e.id = 'unverified-banner';
+				e.style.whiteSpace = 'pre-line';
+				e.style.textAlign = 'center';
+				e.style.zIndex = 999;
+				e.style.position = "absolute";
+				e.style.top = "8.5%";
+				e.style.left = "50%";
+				e.style.transform = "translate(-50%, -50%)";
+				e.style.padding = '10px 20px';
+				e.style.backgroundColor = 'rgba(211, 211, 211, 0.4)';
+				e.style.color = 'white';
+				e.style.border = '1px solid #D3D3D3';
+				e.style.borderRadius = '12px';
+				e.style.fontSize = '24px';
+				e.style.cursor = 'pointer';
+				e.style.transition = 'background-color 0.3s ease, transform 0.2s ease, box-shadow 0.3s ease';
+				e.style.outline = 'none';
+				e.style.boxShadow = 'none';
+				e.addEventListener('focus', () => {
+					e.style.outline = '2px solid #B0B0B0';
+					e.style.boxShadow = '0 0 5px rgba(176, 176, 176, 0.6)';
+				});
+				e.addEventListener('blur', () => {
+					e.style.outline = 'none';
+					e.style.boxShadow = 'none';
+				});
+				e.addEventListener('mouseover', () => {
+					e.style.backgroundColor = 'rgba(185, 185, 185, 0.4)';
+					e.style.transform = 'translate(-50%, -50%), scale(1.01)';
+					e.style.top = "8.5%";
+					e.style.left = "50%";
+				});
+				e.addEventListener('mouseout', () => {
+					e.style.backgroundColor = 'rgba(211, 211, 211, 0.4)';
+					e.style.transform = 'translate(-50%, -50%), scale(1)';
+					e.style.top = "8.5%";
+					e.style.left = "50%";
+				});
+				document.body.appendChild(e);
+			}
+		}
+		function removeUnverifiedBanner() {
+			let x = document.getElementById('unverified-banner');
+			if (x) {
+				document.body.removeChild(x);
+			}
+		}
+		function updUnverifiedBanner() {
+		  if (isMainScreen()) {
+				if (!document.getElementById('unverified-banner')) {
+				  addUnverifiedBanner();
+				}
+			} else {
+			  removeUnverifiedBanner();
+			}
+		}
+		function isMainScreen() {
+		  return getPlayButton() !== null;
+		}
+		function unverifiedStyling() {
 			document.title = 'UnverifiedV2';
 			setBG('https://w0.peakpx.com/wallpaper/810/395/HD-wallpaper-landscape-minecraft-shaders-minecraft.jpg');
 			visuallyRemove(document.querySelector('.chakra-image.css-1je8qb9'));  // Miniblox logo
 			visuallyRemove(document.querySelector('.chakra-stack.css-7kkhgi'));  // Discord button
 			updShortcutMenu();
-		  const elements = [
+			updUnverifiedBanner();
+
+			// general styling
+		  const elements1 = [
 				...document.querySelectorAll('.chakra-button.css-cuh8pi'),  // play button
 				...document.querySelectorAll('.chakra-button.css-32lhf4'),  // left menu buttons
 				...document.querySelectorAll('.chakra-button.css-5ov7ui'),  // signin button
@@ -114,11 +180,12 @@
 				...document.querySelectorAll('div.css-aidfhd'),             // Dressing room profile
 				...document.querySelectorAll('div.css-1kd330l'),            // Dressing room buttons
 				...document.querySelectorAll('button.chakra-button.css-14mkusw'), // planet buttons
-				...document.querySelectorAll('button.chakra-button.css-1axaj8o'),  // invite+exit quick-launch buttons
 				...document.querySelectorAll('button.chakra-button.css-8q1apo'),  // back button
-				...document.querySelectorAll('.css-1a6laq6'),               // sliders pt2
-			;
-			elements.forEach(e => {
+				...document.querySelectorAll('.css-1a6laq6'),               // sliders outer part
+				...document.querySelectorAll('button.chakra-button.css-1axaj8o'),  // invite+exit quick-launch buttons
+				...document.querySelectorAll('button.chakra-button.css-xircll'),  // left menu back button
+			];
+			elements1.forEach(e => {
 				e.style.padding = '10px 20px';
 				e.style.backgroundColor = 'rgba(211, 211, 211, 0.4)';
 				e.style.color = 'white';
@@ -145,23 +212,30 @@
 					e.style.backgroundColor = 'rgba(211, 211, 211, 0.4)';
 					e.style.transform = 'scale(1)';
 				});
-				e.addEventListener('mousedown', () => {
-					e.style.outline = '2px solid #B0B0B0';
-					e.style.boxShadow = '0 0 5px rgba(176, 176, 176, 0.6)';
-				});
-				e.addEventListener('mouseup', () => {
-					e.style.outline = '2px solid #B0B0B0';
-					e.style.boxShadow = '0 0 5px rgba(176, 176, 176, 0.6)';
-				});
 			});
-		}
+			// specific styling
+			const elements2 = [...document.querySelectorAll('button.chakra-button.css-1axaj8o')];  // invite+exit quick-launch buttons
+			elements2.forEach(e => {
+				e.style.fontSize = '24px';
+				e.style.padding = '1px 1px';
+			});
+			const elements3 = [...document.querySelectorAll('.chakra-slider')]; // slider inner part
+			elements3.forEach(e => {
+				e.style.padding = '1px 1px';
+			});
+			const elements4 = [...document.querySelectorAll('.chakra-button.css-cuh8pi')];  // play button
+			elements4.forEach(e => {
+				e.style.fontSize = '20px';
+			});
+		};
+
 		let mainScreenStyleInterval = setInterval(() => {
-			styleMainScreen();
+			unverifiedStyling();
 		}, 50);  
 		// TODO: only use one efficient main interval for looping main screen, pause / cancel when ingame
 		// potentially use event listeners as well to call run
 
-		// === Shortcut Menu Buttons ===  // TODO: WIP
+		// === Shortcut Menu Buttons ===  
 		function getPlayButton() {
 		  return document.querySelector('.chakra-button.css-cuh8pi');
 		}
@@ -185,7 +259,7 @@
 		const container1 = document.createElement("div");
 		Object.assign(container1.style, {
 			position: "absolute",
-			top: "83%",
+			top: "85%",
 			left: "50%",
 			transform: "translate(-50%, -50%)",
 			padding: "20px",
@@ -227,7 +301,7 @@
 			button.style.color = 'white';
 			button.style.border = '1px solid #D3D3D3';
 			button.style.borderRadius = '6px';
-			button.style.fontSize = '14px';
+			button.style.fontSize = '16px';
 			button.style.cursor = 'pointer';
 			button.style.transition = 'background-color 0.3s ease, transform 0.2s ease, box-shadow 0.3s ease';
 			button.style.outline = 'none';
@@ -266,7 +340,7 @@
 			document.body.removeChild(container1);
 		}
 		function updShortcutMenu() {
-			if (getPlayButton()) {
+			if (isMainScreen()) {
 				if (!container1.parentNode) {
 					addShortcutMenu();
 				}
@@ -752,7 +826,6 @@
         }
     });
 
-    createModule("Keystrokes", "Displays the keys you press in real-time.");
     createModule("FPS Counter", "Shows the frames per second (FPS) of the game.");
     createModule("CPS Counter", "Counts how many times you click per second.");
     createModule("Hitboxes", "Visualizes the hitboxes of players or objects.");
@@ -819,7 +892,11 @@
 
     let uiVisible = false;
     function toggleUI() {
-        ui.style.display = uiVisible ? "none" : "block";
+				if (uiVisible) {
+					ui.style.display = "none";
+				} else {
+					ui.style.display = "block";
+				}
         uiVisible = !uiVisible;
     }
 
@@ -865,7 +942,7 @@
 		// ===== =====
 })();
 
-// ===== Client Status =====
+// ===== FPS Boosting =====
 (function() {
     'use strict';
     const originalRAF = window.requestAnimationFrame;
