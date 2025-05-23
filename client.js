@@ -195,6 +195,7 @@
 				...document.querySelectorAll('.css-nizmkx'),     					// player info box xp bar
 				...document.querySelectorAll('.css-r7134l'),     					// ranking cat box
 				...document.querySelectorAll('.css-qzh2oi'),     					// ranking selected cat box
+				...document.querySelectorAll('.chakra-button.css-137k3gn'), 	// sign done button
 			];
 			elements1.forEach(e => {
 				e.style.padding = '10px 20px';
