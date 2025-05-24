@@ -189,7 +189,7 @@ class UnverifiedBanner {
 	}
 	removeBanner() {
 		if (this.shown) {
-			this.shown = true;
+			this.shown = false;
 			this.e.remove();
 		}
 	}
