@@ -8,44 +8,29 @@
 // @grant        none
 // ==/UserScript==
 
-(function() {
-    'use strict';
 
-		// ===== Intro Loading Screen =====
-		const container = document.createElement("div");
-		Object.assign(container.style, {
+class UnverifiedIntro {
+	constructor() {
+		// overall container
+		this.container = document.createElement("div");
+		Object.assign(this.container.style, {
 			position: "fixed",
 			top: 0, left: 0, width: "100vw", height: "100vh",
 			display: "flex", alignItems: "center", justifyContent: "center", flexDirection: "column",
 			backgroundColor: "black",
 			overflow: "hidden", zIndex: 9999,
 		});
-		document.body.appendChild(container);
-		const check = document.createElement("div");
-		check.textContent = "✓";
-		Object.assign(check.style, {
+		// check logo
+		this.check = document.createElement("div");
+		this.check.textContent = "✓";
+		Object.assign(this.check.style, {
 			color: "red", fontSize: "5rem", opacity: 0.05,
 			transition: "opacity 1s ease, transform 1s ease",
 			textShadow: '0 0 5px red, 0 0 10px red, 0 0 20px red',
 		});
-		const text1 = document.createElement("div");
-		text1.textContent = "UnverifiedV2";
-		Object.assign(text1.style, {
-			color: "red", fontSize: "60px", opacity: 0,
-			marginTop: "50px",
-			transition: "opacity 0.8s ease",
-			textShadow: '0 0 5px red, 0 0 10px red, 0 0 20px red',
-		});
-		const text2 = document.createElement("div");
-		text2.textContent = "\nBy wytlines, DeadFish7\nandreypidd, jet";
-		Object.assign(text2.style, {
-			color: "red", fontSize: "30px", opacity: 0, transition: "opacity 0.8s ease",
-			whiteSpace: 'pre-line',
-			textAlign: "center",
-			textShadow: '0 0 5px red, 0 0 10px red, 0 0 20px red',
-		});
-		const circle = document.createElement("div");
-		Object.assign(circle.style, {
+		// check mark circle border
+		this.circle = document.createElement("div");
+		Object.assign(this.circle.style, {
 			width: "100px",
 			height: "100px",
 			backgroundColor: "black",
@@ -58,107 +43,305 @@
 			opacity: 0,
 			transition: "opacity 1s ease, transform 1s ease",
 		});
-		circle.appendChild(check);
-		container.appendChild(circle);
-		container.appendChild(text1);
-		container.appendChild(text2);
-		// Sequence
-		circle.style.opacity = 1;
-		check.style.opacity = 1;
+		this.circle.appendChild(this.check);
+		this.container.appendChild(this.circle);
+		// unverified text
+		this.unverifiedText = document.createElement("div");
+		this.unverifiedText.textContent = "UnverifiedV2";
+		Object.assign(this.unverifiedText.style, {
+			color: "red", fontSize: "60px", opacity: 0,
+			marginTop: "50px",
+			transition: "opacity 0.8s ease",
+			textShadow: '0 0 5px red, 0 0 10px red, 0 0 20px red',
+		});
+		this.container.appendChild(this.unverifiedText);
+		// credits text
+		this.creditsText = document.createElement("div");
+		this.creditsText.textContent = "\nBy wytlines, DeadFish7\nandreypidd, jet";
+		Object.assign(this.creditsText.style, {
+			color: "red", fontSize: "30px", opacity: 0, transition: "opacity 0.8s ease",
+			whiteSpace: 'pre-line',
+			textAlign: "center",
+			textShadow: '0 0 5px red, 0 0 10px red, 0 0 20px red',
+		});
+		this.container.appendChild(this.creditsText);
+	}
+  playIntro() {
+		document.body.appendChild(this.container);
+		// show logo
+		this.circle.style.opacity = 1;
+		this.check.style.opacity = 1;
+		// rotate
 		setTimeout(() => {
-			check.style.transform = "rotate(180deg)";
+			this.check.style.transform = "rotate(180deg)";
 		}, 500);
+		// show unverified text
 		setTimeout(() => {
-			text1.style.opacity = 1;
+			this.unverifiedText.style.opacity = 1;
 		}, 1000);
+		// show credits text
 		setTimeout(() => {
-			text2.style.opacity = 1;
+			this.creditsText.style.opacity = 1;
 		}, 1500);
+		// fade everything out
 		setTimeout(() => {
-			container.style.transition = "opacity 1s ease";
-			container.style.opacity = 0;
+			this.container.style.transition = "opacity 1s ease";
+			this.container.style.opacity = 0;
 		}, 2500);
+		// remove
 		setTimeout(() => {
-			container.remove();
+			this.container.remove();
 		}, 3000);
+	}
+	showInitializedNotif() {
+    const initializedNotification = document.createElement("div");
+    initializedNotification.classList.add('initialized-notification');
+    initializedNotification.textContent = "UnverifiedV2 Initialized";
+    document.body.appendChild(initializedNotification);
+    setTimeout(() => {
+        initializedNotification.style.top = "10px";
+        initializedNotification.style.opacity = "1";
+    }, 10);
+    setTimeout(() => {
+        initializedNotification.style.top = "-50px";
+        initializedNotification.style.opacity = "0";
+    }, 2000);
+		setTimeout(() => {
+				initializedNotification.remove();
+		}, 3000);
+	}
+}
 
-		// ===== Unverified Styling =====
-		const bg = "https://w0.peakpx.com/wallpaper/810/395/HD-wallpaper-landscape-minecraft-shaders-minecraft.jpg";
-		const sel = 'img.chakra-image.css-rkihvp, img.chakra-image.css-mohuzh';
-		const setBG = el => el.src = bg;
+class UnverifiedStyler {
+	constructor() {
+		this.background = new UnverifiedBackground();
+		this.banner = new UnverifiedBanner();
+		this.shortcutMenu = new UnverifiedShortcutMenu();
+	}
+	visuallyRemove(e) {
+		// visually hide an element `e` from the document
+	  if (!e) {
+		  return;
+		}
+		e.style.opacity = 0;
+		e.style.zIndex = -1;
+	}
+}
+
+class UnverifiedBackground {
+  constructor() {
+		this.bgObserver = null;
+		this.bg1 = "https://w0.peakpx.com/wallpaper/810/395/HD-wallpaper-landscape-minecraft-shaders-minecraft.jpg";
+	}
+	addBackgroundSetter(bg) {
+		const setBG = e => {e.src = bg;};  // TODO; make to dynamically pull bg src from MainScreenStyler so can change bg as we want
+		const sel = 'img.chakra-image.css-rkihvp, img.chakra-image.css-mohuzh';  // background img divs
 		document.querySelectorAll(sel).forEach(setBG);
-		new MutationObserver(m => m.forEach(r => r.addedNodes.forEach(n => {
+		this.bgObserver = new MutationObserver(m => m.forEach(r => r.addedNodes.forEach(n => {
 			if (n.nodeType !== 1) return;
 			if (n.matches?.(sel)) setBG(n);
 			n.querySelectorAll?.(sel).forEach(setBG);
 		}))).observe(document.body, { childList: true, subtree: true });
+	}
+}
 
-		function visuallyRemove(a) {
-			if (!a) return;
-			a.style.opacity = 0;
-			a.style.zIndex = -1;
+class UnverifiedBanner {
+  constructor() {
+		this.e = document.createElement('div');
+		this.e.textContent = 'UnverifiedV2\n\nBy wytlines, DeadFish7, andreypidd, jet'
+		this.e.id = 'unverified-banner';
+		this.e.style.whiteSpace = 'pre-line';
+		this.e.style.textAlign = 'center';
+		this.e.style.zIndex = 999;
+		this.e.style.position = "absolute";
+		this.e.style.top = "8.5%";
+		this.e.style.left = "50%";
+		this.e.style.transform = "translate(-50%, -50%)";
+		this.e.style.padding = '10px 20px';
+		this.e.style.backgroundColor = 'rgba(211, 211, 211, 0.4)';
+		this.e.style.color = 'white';
+		this.e.style.border = '1px solid #D3D3D3';
+		this.e.style.borderRadius = '12px';
+		this.e.style.fontSize = '24px';
+		this.e.style.cursor = 'pointer';
+		this.e.style.transition = 'background-color 0.3s ease, transform 0.2s ease, box-shadow 0.3s ease';
+		this.e.style.outline = 'none';
+		this.e.style.boxShadow = 'none';
+		this.e.addEventListener('mouseover', () => {
+			this.e.style.backgroundColor = 'rgba(185, 185, 185, 0.4)';
+			this.e.style.transform = 'translate(-50%, -50%), scale(1.01)';
+			this.e.style.top = "8.5%";
+			this.e.style.left = "50%";
+		});
+		this.e.addEventListener('mouseout', () => {
+			this.e.style.backgroundColor = 'rgba(211, 211, 211, 0.4)';
+			this.e.style.transform = 'translate(-50%, -50%), scale(1)';
+			this.e.style.top = "8.5%";
+			this.e.style.left = "50%";
+		});
+		this.shown = false;
+	}
+	addBanner() {
+		if (!this.shown) {
+			document.body.appendChild(this.e);
+		  this.shown = true;
 		}
-		function addUnverifiedBanner() {
-		  if (!document.getElementById('unverified-banner')) {
-			  const e = document.createElement('div');
-				e.textContent = 'UnverifiedV2\n\nBy wytlines, DeadFish7, andreypidd, jet'
-				e.id = 'unverified-banner';
-				e.style.whiteSpace = 'pre-line';
-				e.style.textAlign = 'center';
-				e.style.zIndex = 999;
-				e.style.position = "absolute";
-				e.style.top = "8.5%";
-				e.style.left = "50%";
-				e.style.transform = "translate(-50%, -50%)";
-				e.style.padding = '10px 20px';
-				e.style.backgroundColor = 'rgba(211, 211, 211, 0.4)';
-				e.style.color = 'white';
-				e.style.border = '1px solid #D3D3D3';
-				e.style.borderRadius = '12px';
-				e.style.fontSize = '24px';
-				e.style.cursor = 'pointer';
-				e.style.transition = 'background-color 0.3s ease, transform 0.2s ease, box-shadow 0.3s ease';
-				e.style.outline = 'none';
-				e.style.boxShadow = 'none';
-				e.addEventListener('mouseover', () => {
-					e.style.backgroundColor = 'rgba(185, 185, 185, 0.4)';
-					e.style.transform = 'translate(-50%, -50%), scale(1.01)';
-					e.style.top = "8.5%";
-					e.style.left = "50%";
-				});
-				e.addEventListener('mouseout', () => {
-					e.style.backgroundColor = 'rgba(211, 211, 211, 0.4)';
-					e.style.transform = 'translate(-50%, -50%), scale(1)';
-					e.style.top = "8.5%";
-					e.style.left = "50%";
-				});
-				document.body.appendChild(e);
-			}
+	}
+	removeBanner() {
+		if (this.shown) {
+			this.shown = true;
+			this.e.remove();
 		}
-		function removeUnverifiedBanner() {
-			let x = document.getElementById('unverified-banner');
-			if (x) {
-				document.body.removeChild(x);
-			}
+	}
+}
+
+class UnverifiedShortcutMenu {
+	constructor() {
+		this.onclicks = [
+			() => {  // Kit
+				this.getPlayButton().click();
+				setTimeout(() => this.getKitPVPButton().click(), 70);
+				document.body.removeChild(this.container);
+			},
+			() => {  // Sky
+				this.getPlayButton().click();
+				setTimeout(() => this.getSkywarsButton().click(), 70);
+				document.body.removeChild(this.container);
+			},
+			() => {  // Doubles
+				this.getPlayButton().click();
+				setTimeout(() => this.getDoublesButton().click(), 70);
+				document.body.removeChild(this.container);
+			},
+			() => {  // Quads
+				this.getPlayButton().click();
+				setTimeout(() => this.getQuadsButton().click(), 70);
+				document.body.removeChild(this.container);
+			},
+			() => {  // Classic
+				this.getPlayButton().click();
+				setTimeout(() => this.getClassicPVPButton().click(), 70);
+				document.body.removeChild(this.container);
+			},
+		];
+		this.container = document.createElement("div");
+		Object.assign(this.container.style, {
+			position: "absolute",
+			top: "82%",
+			left: "50%",
+			transform: "translate(-50%, -50%)",
+			padding: "20px",
+			borderRadius: "12px",
+			display: "flex",
+			flexDirection: "row",
+			gap: "10px",
+			alignItems: "center",
+			zIndex: "99"
+		});
+		let i = 0; ["KitPVP", "Skywars", "Doubles", "Quads", "ClassicPVP"].forEach(label => {
+			const button = document.createElement("button");
+			button.textContent = label;
+			button.style.padding = '8px 16px';
+			button.style.backgroundColor = 'rgba(211, 211, 211, 0.4)';
+			button.style.color = 'white';
+			button.style.border = '1px solid #D3D3D3';
+			button.style.borderRadius = '6px';
+			button.style.fontSize = '16px';
+			button.style.cursor = 'pointer';
+			button.style.transition = 'background-color 0.3s ease, transform 0.2s ease, box-shadow 0.3s ease';
+			button.style.outline = 'none';
+			button.style.boxShadow = 'none';
+			button.addEventListener('focus', () => {
+				button.style.outline = '2px solid #B0B0B0';
+				button.style.boxShadow = '0 0 5px rgba(176, 176, 176, 0.6)';
+			});
+			button.addEventListener('blur', () => {
+				button.style.outline = 'none';
+				button.style.boxShadow = 'none';
+			});
+			button.addEventListener('mouseover', () => {
+				button.style.backgroundColor = 'rgba(185, 185, 185, 0.4)';
+				button.style.transform = 'scale(1.01)';
+			});
+			button.addEventListener('mouseout', () => {
+				button.style.backgroundColor = 'rgba(211, 211, 211, 0.4)';
+				button.style.transform = 'scale(1)';
+			});
+			button.addEventListener('mousedown', () => {
+				button.style.outline = '2px solid #B0B0B0';
+				button.style.boxShadow = '0 0 5px rgba(176, 176, 176, 0.6)';
+			});
+			button.addEventListener('mouseup', () => {
+				button.style.outline = '2px solid #B0B0B0';
+				button.style.boxShadow = '0 0 5px rgba(176, 176, 176, 0.6)';
+			});
+			button.addEventListener('click', this.onclicks[i++]);
+			this.container.appendChild(button);
+		});
+		this.shown = false;
+	}
+	getPlayButton() {
+		return document.querySelector('.chakra-button.css-cuh8pi');
+	}
+	getExitButton() {
+		// called when on games page; exit button -> main screen
+		return document.querySelectorAll('.chakra-button.css-1axaj8o')[1];
+	}
+	getKitPVPButton() {
+		return document.querySelector('.css-1idq8wm.chakra-text');
+	}
+	getSkywarsButton() {
+		return document.querySelector('.css-rsqc3q');
+	}
+	getDoublesButton() {
+		return document.querySelector('.css-6umr0e.chakra-text');
+	}
+	getQuadsButton() {
+		return document.querySelector('.css-sbvzy.chakra-text');
+	}
+	getClassicPVPButton() {
+		return document.querySelector('.css-1w536sc');
+	}
+	addShortcutMenu() {
+		if (!this.shown) {
+			this.shown = true;
+			document.body.appendChild(this.container);
 		}
-		function updUnverifiedBanner() {
-		  if (isMainScreen()) {
-				if (!document.getElementById('unverified-banner')) {
-				  addUnverifiedBanner();
-				}
-			} else {
-			  removeUnverifiedBanner();
-			}
+	}
+	removeShortcutMenu() {
+		if (this.shown) {
+			this.shown = false;
+			document.body.removeChild(this.container);
 		}
-		function isMainScreen() {
-		  return getPlayButton() !== null;
+	}
+}
+
+
+(function() {
+    'use strict';
+		// ===== Intro Player =====
+		const intro = new UnverifiedIntro();
+		intro.playIntro();
+		intro.showInitializedNotif();
+
+		// ===== Unverified Styling =====
+		const styler = new UnverifiedStyler();
+		styler.background.addBackgroundSetter(styler.background.bg1);
+
+		function isMainScreen() {  // TEMP
+		  return styler.shortcutMenu.getPlayButton() !== null;
 		}
-		function unverifiedStyling() {
+		function unverifiedStyling() {  // TODO: move everything to styling class for better adaptability & deving for customization
 			document.title = 'UnverifiedV2';
-			visuallyRemove(document.querySelector('.chakra-image.css-1je8qb9'));  // Miniblox logo
-			visuallyRemove(document.querySelector('.chakra-stack.css-7kkhgi'));  // Discord button
-			updShortcutMenu();
-			updUnverifiedBanner();
+			styler.visuallyRemove(document.querySelector('.chakra-image.css-1je8qb9'));  // Miniblox logo
+			styler.visuallyRemove(document.querySelector('.chakra-stack.css-7kkhgi'));  // Discord button
+			if (isMainScreen()) {  // temp
+				styler.shortcutMenu.addShortcutMenu();
+				styler.banner.addBanner();
+			} else {
+				styler.shortcutMenu.removeShortcutMenu();
+				styler.banner.removeBanner();
+			}
 
 			// general styling
 		  const elements1 = [
@@ -258,6 +441,22 @@
 				e.style.border = '1px solid white';
 				e.style.borderRadius = '12px';
 			});
+			const blackBackgroundElements = [
+				...document.querySelectorAll('.chakra-stack.css-1cklnv0'),  // account data bg
+				...document.querySelectorAll('.chakra-stack.css-oou8ol'),  // profile left menu bg
+				...document.querySelectorAll('.chakra-stack.css-owjkmg'),  // friends list bg
+				...document.querySelectorAll('.chakra-stack.css-15uwvcw'),  // discord connection bg
+				...document.querySelectorAll('.chakra-stack.css-1hj4r72'),  // dressing room bg
+				...document.querySelectorAll('.chakra-stack.css-10tqh5h'),  // subscriptions bg
+				...document.querySelectorAll('.chakra-stack.css-wv1k6p'),  // player stats bg
+				...document.querySelectorAll('.chakra-stack.css-b1sb84'),  // shop bg
+				...document.querySelectorAll('.chakra-stack.css-b1sb84'),  // ranking bg
+			];
+			blackBackgroundElements.forEach(e => {
+				e.style.background = 'transparent'; 
+				e.style.backdropFilter = 'blur(1px)';
+				e.style.webkitBackdropFilter = 'blur(1px)'; 
+			});
 		};
 
 		let mainScreenStyleInterval = setInterval(() => {
@@ -266,128 +465,12 @@
 		// TODO: only use one efficient main interval for looping main screen, pause / cancel when ingame
 		// potentially use event listeners as well to call run; or use MutationObserver instead
 
-		// === Shortcut Menu Buttons ===  
-		function getPlayButton() {
-		  return document.querySelector('.chakra-button.css-cuh8pi');
-		}
-		function getExitButton() {
-			// called when on games page; exit button -> main screen
-			return document.querySelectorAll('.chakra-button.css-1axaj8o')[1];
-		}
-		function getKitPVPButton() {
-			return document.querySelector('.css-1idq8wm .chakra-text');
-		}
-		function getSkywarsButton() {
-		  return document.querySelector('.css-rsqc3q');
-		}
-		function getDoublesButton() {
-		  return document.querySelector('.css-6umr0e .chakra-text');
-		}
-		function getQuadsButton() {
-		  return document.querySelector('.css-sbvzy .chakra-text');
-		}
-		function getClassicPVPButton() {
-		  return document.querySelector('.css-1w536sc');
-		}
-		// Add shortcut menu
-		const container1 = document.createElement("div");
-		Object.assign(container1.style, {
-			position: "absolute",
-			top: "82%",
-			left: "50%",
-			transform: "translate(-50%, -50%)",
-			padding: "20px",
-			borderRadius: "12px",
-			display: "flex",
-			flexDirection: "row",
-			gap: "10px",
-			alignItems: "center",
-			zIndex: "99"
-		});
-		const onclicks = [
-			() => {
-				getPlayButton().click();
-				setTimeout(() => getKitPVPButton().click(), 50);
-				document.body.removeChild(container1);
-			},
-			() => {
-				getPlayButton().click();
-				setTimeout(() => getSkywarsButton().click(), 50);
-				document.body.removeChild(container1);
-			},
-			() => {
-				getPlayButton().click();
-				setTimeout(() => getDoublesButton().click(), 50);
-				document.body.removeChild(container1);
-			},
-			() => {
-				getPlayButton().click();
-				setTimeout(() => getQuadsButton().click(), 50);
-				document.body.removeChild(container1);
-			},
-			() => {
-				getPlayButton().click();
-				setTimeout(() => getClassicPVPButton().click(), 50);
-				document.body.removeChild(container1);
-			},
-		];
-		let i = 0;
-		["KitPVP", "Skywars", "Doubles", "Quads", "ClassicPVP"].forEach(label => {
-			const button = document.createElement("button");
-			button.textContent = label;
-			button.style.padding = '8px 16px';
-			button.style.backgroundColor = 'rgba(211, 211, 211, 0.4)';
-			button.style.color = 'white';
-			button.style.border = '1px solid #D3D3D3';
-			button.style.borderRadius = '6px';
-			button.style.fontSize = '16px';
-			button.style.cursor = 'pointer';
-			button.style.transition = 'background-color 0.3s ease, transform 0.2s ease, box-shadow 0.3s ease';
-			button.style.outline = 'none';
-			button.style.boxShadow = 'none';
-			button.addEventListener('focus', () => {
-				button.style.outline = '2px solid #B0B0B0';
-				button.style.boxShadow = '0 0 5px rgba(176, 176, 176, 0.6)';
-			});
-			button.addEventListener('blur', () => {
-				button.style.outline = 'none';
-				button.style.boxShadow = 'none';
-			});
-			button.addEventListener('mouseover', () => {
-				button.style.backgroundColor = 'rgba(185, 185, 185, 0.4)';
-				button.style.transform = 'scale(1.01)';
-			});
-			button.addEventListener('mouseout', () => {
-				button.style.backgroundColor = 'rgba(211, 211, 211, 0.4)';
-				button.style.transform = 'scale(1)';
-			});
-			button.addEventListener('mousedown', () => {
-				button.style.outline = '2px solid #B0B0B0';
-				button.style.boxShadow = '0 0 5px rgba(176, 176, 176, 0.6)';
-			});
-			button.addEventListener('mouseup', () => {
-				button.style.outline = '2px solid #B0B0B0';
-				button.style.boxShadow = '0 0 5px rgba(176, 176, 176, 0.6)';
-			});
-			button.addEventListener('click', onclicks[i++]);
-			container1.appendChild(button);
-		});
-		function addShortcutMenu() {
-			document.body.appendChild(container1);
-		}
-		function removeShortcutMenu() {
-			document.body.removeChild(container1);
-		}
-		function updShortcutMenu() {
-			if (isMainScreen()) {
-				if (!container1.parentNode) {
-					addShortcutMenu();
-				}
-			} else if (container1.parentNode) {
-			  removeShortcutMenu();
-			}
-		}
 		// ===== =====
+
+
+
+
+
 
 		// ===== Client Interface Creation =====
     const style = document.createElement('style');
@@ -963,23 +1046,14 @@
         uiVisible = false;
     });
 
-		// === Initialized Notif ===
-    const initializedNotification = document.createElement("div");
-    initializedNotification.classList.add('initialized-notification');
-    initializedNotification.textContent = "UnverifiedV2 Initialized";
-    document.body.appendChild(initializedNotification);
-    setTimeout(() => {
-        initializedNotification.style.top = "10px";
-        initializedNotification.style.opacity = "1";
-    }, 10);
-    setTimeout(() => {
-        initializedNotification.style.top = "-50px";
-        initializedNotification.style.opacity = "0";
-    }, 2000);
-		// === ===
 
 		// ===== =====
 })();
+
+
+
+
+
 
 // ===== FPS Boosting =====
 (function() {
