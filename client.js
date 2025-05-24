@@ -379,6 +379,7 @@ class UnverifiedShortcutMenu {
 				...document.querySelectorAll('.css-r7134l'),     					// ranking cat box
 				...document.querySelectorAll('.css-qzh2oi'),     					// ranking selected cat box
 				...document.querySelectorAll('.chakra-button.css-137k3gn'), 	// sign done button
+				...document.querySelectorAll('.chakra-button.css-1n378o7'), 	// open loot box button
 			];
 			elements1.forEach(e => {
 				e.style.padding = '10px 20px';
@@ -454,8 +455,11 @@ class UnverifiedShortcutMenu {
 			];
 			blackBackgroundElements.forEach(e => {
 				e.style.background = 'transparent'; 
-				e.style.backdropFilter = 'blur(1px)';
-				e.style.webkitBackdropFilter = 'blur(1px)'; 
+				e.style.backgroundColor = 'none'; 
+				if (!e.textContent.startsWith('Browse')) {
+					e.style.backdropFilter = 'blur(1px)';
+					e.style.webkitBackdropFilter = 'blur(1px)'; 
+				}
 			});
 		};
 
