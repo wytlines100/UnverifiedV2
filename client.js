@@ -288,16 +288,16 @@ class UnverifiedShortcutMenu {
 		return document.querySelectorAll('.chakra-button.css-1axaj8o')[1];
 	}
 	getKitPVPButton() {
-		return document.querySelector('.css-1idq8wm.chakra-text');
+		return document.querySelector('.css-1idq8wm');
 	}
 	getSkywarsButton() {
 		return document.querySelector('.css-rsqc3q');
 	}
 	getDoublesButton() {
-		return document.querySelector('.css-6umr0e.chakra-text');
+		return document.querySelector('.css-6umr0e');
 	}
 	getQuadsButton() {
-		return document.querySelector('.css-sbvzy.chakra-text');
+		return document.querySelector('.css-sbvzy');
 	}
 	getClassicPVPButton() {
 		return document.querySelector('.css-1w536sc');
