@@ -533,7 +533,11 @@ class UnverifiedShortcutMenu {
 		// ===== Unverified Styling =====
 		const styler = new UnverifiedStyler();
 		styler.addStyleObserver();
-		styler.initialTriggerStyleObserver();
+		try {
+			styler.initialTriggerStyleObserver();
+		} catch (e) {
+			// ignore; was triggered by join invite link & in game already - style observer added so is fine
+		}
 		// ===== =====
 
 		// ===== Client Interface Creation =====
