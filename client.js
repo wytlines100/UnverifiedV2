@@ -9,6 +9,7 @@
 // ==/UserScript==
 
 
+// ===== UNVERIFIED INTRO CLASS - handles intro animation playing =====
 class UnverifiedIntro {
 	constructor() {
 		// overall container
@@ -112,11 +113,80 @@ class UnverifiedIntro {
 	}
 }
 
+// ===== UNVERIFIED STYLER CLASS - handles all menu, button, & bg re-styling =====
 class UnverifiedStyler {
 	constructor() {
+		this.observer = null;
 		this.background = new UnverifiedBackground();
 		this.banner = new UnverifiedBanner();
 		this.shortcutMenu = new UnverifiedShortcutMenu();
+
+		this.visuallyRemoveSelectors = [
+			'.chakra-image.css-1je8qb9', // Miniblox logo
+			'.chakra-stack.css-7kkhgi', // Discord button  // TODO; set to unverified discord server >:D
+		];
+		this.backgroundSelectors = ['img.chakra-image.css-rkihvp', 'img.chakra-image.css-mohuzh'];
+		this.generalStylingSelectors = new Set([
+			'.chakra-button.css-cuh8pi',  // play button
+			'.chakra-button.css-32lhf4',  // left menu buttons
+			'.chakra-button.css-5ov7ui',  // signin button, box, ingame menu button
+			'.chakra-button.css-18wnugv', // customize button
+			'.chakra-button.css-he6upe',  // daily button
+			'.chakra-button.css-1oxqv3t',  // daily ready button
+			'.chakra-button.css-1dkorm4', // free coin button
+			'.css-10y588r',               // user info box
+			'button.chakra-button.css-livqej', // leave game button
+			'button.chakra-button.css-1jg2qv0', // Settings done button
+			'div.css-aidfhd',             // Dressing room profile
+			'div.css-1kd330l',            // Dressing room buttons
+			'button.chakra-button.css-14mkusw', // planet buttons
+			'button.chakra-button.css-8q1apo',  // back button
+			'.css-1a6laq6',               // sliders outer part
+			'button.chakra-button.css-1axaj8o',  // invite+exit quick-launch buttons
+			'button.chakra-button.css-xircll',  // left menu back button
+			'.css-1xy2x8',   						  // dressing room epic skins
+			'.css-i1x0qw',   						  // dressing room rare skins
+			'.css-jnnvp4',   						  // dressing room legendary skins
+			'.css-hk5viu',   						  // dressing room common skins
+			'.chakra-stack.css-1c10cfa',  // friend list block
+			'.chakra-form-control.css-1kxonj9',  // friend search bar
+			'.chakra-button.css-1dcrejx',  // friend search button
+			'.chakra-button.css-1ote1yx',  // profile change buttons
+			'.css-qkv95g',  	             // planet load selects
+			'.css-1r8eeg2',  	             // planet browse selects
+			'.chakra-input.css-18whhxd',    // player search bar
+			'.chakra-input.css-ypk59i',    // profile input bar email
+			'.chakra-input.css-1oc9k70',    // profile input bar username, password
+			'.css-nizmkx',     					// player info box xp bar
+			'.css-r7134l',     					// ranking cat box
+			'.css-qzh2oi',     					// ranking selected cat box
+			'.chakra-button.css-137k3gn', 	// sign done button
+			'.chakra-button.css-1n378o7', 	// open loot box button
+		]);
+		this.specificStylingSelectors = new Map([
+			['button.chakra-button.css-1axaj8o', e => { e.style.fontSize = '24px'; e.style.padding = '1px 1px' }],  // invite+exit quick-launch buttons
+			['.chakra-slider', e => { e.style.padding = '0 0' }],  	                                         // slider inner part
+			['.chakra-button.css-cuh8pi', e => { e.style.fontSize = '20px' }],                            // play button
+			['.css-1xy2x8', e => { e.style.border = '2px solid purple'; e.style.padding = '0 10px' }],     // dressing room epic skins
+			['.css-i1x0qw', e => { e.style.border = '2px solid green'; e.style.padding = '0 10px' }],     // dressing room rare skins
+			['.css-jnnvp4', e => { e.style.border = '2px solid yellow'; e.style.padding = '0 10px' }],    // dressing room legendary skins
+			['.css-hk5viu', e => { e.style.border = '2px solid gray'; e.style.padding = '0 10px' }],      // dressing room common skins
+			['.css-1a6laq6', e => { e.style.padding = '0 5px' }],                                              // sliders outer part
+			['.css-qzh2oi', e => { e.style.border = '2px solid white' }],                                            // ranking selected cat box
+			['.chakra-button.css-1iuk66d', e => { e.style.border = '1px solid white'; e.style.borderRadius = '12px' }], // join friends button
+			['.chakra-button.css-73nw7g', e => { e.style.border = '1px solid white'; e.style.borderRadius = '12px' }], // remove friends button
+		]);
+		this.blackBackgroundSelectors = [
+			'.chakra-stack.css-1cklnv0',  // account data bg
+			'.chakra-stack.css-oou8ol',  // profile left menu bg
+			'.chakra-stack.css-owjkmg',  // friends list bg
+			'.chakra-stack.css-15uwvcw',  // discord connection bg
+			'.chakra-stack.css-1hj4r72',  // dressing room bg
+			'.chakra-stack.css-10tqh5h',  // subscriptions bg
+			'.chakra-stack.css-wv1k6p',  // player stats bg
+			'.chakra-stack.css-b1sb84',  // shop bg
+			'.chakra-stack.css-b1sb84',  // ranking bg
+		];
 	}
 	visuallyRemove(e) {
 		// visually hide an element `e` from the document
@@ -126,25 +196,130 @@ class UnverifiedStyler {
 		e.style.opacity = 0;
 		e.style.zIndex = -1;
 	}
+	isMainScreen() {
+		return this.shortcutMenu.getPlayButton() !== null;
+	}
+	addStyleObserver() {
+		document.title = 'UnverifiedV2';
+		this.observer = new MutationObserver(mutations => {
+			for (const mutation of mutations) {
+				for (const node of mutation.addedNodes) {
+					if (node.nodeType !== Node.ELEMENT_NODE) continue;
+					const isChakraNode = node.matches('[data-chakra-component], [class^="css-"], [class*=" css-"]');
+					if (isChakraNode) {
+						// visually remove
+						for (const selector of this.visuallyRemoveSelectors) {
+						  if (node.matches(selector)) {
+							  this.visuallyRemove(node);
+							}
+							node.querySelectorAll(selector).forEach(e => {
+								this.visuallyRemove(node);
+							});
+						}
+						// background
+						for (const selector of this.backgroundSelectors) {
+							if (node.matches(selector)) {
+								this.background.setBG(node);
+							}
+							node.querySelectorAll(selector).forEach(e => {
+								this.background.setBG();
+							});
+						}
+						// general styling
+						for (const selector of this.generalStylingSelectors) {
+							if (node.matches(selector)) {
+							  this.applyGeneralStyle(node);
+							}
+							node.querySelectorAll(selector).forEach(e => {
+								this.applyGeneralStyle(e);
+							});
+						}
+						// specific styling
+						for (const selector of this.specificStylingSelectors.keys()) {
+							if (node.matches(selector)) {
+							  this.applySpecificStyle(node, selector);
+							}
+							node.querySelectorAll(selector).forEach(e => {
+							  this.applySpecificStyle(e, selector);
+							});
+						}
+						// MainScreen dependent elements
+						if (this.isMainScreen()) {  
+							this.shortcutMenu.addShortcutMenu();
+							this.banner.addBanner();
+						} else {
+							this.shortcutMenu.removeShortcutMenu();
+							this.banner.removeBanner();
+						}
+						// black background elements
+						for (const selector of this.blackBackgroundSelectors) {
+							if (node.matches(selector)) {
+							  this.removeBlackBackground(node);
+							}
+							node.querySelectorAll(selector).forEach(e => {
+							  this.removeBlackBackground(e);
+							});
+						}
+					}
+				}
+			}
+		});
+		this.observer.observe(document.body, { childList: true, subtree: true });
+	}
+	initialTriggerStyleObserver() {
+		// trigger all observer mutation style edits
+	  this.shortcutMenu.getPlayButton().click();
+		setTimeout(() => {
+			this.shortcutMenu.getExitButton().click();
+		}, 70)
+	}
+	applyGeneralStyle(e) {
+		// TODO; maybe have depending on current theme?
+		e.style.padding = '10px 20px';
+		e.style.backgroundColor = (!e.unverifiedMouseIn) ? 'rgba(211, 211, 211, 0.4)' : 'rgba(185, 185, 185, 0.4)';
+		e.style.color = 'white';
+		e.style.border = '1px solid #D3D3D3';
+		e.style.borderRadius = '12px';
+		e.style.fontSize = '16px';
+		e.style.cursor = 'pointer';
+		e.style.transition = 'transform 0.2s ease';
+		e.style.outline = 'none';
+		e.style.boxShadow = 'none';
+		e.addEventListener('mouseover', () => {
+			e.unverifiedMouseIn = true;
+			e.style.backgroundColor = 'rgba(185, 185, 185, 0.4)';
+		});
+		e.addEventListener('mouseout', () => {
+			e.unverifiedMouseIn = false;
+			e.style.backgroundColor = 'rgba(211, 211, 211, 0.4)';
+		});
+	}
+	applySpecificStyle(e, selector) {
+		this.specificStylingSelectors.get(selector)(e);
+	}
+	removeBlackBackground(e) {
+		e.style.background = 'transparent'; 
+		e.style.backgroundColor = 'none'; 
+		if (!e.textContent.startsWith('Browse')) {
+			e.style.backdropFilter = 'blur(1px)';
+			e.style.webkitBackdropFilter = 'blur(1px)'; 
+		}
+	}
 }
 
+// ===== UNVERiFIED BACKGROUND CLASS - handles background setting & background resources =====
 class UnverifiedBackground {
   constructor() {
 		this.bgObserver = null;
 		this.bg1 = "https://w0.peakpx.com/wallpaper/810/395/HD-wallpaper-landscape-minecraft-shaders-minecraft.jpg";
+		this.currentBG = this.bg1;
 	}
-	addBackgroundSetter(bg) {
-		const setBG = e => {e.src = bg;};  // TODO; make to dynamically pull bg src from MainScreenStyler so can change bg as we want
-		const sel = 'img.chakra-image.css-rkihvp, img.chakra-image.css-mohuzh';  // background img divs
-		document.querySelectorAll(sel).forEach(setBG);
-		this.bgObserver = new MutationObserver(m => m.forEach(r => r.addedNodes.forEach(n => {
-			if (n.nodeType !== 1) return;
-			if (n.matches?.(sel)) setBG(n);
-			n.querySelectorAll?.(sel).forEach(setBG);
-		}))).observe(document.body, { childList: true, subtree: true });
+	setBG(e) {
+	  e.src = this.currentBG;
 	}
 }
 
+// ===== UNVERIFIED BANNER CLASS - handles main screen banner component =====
 class UnverifiedBanner {
   constructor() {
 		this.e = document.createElement('div');
@@ -195,6 +370,7 @@ class UnverifiedBanner {
 	}
 }
 
+// ===== UNVERIFIED SHORTCUT MENU CLASS - handles shortcut menu on home screen =====
 class UnverifiedShortcutMenu {
 	constructor() {
 		this.onclicks = [
@@ -326,155 +502,9 @@ class UnverifiedShortcutMenu {
 
 		// ===== Unverified Styling =====
 		const styler = new UnverifiedStyler();
-		styler.background.addBackgroundSetter(styler.background.bg1);
-
-		function isMainScreen() {  // TEMP
-		  return styler.shortcutMenu.getPlayButton() !== null;
-		}
-		function unverifiedStyling() {  // TODO: move everything to styling class for better adaptability & deving for customization
-			document.title = 'UnverifiedV2';
-			styler.visuallyRemove(document.querySelector('.chakra-image.css-1je8qb9'));  // Miniblox logo
-			styler.visuallyRemove(document.querySelector('.chakra-stack.css-7kkhgi'));  // Discord button
-			if (isMainScreen()) {  // temp
-				styler.shortcutMenu.addShortcutMenu();
-				styler.banner.addBanner();
-			} else {
-				styler.shortcutMenu.removeShortcutMenu();
-				styler.banner.removeBanner();
-			}
-
-			// general styling
-		  const elements1 = [
-				...document.querySelectorAll('.chakra-button.css-cuh8pi'),  // play button
-				...document.querySelectorAll('.chakra-button.css-32lhf4'),  // left menu buttons
-				...document.querySelectorAll('.chakra-button.css-5ov7ui'),  // signin button, box
-				...document.querySelectorAll('.chakra-button.css-18wnugv'), // customize button
-				...document.querySelectorAll('.chakra-button.css-he6upe'),  // daily button
-				...document.querySelectorAll('.chakra-button.css-1oxqv3t'),  // daily ready button
-				...document.querySelectorAll('.chakra-button.css-1dkorm4'), // free coin button
-				...document.querySelectorAll('.css-10y588r'),               // user info box
-				...document.querySelectorAll('button.chakra-button.css-livqej'), // leave game button
-				...document.querySelectorAll('button.chakra-button.css-1jg2qv0'), // Settings done button
-				...document.querySelectorAll('div.css-aidfhd'),             // Dressing room profile
-				...document.querySelectorAll('div.css-1kd330l'),            // Dressing room buttons
-				...document.querySelectorAll('button.chakra-button.css-14mkusw'), // planet buttons
-				...document.querySelectorAll('button.chakra-button.css-8q1apo'),  // back button
-				...document.querySelectorAll('.css-1a6laq6'),               // sliders outer part
-				...document.querySelectorAll('button.chakra-button.css-1axaj8o'),  // invite+exit quick-launch buttons
-				...document.querySelectorAll('button.chakra-button.css-xircll'),  // left menu back button
-				...document.querySelectorAll('.css-1xy2x8'),   						  // dressing room epic skins
-				...document.querySelectorAll('.css-i1x0qw'),   						  // dressing room rare skins
-				...document.querySelectorAll('.css-jnnvp4'),   						  // dressing room legendary skins
-				...document.querySelectorAll('.css-hk5viu'),   						  // dressing room common skins
-				...document.querySelectorAll('.chakra-stack.css-1c10cfa'),  // friend list block
-				...document.querySelectorAll('.chakra-form-control.css-1kxonj9'),  // friend search bar
-				...document.querySelectorAll('.chakra-button.css-1dcrejx'),  // friend search button
-				...document.querySelectorAll('.chakra-button.css-1ote1yx'),  // profile change buttons
-				...document.querySelectorAll('.css-qkv95g'),  	             // planet load selects
-				...document.querySelectorAll('.css-1r8eeg2'),  	             // planet browse selects
-				...document.querySelectorAll('.chakra-input.css-18whhxd'),    // player search bar
-				...document.querySelectorAll('.chakra-input.css-ypk59i'),    // profile input bar email
-				...document.querySelectorAll('.chakra-input.css-1oc9k70'),    // profile input bar username, password
-				...document.querySelectorAll('.css-nizmkx'),     					// player info box xp bar
-				...document.querySelectorAll('.css-r7134l'),     					// ranking cat box
-				...document.querySelectorAll('.css-qzh2oi'),     					// ranking selected cat box
-				...document.querySelectorAll('.chakra-button.css-137k3gn'), 	// sign done button
-				...document.querySelectorAll('.chakra-button.css-1n378o7'), 	// open loot box button
-			];
-			elements1.forEach(e => {
-				e.style.padding = '10px 20px';
-				e.style.backgroundColor = (!e.unverifiedMouseIn) ? 'rgba(211, 211, 211, 0.4)' : 'rgba(185, 185, 185, 0.4)';
-				e.style.color = 'white';
-				e.style.border = '1px solid #D3D3D3';
-				e.style.borderRadius = '12px';
-				e.style.fontSize = '16px';
-				e.style.cursor = 'pointer';
-				e.style.transition = 'transform 0.2s ease';
-				e.style.outline = 'none';
-				e.style.boxShadow = 'none';
-				e.addEventListener('mouseover', () => {
-					e.unverifiedMouseIn = true;
-					e.style.backgroundColor = 'rgba(185, 185, 185, 0.4)';
-				});
-				e.addEventListener('mouseout', () => {
-					e.unverifiedMouseIn = false;
-					e.style.backgroundColor = 'rgba(211, 211, 211, 0.4)';
-				});
-			});
-			// specific styling
-			document.querySelectorAll('button.chakra-button.css-1axaj8o').forEach(e => {  // invite+exit quick-launch buttons
-				e.style.fontSize = '24px';
-				e.style.padding = '1px 1px';
-			});
-			document.querySelectorAll('.chakra-slider').forEach(e => {  // slider inner part
-				e.style.padding = '0 0';
-			});
-			document.querySelectorAll('.chakra-button.css-cuh8pi').forEach(e => {  // play button
-				e.style.fontSize = '20px';
-			});
-			document.querySelectorAll('.css-1xy2x8').forEach(e => {  // dressing room epic skins
-				e.style.border = '2px solid purple';
-				e.style.padding = '0 10px';
-			});
-			document.querySelectorAll('.css-i1x0qw').forEach(e => { // dressing room rare skins
-				e.style.border = '2px solid green';
-				e.style.padding = '0 10px';
-			});
-			document.querySelectorAll('.css-jnnvp4').forEach(e => { // dressing room legendary skins
-				e.style.border = '2px solid yellow';
-				e.style.padding = '0 10px';
-			});
-			document.querySelectorAll('.css-hk5viu').forEach(e => { // dressing room common skins
-				e.style.border = '2px solid gray';
-				e.style.padding = '0 10px';
-			});
-			document.querySelectorAll('.css-1a6laq6').forEach(e => {  // sliders outer part
-				e.style.padding = '0 5px';
-			});
-			document.querySelectorAll('.css-qzh2oi').forEach(e => {   // ranking selected cat box
-				e.style.border = '2px solid white';
-			});
-			document.querySelectorAll('.chakra-button.css-1iuk66d').forEach(e => {   // join friends button
-				e.style.border = '1px solid white';
-				e.style.borderRadius = '12px';
-			});
-			document.querySelectorAll('.chakra-button.css-73nw7g').forEach(e => {   // remove friends button
-				e.style.border = '1px solid white';
-				e.style.borderRadius = '12px';
-			});
-			const blackBackgroundElements = [
-				...document.querySelectorAll('.chakra-stack.css-1cklnv0'),  // account data bg
-				...document.querySelectorAll('.chakra-stack.css-oou8ol'),  // profile left menu bg
-				...document.querySelectorAll('.chakra-stack.css-owjkmg'),  // friends list bg
-				...document.querySelectorAll('.chakra-stack.css-15uwvcw'),  // discord connection bg
-				...document.querySelectorAll('.chakra-stack.css-1hj4r72'),  // dressing room bg
-				...document.querySelectorAll('.chakra-stack.css-10tqh5h'),  // subscriptions bg
-				...document.querySelectorAll('.chakra-stack.css-wv1k6p'),  // player stats bg
-				...document.querySelectorAll('.chakra-stack.css-b1sb84'),  // shop bg
-				...document.querySelectorAll('.chakra-stack.css-b1sb84'),  // ranking bg
-			];
-			blackBackgroundElements.forEach(e => {
-				e.style.background = 'transparent'; 
-				e.style.backgroundColor = 'none'; 
-				if (!e.textContent.startsWith('Browse')) {
-					e.style.backdropFilter = 'blur(1px)';
-					e.style.webkitBackdropFilter = 'blur(1px)'; 
-				}
-			});
-		};
-
-		let mainScreenStyleInterval = setInterval(() => {
-			unverifiedStyling();
-		}, 100);  
-		// TODO: only use one efficient main interval for looping main screen, pause / cancel when ingame
-		// potentially use event listeners as well to call run; or use MutationObserver instead
-
+		styler.addStyleObserver();
+		styler.initialTriggerStyleObserver();
 		// ===== =====
-
-
-
-
-
 
 		// ===== Client Interface Creation =====
     const style = document.createElement('style');
@@ -1053,7 +1083,6 @@ class UnverifiedShortcutMenu {
 
 		// ===== =====
 })();
-
 
 
 
