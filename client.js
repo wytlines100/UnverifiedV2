@@ -125,7 +125,11 @@ class UnverifiedStyler {
 			'.chakra-image.css-1je8qb9', // Miniblox logo
 			'.chakra-stack.css-7kkhgi', // Discord button  // TODO; set to unverified discord server >:D
 		];
-		this.backgroundSelectors = ['img.chakra-image.css-rkihvp', 'img.chakra-image.css-mohuzh'];
+		this.backgroundSelectors = [
+			'img.chakra-image.css-rkihvp',
+			'img.chakra-image.css-mohuzh',
+			'.css-aznra0',
+		];
 		this.generalStylingSelectors = new Set([
 			'.chakra-button.css-cuh8pi',  // play button
 			'.chakra-button.css-32lhf4',  // left menu buttons
@@ -148,6 +152,10 @@ class UnverifiedStyler {
 			'.css-i1x0qw',   						  // dressing room rare skins
 			'.css-jnnvp4',   						  // dressing room legendary skins
 			'.css-hk5viu',   						  // dressing room common skins
+			'.css-55x3n6',   						  // dressing room selected common skins
+			'.css-n15lby',                // dressing room selected rare skins
+			'.css-1xqsddr',   						  // dressing room selected epic skins
+			'.css-1ibhl1y',              // dressing room selected legendary skins
 			'.chakra-stack.css-1c10cfa',  // friend list block
 			'.chakra-form-control.css-1kxonj9',  // friend search bar
 			'.chakra-button.css-1dcrejx',  // friend search button
@@ -162,19 +170,33 @@ class UnverifiedStyler {
 			'.css-qzh2oi',     					// ranking selected cat box
 			'.chakra-button.css-137k3gn', 	// sign done button
 			'.chakra-button.css-1n378o7', 	// open loot box button
+			'.css-1f34n7d', 	          // daily login reward small
+			'.css-tncl4j', 	          // daily login reward large
+			'.css-1tyymsb', 	          // daily login today reward
+			'.css-ol7umz', 	          // daily login tomorrow? reward
+			'.chakra-button.css-12t4nq4', 	          // daily login next reward
 		]);
 		this.specificStylingSelectors = new Map([
 			['button.chakra-button.css-1axaj8o', e => { e.style.fontSize = '24px'; e.style.padding = '1px 1px' }],  // invite+exit quick-launch buttons
-			['.chakra-slider', e => { e.style.padding = '0 0' }],  	                                         // slider inner part
 			['.chakra-button.css-cuh8pi', e => { e.style.fontSize = '20px' }],                            // play button
 			['.css-1xy2x8', e => { e.style.border = '2px solid purple'; e.style.padding = '0 10px' }],     // dressing room epic skins
 			['.css-i1x0qw', e => { e.style.border = '2px solid green'; e.style.padding = '0 10px' }],     // dressing room rare skins
 			['.css-jnnvp4', e => { e.style.border = '2px solid yellow'; e.style.padding = '0 10px' }],    // dressing room legendary skins
 			['.css-hk5viu', e => { e.style.border = '2px solid gray'; e.style.padding = '0 10px' }],      // dressing room common skins
-			['.css-1a6laq6', e => { e.style.padding = '0 5px' }],                                              // sliders outer part
 			['.css-qzh2oi', e => { e.style.border = '2px solid white' }],                                            // ranking selected cat box
 			['.chakra-button.css-1iuk66d', e => { e.style.border = '1px solid white'; e.style.borderRadius = '12px' }], // join friends button
 			['.chakra-button.css-73nw7g', e => { e.style.border = '1px solid white'; e.style.borderRadius = '12px' }], // remove friends button
+			['.css-55x3n6', e => { e.style.border = '2px solid white'; e.style.padding = '0 10px' }],                // dressing room selected common skins
+			['.css-n15lby', e => { e.style.border = '2px solid lime'; e.style.padding = '0 10px' }],                // dressing room selected rare skins
+			['.css-1xqsddr', e => { e.style.border = '2px solid pink'; e.style.padding = '0 10px' }],                // dressing room selected epic skins
+			['.css-1ibhl1y', e => { e.style.border = '2px solid orange'; e.style.padding = '0 10px' }],              // dressing room selected legendary skins
+			['.chakra-input.css-ypk59i', e => { e.style.border = 'none'; e.style.background = 'none'; }],              // email input form double border fix
+			['.chakra-input.css-1oc9k70', e => { e.style.border = 'none'; e.style.background = 'none'; }],              // profile input bar username, password
+			['.chakra-input.css-18whhxd', e => { e.style.border = 'none'; e.style.background = 'none'; }],              // player search
+			['.css-nizmkx', e => { e.style.padding = '0 0' }],                                                    // player xp bar
+			['.chakra-slider', e => { e.style.padding = '0 0'; e.style.borderRadius = '12px' }],  	                    // slider inner part
+			['.css-1a6laq6', e => { e.style.padding = '0 0' }],                                              // sliders outer part
+			['.chakra-slider__filled-track.css-li9pez', e => { e.style.borderRadius = '12px' }],                        // sliders drag bg part
 		]);
 		this.blackBackgroundSelectors = [
 			'.chakra-stack.css-1cklnv0',  // account data bg
@@ -186,7 +208,14 @@ class UnverifiedStyler {
 			'.chakra-stack.css-wv1k6p',  // player stats bg
 			'.chakra-stack.css-b1sb84',  // shop bg
 			'.chakra-stack.css-b1sb84',  // ranking bg
+			'.chakra-modal__content.css-1n1g7m4',  // daily login bg
+			'.chakra-modal__content.css-1ah3qhl',  // partner sites bg
 		];
+		this.skipMouseInOutListeners = new Set([
+			'.chakra-input.css-ypk59i',    // profile input bar email
+			'.chakra-input.css-1oc9k70',    // profile input bar username, password
+			'.chakra-input.css-18whhxd',     // player search
+		]);
 	}
 	visuallyRemove(e) {
 		// visually hide an element `e` from the document
@@ -205,61 +234,58 @@ class UnverifiedStyler {
 			for (const mutation of mutations) {
 				for (const node of mutation.addedNodes) {
 					if (node.nodeType !== Node.ELEMENT_NODE) continue;
-					const isChakraNode = node.matches('[data-chakra-component], [class^="css-"], [class*=" css-"]');
-					if (isChakraNode) {
-						// visually remove
-						for (const selector of this.visuallyRemoveSelectors) {
-						  if (node.matches(selector)) {
-							  this.visuallyRemove(node);
-							}
-							node.querySelectorAll(selector).forEach(e => {
-								this.visuallyRemove(node);
-							});
+					// visually remove
+					for (const selector of this.visuallyRemoveSelectors) {
+						if (node.matches(selector)) {
+							this.visuallyRemove(node);
 						}
-						// background
-						for (const selector of this.backgroundSelectors) {
-							if (node.matches(selector)) {
-								this.background.setBG(node);
-							}
-							node.querySelectorAll(selector).forEach(e => {
-								this.background.setBG();
-							});
+						node.querySelectorAll(selector).forEach(e => {
+							this.visuallyRemove(node);
+						});
+					}
+					// background
+					for (const selector of this.backgroundSelectors) {
+						if (node.matches(selector)) {
+							this.background.setBG(node);
 						}
-						// general styling
-						for (const selector of this.generalStylingSelectors) {
-							if (node.matches(selector)) {
-							  this.applyGeneralStyle(node);
-							}
-							node.querySelectorAll(selector).forEach(e => {
-								this.applyGeneralStyle(e);
-							});
+						node.querySelectorAll(selector).forEach(e => {
+							this.background.setBG();
+						});
+					}
+					// general styling
+					for (const selector of this.generalStylingSelectors) {
+						if (node.matches(selector)) {
+							this.applyGeneralStyle(node, selector);
 						}
-						// specific styling
-						for (const selector of this.specificStylingSelectors.keys()) {
-							if (node.matches(selector)) {
-							  this.applySpecificStyle(node, selector);
-							}
-							node.querySelectorAll(selector).forEach(e => {
-							  this.applySpecificStyle(e, selector);
-							});
+						node.querySelectorAll(selector).forEach(e => {
+							this.applyGeneralStyle(e, selector);
+						});
+					}
+					// specific styling
+					for (const selector of this.specificStylingSelectors.keys()) {
+						if (node.matches(selector)) {
+							this.applySpecificStyle(node, selector);
 						}
-						// MainScreen dependent elements
-						if (this.isMainScreen()) {  
-							this.shortcutMenu.addShortcutMenu();
-							this.banner.addBanner();
-						} else {
-							this.shortcutMenu.removeShortcutMenu();
-							this.banner.removeBanner();
+						node.querySelectorAll(selector).forEach(e => {
+							this.applySpecificStyle(e, selector);
+						});
+					}
+					// MainScreen dependent elements
+					if (this.isMainScreen()) {  
+						this.shortcutMenu.addShortcutMenu();
+						this.banner.addBanner();
+					} else {
+						this.shortcutMenu.removeShortcutMenu();
+						this.banner.removeBanner();
+					}
+					// black background elements
+					for (const selector of this.blackBackgroundSelectors) {
+						if (node.matches(selector)) {
+							this.removeBlackBackground(node);
 						}
-						// black background elements
-						for (const selector of this.blackBackgroundSelectors) {
-							if (node.matches(selector)) {
-							  this.removeBlackBackground(node);
-							}
-							node.querySelectorAll(selector).forEach(e => {
-							  this.removeBlackBackground(e);
-							});
-						}
+						node.querySelectorAll(selector).forEach(e => {
+							this.removeBlackBackground(e);
+						});
 					}
 				}
 			}
@@ -273,7 +299,7 @@ class UnverifiedStyler {
 			this.shortcutMenu.getExitButton().click();
 		}, 70)
 	}
-	applyGeneralStyle(e) {
+	applyGeneralStyle(e, selector) {
 		// TODO; maybe have depending on current theme?
 		e.style.padding = '10px 20px';
 		e.style.backgroundColor = (!e.unverifiedMouseIn) ? 'rgba(211, 211, 211, 0.4)' : 'rgba(185, 185, 185, 0.4)';
@@ -285,14 +311,16 @@ class UnverifiedStyler {
 		e.style.transition = 'transform 0.2s ease';
 		e.style.outline = 'none';
 		e.style.boxShadow = 'none';
-		e.addEventListener('mouseover', () => {
-			e.unverifiedMouseIn = true;
-			e.style.backgroundColor = 'rgba(185, 185, 185, 0.4)';
-		});
-		e.addEventListener('mouseout', () => {
-			e.unverifiedMouseIn = false;
-			e.style.backgroundColor = 'rgba(211, 211, 211, 0.4)';
-		});
+		if (!this.skipMouseInOutListeners.has(selector)) {
+			e.addEventListener('mouseover', () => {
+				e.unverifiedMouseIn = true;
+				e.style.backgroundColor = 'rgba(185, 185, 185, 0.4)';
+			});
+			e.addEventListener('mouseout', () => {
+				e.unverifiedMouseIn = false;
+				e.style.backgroundColor = 'rgba(211, 211, 211, 0.4)';
+			});
+		}
 	}
 	applySpecificStyle(e, selector) {
 		this.specificStylingSelectors.get(selector)(e);
@@ -300,6 +328,7 @@ class UnverifiedStyler {
 	removeBlackBackground(e) {
 		e.style.background = 'transparent'; 
 		e.style.backgroundColor = 'none'; 
+		e.style.boxShadow = 'none';
 		if (!e.textContent.startsWith('Browse')) {
 			e.style.backdropFilter = 'blur(1px)';
 			e.style.webkitBackdropFilter = 'blur(1px)'; 
