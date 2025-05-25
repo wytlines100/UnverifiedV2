@@ -210,6 +210,7 @@ class UnverifiedStyler {
 			'.chakra-stack.css-b1sb84',  // ranking bg
 			'.chakra-modal__content.css-1n1g7m4',  // daily login bg
 			'.chakra-modal__content.css-1ah3qhl',  // partner sites bg
+			'.chakra-modal__content.css-1yhxaze', // loot box bg
 		];
 		this.skipMouseInOutListeners = new Set([
 			'.chakra-input.css-ypk59i',    // profile input bar email
