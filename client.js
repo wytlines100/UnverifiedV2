@@ -891,7 +891,12 @@ class UnverifiedShortcutMenu {
                     localStorage.setItem(key, value);
                 };
 
+								if (document.getElementById('keystrokes-container')) {
+									console.log('hi');
+									document.getElementById('keystrokes-container').remove();
+								}
                 const keystrokescontainer = document.createElement('div');
+								keystrokescontainer.id = 'keystrokes-container';
                 keystrokescontainer.style.zIndex = '10000';
                 keystrokescontainer.style.width = '300px';
                 keystrokescontainer.style.height = '230px';
@@ -1020,7 +1025,7 @@ class UnverifiedShortcutMenu {
 
 
         } else {
-            // 🔼 INSERT your "off" code here
+						document.getElementById('keystrokes-container').remove();
             console.log("Keystrokes module disabled");
         }
     });
