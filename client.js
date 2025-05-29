@@ -972,10 +972,10 @@ class UnverifiedShortcutMenu {
                 const dkey = createKey('D', { top: '55px', left: '180px' });
 
                 const lmb = createKey('LMB', {
-                    top: '110px', left: '30px', width: '79px'
+                    top: '110px', left: '60px', width: '79px'
                 });
                 const rmb = createKey('RMB', {
-                    top: '110px', left: '190px', width: '79px'
+                    top: '110px', left: '160px', width: '79px'
                 });
                 const space = createKey('_____', {
                     top: '170px', left: '70px', width: '160px'
