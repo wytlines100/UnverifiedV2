@@ -132,7 +132,7 @@ class UnverifiedStyler {
 
 		this.visuallyRemoveSelectors = [
 			'.chakra-image.css-1je8qb9', // Miniblox logo
-			'.chakra-stack.css-7kkhgi', // Discord button  
+			'.chakra-stack.css-7kkhgi', // Discord button
 		];
 		this.backgroundSelectors = [
 			'img.chakra-image.css-rkihvp',
@@ -281,7 +281,7 @@ class UnverifiedStyler {
 						});
 					}
 					// MainScreen dependent elements
-					if (this.isMainScreen()) {  
+					if (this.isMainScreen()) {
 						this.shortcutMenu.addShortcutMenu();
 						this.banner.addBanner();
 					} else {
@@ -336,12 +336,12 @@ class UnverifiedStyler {
 		this.specificStylingSelectors.get(selector)(e);
 	}
 	removeBlackBackground(e) {
-		e.style.background = 'transparent'; 
-		e.style.backgroundColor = 'none'; 
+		e.style.background = 'transparent';
+		e.style.backgroundColor = 'none';
 		e.style.boxShadow = 'none';
 		if (!e.textContent.startsWith('Browse')) {
 			e.style.backdropFilter = 'blur(1px)';
-			e.style.webkitBackdropFilter = 'blur(1px)'; 
+			e.style.webkitBackdropFilter = 'blur(1px)';
 		}
 	}
 }
@@ -907,7 +907,7 @@ class UnverifiedShortcutMenu {
                 keystrokescontainer.style.boxShadow = 'none';
                 keystrokescontainer.style.backgroundColor = 'transparent';
 
-                
+
                 keystrokescontainer.style.position = 'fixed';
                 keystrokescontainer.style.transform = 'translate(-50%, -50%)';
                 keystrokescontainer.style.display = 'flex';
@@ -965,7 +965,7 @@ class UnverifiedShortcutMenu {
                     return key;
                 };
 
-                
+
                 const wkey = createKey('W', { top: '0px', left: '125px' });
                 const akey = createKey('A', { top: '55px', left: '70px' });
                 const skey = createKey('S', { top: '55px', left: '125px' });
@@ -1038,6 +1038,8 @@ class UnverifiedShortcutMenu {
     createModule("FPS Booster", "Changes settings to improve FPS");
     createModule("Render Dist. Bypasser", "Allow you to change your render distance past the limit.");
     createModule("Session Information", "Display information about your session such as => amount of clicks, amount of key presss.");
+    createModule("Anti-Afk", "Press f8 to start moving without doing anything and you can be afk!.");
+    createModule("Time", "Shows you the time so you dont have to exit full screen.");
 
     const closeButton = document.createElement("button");
     closeButton.textContent = "Close UI";
@@ -1061,7 +1063,7 @@ class UnverifiedShortcutMenu {
     ThemesDropdown.style.fontSize = "18px";
     ThemesDropdown.style.marginTop = "20px";
     ThemesDropdown.style.cursor = "pointer";
-    
+
     // Define themes with names and background image URLs
     const themes = [
         { name: "test1", image: "none" },
@@ -1070,7 +1072,7 @@ class UnverifiedShortcutMenu {
         { name: "test4", image: "https://wallpaperaccess.com/full/185084.jpg" },
         { name: "test5", image: "https://wallpaperaccess.com/full/317501.jpg" }
     ];
-    
+
     // Populate dropdown with theme options
     themes.forEach(theme => {
         const option = document.createElement("option");
@@ -1078,7 +1080,7 @@ class UnverifiedShortcutMenu {
         option.textContent = theme.name;
         ThemesDropdown.appendChild(option);
     });
-    
+
     // On theme change, set UI background image
     ThemesDropdown.addEventListener("change", (e) => {
         const image = e.target.value;
@@ -1087,12 +1089,12 @@ class UnverifiedShortcutMenu {
         } else {
             ui.style.backgroundImage = `url(${image})`;
             ui.style.backgroundSize = "cover";
-            ui.style.backgroundPosition = "center";            
+            ui.style.backgroundPosition = "center";
         }
     });
-    
+
     ui.appendChild(ThemesDropdown);
-    
+
 
     let uiVisible = false;
     function toggleUI() {
@@ -1148,4 +1150,3 @@ class UnverifiedShortcutMenu {
     console.log('Client Status: Great');
 })();
 // ===== =====
-
