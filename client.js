@@ -10,6 +10,11 @@
 
 
 // ===== UNVERIFIED INTRO CLASS - handles intro animation playing =====
+class LurkerChecker {
+  static lurkerInstalled() {
+	  return document.getElementById('_L7Banner') !== null;
+	}
+}
 class UnverifiedIntro {
 	constructor() {
 		// overall container
@@ -78,6 +83,10 @@ class UnverifiedIntro {
 		}, 500);
 		// show unverified text
 		setTimeout(() => {
+			if (LurkerChecker.lurkerInstalled()) {
+				this.unverifiedText.textContent = 'UnverifiedV2 x PublicLurker';
+				document.title = 'UnverifiedV2 x PublicLurker';
+			}
 			this.unverifiedText.style.opacity = 1;
 		}, 1000);
 		// show credits text
@@ -123,7 +132,7 @@ class UnverifiedStyler {
 
 		this.visuallyRemoveSelectors = [
 			'.chakra-image.css-1je8qb9', // Miniblox logo
-			'.chakra-stack.css-7kkhgi', // Discord button  // TODO; set to unverified discord server >:D
+			'.chakra-stack.css-7kkhgi', // Discord button  
 		];
 		this.backgroundSelectors = [
 			'img.chakra-image.css-rkihvp',
