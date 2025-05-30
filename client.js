@@ -84,8 +84,8 @@ class UnverifiedIntro {
 		// show unverified text
 		setTimeout(() => {
 			if (LurkerChecker.lurkerInstalled()) {
-				this.unverifiedText.textContent = 'UnverifiedV2 x PublicLurker';
-				document.title = 'UnverifiedV2 x PublicLurker';
+				this.unverifiedText.textContent = 'UnverifiedV2 x Lurker';
+				document.title = 'UnverifiedV2 x Lurker';
 			}
 			this.unverifiedText.style.opacity = 1;
 		}, 1000);
