@@ -1040,6 +1040,48 @@ class UnverifiedShortcutMenu {
     createModule("Session Information", "Display information about your session such as => amount of clicks, amount of key presses.");
     createModule("Anti-Afk", "Presses WASD on its own to avoid being kicked for being AFK");
     createModule("Time Display", "Shows you the time so you dont have to exit full screen.");
+    const timeModule = [...gridContainer.children].find(child =>
+    child.querySelector("h3")?.textContent === "Time Display"
+);
+
+let isTimeVisible = false;
+let timeElement = null;
+
+if (timeModule) {
+    timeModule.addEventListener("click", () => {
+        isTimeVisible = !isTimeVisible;
+
+        if (isTimeVisible) {
+            timeElement = document.createElement("div");
+            timeElement.id = "fullscreen-clock";
+            timeElement.style.position = "fixed";
+            timeElement.style.bottom = "20px";
+            timeElement.style.right = "20px";
+            timeElement.style.backgroundColor = "rgba(0, 0, 0, 0.7)";
+            timeElement.style.color = "white";
+            timeElement.style.padding = "10px 15px";
+            timeElement.style.borderRadius = "8px";
+            timeElement.style.fontSize = "18px";
+            timeElement.style.fontFamily = "monospace";
+            timeElement.style.zIndex = "99999";
+            timeElement.style.pointerEvents = "none"; // So it doesn't block clicks
+
+            document.body.appendChild(timeElement);
+
+            const updateClock = () => {
+                const now = new Date();
+                timeElement.textContent = now.toLocaleTimeString();
+            };
+
+            updateClock();
+            timeElement._interval = setInterval(updateClock, 1000);
+        } else if (timeElement) {
+            clearInterval(timeElement._interval);
+            timeElement.remove();
+            timeElement = null;
+        }
+    });
+}
 
     const closeButton = document.createElement("button");
     closeButton.textContent = "Close UI";
