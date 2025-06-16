@@ -972,10 +972,10 @@ class UnverifiedShortcutMenu {
                 const dkey = createKey('D', { top: '55px', left: '180px' });
 
                 const lmb = createKey('LMB', {
-                    top: '110px', left: '60px', width: '79px'
+                    top: '110px', left: '70px', width: '79px'
                 });
                 const rmb = createKey('RMB', {
-                    top: '110px', left: '160px', width: '79px'
+                    top: '110px', left: '150px', width: '79px'
                 });
                 const space = createKey('_____', {
                     top: '170px', left: '70px', width: '160px'
@@ -1031,9 +1031,178 @@ class UnverifiedShortcutMenu {
     });
 
     createModule("FPS Counter", "Shows the frames per second (FPS) of the game.");
-    createModule("CPS Counter", "Counts how many times you click per second.");
+// Create CPS Module
+const cpsModule = createModule("CPS Counter", "Counts how many times you click per second.");
+
+let isCpsActive = false;
+let clickTimes = [];
+let cpsElement = null;
+
+// You can adjust this value to make CPS drop faster or slower (in milliseconds)
+let cpsDecayTime = 1050;
+
+cpsModule.addEventListener("click", () => {
+    isCpsActive = !isCpsActive;
+
+    if (isCpsActive) {
+        // Create or reset CPS display
+        if (!cpsElement) {
+            cpsElement = document.createElement("div");
+            cpsElement.id = "cps-counter";
+            cpsElement.style.position = "fixed";
+            cpsElement.style.top = "20px";
+            cpsElement.style.left = "20px";
+            cpsElement.style.color = "white";
+            cpsElement.style.backgroundColor = "rgba(0, 0, 0, 0.6)";
+            cpsElement.style.padding = "10px 15px";
+            cpsElement.style.borderRadius = "8px";
+            cpsElement.style.fontSize = "18px";
+            cpsElement.style.fontFamily = "monospace";
+            cpsElement.style.zIndex = "99999";
+            cpsElement.style.userSelect = "none";
+            cpsElement.style.cursor = "move";
+
+            document.body.appendChild(cpsElement);
+
+            // Make draggable
+            let isDragging = false;
+            let offsetX = 0;
+            let offsetY = 0;
+
+            cpsElement.addEventListener("mousedown", (e) => {
+                isDragging = true;
+                offsetX = e.clientX - cpsElement.getBoundingClientRect().left;
+                offsetY = e.clientY - cpsElement.getBoundingClientRect().top;
+                e.preventDefault();
+            });
+
+            document.addEventListener("mousemove", (e) => {
+                if (isDragging) {
+                    cpsElement.style.left = (e.clientX - offsetX) + "px";
+                    cpsElement.style.top = (e.clientY - offsetY) + "px";
+                }
+            });
+
+            document.addEventListener("mouseup", () => {
+                isDragging = false;
+            });
+        }
+
+        // Clear previous clicks
+        clickTimes = [];
+
+        // Listen for clicks globally
+        const clickHandler = () => {
+            clickTimes.push(Date.now());
+        };
+        document.addEventListener("mousedown", clickHandler);
+
+        // Update CPS display function
+        function updateCps() {
+            const now = Date.now();
+            // Keep clicks within decay time window
+            clickTimes = clickTimes.filter(time => now - time <= cpsDecayTime);
+
+            cpsElement.textContent = `CPS: ${clickTimes.length}`;
+
+            if (isCpsActive) {
+                requestAnimationFrame(updateCps);
+            }
+        }
+
+        updateCps();
+
+        // Save for cleanup
+        cpsModule._clickHandler = clickHandler;
+
+    } else {
+        // Remove CPS display and listeners
+        if (cpsElement) {
+            cpsElement.remove();
+            cpsElement = null;
+        }
+        if (cpsModule._clickHandler) {
+            document.removeEventListener("mousedown", cpsModule._clickHandler);
+            cpsModule._clickHandler = null;
+        }
+    }
+});
+
     createModule("Hitboxes", "Visualizes the hitboxes of players or objects.");
-    createModule("Ping Counter", "Shows the latency between your client and the server.");
+ const pingModule = createModule("Ping Counter", "Shows the latency between your client and the server.");
+
+let isPingActive = false;
+let pingElement = null;
+let pingInterval = null;
+
+pingModule.addEventListener("click", () => {
+    isPingActive = !isPingActive;
+
+    if (isPingActive) {
+        // Create the ping display element
+        pingElement = document.createElement("div");
+        pingElement.id = "ping-counter";
+        pingElement.style.position = "fixed";
+        pingElement.style.top = "20px";
+        pingElement.style.left = "20px";
+        pingElement.style.padding = "8px 12px";
+        pingElement.style.backgroundColor = "rgba(0, 0, 0, 0.6)";
+        pingElement.style.color = "white";
+        pingElement.style.fontWeight = "bold";
+        pingElement.style.fontFamily = "monospace";
+        pingElement.style.borderRadius = "8px";
+        pingElement.style.zIndex = "10000";
+        pingElement.style.cursor = "move";
+        pingElement.style.userSelect = "none";
+
+        document.body.appendChild(pingElement);
+
+        // Dragging logic
+        let isDragging = false;
+        let offsetX = 0;
+        let offsetY = 0;
+
+        pingElement.addEventListener("mousedown", (e) => {
+            isDragging = true;
+            offsetX = e.clientX - pingElement.getBoundingClientRect().left;
+            offsetY = e.clientY - pingElement.getBoundingClientRect().top;
+            e.preventDefault();
+        });
+
+        document.addEventListener("mousemove", (e) => {
+            if (isDragging) {
+                pingElement.style.left = `${e.clientX - offsetX}px`;
+                pingElement.style.top = `${e.clientY - offsetY}px`;
+            }
+        });
+
+        document.addEventListener("mouseup", () => {
+            isDragging = false;
+        });
+
+        // Ping update function
+        const updatePing = () => {
+            const start = Date.now();
+            fetch(window.location.href, { method: 'HEAD', cache: "no-cache" }).then(() => {
+                const end = Date.now();
+                const ping = end - start;
+                pingElement.textContent = `Ping: ${ping}`;  // No "ms" here
+            }).catch(() => {
+                pingElement.textContent = `Ping: N/A`;
+            });
+        };
+
+        updatePing();
+        pingInterval = setInterval(updatePing, 1000);
+    } else {
+        if (pingElement) {
+            pingElement.remove();
+            pingElement = null;
+        }
+        clearInterval(pingInterval);
+    }
+});
+
     createModule("Armor HUD", "Displays the current armor stats of your character.");
     createModule("FPS Booster", "Changes settings to improve FPS");
     createModule("Render Dist. Bypasser", "Allow you to change your render distance past the limit.");
@@ -1108,11 +1277,11 @@ if (timeModule) {
 
     // Define themes with names and background image URLs
     const themes = [
-        { name: "test1", image: "none" },
-        { name: "test2", image: "https://media1.tenor.com/m/mn2d2liDsmUAAAAC/ichigo-bleach.gif" },
-        { name: "test3", image: "https://wallpaperaccess.com/full/174768.jpg" },
-        { name: "test4", image: "https://wallpaperaccess.com/full/185084.jpg" },
-        { name: "test5", image: "https://wallpaperaccess.com/full/317501.jpg" }
+        { name: "Default", image: "none" },
+        { name: "Minors??!!", image: "https://media1.tenor.com/m/mn2d2liDsmUAAAAC/ichigo-bleach.gif" },
+        { name: "Beach", image: "https://wallpaperaccess.com/full/174768.jpg" },
+        { name: "Fall", image: "https://wallpaperaccess.com/full/185084.jpg" },
+        { name: "Ocean", image: "https://wallpaperaccess.com/full/317501.jpg" }
     ];
 
     // Populate dropdown with theme options
