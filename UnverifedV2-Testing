@@ -1031,6 +1031,85 @@ class UnverifiedShortcutMenu {
     });
 
     createModule("FPS Counter", "Shows the frames per second (FPS) of the game.");
+    const fpsModule = [...gridContainer.children].find(child =>
+  child.querySelector("h3")?.textContent === "FPS Counter"
+);
+
+let isFPSVisible = false;
+let fpsElement = null;
+let lastFrameTime = performance.now();
+let frameCount = 0;
+let fps = 0;
+
+if (fpsModule) {
+  fpsModule.addEventListener("click", () => {
+    isFPSVisible = !isFPSVisible;
+
+    if (isFPSVisible) {
+      fpsElement = document.createElement("div");
+      fpsElement.textContent = "FPS: 0";
+      fpsElement.style.position = "fixed";
+      fpsElement.style.top = "120px";
+      fpsElement.style.left = "20px";
+      fpsElement.style.background = "rgba(0, 0, 0, 0.8)";
+      fpsElement.style.color = "#ffffff";
+      fpsElement.style.fontSize = "14px";
+      fpsElement.style.fontFamily = "monospace";
+      fpsElement.style.padding = "8px 12px";
+      fpsElement.style.borderRadius = "6px";
+      fpsElement.style.zIndex = "99999";
+      fpsElement.style.cursor = "move";
+      fpsElement.style.userSelect = "none";
+
+      document.body.appendChild(fpsElement);
+
+      // Dragging logic
+      let offsetX = 0,
+        offsetY = 0,
+        isDragging = false;
+
+      fpsElement.addEventListener("mousedown", (e) => {
+        isDragging = true;
+        offsetX = e.clientX - fpsElement.getBoundingClientRect().left;
+        offsetY = e.clientY - fpsElement.getBoundingClientRect().top;
+        e.preventDefault();
+      });
+
+      document.addEventListener("mousemove", (e) => {
+        if (isDragging) {
+          fpsElement.style.left = `${e.clientX - offsetX}px`;
+          fpsElement.style.top = `${e.clientY - offsetY}px`;
+        }
+      });
+
+      document.addEventListener("mouseup", () => {
+        isDragging = false;
+      });
+
+      // FPS calculation
+      const updateFPS = () => {
+        const now = performance.now();
+        frameCount++;
+
+        if (now - lastFrameTime >= 1000) {
+          fps = frameCount;
+          fpsElement.textContent = `FPS: ${fps}`;
+          frameCount = 0;
+          lastFrameTime = now;
+        }
+
+        if (isFPSVisible) {
+          requestAnimationFrame(updateFPS);
+        }
+      };
+
+      requestAnimationFrame(updateFPS);
+    } else if (fpsElement) {
+      fpsElement.remove();
+      fpsElement = null;
+    }
+  });
+}
 // Create CPS Module
 const cpsModule = createModule("CPS Counter", "Counts how many times you click per second.");
 
