@@ -972,10 +972,10 @@ class UnverifiedShortcutMenu {
                 const dkey = createKey('D', { top: '55px', left: '180px' });
 
                 const lmb = createKey('LMB', {
-                    top: '110px', left: '60px', width: '79px'
+                    top: '110px', left: '70px', width: '79px'
                 });
                 const rmb = createKey('RMB', {
-                    top: '110px', left: '160px', width: '79px'
+                    top: '110px', left: '150px', width: '79px'
                 });
                 const space = createKey('_____', {
                     top: '170px', left: '70px', width: '160px'
@@ -1233,7 +1233,34 @@ if (timeModule) {
             timeElement.style.fontSize = "18px";
             timeElement.style.fontFamily = "monospace";
             timeElement.style.zIndex = "99999";
-            timeElement.style.pointerEvents = "none"; // So it doesn't block clicks
+            timeElement.style.pointerEvents = "auto"; // Allow dragging
+            timeElement.style.cursor = "move";
+            timeElement.style.top = "unset";
+            timeElement.style.left = "unset";
+            let isDragging = false;
+let offsetX = 0, offsetY = 0;
+
+timeElement.addEventListener("mousedown", (e) => {
+    isDragging = true;
+    offsetX = e.clientX - timeElement.getBoundingClientRect().left;
+    offsetY = e.clientY - timeElement.getBoundingClientRect().top;
+    e.preventDefault();
+});
+
+document.addEventListener("mousemove", (e) => {
+    if (isDragging) {
+        timeElement.style.left = `${e.clientX - offsetX}px`;
+        timeElement.style.top = `${e.clientY - offsetY}px`;
+        timeElement.style.bottom = "auto";
+        timeElement.style.right = "auto";
+        timeElement.style.position = "fixed";
+    }
+});
+
+document.addEventListener("mouseup", () => {
+    isDragging = false;
+});
+
 
             document.body.appendChild(timeElement);
 
@@ -1277,11 +1304,11 @@ if (timeModule) {
 
     // Define themes with names and background image URLs
     const themes = [
-        { name: "test1", image: "none" },
-        { name: "test2", image: "https://media1.tenor.com/m/mn2d2liDsmUAAAAC/ichigo-bleach.gif" },
-        { name: "test3", image: "https://wallpaperaccess.com/full/174768.jpg" },
-        { name: "test4", image: "https://wallpaperaccess.com/full/185084.jpg" },
-        { name: "test5", image: "https://wallpaperaccess.com/full/317501.jpg" }
+        { name: "Default", image: "none" },
+        { name: "Minors??!!", image: "https://media1.tenor.com/m/mn2d2liDsmUAAAAC/ichigo-bleach.gif" },
+        { name: "Beach", image: "https://wallpaperaccess.com/full/174768.jpg" },
+        { name: "Fall", image: "https://wallpaperaccess.com/full/185084.jpg" },
+        { name: "Ocean", image: "https://wallpaperaccess.com/full/317501.jpg" }
     ];
 
     // Populate dropdown with theme options
