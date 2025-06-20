@@ -1379,7 +1379,7 @@ document.addEventListener("mouseup", () => {
 
     // Define themes with names and background image URLs
     const themes = [
-        { name: "Default", image: "none" },
+        { name: "Default", image: "#1a1a1a" },
         { name: "Minors??!!", image: "https://media1.tenor.com/m/mn2d2liDsmUAAAAC/ichigo-bleach.gif" },
         { name: "Beach", image: "https://wallpaperaccess.com/full/174768.jpg" },
         { name: "Fall", image: "https://wallpaperaccess.com/full/185084.jpg" },
