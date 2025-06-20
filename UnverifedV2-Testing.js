@@ -9,7 +9,7 @@
 // ==/UserScript==
 
 
-// ===== UNVERIFIED INTRO CLASS - handles intro animation playing =====
+
 class LurkerChecker {
   static lurkerInstalled() {
 	  return document.getElementById('_L7Banner') !== null;
@@ -17,7 +17,7 @@ class LurkerChecker {
 }
 class UnverifiedIntro {
 	constructor() {
-		// overall container
+
 		this.container = document.createElement("div");
 		Object.assign(this.container.style, {
 			position: "fixed",
@@ -26,7 +26,7 @@ class UnverifiedIntro {
 			backgroundColor: "black",
 			overflow: "hidden", zIndex: 9999,
 		});
-		// check logo
+
 		this.check = document.createElement("div");
 		this.check.textContent = "✓";
 		Object.assign(this.check.style, {
@@ -34,7 +34,7 @@ class UnverifiedIntro {
 			transition: "opacity 1s ease, transform 1s ease",
 			textShadow: '0 0 5px red, 0 0 10px red, 0 0 20px red',
 		});
-		// check mark circle border
+
 		this.circle = document.createElement("div");
 		Object.assign(this.circle.style, {
 			width: "100px",
@@ -51,7 +51,7 @@ class UnverifiedIntro {
 		});
 		this.circle.appendChild(this.check);
 		this.container.appendChild(this.circle);
-		// unverified text
+
 		this.unverifiedText = document.createElement("div");
 		this.unverifiedText.textContent = "UnverifiedV2";
 		Object.assign(this.unverifiedText.style, {
@@ -61,7 +61,7 @@ class UnverifiedIntro {
 			textShadow: '0 0 5px red, 0 0 10px red, 0 0 20px red',
 		});
 		this.container.appendChild(this.unverifiedText);
-		// credits text
+
 		this.creditsText = document.createElement("div");
 		this.creditsText.textContent = "\nBy wytlines, DeadFish7\nandreypidd, jet";
 		Object.assign(this.creditsText.style, {
@@ -74,14 +74,14 @@ class UnverifiedIntro {
 	}
   playIntro() {
 		document.body.appendChild(this.container);
-		// show logo
+
 		this.circle.style.opacity = 1;
 		this.check.style.opacity = 1;
-		// rotate
+
 		setTimeout(() => {
 			this.check.style.transform = "rotate(180deg)";
 		}, 500);
-		// show unverified text
+
 		setTimeout(() => {
 			if (LurkerChecker.lurkerInstalled()) {
 				this.unverifiedText.textContent = 'UnverifiedV2 x Lurker';
@@ -89,16 +89,16 @@ class UnverifiedIntro {
 			}
 			this.unverifiedText.style.opacity = 1;
 		}, 1000);
-		// show credits text
+
 		setTimeout(() => {
 			this.creditsText.style.opacity = 1;
 		}, 1500);
-		// fade everything out
+
 		setTimeout(() => {
 			this.container.style.transition = "opacity 1s ease";
 			this.container.style.opacity = 0;
 		}, 2500);
-		// remove
+
 		setTimeout(() => {
 			this.container.remove();
 		}, 3000);
@@ -122,7 +122,7 @@ class UnverifiedIntro {
 	}
 }
 
-// ===== UNVERIFIED STYLER CLASS - handles all menu, button, & bg re-styling =====
+
 class UnverifiedStyler {
 	constructor() {
 		this.observer = null;
@@ -228,7 +228,7 @@ class UnverifiedStyler {
 		]);
 	}
 	visuallyRemove(e) {
-		// visually hide an element `e` from the document
+
 	  if (!e) {
 		  return;
 		}
@@ -244,7 +244,7 @@ class UnverifiedStyler {
 			for (const mutation of mutations) {
 				for (const node of mutation.addedNodes) {
 					if (node.nodeType !== Node.ELEMENT_NODE) continue;
-					// visually remove
+
 					for (const selector of this.visuallyRemoveSelectors) {
 						if (node.matches(selector)) {
 							this.visuallyRemove(node);
@@ -253,7 +253,7 @@ class UnverifiedStyler {
 							this.visuallyRemove(node);
 						});
 					}
-					// background
+
 					for (const selector of this.backgroundSelectors) {
 						if (node.matches(selector)) {
 							this.background.setBG(node);
@@ -262,7 +262,7 @@ class UnverifiedStyler {
 							this.background.setBG();
 						});
 					}
-					// general styling
+
 					for (const selector of this.generalStylingSelectors) {
 						if (node.matches(selector)) {
 							this.applyGeneralStyle(node, selector);
@@ -271,7 +271,7 @@ class UnverifiedStyler {
 							this.applyGeneralStyle(e, selector);
 						});
 					}
-					// specific styling
+
 					for (const selector of this.specificStylingSelectors.keys()) {
 						if (node.matches(selector)) {
 							this.applySpecificStyle(node, selector);
@@ -280,7 +280,7 @@ class UnverifiedStyler {
 							this.applySpecificStyle(e, selector);
 						});
 					}
-					// MainScreen dependent elements
+
 					if (this.isMainScreen()) {
 						this.shortcutMenu.addShortcutMenu();
 						this.banner.addBanner();
@@ -288,7 +288,7 @@ class UnverifiedStyler {
 						this.shortcutMenu.removeShortcutMenu();
 						this.banner.removeBanner();
 					}
-					// black background elements
+
 					for (const selector of this.blackBackgroundSelectors) {
 						if (node.matches(selector)) {
 							this.removeBlackBackground(node);
@@ -303,14 +303,14 @@ class UnverifiedStyler {
 		this.observer.observe(document.body, { childList: true, subtree: true });
 	}
 	initialTriggerStyleObserver() {
-		// trigger all observer mutation style edits
+
 	  this.shortcutMenu.getPlayButton().click();
 		setTimeout(() => {
 			this.shortcutMenu.getExitButton().click();
 		}, 70)
 	}
 	applyGeneralStyle(e, selector) {
-		// TODO; maybe have depending on current theme?
+
 		e.style.padding = '10px 20px';
 		e.style.backgroundColor = (!e.unverifiedMouseIn) ? 'rgba(211, 211, 211, 0.4)' : 'rgba(185, 185, 185, 0.4)';
 		e.style.color = 'white';
@@ -346,7 +346,7 @@ class UnverifiedStyler {
 	}
 }
 
-// ===== UNVERiFIED BACKGROUND CLASS - handles background setting & background resources =====
+
 class UnverifiedBackground {
   constructor() {
 		this.bgObserver = null;
@@ -358,7 +358,7 @@ class UnverifiedBackground {
 	}
 }
 
-// ===== UNVERIFIED BANNER CLASS - handles main screen banner component =====
+
 class UnverifiedBanner {
   constructor() {
 		this.e = document.createElement('div');
@@ -409,7 +409,7 @@ class UnverifiedBanner {
 	}
 }
 
-// ===== UNVERIFIED SHORTCUT MENU CLASS - handles shortcut menu on home screen =====
+
 class UnverifiedShortcutMenu {
 	constructor() {
 		this.onclicks = [
@@ -499,7 +499,7 @@ class UnverifiedShortcutMenu {
 		return document.querySelector('.chakra-button.css-cuh8pi');
 	}
 	getExitButton() {
-		// called when on games page; exit button -> main screen
+
 		return document.querySelectorAll('.chakra-button.css-1axaj8o')[1];
 	}
 	getKitPVPButton() {
@@ -534,22 +534,22 @@ class UnverifiedShortcutMenu {
 
 (function() {
     'use strict';
-		// ===== Intro Player =====
+
 		const intro = new UnverifiedIntro();
 		intro.playIntro();
 		intro.showInitializedNotif();
 
-		// ===== Unverified Styling =====
+
 		const styler = new UnverifiedStyler();
 		styler.addStyleObserver();
 		try {
 			styler.initialTriggerStyleObserver();
 		} catch (e) {
-			// ignore; was triggered by join invite link & in game already - style observer added so is fine
+
 		}
 		// ===== =====
 
-		// ===== Client Interface Creation =====
+
     const style = document.createElement('style');
     style.innerHTML = `
         @font-face {
@@ -1063,7 +1063,7 @@ if (fpsModule) {
 
       document.body.appendChild(fpsElement);
 
-      // Dragging logic
+
       let offsetX = 0,
         offsetY = 0,
         isDragging = false;
@@ -1086,7 +1086,7 @@ if (fpsModule) {
         isDragging = false;
       });
 
-      // FPS calculation
+
       const updateFPS = () => {
         const now = performance.now();
         frameCount++;
@@ -1110,21 +1110,21 @@ if (fpsModule) {
     }
   });
 }
-// Create CPS Module
+
 const cpsModule = createModule("CPS Counter", "Counts how many times you click per second.");
 
 let isCpsActive = false;
 let clickTimes = [];
 let cpsElement = null;
 
-// You can adjust this value to make CPS drop faster or slower (in milliseconds)
+
 let cpsDecayTime = 1050;
 
 cpsModule.addEventListener("click", () => {
     isCpsActive = !isCpsActive;
 
     if (isCpsActive) {
-        // Create or reset CPS display
+
         if (!cpsElement) {
             cpsElement = document.createElement("div");
             cpsElement.id = "cps-counter";
@@ -1143,7 +1143,7 @@ cpsModule.addEventListener("click", () => {
 
             document.body.appendChild(cpsElement);
 
-            // Make draggable
+
             let isDragging = false;
             let offsetX = 0;
             let offsetY = 0;
@@ -1167,19 +1167,19 @@ cpsModule.addEventListener("click", () => {
             });
         }
 
-        // Clear previous clicks
+
         clickTimes = [];
 
-        // Listen for clicks globally
+
         const clickHandler = () => {
             clickTimes.push(Date.now());
         };
         document.addEventListener("mousedown", clickHandler);
 
-        // Update CPS display function
+
         function updateCps() {
             const now = Date.now();
-            // Keep clicks within decay time window
+
             clickTimes = clickTimes.filter(time => now - time <= cpsDecayTime);
 
             cpsElement.textContent = `CPS: ${clickTimes.length}`;
@@ -1191,11 +1191,11 @@ cpsModule.addEventListener("click", () => {
 
         updateCps();
 
-        // Save for cleanup
+
         cpsModule._clickHandler = clickHandler;
 
     } else {
-        // Remove CPS display and listeners
+
         if (cpsElement) {
             cpsElement.remove();
             cpsElement = null;
@@ -1217,7 +1217,7 @@ pingModule.addEventListener("click", () => {
     isPingActive = !isPingActive;
 
     if (isPingActive) {
-        // Create the ping display element
+
         pingElement = document.createElement("div");
         pingElement.id = "ping-counter";
         pingElement.style.position = "fixed";
@@ -1235,7 +1235,7 @@ pingModule.addEventListener("click", () => {
 
         document.body.appendChild(pingElement);
 
-        // Dragging logic
+
         let isDragging = false;
         let offsetX = 0;
         let offsetY = 0;
@@ -1258,7 +1258,7 @@ pingModule.addEventListener("click", () => {
             isDragging = false;
         });
 
-        // Ping update function
+
         const updatePing = () => {
             const start = Date.now();
             fetch(window.location.href, { method: 'HEAD', cache: "no-cache" }).then(() => {
@@ -1377,7 +1377,7 @@ document.addEventListener("mouseup", () => {
     ThemesDropdown.style.marginTop = "20px";
     ThemesDropdown.style.cursor = "pointer";
 
-    // Define themes with names and background image URLs
+
     const themes = [
         { name: "Default", image: "#1a1a1a" },
         { name: "Minors??!!", image: "https://media1.tenor.com/m/mn2d2liDsmUAAAAC/ichigo-bleach.gif" },
@@ -1386,7 +1386,7 @@ document.addEventListener("mouseup", () => {
         { name: "Ocean", image: "https://wallpaperaccess.com/full/317501.jpg" }
     ];
 
-    // Populate dropdown with theme options
+
     themes.forEach(theme => {
         const option = document.createElement("option");
         option.value = theme.image;
@@ -1394,7 +1394,7 @@ document.addEventListener("mouseup", () => {
         ThemesDropdown.appendChild(option);
     });
 
-    // On theme change, set UI background image
+
     ThemesDropdown.addEventListener("change", (e) => {
         const image = e.target.value;
         if (image === "none") {
