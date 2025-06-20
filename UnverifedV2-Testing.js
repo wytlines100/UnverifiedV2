@@ -1282,10 +1282,7 @@ pingModule.addEventListener("click", () => {
     }
 });
 
-    createModule("Armor HUD", "Displays the current armor stats of your character.");
-    createModule("FPS Booster", "Changes settings to improve FPS");
-    createModule("Render Dist. Bypasser", "Allow you to change your render distance past the limit.");
-    createModule("Session Information", "Display information about your session such as => amount of clicks, amount of key presses.");
+    createModule("FPS Booster", "Changes settings to improve FPS (refresh page)");
     createModule("Anti-Afk", "Presses WASD on its own to avoid being kicked for being AFK");
     createModule("Time Display", "Shows you the time so you dont have to exit full screen.");
     const timeModule = [...gridContainer.children].find(child =>
