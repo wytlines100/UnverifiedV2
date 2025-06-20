@@ -1207,7 +1207,6 @@ cpsModule.addEventListener("click", () => {
     }
 });
 
-    createModule("Hitboxes", "Visualizes the hitboxes of players or objects.");
  const pingModule = createModule("Ping Counter", "Shows the latency between your client and the server.");
 
 let isPingActive = false;
