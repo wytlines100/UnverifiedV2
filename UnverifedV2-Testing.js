@@ -3,7 +3,7 @@
 // @namespace    http://tampermonkey.net/
 // @version      2.0
 // @description  :D
-// @author       wytlines, DeadFish7, andreypidd, jet
+// @author       wytlines, DeadFish7, andreypidd, jet, joudaALT!
 // @match        https://miniblox.io/*
 // @grant        none
 // ==/UserScript==
@@ -63,7 +63,7 @@ class UnverifiedIntro {
 		this.container.appendChild(this.unverifiedText);
 
 		this.creditsText = document.createElement("div");
-		this.creditsText.textContent = "\nBy wytlines, DeadFish7\nandreypidd, jet";
+		this.creditsText.textContent = "\nBy wytlines, DeadFish7\nandreypidd, jet, joudaALT!";
 		Object.assign(this.creditsText.style, {
 			color: "red", fontSize: "30px", opacity: 0, transition: "opacity 0.8s ease",
 			whiteSpace: 'pre-line',
@@ -362,7 +362,7 @@ class UnverifiedBackground {
 class UnverifiedBanner {
   constructor() {
 		this.e = document.createElement('div');
-		this.e.textContent = 'UnverifiedV2\n\nBy wytlines, DeadFish7, andreypidd, jet'
+		this.e.textContent = 'UnverifiedV2\n\nBy wytlines, DeadFish7, andreypidd, jet, joudaALT!'
 		this.e.id = 'unverified-banner';
 		this.e.style.whiteSpace = 'pre-line';
 		this.e.style.textAlign = 'center';
