@@ -1,7 +1,7 @@
 // ==UserScript==
 // @name         UnverifiedV2
 // @namespace    http://tampermonkey.net/
-// @version      2.0
+// @version      2.0.3
 // @description  :D
 // @author       wytlines, DeadFish7, andreypidd, jet, joudaALT!
 // @match        https://miniblox.io/*
