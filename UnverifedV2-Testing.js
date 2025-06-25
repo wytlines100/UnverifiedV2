@@ -1308,7 +1308,7 @@ if (antiAfkModule) {
             antiAfkBox.style.zIndex = "9999";
             antiAfkBox.style.cursor = "move";
             antiAfkBox.style.userSelect = "none";
-            antiAfkBox.textContent = "Anti-AFK: 5";
+            antiAfkBox.textContent = "Anti-AFK: ON";
 
             document.body.appendChild(antiAfkBox);
 
@@ -1335,28 +1335,20 @@ if (antiAfkModule) {
                 isDragging = false;
             });
 
-            let countdown = 5;
+            const keys = [
+                ['w', 'KeyW', 87],
+                ['a', 'KeyA', 65],
+                ['s', 'KeyS', 83],
+                ['d', 'KeyD', 68],
+                [' ', 'Space', 32]
+            ];
 
+            let index = 0;
             antiAfkInterval = setInterval(() => {
-                countdown--;
-                antiAfkBox.textContent = `Anti-AFK: ${countdown}`;
-
-                if (countdown <= 0) {
-                    const keys = [
-                        ['w', 'KeyW', 87],
-                        ['a', 'KeyA', 65],
-                        ['s', 'KeyS', 83],
-                        ['d', 'KeyD', 68],
-                        [' ', 'Space', 32]
-                    ];
-
-                    keys.forEach(([key, code, keyCode], i) => {
-                        setTimeout(() => simulateKeyPress(key, code, keyCode), i * 500);
-                    });
-
-                    countdown = 5;
-                }
-            }, 1000);
+                const [key, code, keyCode] = keys[index];
+                simulateKeyPress(key, code, keyCode);
+                index = (index + 1) % keys.length;
+            }, 500);
         } else {
             if (antiAfkInterval) clearInterval(antiAfkInterval);
             if (antiAfkBox) antiAfkBox.remove();
@@ -1388,6 +1380,7 @@ function simulateKeyPress(key, code, keyCode) {
     eventTarget.dispatchEvent(downEvent);
     setTimeout(() => eventTarget.dispatchEvent(upEvent), 50);
 }
+
 
     createModule("Time Display", "Shows you the time so you dont have to exit full screen.");
     const timeModule = [...gridContainer.children].find(child =>
