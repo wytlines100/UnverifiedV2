@@ -3,7 +3,7 @@
 // @namespace    http://tampermonkey.net/
 // @version      2.37
 // @description  Look at my license before you modify, I WILL DMCA you.
-// @license		 Proprietary License 
+// @license      Proprietary License 
 // @author       wytlines, DeadFish7, andreypidd, jet, joudaALT!
 // @match        https://miniblox.io/*
 // @match        https://miniblox.org/*
@@ -1287,42 +1287,46 @@ pingModule.addEventListener("click", () => {
 
     createModule("FPS Booster", "Changes settings to improve FPS (refresh page)");
     createModule("Anti-Afk", "Presses WASD on its own to avoid being kicked for being AFK");
-    const antiAfkModuleElement = [...gridContainer.children].find(child =>
+    const antiAfkModule = [...gridContainer.children].find(child =>
     child.querySelector("h3")?.textContent === "Anti-Afk"
 );
 
 let isAntiAfkActive = false;
 let antiAfkInterval = null;
-let afkCountdown = 5;
 let antiAfkBox = null;
 
-if (antiAfkModuleElement) {
-    antiAfkModuleElement.addEventListener("click", () => {
+if (antiAfkModule) {
+    antiAfkModule.addEventListener("click", () => {
         isAntiAfkActive = !isAntiAfkActive;
 
         if (isAntiAfkActive) {
             antiAfkBox = document.createElement("div");
-            antiAfkBox.textContent = `Jumping in ${afkCountdown}`;
             antiAfkBox.style.position = "fixed";
             antiAfkBox.style.top = "20px";
             antiAfkBox.style.right = "20px";
-            antiAfkBox.style.background = "rgba(0, 0, 0, 0.7)";
-            antiAfkBox.style.color = "#fff";
+            antiAfkBox.style.backgroundColor = "rgba(0, 0, 0, 0.7)";
+            antiAfkBox.style.color = "white";
+            antiAfkBox.style.fontFamily = "monospace";
             antiAfkBox.style.padding = "10px 15px";
             antiAfkBox.style.borderRadius = "8px";
-            antiAfkBox.style.fontFamily = "monospace";
-            antiAfkBox.style.fontSize = "16px";
+            antiAfkBox.style.zIndex = "9999";
             antiAfkBox.style.cursor = "move";
-            antiAfkBox.style.zIndex = "99999";
+            antiAfkBox.style.userSelect = "none";
+            antiAfkBox.textContent = "Anti-AFK: ON";
+
             document.body.appendChild(antiAfkBox);
 
-            let isDragging = false, offsetX = 0, offsetY = 0;
+            let offsetX = 0;
+            let offsetY = 0;
+            let isDragging = false;
+
             antiAfkBox.addEventListener("mousedown", (e) => {
                 isDragging = true;
                 offsetX = e.clientX - antiAfkBox.getBoundingClientRect().left;
                 offsetY = e.clientY - antiAfkBox.getBoundingClientRect().top;
                 e.preventDefault();
             });
+
             document.addEventListener("mousemove", (e) => {
                 if (isDragging) {
                     antiAfkBox.style.left = `${e.clientX - offsetX}px`;
@@ -1330,48 +1334,57 @@ if (antiAfkModuleElement) {
                     antiAfkBox.style.right = "auto";
                 }
             });
+
             document.addEventListener("mouseup", () => {
                 isDragging = false;
             });
 
-            function pressSpace() {
-                const down = new KeyboardEvent("keydown", {
-                    key: " ",
-                    code: "Space",
-                    keyCode: 32,
-                    which: 32,
-                    bubbles: true,
-                });
-                const up = new KeyboardEvent("keyup", {
-                    key: " ",
-                    code: "Space",
-                    keyCode: 32,
-                    which: 32,
-                    bubbles: true,
-                });
-                window.dispatchEvent(down);
-                setTimeout(() => window.dispatchEvent(up), 50);
-            }
+            const keys = [
+                ['w', 'KeyW', 87],
+                ['a', 'KeyA', 65],
+                ['s', 'KeyS', 83],
+                ['d', 'KeyD', 68],
+                [' ', 'Space', 32]
+            ];
 
+            let index = 0;
             antiAfkInterval = setInterval(() => {
-                afkCountdown--;
-                antiAfkBox.textContent = `Jumping in ${afkCountdown}`;
-                if (afkCountdown <= 0) {
-                    pressSpace();
-                    afkCountdown = 5;
-                }
-            }, 1000);
+                const [key, code, keyCode] = keys[index];
+                simulateKeyPress(key, code, keyCode);
+                index = (index + 1) % keys.length;
+            }, 500);
         } else {
-            clearInterval(antiAfkInterval);
-            antiAfkInterval = null;
-            afkCountdown = 5;
-            if (antiAfkBox) {
-                antiAfkBox.remove();
-                antiAfkBox = null;
-            }
+            if (antiAfkInterval) clearInterval(antiAfkInterval);
+            if (antiAfkBox) antiAfkBox.remove();
         }
     });
 }
+
+function simulateKeyPress(key, code, keyCode) {
+    const eventTarget = document.activeElement || document.body;
+
+    const downEvent = new KeyboardEvent('keydown', {
+        key: key,
+        code: code,
+        keyCode: keyCode,
+        which: keyCode,
+        bubbles: true,
+        cancelable: true
+    });
+
+    const upEvent = new KeyboardEvent('keyup', {
+        key: key,
+        code: code,
+        keyCode: keyCode,
+        which: keyCode,
+        bubbles: true,
+        cancelable: true
+    });
+
+    eventTarget.dispatchEvent(downEvent);
+    setTimeout(() => eventTarget.dispatchEvent(upEvent), 50);
+}
+
 
     createModule("Time Display", "Shows you the time so you dont have to exit full screen.");
     const timeModule = [...gridContainer.children].find(child =>
@@ -1398,7 +1411,7 @@ if (timeModule) {
             timeElement.style.fontSize = "18px";
             timeElement.style.fontFamily = "monospace";
             timeElement.style.zIndex = "99999";
-            timeElement.style.pointerEvents = "auto"; // Allow dragging
+            timeElement.style.pointerEvents = "auto"; // Allow draggings :D -wyt
             timeElement.style.cursor = "move";
             timeElement.style.top = "unset";
             timeElement.style.left = "unset";
@@ -1553,4 +1566,3 @@ document.addEventListener("mouseup", () => {
     console.log('Client Status: Great');
 })();
 // ===== =====
-
