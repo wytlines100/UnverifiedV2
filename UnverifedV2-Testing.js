@@ -1,10 +1,14 @@
 // ==UserScript==
 // @name         UnverifiedV2
 // @namespace    http://tampermonkey.net/
-// @version      2.0
-// @description  :D
+// @version      2.32
+// @description  Look at my license before you modify, I WILL DMCA you.
+// @license		 Proprietary License 
 // @author       wytlines, DeadFish7, andreypidd, jet, joudaALT!
 // @match        https://miniblox.io/*
+// @match        https://miniblox.org/*
+// @match        https://miniblox.com/*
+// @match        https://blockcraft.io/*
 // @grant        none
 // ==/UserScript==
 
