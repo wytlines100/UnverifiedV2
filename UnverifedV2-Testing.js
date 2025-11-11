@@ -3,7 +3,7 @@
 // @namespace    http://tampermonkey.net/
 // @version      2.32
 // @description  Look at my license before you modify, I WILL DMCA you.
-// @license		 Proprietary License 
+// @license      Proprietary License 
 // @author       wytlines, DeadFish7, andreypidd, jet, joudaALT!
 // @match        https://miniblox.io/*
 // @match        https://miniblox.org/*
