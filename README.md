@@ -1,4 +1,6 @@
-Project took over 1 year so it would be nice you atleast credited me when stealing my projects 😓
+Project took over 1 year so it would be nice if you atleast credited me when stealing my projects 😓
+
+Est. October 2024 Credit to Miniblox
 
 ## License
 
