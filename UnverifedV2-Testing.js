@@ -447,7 +447,7 @@ class UnverifiedShortcutMenu {
 		this.container = document.createElement("div");
 		Object.assign(this.container.style, {
 			position: "absolute",
-			top: "82%",
+			top: "76%",
 			left: "50%",
 			transform: "translate(-50%, -50%)",
 			padding: "20px",
