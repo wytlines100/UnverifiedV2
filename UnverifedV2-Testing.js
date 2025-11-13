@@ -4,7 +4,7 @@
 // @version      2.32
 // @description  Look at my license before you modify, I WILL DMCA you.
 // @icon         https://raw.githubusercontent.com/wytlines100/UnverifiedV2/refs/heads/main/logo.jpg
-// @license      Proprietary License 
+// @license      Proprietary License
 // @author       wytlines, DeadFish7, andreypidd, jet, joudaALT!
 // @match        https://miniblox.io/*
 // @match        https://miniblox.org/*
@@ -373,7 +373,7 @@ class UnverifiedBanner {
 		this.e.style.textAlign = 'center';
 		this.e.style.zIndex = 999;
 		this.e.style.position = "absolute";
-		this.e.style.top = "8.5%";
+		this.e.style.top = "11.5%";
 		this.e.style.left = "50%";
 		this.e.style.transform = "translate(-50%, -50%)";
 		this.e.style.padding = '10px 20px';
@@ -389,13 +389,13 @@ class UnverifiedBanner {
 		this.e.addEventListener('mouseover', () => {
 			this.e.style.backgroundColor = 'rgba(185, 185, 185, 0.4)';
 			this.e.style.transform = 'translate(-50%, -50%), scale(1.01)';
-			this.e.style.top = "8.5%";
+			this.e.style.top = "11.5%";
 			this.e.style.left = "50%";
 		});
 		this.e.addEventListener('mouseout', () => {
 			this.e.style.backgroundColor = 'rgba(211, 211, 211, 0.4)';
 			this.e.style.transform = 'translate(-50%, -50%), scale(1)';
-			this.e.style.top = "8.5%";
+			this.e.style.top = "11.5%";
 			this.e.style.left = "50%";
 		});
 		this.shown = false;
