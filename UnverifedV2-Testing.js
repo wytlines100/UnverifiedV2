@@ -127,6 +127,44 @@ class UnverifiedIntro {
 	}
 }
 
+     // thanking message for using client -jouda lol
+     (function() {
+    'use strict';
+
+    const gameRef = {
+        _game: null,
+        get game() {
+            if (this._game) return this._game;
+
+            const reactRoot = document.querySelector("#react");
+            if (!reactRoot) return null;
+
+            try {
+                const fiber = Object.values(reactRoot)[0];
+                const game = fiber?.updateQueue?.baseState?.element?.props?.game;
+                if (game) this._game = game;
+                return game;
+            } catch (e) {
+                console.warn("[UnverifiedV2] Failed to get game object:", e);
+                return null;
+            }
+        }
+    };
+
+    const waitForGame = setInterval(() => {
+        const game = gameRef.game;
+        if (game && game.chat && typeof game.chat.addChat === "function") {
+            clearInterval(waitForGame);
+
+            game.chat.addChat({
+                text: "\\#00FFFF\\[UnverifiedV2]\\reset\\ Hello Thank You For Using The Unverified Client."
+            });
+
+            console.log("[UnverifiedV2] Sent Welcome Message");
+        }
+    }, 500);
+
+})();
 
 class UnverifiedStyler {
 	constructor() {
