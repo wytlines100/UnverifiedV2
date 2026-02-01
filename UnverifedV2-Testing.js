@@ -157,7 +157,7 @@ class UnverifiedIntro {
             clearInterval(waitForGame);
 
             game.chat.addChat({
-                text: "\\#00FFFF\\[UnverifiedV2]\\reset\\ Hello Thank You For Using The Unverified Client."
+                text: "\\#00FFFF\\[UnverifiedV2]\\reset\\ Hello, Thank You For Using The Unverified Client."
             });
 
             console.log("[UnverifiedV2] Sent Welcome Message");
