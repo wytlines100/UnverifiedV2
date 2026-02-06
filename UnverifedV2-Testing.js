@@ -1154,98 +1154,98 @@ if (fpsModule) {
   });
 }
 
-const cpsModule = createModule("CPS Counter", "Counts how many times you click per second.");
+const mouseModule = createModule("CPS Counter", "Counts how many times you click per second.");
 
-let isCpsActive = false;
+let isMouseActive = false;
 let clickTimes = [];
-let cpsElement = null;
+let mouseElement = null;
+const mouseDecayTime = 1000;
 
+const strokeColor = "#FFFFFF";
+const idleFill = "rgba(255, 255, 255, 0.1)";
+const activeFill = "rgba(255, 255, 255, 0.8)";
 
-let cpsDecayTime = 1050;
+mouseModule.addEventListener("click", () => {
+    isMouseActive = !isMouseActive;
 
-cpsModule.addEventListener("click", () => {
-    isCpsActive = !isCpsActive;
+    if (isMouseActive) {
+        if (!mouseElement) {
+            mouseElement = document.createElement("div");
+            mouseElement.id = "mouse-strokes-hud";
+            mouseElement.style.cssText = `
+                position: fixed; top: 100px; left: 20px;
+                padding: 10px; z-index: 99999;
+                user-select: none; cursor: move;
+                display: flex; flex-direction: column; align-items: center;
+                gap: 5px; font-family: 'Segoe UI', Tahoma, sans-serif;
+                filter: drop-shadow(0px 0px 8px rgba(0, 0, 0, 0.8));
+            `;
 
-    if (isCpsActive) {
+            mouseElement.innerHTML = `
+                <svg id="mouse-svg" width="70" height="95" viewBox="0 0 100 140">
+                    <path id="m-left" d="M10 40 Q 10 10, 48 10 L 48 65 L 10 65 Z" fill="${idleFill}" stroke="${strokeColor}" stroke-width="6"/>
+                    <path id="m-right" d="M90 40 Q 90 10, 52 10 L 52 65 L 90 65 Z" fill="${idleFill}" stroke="${strokeColor}" stroke-width="6"/>
+                    <path d="M10 65 L 90 65 Q 90 130, 50 130 Q 10 130, 10 65" fill="none" stroke="${strokeColor}" stroke-width="6"/>
+                    <rect x="43" y="22" width="14" height="24" rx="7" fill="${strokeColor}"/>
+                </svg>
+                <div id="cps-display" style="color: white; font-size: 20px; font-weight: 900; text-shadow: 0px 0px 10px rgba(0,0,0,1), 0px 0px 5px rgba(0,0,0,1);">0 CPS</div>
+            `;
 
-        if (!cpsElement) {
-            cpsElement = document.createElement("div");
-            cpsElement.id = "cps-counter";
-            cpsElement.style.position = "fixed";
-            cpsElement.style.top = "20px";
-            cpsElement.style.left = "20px";
-            cpsElement.style.color = "white";
-            cpsElement.style.backgroundColor = "rgba(0, 0, 0, 0.6)";
-            cpsElement.style.padding = "10px 15px";
-            cpsElement.style.borderRadius = "8px";
-            cpsElement.style.fontSize = "18px";
-            cpsElement.style.fontFamily = "monospace";
-            cpsElement.style.zIndex = "99999";
-            cpsElement.style.userSelect = "none";
-            cpsElement.style.cursor = "move";
-
-            document.body.appendChild(cpsElement);
-
+            document.body.appendChild(mouseElement);
 
             let isDragging = false;
-            let offsetX = 0;
-            let offsetY = 0;
-
-            cpsElement.addEventListener("mousedown", (e) => {
+            let offsetX, offsetY;
+            mouseElement.addEventListener("mousedown", (e) => {
                 isDragging = true;
-                offsetX = e.clientX - cpsElement.getBoundingClientRect().left;
-                offsetY = e.clientY - cpsElement.getBoundingClientRect().top;
-                e.preventDefault();
+                offsetX = e.clientX - mouseElement.getBoundingClientRect().left;
+                offsetY = e.clientY - mouseElement.getBoundingClientRect().top;
             });
 
             document.addEventListener("mousemove", (e) => {
                 if (isDragging) {
-                    cpsElement.style.left = (e.clientX - offsetX) + "px";
-                    cpsElement.style.top = (e.clientY - offsetY) + "px";
+                    mouseElement.style.left = (e.clientX - offsetX) + "px";
+                    mouseElement.style.top = (e.clientY - offsetY) + "px";
                 }
             });
 
-            document.addEventListener("mouseup", () => {
-                isDragging = false;
-            });
+            document.addEventListener("mouseup", () => isDragging = false);
         }
 
-
-        clickTimes = [];
-
-
-        const clickHandler = () => {
-            clickTimes.push(Date.now());
-        };
-        document.addEventListener("mousedown", clickHandler);
-
-
-        function updateCps() {
+        const handleInteraction = (e) => {
             const now = Date.now();
-
-            clickTimes = clickTimes.filter(time => now - time <= cpsDecayTime);
-
-            cpsElement.textContent = `CPS: ${clickTimes.length}`;
-
-            if (isCpsActive) {
-                requestAnimationFrame(updateCps);
+            if (e.type === "mousedown") {
+                if (e.button === 0) document.getElementById("m-left").setAttribute("fill", activeFill);
+                if (e.button === 2) document.getElementById("m-right").setAttribute("fill", activeFill);
+                clickTimes.push(now);
+            } else if (e.type === "mouseup") {
+                if (e.button === 0) document.getElementById("m-left").setAttribute("fill", idleFill);
+                if (e.button === 2) document.getElementById("m-right").setAttribute("fill", idleFill);
             }
+        };
+
+        document.addEventListener("mousedown", handleInteraction);
+        document.addEventListener("mouseup", handleInteraction);
+        document.addEventListener("contextmenu", (e) => e.preventDefault());
+
+        function updateLoop() {
+            const now = Date.now();
+            clickTimes = clickTimes.filter(time => now - time <= mouseDecayTime);
+            const display = document.getElementById("cps-display");
+            if (display) display.textContent = `${clickTimes.length} CPS`;
+            if (isMouseActive) requestAnimationFrame(updateLoop);
         }
 
-        updateCps();
-
-
-        cpsModule._clickHandler = clickHandler;
+        updateLoop();
+        mouseModule._handler = handleInteraction;
 
     } else {
-
-        if (cpsElement) {
-            cpsElement.remove();
-            cpsElement = null;
+        if (mouseElement) {
+            mouseElement.remove();
+            mouseElement = null;
         }
-        if (cpsModule._clickHandler) {
-            document.removeEventListener("mousedown", cpsModule._clickHandler);
-            cpsModule._clickHandler = null;
+        if (mouseModule._handler) {
+            document.removeEventListener("mousedown", mouseModule._handler);
+            document.removeEventListener("mouseup", mouseModule._handler);
         }
     }
 });
