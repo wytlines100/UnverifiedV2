@@ -1250,7 +1250,7 @@ mouseModule.addEventListener("click", () => {
     }
 });
 
- const pingModule = createModule("Ping Counter", "Shows the latency between your client and the server.");
+const pingModule = createModule("Ping Counter", "Shows the latency between your client and the server.");
 
 let isPingActive = false;
 let pingElement = null;
@@ -1260,24 +1260,47 @@ pingModule.addEventListener("click", () => {
     isPingActive = !isPingActive;
 
     if (isPingActive) {
-
         pingElement = document.createElement("div");
         pingElement.id = "ping-counter";
         pingElement.style.position = "fixed";
         pingElement.style.top = "20px";
         pingElement.style.left = "20px";
-        pingElement.style.padding = "8px 12px";
-        pingElement.style.backgroundColor = "rgba(0, 0, 0, 0.6)";
-        pingElement.style.color = "white";
-        pingElement.style.fontWeight = "bold";
-        pingElement.style.fontFamily = "monospace";
+        pingElement.style.padding = "8px 14px";
+        pingElement.style.background = "rgba(0, 0, 0, 0.6)";
+        pingElement.style.backdropFilter = "blur(8px)";
+        pingElement.style.border = "1px solid rgba(255, 255, 255, 0.15)";
         pingElement.style.borderRadius = "8px";
         pingElement.style.zIndex = "10000";
         pingElement.style.cursor = "move";
         pingElement.style.userSelect = "none";
+        pingElement.style.fontFamily = "'Segoe UI', 'Roboto', sans-serif";
+        pingElement.style.display = "flex";
+        pingElement.style.alignItems = "center";
+        pingElement.style.gap = "8px";
+        pingElement.style.boxShadow = "0 4px 12px rgba(0, 0, 0, 0.3)";
+
+        const pingDot = document.createElement("div");
+        pingDot.id = "ping-dot";
+        pingDot.style.width = "10px";
+        pingDot.style.height = "10px";
+        pingDot.style.borderRadius = "50%";
+        pingDot.style.backgroundColor = "#4CAF50";
+        pingDot.style.boxShadow = "0 0 12px rgba(76, 175, 80, 0.9)";
+        pingDot.style.transition = "all 0.3s ease";
+
+        const pingValue = document.createElement("div");
+        pingValue.id = "ping-value";
+        pingValue.textContent = "--- ms";
+        pingValue.style.fontSize = "16px";
+        pingValue.style.fontWeight = "700";
+        pingValue.style.color = "#FFFFFF";
+        pingValue.style.letterSpacing = "0.5px";
+        pingValue.style.transition = "color 0.3s ease";
+
+        pingElement.appendChild(pingDot);
+        pingElement.appendChild(pingValue);
 
         document.body.appendChild(pingElement);
-
 
         let isDragging = false;
         let offsetX = 0;
@@ -1301,16 +1324,51 @@ pingModule.addEventListener("click", () => {
             isDragging = false;
         });
 
-
         const updatePing = () => {
             const start = Date.now();
-            fetch(window.location.href, { method: 'HEAD', cache: "no-cache" }).then(() => {
-                const end = Date.now();
-                const ping = end - start;
-                pingElement.textContent = `Ping: ${ping}`;  // No "ms" here
-            }).catch(() => {
-                pingElement.textContent = `Ping: N/A`;
-            });
+            fetch(window.location.href, { method: 'HEAD', cache: "no-cache" })
+                .then(() => {
+                    const end = Date.now();
+                    const ping = end - start;
+                    const valueElement = document.getElementById("ping-value");
+                    const dotElement = document.getElementById("ping-dot");
+
+                    if (valueElement && dotElement) {
+                        valueElement.textContent = `${ping} ms`;
+
+                        if (ping < 50) {
+                            valueElement.style.color = "#4CAF50";
+                            dotElement.style.backgroundColor = "#4CAF50";
+                            dotElement.style.boxShadow = "0 0 12px rgba(76, 175, 80, 0.9)";
+                        } else if (ping < 100) {
+                            valueElement.style.color = "#8BC34A";
+                            dotElement.style.backgroundColor = "#8BC34A";
+                            dotElement.style.boxShadow = "0 0 12px rgba(139, 195, 74, 0.9)";
+                        } else if (ping < 150) {
+                            valueElement.style.color = "#FFC107";
+                            dotElement.style.backgroundColor = "#FFC107";
+                            dotElement.style.boxShadow = "0 0 12px rgba(255, 193, 7, 0.9)";
+                        } else if (ping < 200) {
+                            valueElement.style.color = "#FF9800";
+                            dotElement.style.backgroundColor = "#FF9800";
+                            dotElement.style.boxShadow = "0 0 12px rgba(255, 152, 0, 0.9)";
+                        } else {
+                            valueElement.style.color = "#F44336";
+                            dotElement.style.backgroundColor = "#F44336";
+                            dotElement.style.boxShadow = "0 0 12px rgba(244, 67, 54, 0.9)";
+                        }
+                    }
+                })
+                .catch(() => {
+                    const valueElement = document.getElementById("ping-value");
+                    const dotElement = document.getElementById("ping-dot");
+                    if (valueElement && dotElement) {
+                        valueElement.textContent = "N/A";
+                        valueElement.style.color = "#9E9E9E";
+                        dotElement.style.backgroundColor = "#9E9E9E";
+                        dotElement.style.boxShadow = "0 0 12px rgba(158, 158, 158, 0.9)";
+                    }
+                });
         };
 
         updatePing();
