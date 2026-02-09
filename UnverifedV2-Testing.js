@@ -1074,7 +1074,7 @@ class UnverifiedShortcutMenu {
     });
 
     createModule("FPS Counter", "Shows the frames per second (FPS) of the game.");
-    const fpsModule = [...gridContainer.children].find(child =>
+const fpsModule = [...gridContainer.children].find(child =>
   child.querySelector("h3")?.textContent === "FPS Counter"
 );
 
@@ -1090,22 +1090,46 @@ if (fpsModule) {
 
     if (isFPSVisible) {
       fpsElement = document.createElement("div");
-      fpsElement.textContent = "FPS: 0";
+      fpsElement.id = "fps-counter";
       fpsElement.style.position = "fixed";
-      fpsElement.style.top = "120px";
+      fpsElement.style.top = "60px";
       fpsElement.style.left = "20px";
-      fpsElement.style.background = "rgba(0, 0, 0, 0.8)";
-      fpsElement.style.color = "#ffffff";
-      fpsElement.style.fontSize = "14px";
-      fpsElement.style.fontFamily = "monospace";
-      fpsElement.style.padding = "8px 12px";
-      fpsElement.style.borderRadius = "6px";
+      fpsElement.style.padding = "8px 14px";
+      fpsElement.style.background = "rgba(0, 0, 0, 0.6)";
+      fpsElement.style.backdropFilter = "blur(8px)";
+      fpsElement.style.border = "1px solid rgba(255, 255, 255, 0.15)";
+      fpsElement.style.borderRadius = "8px";
       fpsElement.style.zIndex = "99999";
       fpsElement.style.cursor = "move";
       fpsElement.style.userSelect = "none";
+      fpsElement.style.fontFamily = "'Segoe UI', 'Roboto', sans-serif";
+      fpsElement.style.display = "flex";
+      fpsElement.style.alignItems = "center";
+      fpsElement.style.gap = "8px";
+      fpsElement.style.boxShadow = "0 4px 12px rgba(0, 0, 0, 0.3)";
+
+      const fpsDot = document.createElement("div");
+      fpsDot.id = "fps-dot";
+      fpsDot.style.width = "10px";
+      fpsDot.style.height = "10px";
+      fpsDot.style.borderRadius = "50%";
+      fpsDot.style.backgroundColor = "#4CAF50";
+      fpsDot.style.boxShadow = "0 0 12px rgba(76, 175, 80, 0.9)";
+      fpsDot.style.transition = "all 0.3s ease";
+
+      const fpsValue = document.createElement("div");
+      fpsValue.id = "fps-value";
+      fpsValue.textContent = "0 FPS";
+      fpsValue.style.fontSize = "16px";
+      fpsValue.style.fontWeight = "700";
+      fpsValue.style.color = "#FFFFFF";
+      fpsValue.style.letterSpacing = "0.5px";
+      fpsValue.style.transition = "color 0.3s ease";
+
+      fpsElement.appendChild(fpsDot);
+      fpsElement.appendChild(fpsValue);
 
       document.body.appendChild(fpsElement);
-
 
       let offsetX = 0,
         offsetY = 0,
@@ -1129,14 +1153,41 @@ if (fpsModule) {
         isDragging = false;
       });
 
-
       const updateFPS = () => {
         const now = performance.now();
         frameCount++;
 
         if (now - lastFrameTime >= 1000) {
           fps = frameCount;
-          fpsElement.textContent = `FPS: ${fps}`;
+          const valueElement = document.getElementById("fps-value");
+          const dotElement = document.getElementById("fps-dot");
+
+          if (valueElement && dotElement) {
+            valueElement.textContent = `${fps} FPS`;
+
+            if (fps >= 60) {
+              valueElement.style.color = "#4CAF50";
+              dotElement.style.backgroundColor = "#4CAF50";
+              dotElement.style.boxShadow = "0 0 12px rgba(76, 175, 80, 0.9)";
+            } else if (fps >= 45) {
+              valueElement.style.color = "#8BC34A";
+              dotElement.style.backgroundColor = "#8BC34A";
+              dotElement.style.boxShadow = "0 0 12px rgba(139, 195, 74, 0.9)";
+            } else if (fps >= 30) {
+              valueElement.style.color = "#FFC107";
+              dotElement.style.backgroundColor = "#FFC107";
+              dotElement.style.boxShadow = "0 0 12px rgba(255, 193, 7, 0.9)";
+            } else if (fps >= 20) {
+              valueElement.style.color = "#FF9800";
+              dotElement.style.backgroundColor = "#FF9800";
+              dotElement.style.boxShadow = "0 0 12px rgba(255, 152, 0, 0.9)";
+            } else {
+              valueElement.style.color = "#F44336";
+              dotElement.style.backgroundColor = "#F44336";
+              dotElement.style.boxShadow = "0 0 12px rgba(244, 67, 54, 0.9)";
+            }
+          }
+
           frameCount = 0;
           lastFrameTime = now;
         }
@@ -1384,7 +1435,7 @@ pingModule.addEventListener("click", () => {
 
     createModule("FPS Booster", "Changes settings to improve FPS (refresh page)");
     createModule("Anti-Afk", "Presses WASD on its own to avoid being kicked for being AFK");
-    const antiAfkModule = [...gridContainer.children].find(child =>
+const antiAfkModule = [...gridContainer.children].find(child =>
     child.querySelector("h3")?.textContent === "Anti-Afk"
 );
 
@@ -1398,18 +1449,51 @@ if (antiAfkModule) {
 
         if (isAntiAfkActive) {
             antiAfkBox = document.createElement("div");
+            antiAfkBox.id = "anti-afk-counter";
             antiAfkBox.style.position = "fixed";
-            antiAfkBox.style.top = "20px";
-            antiAfkBox.style.right = "20px";
-            antiAfkBox.style.backgroundColor = "rgba(0, 0, 0, 0.7)";
-            antiAfkBox.style.color = "white";
-            antiAfkBox.style.fontFamily = "monospace";
-            antiAfkBox.style.padding = "10px 15px";
+            antiAfkBox.style.top = "100px";
+            antiAfkBox.style.left = "20px";
+            antiAfkBox.style.padding = "8px 14px";
+            antiAfkBox.style.background = "rgba(0, 0, 0, 0.6)";
+            antiAfkBox.style.backdropFilter = "blur(8px)";
+            antiAfkBox.style.border = "1px solid rgba(255, 255, 255, 0.15)";
             antiAfkBox.style.borderRadius = "8px";
             antiAfkBox.style.zIndex = "9999";
             antiAfkBox.style.cursor = "move";
             antiAfkBox.style.userSelect = "none";
-            antiAfkBox.textContent = "Anti-AFK: ON";
+            antiAfkBox.style.fontFamily = "'Segoe UI', 'Roboto', sans-serif";
+            antiAfkBox.style.display = "flex";
+            antiAfkBox.style.alignItems = "center";
+            antiAfkBox.style.gap = "8px";
+            antiAfkBox.style.boxShadow = "0 4px 12px rgba(0, 0, 0, 0.3)";
+
+            const afkDot = document.createElement("div");
+            afkDot.id = "afk-dot";
+            afkDot.style.width = "10px";
+            afkDot.style.height = "10px";
+            afkDot.style.borderRadius = "50%";
+            afkDot.style.backgroundColor = "#4CAF50";
+            afkDot.style.boxShadow = "0 0 12px rgba(76, 175, 80, 0.9)";
+            afkDot.style.animation = "afkPulse 1.5s infinite";
+
+            const afkText = document.createElement("div");
+            afkText.textContent = "Anti-AFK";
+            afkText.style.fontSize = "16px";
+            afkText.style.fontWeight = "700";
+            afkText.style.color = "#4CAF50";
+            afkText.style.letterSpacing = "0.5px";
+
+            antiAfkBox.appendChild(afkDot);
+            antiAfkBox.appendChild(afkText);
+
+            const style = document.createElement("style");
+            style.textContent = `
+                @keyframes afkPulse {
+                    0%, 100% { opacity: 1; transform: scale(1); }
+                    50% { opacity: 0.5; transform: scale(1.2); }
+                }
+            `;
+            document.head.appendChild(style);
 
             document.body.appendChild(antiAfkBox);
 
