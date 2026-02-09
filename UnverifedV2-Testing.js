@@ -1525,8 +1525,9 @@ document.addEventListener("mouseup", () => {
         { name: "Minors??!!", image: "https://media1.tenor.com/m/mn2d2liDsmUAAAAC/ichigo-bleach.gif" },
         { name: "Beach", image: "https://wallpaperaccess.com/full/174768.jpg" },
         { name: "Fall", image: "https://wallpaperaccess.com/full/185084.jpg" },
-        { name: "Ocean", image: "https://wallpaperaccess.com/full/317501.jpg" }
-    ];
+        { name: "Ocean", image: "https://wallpaperaccess.com/full/317501.jpg" },
+        { name: "Sunrise", image: "https://wallpaperaccess.com/full/14240.jpg"}
+];
 
 
     themes.forEach(theme => {
