@@ -1301,6 +1301,50 @@ mouseModule.addEventListener("click", () => {
     }
 });
 
+const muteChatModule = createModule("Mute Chat", "Prevents other players messages from appearing in chat.");
+
+let isMuteChatActive = false;
+let originalAddChat = null;
+
+muteChatModule.addEventListener("click", () => {
+    isMuteChatActive = !isMuteChatActive;
+
+    const gameRef = {
+        _game: null,
+        get game() {
+            if (this._game) return this._game;
+
+            const reactRoot = document.querySelector("#react");
+            if (!reactRoot) return null;
+
+            try {
+                const fiber = Object.values(reactRoot)[0];
+                const game = fiber?.updateQueue?.baseState?.element?.props?.game;
+                if (game) this._game = game;
+                return game;
+            } catch (e) {
+                console.warn("[UnverifiedV2] Failed to get game object:", e);
+                return null;
+            }
+        }
+    };
+
+    const game = gameRef.game;
+
+    if (game && game.chat) {
+        if (isMuteChatActive) {
+            if (!originalAddChat) {
+                originalAddChat = game.chat.addChat;
+            }
+            game.chat.addChat = function() {};
+        } else {
+            if (originalAddChat) {
+                game.chat.addChat = originalAddChat;
+            }
+        }
+    }
+});
+
 const pingModule = createModule("Ping Counter", "Shows the latency between your client and the server.");
 
 let isPingActive = false;
