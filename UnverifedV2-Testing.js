@@ -1,7 +1,7 @@
 // ==UserScript==
 // @name         UnverifiedV2
 // @namespace    http://tampermonkey.net/
-// @version      2.32
+// @version      2.34
 // @description  Look at my license before you modify, I WILL DMCA you.
 // @icon         https://raw.githubusercontent.com/wytlines100/UnverifiedV2/refs/heads/main/logo.jpg
 // @license      Proprietary License
@@ -127,7 +127,6 @@ class UnverifiedIntro {
 	}
 }
 
-     // thanking message for using client -jouda lol
      (function() {
     'use strict';
 
@@ -174,8 +173,8 @@ class UnverifiedStyler {
 		this.shortcutMenu = new UnverifiedShortcutMenu();
 
 		this.visuallyRemoveSelectors = [
-			'.chakra-image.css-1je8qb9', // Miniblox logo
-			'.chakra-stack.css-7kkhgi', // Discord button
+			'.chakra-image.css-1je8qb9',
+			'.chakra-stack.css-7kkhgi',
 		];
 		this.backgroundSelectors = [
 			'img.chakra-image.css-rkihvp',
@@ -183,91 +182,91 @@ class UnverifiedStyler {
 			'.css-aznra0',
 		];
 		this.generalStylingSelectors = new Set([
-			'.chakra-button.css-cuh8pi',  // play button
-			'.chakra-button.css-32lhf4',  // left menu buttons
-			'.chakra-button.css-5ov7ui',  // signin button, box, ingame menu button
-			'.chakra-button.css-18wnugv', // customize button
-			'.chakra-button.css-he6upe',  // daily button
-			'.chakra-button.css-1oxqv3t',  // daily ready button
-			'.chakra-button.css-1dkorm4', // free coin button
-			'.css-10y588r',               // user info box
-			'button.chakra-button.css-livqej', // leave game button
-			'button.chakra-button.css-1jg2qv0', // Settings done button
-			'div.css-aidfhd',             // Dressing room profile
-			'div.css-1kd330l',            // Dressing room buttons
-			'button.chakra-button.css-14mkusw', // planet buttons
-			'button.chakra-button.css-8q1apo',  // back button
-			'.css-1a6laq6',               // sliders outer part
-			'button.chakra-button.css-1axaj8o',  // invite+exit quick-launch buttons
-			'button.chakra-button.css-xircll',  // left menu back button
-			'.css-1xy2x8',   						  // dressing room epic skins
-			'.css-i1x0qw',   						  // dressing room rare skins
-			'.css-jnnvp4',   						  // dressing room legendary skins
-			'.css-hk5viu',   						  // dressing room common skins
-			'.css-55x3n6',   						  // dressing room selected common skins
-			'.css-n15lby',                // dressing room selected rare skins
-			'.css-1xqsddr',   						  // dressing room selected epic skins
-			'.css-1ibhl1y',              // dressing room selected legendary skins
-			'.chakra-stack.css-1c10cfa',  // friend list block
-			'.chakra-form-control.css-1kxonj9',  // friend search bar
-			'.chakra-button.css-1dcrejx',  // friend search button
-			'.chakra-button.css-1ote1yx',  // profile change buttons
-			'.css-qkv95g',  	             // planet load selects
-			'.css-1r8eeg2',  	             // planet browse selects
-			'.chakra-input.css-18whhxd',    // player search bar
-			'.chakra-input.css-ypk59i',    // profile input bar email
-			'.chakra-input.css-1oc9k70',    // profile input bar username, password
-			'.css-nizmkx',     					// player info box xp bar
-			'.css-r7134l',     					// ranking cat box
-			'.css-qzh2oi',     					// ranking selected cat box
-			'.chakra-button.css-137k3gn', 	// sign done button
-			'.chakra-button.css-1n378o7', 	// open loot box button
-			'.css-1f34n7d', 	          // daily login reward small
-			'.css-tncl4j', 	          // daily login reward large
-			'.css-1tyymsb', 	          // daily login today reward
-			'.css-ol7umz', 	          // daily login tomorrow? reward
-			'.chakra-button.css-12t4nq4', 	          // daily login next reward
+			'.chakra-button.css-cuh8pi',
+			'.chakra-button.css-32lhf4',
+			'.chakra-button.css-5ov7ui',
+			'.chakra-button.css-18wnugv',
+			'.chakra-button.css-he6upe',
+			'.chakra-button.css-1oxqv3t',
+			'.chakra-button.css-1dkorm4',
+			'.css-10y588r',
+			'button.chakra-button.css-livqej',
+			'button.chakra-button.css-1jg2qv0',
+			'div.css-aidfhd',
+			'div.css-1kd330l',
+			'button.chakra-button.css-14mkusw',
+			'button.chakra-button.css-8q1apo',
+			'.css-1a6laq6',
+			'button.chakra-button.css-1axaj8o',
+			'button.chakra-button.css-xircll',
+			'.css-1xy2x8',
+			'.css-i1x0qw',
+			'.css-jnnvp4',
+			'.css-hk5viu',
+			'.css-55x3n6',
+			'.css-n15lby',
+			'.css-1xqsddr',
+			'.css-1ibhl1y',
+			'.chakra-stack.css-1c10cfa',
+			'.chakra-form-control.css-1kxonj9',
+			'.chakra-button.css-1dcrejx',
+			'.chakra-button.css-1ote1yx',
+			'.css-qkv95g',
+			'.css-1r8eeg2',
+			'.chakra-input.css-18whhxd',
+			'.chakra-input.css-ypk59i',
+			'.chakra-input.css-1oc9k70',
+			'.css-nizmkx',
+			'.css-r7134l',
+			'.css-qzh2oi',
+			'.chakra-button.css-137k3gn',
+			'.chakra-button.css-1n378o7',
+			'.css-1f34n7d',
+			'.css-tncl4j',
+			'.css-1tyymsb',
+			'.css-ol7umz',
+			'.chakra-button.css-12t4nq4',
 		]);
 		this.specificStylingSelectors = new Map([
-			['button.chakra-button.css-1axaj8o', e => { e.style.fontSize = '24px'; e.style.padding = '1px 1px' }],  // invite+exit quick-launch buttons
-			['.chakra-button.css-cuh8pi', e => { e.style.fontSize = '20px' }],                            // play button
-			['.css-1xy2x8', e => { e.style.border = '2px solid purple'; e.style.padding = '0 10px' }],     // dressing room epic skins
-			['.css-i1x0qw', e => { e.style.border = '2px solid green'; e.style.padding = '0 10px' }],     // dressing room rare skins
-			['.css-jnnvp4', e => { e.style.border = '2px solid yellow'; e.style.padding = '0 10px' }],    // dressing room legendary skins
-			['.css-hk5viu', e => { e.style.border = '2px solid gray'; e.style.padding = '0 10px' }],      // dressing room common skins
-			['.css-qzh2oi', e => { e.style.border = '2px solid white' }],                                            // ranking selected cat box
-			['.chakra-button.css-1iuk66d', e => { e.style.border = '1px solid white'; e.style.borderRadius = '12px' }], // join friends button
-			['.chakra-button.css-73nw7g', e => { e.style.border = '1px solid white'; e.style.borderRadius = '12px' }], // remove friends button
-			['.css-55x3n6', e => { e.style.border = '2px solid white'; e.style.padding = '0 10px' }],                // dressing room selected common skins
-			['.css-n15lby', e => { e.style.border = '2px solid lime'; e.style.padding = '0 10px' }],                // dressing room selected rare skins
-			['.css-1xqsddr', e => { e.style.border = '2px solid pink'; e.style.padding = '0 10px' }],                // dressing room selected epic skins
-			['.css-1ibhl1y', e => { e.style.border = '2px solid orange'; e.style.padding = '0 10px' }],              // dressing room selected legendary skins
-			['.chakra-input.css-ypk59i', e => { e.style.border = 'none'; e.style.background = 'none'; }],              // email input form double border fix
-			['.chakra-input.css-1oc9k70', e => { e.style.border = 'none'; e.style.background = 'none'; }],              // profile input bar username, password
-			['.chakra-input.css-18whhxd', e => { e.style.border = 'none'; e.style.background = 'none'; }],              // player search
-			['.css-nizmkx', e => { e.style.padding = '0 0' }],                                                    // player xp bar
-			['.chakra-slider', e => { e.style.padding = '0 0'; e.style.borderRadius = '12px' }],  	                    // slider inner part
-			['.css-1a6laq6', e => { e.style.padding = '0 0' }],                                              // sliders outer part
-			['.chakra-slider__filled-track.css-li9pez', e => { e.style.borderRadius = '12px' }],                        // sliders drag bg part
+			['button.chakra-button.css-1axaj8o', e => { e.style.fontSize = '24px'; e.style.padding = '1px 1px' }],
+			['.chakra-button.css-cuh8pi', e => { e.style.fontSize = '20px' }],
+			['.css-1xy2x8', e => { e.style.border = '2px solid purple'; e.style.padding = '0 10px' }],
+			['.css-i1x0qw', e => { e.style.border = '2px solid green'; e.style.padding = '0 10px' }],
+			['.css-jnnvp4', e => { e.style.border = '2px solid yellow'; e.style.padding = '0 10px' }],
+			['.css-hk5viu', e => { e.style.border = '2px solid gray'; e.style.padding = '0 10px' }],
+			['.css-qzh2oi', e => { e.style.border = '2px solid white' }],
+			['.chakra-button.css-1iuk66d', e => { e.style.border = '1px solid white'; e.style.borderRadius = '12px' }],
+			['.chakra-button.css-73nw7g', e => { e.style.border = '1px solid white'; e.style.borderRadius = '12px' }],
+			['.css-55x3n6', e => { e.style.border = '2px solid white'; e.style.padding = '0 10px' }],
+			['.css-n15lby', e => { e.style.border = '2px solid lime'; e.style.padding = '0 10px' }],
+			['.css-1xqsddr', e => { e.style.border = '2px solid pink'; e.style.padding = '0 10px' }],
+			['.css-1ibhl1y', e => { e.style.border = '2px solid orange'; e.style.padding = '0 10px' }],
+			['.chakra-input.css-ypk59i', e => { e.style.border = 'none'; e.style.background = 'none'; }],
+			['.chakra-input.css-1oc9k70', e => { e.style.border = 'none'; e.style.background = 'none'; }],
+			['.chakra-input.css-18whhxd', e => { e.style.border = 'none'; e.style.background = 'none'; }],
+			['.css-nizmkx', e => { e.style.padding = '0 0' }],
+			['.chakra-slider', e => { e.style.padding = '0 0'; e.style.borderRadius = '12px' }],
+			['.css-1a6laq6', e => { e.style.padding = '0 0' }],
+			['.chakra-slider__filled-track.css-li9pez', e => { e.style.borderRadius = '12px' }],
 		]);
 		this.blackBackgroundSelectors = [
-			'.chakra-stack.css-1cklnv0',  // account data bg
-			'.chakra-stack.css-oou8ol',  // profile left menu bg
-			'.chakra-stack.css-owjkmg',  // friends list bg
-			'.chakra-stack.css-15uwvcw',  // discord connection bg
-			'.chakra-stack.css-1hj4r72',  // dressing room bg
-			'.chakra-stack.css-10tqh5h',  // subscriptions bg
-			'.chakra-stack.css-wv1k6p',  // player stats bg
-			'.chakra-stack.css-b1sb84',  // shop bg
-			'.chakra-stack.css-b1sb84',  // ranking bg
-			'.chakra-modal__content.css-1n1g7m4',  // daily login bg
-			'.chakra-modal__content.css-1ah3qhl',  // partner sites bg
-			'.chakra-modal__content.css-1yhxaze', // loot box bg
+			'.chakra-stack.css-1cklnv0',
+			'.chakra-stack.css-oou8ol',
+			'.chakra-stack.css-owjkmg',
+			'.chakra-stack.css-15uwvcw',
+			'.chakra-stack.css-1hj4r72',
+			'.chakra-stack.css-10tqh5h',
+			'.chakra-stack.css-wv1k6p',
+			'.chakra-stack.css-b1sb84',
+			'.chakra-stack.css-b1sb84',
+			'.chakra-modal__content.css-1n1g7m4',
+			'.chakra-modal__content.css-1ah3qhl',
+			'.chakra-modal__content.css-1yhxaze',
 		];
 		this.skipMouseInOutListeners = new Set([
-			'.chakra-input.css-ypk59i',    // profile input bar email
-			'.chakra-input.css-1oc9k70',    // profile input bar username, password
-			'.chakra-input.css-18whhxd',     // player search
+			'.chakra-input.css-ypk59i',
+			'.chakra-input.css-1oc9k70',
+			'.chakra-input.css-18whhxd',
 		]);
 	}
 	visuallyRemove(e) {
@@ -456,27 +455,27 @@ class UnverifiedBanner {
 class UnverifiedShortcutMenu {
 	constructor() {
 		this.onclicks = [
-			() => {  // Kit
+			() => {
 				this.getPlayButton().click();
 				setTimeout(() => this.getKitPVPButton().click(), 70);
 				document.body.removeChild(this.container);
 			},
-			() => {  // Sky
+			() => {
 				this.getPlayButton().click();
 				setTimeout(() => this.getSkywarsButton().click(), 70);
 				document.body.removeChild(this.container);
 			},
-			() => {  // Doubles
+			() => {
 				this.getPlayButton().click();
 				setTimeout(() => this.getDoublesButton().click(), 70);
 				document.body.removeChild(this.container);
 			},
-			() => {  // Quads
+			() => {
 				this.getPlayButton().click();
 				setTimeout(() => this.getQuadsButton().click(), 70);
 				document.body.removeChild(this.container);
 			},
-			() => {  // Classic
+			() => {
 				this.getPlayButton().click();
 				setTimeout(() => this.getClassicPVPButton().click(), 70);
 				document.body.removeChild(this.container);
@@ -590,7 +589,6 @@ class UnverifiedShortcutMenu {
 		} catch (e) {
 
 		}
-		// ===== =====
 
 
     const style = document.createElement('style');
@@ -680,37 +678,548 @@ class UnverifiedShortcutMenu {
             opacity: 0;
             transform: translateX(100%);
         }
+        .settings-icon {
+            width: 30px;
+            height: 30px;
+            fill: white;
+            transition: transform 0.3s ease;
+        }
+        .settings-icon:hover {
+            transform: rotate(90deg);
+        }
     `;
     document.head.appendChild(style);
 
     const ui = document.createElement("div");
-    ui.style.position = "absolute";
+    ui.style.position = "fixed";
     ui.style.top = "50%";
     ui.style.left = "50%";
     ui.style.transform = "translate(-50%, -50%)";
     ui.style.backgroundColor = "#1a1a1a";
     ui.style.color = "white";
-    ui.style.padding = "30px";
+    ui.style.padding = "28px";
     ui.style.borderRadius = "15px";
     ui.style.display = "none";
     ui.style.zIndex = "9999";
     ui.style.textAlign = "center";
     ui.style.boxShadow = "0 0 10px rgba(0, 0, 0, 0.7)";
     ui.style.fontFamily = 'MinibloxFont, sans-serif';
+    ui.style.maxHeight = "90vh";
+    ui.style.maxWidth = "90vw";
+    ui.style.overflowY = "auto";
+    ui.style.overflowX = "hidden";
     document.body.appendChild(ui);
+
+    document.addEventListener('fullscreenchange', () => {
+        if (document.fullscreenElement) {
+            ui.style.maxHeight = "95vh";
+            ui.style.padding = "22px";
+        } else {
+            ui.style.maxHeight = "90vh";
+            ui.style.padding = "28px";
+        }
+    });
+
+    document.addEventListener('webkitfullscreenchange', () => {
+        if (document.webkitFullscreenElement) {
+            ui.style.maxHeight = "95vh";
+            ui.style.padding = "22px";
+        } else {
+            ui.style.maxHeight = "90vh";
+            ui.style.padding = "28px";
+        }
+    });
+
+    document.addEventListener('mozfullscreenchange', () => {
+        if (document.mozFullScreenElement) {
+            ui.style.maxHeight = "95vh";
+            ui.style.padding = "22px";
+        } else {
+            ui.style.maxHeight = "90vh";
+            ui.style.padding = "28px";
+        }
+    });
 
     const title = document.createElement("h2");
     title.textContent = "UnverifiedV2";
-    title.style.fontSize = "36px";
+    title.style.fontSize = "34px";
     title.style.color = "#e74c3c";
     title.style.fontFamily = 'MinibloxFont, sans-serif';
+    title.style.marginTop = "0";
+    title.style.marginBottom = "15px";
     ui.appendChild(title);
+
+    const languageDropdown = document.createElement("select");
+    languageDropdown.style.position = "absolute";
+    languageDropdown.style.top = "20px";
+    languageDropdown.style.right = "20px";
+    languageDropdown.style.backgroundColor = "#e74c3c";
+    languageDropdown.style.color = "white";
+    languageDropdown.style.border = "none";
+    languageDropdown.style.borderRadius = "5px";
+    languageDropdown.style.padding = "10px 15px";
+    languageDropdown.style.fontSize = "16px";
+    languageDropdown.style.cursor = "pointer";
+    languageDropdown.style.zIndex = "10000";
+    languageDropdown.style.fontFamily = 'MinibloxFont, sans-serif';
+    ui.appendChild(languageDropdown);
+
+    const settingsIcon = document.createElementNS("http://www.w3.org/2000/svg", "svg");
+    settingsIcon.setAttribute("viewBox", "0 0 24 24");
+    settingsIcon.classList.add("settings-icon");
+    settingsIcon.style.position = "absolute";
+    settingsIcon.style.top = "20px";
+    settingsIcon.style.right = "60px";
+    settingsIcon.style.cursor = "pointer";
+    settingsIcon.innerHTML = `<path d="M19.14,12.94c0.04-0.3,0.06-0.61,0.06-0.94c0-0.32-0.02-0.64-0.07-0.94l2.03-1.58c0.18-0.14,0.23-0.41,0.12-0.61 l-1.92-3.32c-0.12-0.22-0.37-0.29-0.59-0.22l-2.39,0.96c-0.5-0.38-1.03-0.7-1.62-0.94L14.4,2.81c-0.04-0.24-0.24-0.41-0.48-0.41 h-3.84c-0.24,0-0.43,0.17-0.47,0.41L9.25,5.35C8.66,5.59,8.12,5.92,7.63,6.29L5.24,5.33c-0.22-0.08-0.47,0-0.59,0.22L2.74,8.87 C2.62,9.08,2.66,9.34,2.86,9.48l2.03,1.58C4.84,11.36,4.8,11.69,4.8,12s0.02,0.64,0.07,0.94l-2.03,1.58 c-0.18,0.14-0.23,0.41-0.12,0.61l1.92,3.32c0.12,0.22,0.37,0.29,0.59,0.22l2.39-0.96c0.5,0.38,1.03,0.7,1.62,0.94l0.36,2.54 c0.05,0.24,0.24,0.41,0.48,0.41h3.84c0.24,0,0.44-0.17,0.47-0.41l0.36-2.54c0.59-0.24,1.13-0.56,1.62-0.94l2.39,0.96 c0.22,0.08,0.47,0,0.59-0.22l1.92-3.32c0.12-0.22,0.07-0.47-0.12-0.61L19.14,12.94z M12,15.6c-1.98,0-3.6-1.62-3.6-3.6 s1.62-3.6,3.6-3.6s3.6,1.62,3.6,3.6S13.98,15.6,12,15.6z"/>`;
+    ui.appendChild(settingsIcon);
+
+    const translations = {
+        en: {
+            languageName: "English 🇬🇧",
+            title: "UnverifiedV2",
+            autoFullscreen: "Auto Fullscreen",
+            autoFullscreenDesc: "Automatically toggles Fullscreen",
+            keystrokes: "Keystrokes",
+            keystrokesDesc: "Displays the keys you press in real-time.",
+            fpsCounter: "FPS Counter",
+            fpsCounterDesc: "Shows the frames per second (FPS) of the game.",
+            cpsCounter: "CPS Counter",
+            cpsCounterDesc: "Counts how many times you click per second.",
+            muteChat: "Mute Chat",
+            muteChatDesc: "Prevents other players messages from appearing in chat.",
+            pingCounter: "Ping Counter",
+            pingCounterDesc: "Shows the latency between your client and the server.",
+            fpsBooster: "FPS Booster",
+            fpsBoosterDesc: "Changes settings to improve FPS (refresh page)",
+            antiAfk: "Anti-Afk",
+            antiAfkDesc: "Presses WASD on its own to avoid being kicked for being AFK",
+            timeDisplay: "Time Display",
+            timeDisplayDesc: "Shows you the time so you dont have to exit full screen.",
+            closeUI: "Close UI",
+            turnedOn: "was turned on",
+            turnedOff: "was turned off",
+            tooltipBind: "right-click to bind"
+        },
+        es: {
+            languageName: "Español 🇪🇸",
+            title: "UnverifiedV2",
+            autoFullscreen: "Pantalla Completa Automática",
+            autoFullscreenDesc: "Activa/desactiva automáticamente la pantalla completa",
+            keystrokes: "Teclas",
+            keystrokesDesc: "Muestra las teclas que presionas en tiempo real.",
+            fpsCounter: "Contador de FPS",
+            fpsCounterDesc: "Muestra los fotogramas por segundo (FPS) del juego.",
+            cpsCounter: "Contador de CPS",
+            cpsCounterDesc: "Cuenta cuántas veces haces clic por segundo.",
+            muteChat: "Silenciar Chat",
+            muteChatDesc: "Evita que aparezcan mensajes de otros jugadores en el chat.",
+            pingCounter: "Contador de Ping",
+            pingCounterDesc: "Muestra la latencia entre tu cliente y el servidor.",
+            fpsBooster: "Mejorador de FPS",
+            fpsBoosterDesc: "Cambia la configuración para mejorar los FPS (actualiza la página)",
+            antiAfk: "Anti-Inactividad",
+            antiAfkDesc: "Presiona WASD automáticamente para evitar ser expulsado por inactividad",
+            timeDisplay: "Mostrar Hora",
+            timeDisplayDesc: "Te muestra la hora para que no tengas que salir de pantalla completa.",
+            closeUI: "Cerrar UI",
+            turnedOn: "fue activado",
+            turnedOff: "fue desactivado",
+            tooltipBind: "clic derecho para vincular"
+        },
+        fr: {
+            languageName: "Français 🇫🇷",
+            title: "UnverifiedV2",
+            autoFullscreen: "Plein Écran Automatique",
+            autoFullscreenDesc: "Active/désactive automatiquement le plein écran",
+            keystrokes: "Touches",
+            keystrokesDesc: "Affiche les touches que vous appuyez en temps réel.",
+            fpsCounter: "Compteur FPS",
+            fpsCounterDesc: "Affiche les images par seconde (FPS) du jeu.",
+            cpsCounter: "Compteur CPS",
+            cpsCounterDesc: "Compte combien de fois vous cliquez par seconde.",
+            muteChat: "Couper le Chat",
+            muteChatDesc: "Empêche les messages des autres joueurs d'apparaître dans le chat.",
+            pingCounter: "Compteur de Ping",
+            pingCounterDesc: "Affiche la latence entre votre client et le serveur.",
+            fpsBooster: "Booster FPS",
+            fpsBoosterDesc: "Modifie les paramètres pour améliorer les FPS (actualiser la page)",
+            antiAfk: "Anti-Inactivité",
+            antiAfkDesc: "Appuie sur WASD automatiquement pour éviter d'être expulsé pour inactivité",
+            timeDisplay: "Afficher l'Heure",
+            timeDisplayDesc: "Affiche l'heure pour que vous n'ayez pas à quitter le plein écran.",
+            closeUI: "Fermer UI",
+            turnedOn: "a été activé",
+            turnedOff: "a été désactivé",
+            tooltipBind: "clic droit pour lier"
+        },
+        de: {
+            languageName: "Deutsch 🇩🇪",
+            title: "UnverifiedV2",
+            autoFullscreen: "Auto-Vollbild",
+            autoFullscreenDesc: "Schaltet Vollbild automatisch ein/aus",
+            keystrokes: "Tastenanschläge",
+            keystrokesDesc: "Zeigt die Tasten an, die Sie in Echtzeit drücken.",
+            fpsCounter: "FPS-Zähler",
+            fpsCounterDesc: "Zeigt die Bilder pro Sekunde (FPS) des Spiels an.",
+            cpsCounter: "CPS-Zähler",
+            cpsCounterDesc: "Zählt, wie oft Sie pro Sekunde klicken.",
+            muteChat: "Chat Stumm",
+            muteChatDesc: "Verhindert, dass Nachrichten anderer Spieler im Chat erscheinen.",
+            pingCounter: "Ping-Zähler",
+            pingCounterDesc: "Zeigt die Latenz zwischen Ihrem Client und dem Server an.",
+            fpsBooster: "FPS-Booster",
+            fpsBoosterDesc: "Ändert Einstellungen zur Verbesserung der FPS (Seite aktualisieren)",
+            antiAfk: "Anti-Inaktiv",
+            antiAfkDesc: "Drückt WASD automatisch, um nicht wegen Inaktivität gekickt zu werden",
+            timeDisplay: "Zeitanzeige",
+            timeDisplayDesc: "Zeigt die Zeit an, damit Sie den Vollbildmodus nicht verlassen müssen.",
+            closeUI: "UI Schließen",
+            turnedOn: "wurde eingeschaltet",
+            turnedOff: "wurde ausgeschaltet",
+            tooltipBind: "Rechtsklick zum Binden"
+        },
+        ar: {
+            languageName: "العربية 🇸🇦",
+            title: "UnverifiedV2",
+            autoFullscreen: "ملء الشاشة التلقائي",
+            autoFullscreenDesc: "يبدل ملء الشاشة تلقائيًا",
+            keystrokes: "ضغطات المفاتيح",
+            keystrokesDesc: "يعرض المفاتيح التي تضغط عليها في الوقت الفعلي.",
+            fpsCounter: "عداد الإطارات",
+            fpsCounterDesc: "يعرض الإطارات في الثانية (FPS) للعبة.",
+            cpsCounter: "عداد النقرات",
+            cpsCounterDesc: "يحسب عدد مرات النقر في الثانية.",
+            muteChat: "كتم الدردشة",
+            muteChatDesc: "يمنع ظهور رسائل اللاعبين الآخرين في الدردشة.",
+            pingCounter: "عداد البينج",
+            pingCounterDesc: "يعرض زمن الاستجابة بين العميل والخادم.",
+            fpsBooster: "معزز الإطارات",
+            fpsBoosterDesc: "يغير الإعدادات لتحسين FPS (قم بتحديث الصفحة)",
+            antiAfk: "مضاد الخمول",
+            antiAfkDesc: "يضغط WASD تلقائيًا لتجنب الطرد بسبب الخمول",
+            timeDisplay: "عرض الوقت",
+            timeDisplayDesc: "يعرض الوقت حتى لا تضطر للخروج من ملء الشاشة.",
+            closeUI: "إغلاق الواجهة",
+            turnedOn: "تم تشغيله",
+            turnedOff: "تم إيقافه",
+            tooltipBind: "انقر بزر الماوس الأيمن للربط"
+        },
+        pt: {
+            languageName: "Português 🇧🇷",
+            title: "UnverifiedV2",
+            autoFullscreen: "Tela Cheia Automática",
+            autoFullscreenDesc: "Ativa/desativa a tela cheia automaticamente",
+            keystrokes: "Teclas",
+            keystrokesDesc: "Exibe as teclas que você pressiona em tempo real.",
+            fpsCounter: "Contador de FPS",
+            fpsCounterDesc: "Mostra os quadros por segundo (FPS) do jogo.",
+            cpsCounter: "Contador de CPS",
+            cpsCounterDesc: "Conta quantas vezes você clica por segundo.",
+            muteChat: "Silenciar Chat",
+            muteChatDesc: "Impede que mensagens de outros jogadores apareçam no chat.",
+            pingCounter: "Contador de Ping",
+            pingCounterDesc: "Mostra a latência entre seu cliente e o servidor.",
+            fpsBooster: "Melhorador de FPS",
+            fpsBoosterDesc: "Altera configurações para melhorar os FPS (atualize a página)",
+            antiAfk: "Anti-Inatividade",
+            antiAfkDesc: "Pressiona WASD automaticamente para evitar ser expulso por inatividade",
+            timeDisplay: "Exibir Hora",
+            timeDisplayDesc: "Mostra a hora para que você não precise sair da tela cheia.",
+            closeUI: "Fechar UI",
+            turnedOn: "foi ativado",
+            turnedOff: "foi desativado",
+            tooltipBind: "clique direito para vincular"
+        },
+        ru: {
+            languageName: "Русский 🇷🇺",
+            title: "UnverifiedV2",
+            autoFullscreen: "Автополноэкранный режим",
+            autoFullscreenDesc: "Автоматически переключает полноэкранный режим",
+            keystrokes: "Нажатия клавиш",
+            keystrokesDesc: "Отображает нажимаемые клавиши в реальном времени.",
+            fpsCounter: "Счетчик FPS",
+            fpsCounterDesc: "Показывает количество кадров в секунду (FPS) игры.",
+            cpsCounter: "Счетчик CPS",
+            cpsCounterDesc: "Считает, сколько раз вы кликаете в секунду.",
+            muteChat: "Отключить чат",
+            muteChatDesc: "Предотвращает появление сообщений других игроков в чате.",
+            pingCounter: "Счетчик пинга",
+            pingCounterDesc: "Показывает задержку между вашим клиентом и сервером.",
+            fpsBooster: "Усилитель FPS",
+            fpsBoosterDesc: "Изменяет настройки для улучшения FPS (обновите страницу)",
+            antiAfk: "Анти-АФК",
+            antiAfkDesc: "Автоматически нажимает WASD, чтобы избежать кика за неактивность",
+            timeDisplay: "Показать время",
+            timeDisplayDesc: "Показывает время, чтобы вам не нужно было выходить из полноэкранного режима.",
+            closeUI: "Закрыть UI",
+            turnedOn: "включен",
+            turnedOff: "выключен",
+            tooltipBind: "правый клик для привязки"
+        },
+        it: {
+            languageName: "Italiano 🇮🇹",
+            title: "UnverifiedV2",
+            autoFullscreen: "Schermo Intero Automatico",
+            autoFullscreenDesc: "Attiva/disattiva automaticamente lo schermo intero",
+            keystrokes: "Tasti",
+            keystrokesDesc: "Mostra i tasti che premi in tempo reale.",
+            fpsCounter: "Contatore FPS",
+            fpsCounterDesc: "Mostra i fotogrammi al secondo (FPS) del gioco.",
+            cpsCounter: "Contatore CPS",
+            cpsCounterDesc: "Conta quante volte fai clic al secondo.",
+            muteChat: "Silenzia Chat",
+            muteChatDesc: "Impedisce che i messaggi degli altri giocatori appaiano nella chat.",
+            pingCounter: "Contatore Ping",
+            pingCounterDesc: "Mostra la latenza tra il tuo client e il server.",
+            fpsBooster: "Potenziatore FPS",
+            fpsBoosterDesc: "Modifica le impostazioni per migliorare gli FPS (aggiorna la pagina)",
+            antiAfk: "Anti-Inattività",
+            antiAfkDesc: "Preme WASD automaticamente per evitare di essere espulso per inattività",
+            timeDisplay: "Mostra Ora",
+            timeDisplayDesc: "Mostra l'ora in modo da non dover uscire dallo schermo intero.",
+            closeUI: "Chiudi UI",
+            turnedOn: "è stato attivato",
+            turnedOff: "è stato disattivato",
+            tooltipBind: "clic destro per associare"
+        },
+        ja: {
+            languageName: "日本語 🇯🇵",
+            title: "UnverifiedV2",
+            autoFullscreen: "自動フルスクリーン",
+            autoFullscreenDesc: "フルスクリーンを自動的に切り替えます",
+            keystrokes: "キーストローク",
+            keystrokesDesc: "押したキーをリアルタイムで表示します。",
+            fpsCounter: "FPSカウンター",
+            fpsCounterDesc: "ゲームのフレームレート（FPS）を表示します。",
+            cpsCounter: "CPSカウンター",
+            cpsCounterDesc: "1秒あたりのクリック数をカウントします。",
+            muteChat: "チャットミュート",
+            muteChatDesc: "他のプレイヤーのメッセージがチャットに表示されないようにします。",
+            pingCounter: "Pingカウンター",
+            pingCounterDesc: "クライアントとサーバー間のレイテンシを表示します。",
+            fpsBooster: "FPSブースター",
+            fpsBoosterDesc: "FPSを改善するための設定を変更します（ページを更新）",
+            antiAfk: "アンチAFK",
+            antiAfkDesc: "WASDを自動的に押してAFKでキックされるのを防ぎます",
+            timeDisplay: "時刻表示",
+            timeDisplayDesc: "フルスクリーンを終了せずに時刻を表示します。",
+            closeUI: "UIを閉じる",
+            turnedOn: "がオンになりました",
+            turnedOff: "がオフになりました",
+            tooltipBind: "右クリックでバインド"
+        },
+        zh: {
+            languageName: "中文 🇨🇳",
+            title: "UnverifiedV2",
+            autoFullscreen: "自动全屏",
+            autoFullscreenDesc: "自动切换全屏",
+            keystrokes: "按键显示",
+            keystrokesDesc: "实时显示您按下的按键。",
+            fpsCounter: "FPS计数器",
+            fpsCounterDesc: "显示游戏的每秒帧数（FPS）。",
+            cpsCounter: "CPS计数器",
+            cpsCounterDesc: "统计您每秒点击的次数。",
+            muteChat: "静音聊天",
+            muteChatDesc: "防止其他玩家的消息出现在聊天中。",
+            pingCounter: "Ping计数器",
+            pingCounterDesc: "显示您的客户端与服务器之间的延迟。",
+            fpsBooster: "FPS提升器",
+            fpsBoosterDesc: "更改设置以提高FPS（刷新页面）",
+            antiAfk: "防挂机",
+            antiAfkDesc: "自动按下WASD以避免因挂机而被踢出",
+            timeDisplay: "时间显示",
+            timeDisplayDesc: "显示时间，这样您就不必退出全屏。",
+            closeUI: "关闭UI",
+            turnedOn: "已开启",
+            turnedOff: "已关闭",
+            tooltipBind: "右键绑定"
+        },
+        ko: {
+            languageName: "한국어 🇰🇷",
+            title: "UnverifiedV2",
+            autoFullscreen: "자동 전체화면",
+            autoFullscreenDesc: "전체화면을 자동으로 전환합니다",
+            keystrokes: "키 입력",
+            keystrokesDesc: "실시간으로 누른 키를 표시합니다.",
+            fpsCounter: "FPS 카운터",
+            fpsCounterDesc: "게임의 초당 프레임 수(FPS)를 표시합니다.",
+            cpsCounter: "CPS 카운터",
+            cpsCounterDesc: "초당 클릭 횟수를 계산합니다.",
+            muteChat: "채팅 음소거",
+            muteChatDesc: "다른 플레이어의 메시지가 채팅에 나타나지 않도록 합니다.",
+            pingCounter: "핑 카운터",
+            pingCounterDesc: "클라이언트와 서버 간의 지연 시간을 표시합니다.",
+            fpsBooster: "FPS 부스터",
+            fpsBoosterDesc: "FPS를 향상시키기 위해 설정을 변경합니다 (페이지 새로고침)",
+            antiAfk: "자리비움 방지",
+            antiAfkDesc: "자리비움으로 인한 강퇴를 방지하기 위해 WASD를 자동으로 누릅니다",
+            timeDisplay: "시간 표시",
+            timeDisplayDesc: "전체화면을 종료하지 않고도 시간을 표시합니다.",
+            closeUI: "UI 닫기",
+            turnedOn: "이(가) 켜졌습니다",
+            turnedOff: "이(가) 꺼졌습니다",
+            tooltipBind: "우클릭하여 바인딩"
+        },
+        nl: {
+            languageName: "Nederlands 🇳🇱",
+            title: "UnverifiedV2",
+            autoFullscreen: "Auto Volledig Scherm",
+            autoFullscreenDesc: "Schakelt automatisch volledig scherm in/uit",
+            keystrokes: "Toetsaanslagen",
+            keystrokesDesc: "Toont de toetsen die je in realtime indrukt.",
+            fpsCounter: "FPS-teller",
+            fpsCounterDesc: "Toont de frames per seconde (FPS) van het spel.",
+            cpsCounter: "CPS-teller",
+            cpsCounterDesc: "Telt hoeveel keer je per seconde klikt.",
+            muteChat: "Chat Dempen",
+            muteChatDesc: "Voorkomt dat berichten van andere spelers in de chat verschijnen.",
+            pingCounter: "Ping-teller",
+            pingCounterDesc: "Toont de latentie tussen je client en de server.",
+            fpsBooster: "FPS-booster",
+            fpsBoosterDesc: "Wijzigt instellingen om FPS te verbeteren (pagina vernieuwen)",
+            antiAfk: "Anti-Afwezig",
+            antiAfkDesc: "Drukt automatisch op WASD om te voorkomen dat je wordt gekickt wegens inactiviteit",
+            timeDisplay: "Tijd Weergeven",
+            timeDisplayDesc: "Toont de tijd zodat je niet uit volledig scherm hoeft te gaan.",
+            closeUI: "UI Sluiten",
+            turnedOn: "is ingeschakeld",
+            turnedOff: "is uitgeschakeld",
+            tooltipBind: "rechtermuisklik om te binden"
+        },
+        tr: {
+            languageName: "Türkçe 🇹🇷",
+            title: "UnverifiedV2",
+            autoFullscreen: "Otomatik Tam Ekran",
+            autoFullscreenDesc: "Tam ekranı otomatik olarak değiştirir",
+            keystrokes: "Tuş Vuruşları",
+            keystrokesDesc: "Bastığınız tuşları gerçek zamanlı olarak gösterir.",
+            fpsCounter: "FPS Sayacı",
+            fpsCounterDesc: "Oyunun saniyedeki kare sayısını (FPS) gösterir.",
+            cpsCounter: "CPS Sayacı",
+            cpsCounterDesc: "Saniyede kaç kez tıkladığınızı sayar.",
+            muteChat: "Sohbeti Kapat",
+            muteChatDesc: "Diğer oyuncuların mesajlarının sohbette görünmesini engeller.",
+            pingCounter: "Ping Sayacı",
+            pingCounterDesc: "İstemciniz ile sunucu arasındaki gecikmeyi gösterir.",
+            fpsBooster: "FPS Güçlendirici",
+            fpsBoosterDesc: "FPS'yi artırmak için ayarları değiştirir (sayfayı yenileyin)",
+            antiAfk: "Anti-AFK",
+            antiAfkDesc: "AFK nedeniyle atılmayı önlemek için otomatik olarak WASD'ye basar",
+            timeDisplay: "Saat Göster",
+            timeDisplayDesc: "Tam ekrandan çıkmak zorunda kalmadan saati gösterir.",
+            closeUI: "UI'yi Kapat",
+            turnedOn: "açıldı",
+            turnedOff: "kapandı",
+            tooltipBind: "bağlamak için sağ tıklayın"
+        },
+        pl: {
+            languageName: "Polski 🇵🇱",
+            title: "UnverifiedV2",
+            autoFullscreen: "Automatyczny Pełny Ekran",
+            autoFullscreenDesc: "Automatycznie przełącza pełny ekran",
+            keystrokes: "Naciśnięcia Klawiszy",
+            keystrokesDesc: "Wyświetla klawisze, które naciskasz w czasie rzeczywistym.",
+            fpsCounter: "Licznik FPS",
+            fpsCounterDesc: "Pokazuje liczbę klatek na sekundę (FPS) gry.",
+            cpsCounter: "Licznik CPS",
+            cpsCounterDesc: "Liczy, ile razy klikasz na sekundę.",
+            muteChat: "Wycisz Czat",
+            muteChatDesc: "Zapobiega pojawianiu się wiadomości innych graczy na czacie.",
+            pingCounter: "Licznik Pingu",
+            pingCounterDesc: "Pokazuje opóźnienie między klientem a serwerem.",
+            fpsBooster: "Wzmacniacz FPS",
+            fpsBoosterDesc: "Zmienia ustawienia w celu poprawy FPS (odśwież stronę)",
+            antiAfk: "Anti-AFK",
+            antiAfkDesc: "Automatycznie naciska WASD, aby uniknąć wyrzucenia za bezczynność",
+            timeDisplay: "Wyświetl Czas",
+            timeDisplayDesc: "Pokazuje czas, więc nie musisz wychodzić z pełnego ekranu.",
+            closeUI: "Zamknij UI",
+            turnedOn: "został włączony",
+            turnedOff: "został wyłączony",
+            tooltipBind: "kliknij prawym przyciskiem, aby powiązać"
+        },
+        sv: {
+            languageName: "Svenska 🇸🇪",
+            title: "UnverifiedV2",
+            autoFullscreen: "Auto Helskärm",
+            autoFullscreenDesc: "Växlar automatiskt helskärm",
+            keystrokes: "Tangenttryckningar",
+            keystrokesDesc: "Visar tangenterna du trycker på i realtid.",
+            fpsCounter: "FPS-räknare",
+            fpsCounterDesc: "Visar spelets bilder per sekund (FPS).",
+            cpsCounter: "CPS-räknare",
+            cpsCounterDesc: "Räknar hur många gånger du klickar per sekund.",
+            muteChat: "Tysta Chatt",
+            muteChatDesc: "Förhindrar att andra spelares meddelanden visas i chatten.",
+            pingCounter: "Ping-räknare",
+            pingCounterDesc: "Visar latensen mellan din klient och servern.",
+            fpsBooster: "FPS-förbättrare",
+            fpsBoosterDesc: "Ändrar inställningar för att förbättra FPS (uppdatera sidan)",
+            antiAfk: "Anti-AFK",
+            antiAfkDesc: "Trycker automatiskt på WASD för att undvika att bli kickad för inaktivitet",
+            timeDisplay: "Visa Tid",
+            timeDisplayDesc: "Visar tiden så att du inte behöver lämna helskärm.",
+            closeUI: "Stäng UI",
+            turnedOn: "aktiverades",
+            turnedOff: "inaktiverades",
+            tooltipBind: "högerklicka för att binda"
+        }
+    };
+
+    let currentLanguage = localStorage.getItem('unverified-language') || 'en';
+
+    Object.keys(translations).forEach(langCode => {
+        const option = document.createElement("option");
+        option.value = langCode;
+        option.textContent = translations[langCode].languageName;
+        if (langCode === currentLanguage) {
+            option.selected = true;
+        }
+        languageDropdown.appendChild(option);
+    });
+
+    languageDropdown.addEventListener("change", (e) => {
+        currentLanguage = e.target.value;
+        localStorage.setItem('unverified-language', currentLanguage);
+        updateLanguage();
+    });
+
+    function updateLanguage() {
+        title.textContent = translations[currentLanguage].title;
+        closeButton.textContent = translations[currentLanguage].closeUI;
+
+        const modules = gridContainer.children;
+        const moduleKeys = [
+            'autoFullscreen',
+            'keystrokes',
+            'fpsCounter',
+            'cpsCounter',
+            'muteChat',
+            'pingCounter',
+            'fpsBooster',
+            'antiAfk',
+            'timeDisplay'
+        ];
+
+        for (let i = 0; i < modules.length; i++) {
+            const moduleTitle = modules[i].querySelector("h3");
+            const moduleDesc = modules[i].querySelector("p");
+            const tooltip = modules[i].querySelector(".module-tooltip");
+
+            if (moduleTitle && moduleKeys[i]) {
+                moduleTitle.textContent = translations[currentLanguage][moduleKeys[i]];
+                moduleDesc.textContent = translations[currentLanguage][moduleKeys[i] + 'Desc'];
+                tooltip.textContent = translations[currentLanguage].tooltipBind;
+            }
+        }
+    }
 
     const gridContainer = document.createElement("div");
     gridContainer.style.display = "grid";
     gridContainer.style.gridTemplateColumns = "repeat(3, 1fr)";
-    gridContainer.style.gridGap = "20px";
-    gridContainer.style.marginTop = "20px";
+    gridContainer.style.gridGap = "18px";
+    gridContainer.style.marginTop = "18px";
     ui.appendChild(gridContainer);
 
     const notificationContainer = document.createElement("div");
@@ -729,24 +1238,32 @@ class UnverifiedShortcutMenu {
 
     function createModule(name, description) {
         const moduleContainer = document.createElement("div");
-        moduleContainer.style.padding = "20px";
+        moduleContainer.style.padding = "19px";
         moduleContainer.style.borderRadius = "10px";
         moduleContainer.style.boxShadow = "0 0 10px rgba(0, 0, 0, 0.5)";
         moduleContainer.style.cursor = "pointer";
         moduleContainer.style.transition = "border-color 0.3s ease";
         moduleContainer.style.border = "5px solid transparent";
+        moduleContainer.style.minHeight = "185px";
+        moduleContainer.style.width = "100%";
+        moduleContainer.style.display = "flex";
+        moduleContainer.style.flexDirection = "column";
+        moduleContainer.style.justifyContent = "flex-start";
         moduleContainer.classList.add('module-container');
 
         const moduleTitle = document.createElement("h3");
         moduleTitle.textContent = name;
         moduleTitle.style.color = "#e74c3c";
-        moduleTitle.style.fontSize = "24px";
+        moduleTitle.style.fontSize = "23px";
+        moduleTitle.style.margin = "0 0 10px 0";
         moduleContainer.appendChild(moduleTitle);
 
         const moduleDescription = document.createElement("p");
         moduleDescription.textContent = description;
         moduleDescription.style.color = "#bdc3c7";
         moduleDescription.style.fontSize = "14px";
+        moduleDescription.style.margin = "0";
+        moduleDescription.style.lineHeight = "1.45";
         moduleContainer.appendChild(moduleDescription);
 
         gridContainer.appendChild(moduleContainer);
@@ -797,7 +1314,8 @@ class UnverifiedShortcutMenu {
 
     function showNotification(message, isOn) {
         const notification = document.createElement("div");
-        notification.textContent = message;
+        const moduleName = message.split(' was ')[0];
+        notification.textContent = `${moduleName} ${isOn ? translations[currentLanguage].turnedOn : translations[currentLanguage].turnedOff}`;
         notification.classList.add('other-notification');
         notificationContainer.appendChild(notification);
 
@@ -1636,7 +2154,7 @@ if (timeModule) {
             timeElement.style.fontSize = "18px";
             timeElement.style.fontFamily = "monospace";
             timeElement.style.zIndex = "99999";
-            timeElement.style.pointerEvents = "auto"; // Allow dragging
+            timeElement.style.pointerEvents = "auto";
             timeElement.style.cursor = "move";
             timeElement.style.top = "unset";
             timeElement.style.left = "unset";
@@ -1689,8 +2207,8 @@ document.addEventListener("mouseup", () => {
     closeButton.style.border = "none";
     closeButton.style.borderRadius = "5px";
     closeButton.style.padding = "10px 20px";
-    closeButton.style.fontSize = "18px";
-    closeButton.style.marginTop = "20px";
+    closeButton.style.fontSize = "17px";
+    closeButton.style.marginTop = "18px";
     closeButton.style.cursor = "pointer";
     ui.appendChild(closeButton);
 
@@ -1701,8 +2219,8 @@ document.addEventListener("mouseup", () => {
     ThemesDropdown.style.border = "none";
     ThemesDropdown.style.borderRadius = "5px";
     ThemesDropdown.style.padding = "10px 20px";
-    ThemesDropdown.style.fontSize = "18px";
-    ThemesDropdown.style.marginTop = "20px";
+    ThemesDropdown.style.fontSize = "17px";
+    ThemesDropdown.style.marginTop = "15px";
     ThemesDropdown.style.cursor = "pointer";
 
 
@@ -1727,7 +2245,7 @@ document.addEventListener("mouseup", () => {
     ThemesDropdown.addEventListener("change", (e) => {
         const image = e.target.value;
         if (image === "none") {
-            ui.style.background = ""; // Reset
+            ui.style.background = "";
         } else {
             ui.style.backgroundImage = `url(${image})`;
             ui.style.backgroundSize = "cover";
@@ -1737,6 +2255,7 @@ document.addEventListener("mouseup", () => {
 
     ui.appendChild(ThemesDropdown);
 
+    updateLanguage();
 
     let uiVisible = false;
     function toggleUI() {
@@ -1772,15 +2291,12 @@ document.addEventListener("mouseup", () => {
         uiVisible = false;
     });
 
-
-		// ===== =====
 })();
 
 
 
 
 
-// ===== FPS Boosting =====
 (function() {
     'use strict';
     const originalRAF = window.requestAnimationFrame;
@@ -1791,4 +2307,3 @@ document.addEventListener("mouseup", () => {
     };
     console.log('Client Status: Great');
 })();
-// ===== =====
