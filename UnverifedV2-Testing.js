@@ -687,6 +687,12 @@ class UnverifiedShortcutMenu {
         .settings-icon:hover {
             transform: rotate(90deg);
         }
+        #ct-name:focus, #ct-bg:focus {
+            border-color: #e74c3c !important;
+            outline: none !important;
+        }
+        #ct-save:hover { background: #27ae60 !important; }
+        #ct-cancel:hover { background: #444 !important; }
     `;
     document.head.appendChild(style);
 
@@ -2200,6 +2206,14 @@ document.addEventListener("mouseup", () => {
     });
 }
 
+    const bottomRow = document.createElement("div");
+    bottomRow.style.display = "flex";
+    bottomRow.style.alignItems = "center";
+    bottomRow.style.justifyContent = "center";
+    bottomRow.style.gap = "8px";
+    bottomRow.style.marginTop = "18px";
+    ui.appendChild(bottomRow);
+
     const closeButton = document.createElement("button");
     closeButton.textContent = "Close UI";
     closeButton.style.backgroundColor = "#e74c3c";
@@ -2208,21 +2222,18 @@ document.addEventListener("mouseup", () => {
     closeButton.style.borderRadius = "5px";
     closeButton.style.padding = "10px 20px";
     closeButton.style.fontSize = "17px";
-    closeButton.style.marginTop = "18px";
     closeButton.style.cursor = "pointer";
-    ui.appendChild(closeButton);
+    bottomRow.appendChild(closeButton);
 
     const ThemesDropdown = document.createElement("select");
-
     ThemesDropdown.style.backgroundColor = "#e74c3c";
     ThemesDropdown.style.color = "white";
     ThemesDropdown.style.border = "none";
     ThemesDropdown.style.borderRadius = "5px";
     ThemesDropdown.style.padding = "10px 20px";
     ThemesDropdown.style.fontSize = "17px";
-    ThemesDropdown.style.marginTop = "15px";
+    ThemesDropdown.style.marginTop = "0";
     ThemesDropdown.style.cursor = "pointer";
-
 
     const themes = [
         { name: "Default", image: "#1a1a1a" },
@@ -2230,9 +2241,8 @@ document.addEventListener("mouseup", () => {
         { name: "Beach", image: "https://wallpaperaccess.com/full/174768.jpg" },
         { name: "Fall", image: "https://wallpaperaccess.com/full/185084.jpg" },
         { name: "Ocean", image: "https://wallpaperaccess.com/full/317501.jpg" },
-        { name: "Sunrise", image: "https://wallpaperaccess.com/full/14240.jpg"}
-];
-
+        { name: "Sunrise", image: "https://wallpaperaccess.com/full/14240.jpg" }
+    ];
 
     themes.forEach(theme => {
         const option = document.createElement("option");
@@ -2241,35 +2251,362 @@ document.addEventListener("mouseup", () => {
         ThemesDropdown.appendChild(option);
     });
 
-
-    ThemesDropdown.addEventListener("change", (e) => {
-        const image = e.target.value;
-        if (image === "none") {
-            ui.style.background = "";
+    function applyTheme(value) {
+        const isColor = value.startsWith("#") || value.startsWith("rgb");
+        if (isColor) {
+            ui.style.backgroundImage = "";
+            ui.style.backgroundSize = "";
+            ui.style.backgroundPosition = "";
+            ui.style.backgroundColor = value;
         } else {
-            ui.style.backgroundImage = `url(${image})`;
+            ui.style.backgroundColor = "";
+            ui.style.backgroundImage = `url(${value})`;
             ui.style.backgroundSize = "cover";
             ui.style.backgroundPosition = "center";
         }
+    }
+
+    ThemesDropdown.addEventListener("change", (e) => {
+        if (e.target.value.toLowerCase() === RAINBOW_CODE) {
+            applyRainbow(ui);
+        } else {
+            ui.style.animation = "";
+            ui.style.filter = "";
+            ui.classList.remove("unverified-rainbow-wrap");
+            applyTheme(e.target.value);
+        }
     });
 
-    ui.appendChild(ThemesDropdown);
+    const MAX_CUSTOM = 3;
+    let customThemes = JSON.parse(localStorage.getItem("unverified-custom-themes") || "[]");
 
+    function saveCustomThemes() {
+        localStorage.setItem("unverified-custom-themes", JSON.stringify(customThemes));
+    }
+
+    function rebuildCustomOptions() {
+
+        for (let i = ThemesDropdown.options.length - 1; i >= 0; i--) {
+            if (ThemesDropdown.options[i].dataset.custom === "1") {
+                ThemesDropdown.remove(i);
+            }
+        }
+        customThemes.forEach(t => {
+            const opt = document.createElement("option");
+            opt.value = t.image;
+            opt.textContent = "\u2605 " + t.name;
+            opt.dataset.custom = "1";
+            ThemesDropdown.appendChild(opt);
+        });
+    }
+
+    rebuildCustomOptions();
+
+    const themeRow = document.createElement("div");
+    themeRow.style.display = "flex";
+    themeRow.style.alignItems = "center";
+    themeRow.style.gap = "8px";
+
+    themeRow.appendChild(ThemesDropdown);
+
+    const addThemeBtn = document.createElement("button");
+    addThemeBtn.textContent = "+";
+    addThemeBtn.title = "Create custom theme (max 3)";
+    addThemeBtn.style.backgroundColor = "#e74c3c";
+    addThemeBtn.style.color = "white";
+    addThemeBtn.style.border = "none";
+    addThemeBtn.style.borderRadius = "5px";
+    addThemeBtn.style.width = "38px";
+    addThemeBtn.style.height = "38px";
+    addThemeBtn.style.fontSize = "22px";
+    addThemeBtn.style.lineHeight = "1";
+    addThemeBtn.style.cursor = "pointer";
+    addThemeBtn.style.flexShrink = "0";
+    addThemeBtn.style.transition = "background-color 0.2s";
+    addThemeBtn.addEventListener("mouseover", () => addThemeBtn.style.backgroundColor = "#c0392b");
+    addThemeBtn.addEventListener("mouseout",  () => addThemeBtn.style.backgroundColor = "#e74c3c");
+
+    themeRow.appendChild(addThemeBtn);
+    bottomRow.appendChild(themeRow);
+
+    const ctOverlay = document.createElement("div");
+    ctOverlay.id = "ct-overlay";
+    ctOverlay.style.cssText = "display:none;position:fixed;inset:0;background:rgba(0,0,0,0.55);z-index:99998;";
+    document.body.appendChild(ctOverlay);
+
+    const ctModalStyle = document.createElement("style");
+    ctModalStyle.textContent = `
+        @keyframes ctSlideIn {
+            from { opacity:0; transform:translate(-50%,-46%) scale(0.96); }
+            to   { opacity:1; transform:translate(-50%,-50%) scale(1); }
+        }
+        @keyframes ctSlideOut {
+            from { opacity:1; transform:translate(-50%,-50%) scale(1); }
+            to   { opacity:0; transform:translate(-50%,-46%) scale(0.96); }
+        }
+        #ct-modal.ct-in  { animation: ctSlideIn  0.18s ease forwards; }
+        #ct-modal.ct-out { animation: ctSlideOut 0.15s ease forwards; }
+        #ct-name:focus, #ct-bg:focus { border-bottom-color:#e74c3c !important; }
+        #ct-save:hover   { background:#c0392b !important; }
+        #ct-cancel-btn:hover { color:#ccc !important; }
+    `;
+    document.head.appendChild(ctModalStyle);
+
+    const ctModal = document.createElement("div");
+    ctModal.id = "ct-modal";
+    ctModal.style.cssText = `
+        display:none;position:fixed;top:50%;left:50%;
+        transform:translate(-50%,-50%);
+        background:#141414;border-top:3px solid #e74c3c;
+        border-radius:6px;padding:20px 22px 22px;
+        z-index:99999;width:300px;
+        box-shadow:0 16px 48px rgba(0,0,0,0.95);
+        font-family:MinibloxFont,sans-serif;color:white;
+    `;
+
+    ctModal.innerHTML = `
+        <div style="display:flex;align-items:center;justify-content:space-between;margin-bottom:18px;">
+            <span style="color:#e74c3c;font-size:17px;letter-spacing:0.5px;">New Theme</span>
+            <button id="ct-cancel-btn" style="background:none;border:none;color:#555;font-size:20px;cursor:pointer;padding:0;line-height:1;transition:color 0.15s;">&#x2715;</button>
+        </div>
+        <div style="font-size:11px;color:#555;letter-spacing:1.5px;text-transform:uppercase;margin-bottom:5px;">Name</div>
+        <input id="ct-name" maxlength="20" placeholder="My Theme" style="
+            width:100%;box-sizing:border-box;background:#1a1a1a;color:white;
+            border:none;border-bottom:1px solid #2a2a2a;padding:7px 0;
+            font-size:14px;outline:none;margin-bottom:16px;
+            font-family:MinibloxFont,sans-serif;transition:border-color 0.2s;
+        ">
+        <div style="font-size:11px;color:#555;letter-spacing:1.5px;text-transform:uppercase;margin-bottom:5px;">Background</div>
+        <input id="ct-bg" placeholder="https://... or #hexcolor" style="
+            width:100%;box-sizing:border-box;background:#1a1a1a;color:white;
+            border:none;border-bottom:1px solid #2a2a2a;padding:7px 0;
+            font-size:13px;outline:none;margin-bottom:14px;
+            font-family:MinibloxFont,sans-serif;transition:border-color 0.2s;
+        ">
+        <div id="ct-preview" style="
+            width:100%;height:90px;margin-bottom:16px;
+            border-radius:4px;
+            background-size:cover;background-position:center;
+            display:flex;align-items:center;justify-content:center;
+            color:#333;font-size:12px;letter-spacing:1px;
+            text-transform:uppercase;transition:all 0.3s;
+            box-sizing:border-box;overflow:hidden;
+        ">no preview</div>
+        <div id="ct-limit-warn" style="color:#e74c3c;font-size:12px;margin-bottom:12px;display:none;letter-spacing:0.3px;">
+            max 3 themes — delete one first
+        </div>
+        <button id="ct-save" style="
+            width:100%;background:#e74c3c;color:white;border:none;
+            padding:10px;font-size:14px;cursor:pointer;letter-spacing:0.5px;
+            font-family:MinibloxFont,sans-serif;border-radius:3px;margin-bottom:20px;
+            transition:background 0.15s;
+        ">Save Theme</button>
+        <div style="font-size:10px;color:#333;letter-spacing:2px;text-transform:uppercase;margin-bottom:10px;">Saved Themes</div>
+        <div id="ct-list" style="display:flex;flex-direction:column;gap:6px;"></div>
+    `;
+
+    document.body.appendChild(ctModal);
+    const _prevInit = document.getElementById("ct-preview");
+    if (_prevInit) _prevInit.style.background = "#1a1a1a";
+
+    function openCtModal() {
+        ctModal.style.display = "block";
+        ctOverlay.style.display = "block";
+        ctModal.classList.remove("ct-out");
+        ctModal.classList.add("ct-in");
+    }
+
+    function closeCtModal() {
+        ctModal.classList.remove("ct-in");
+        ctModal.classList.add("ct-out");
+        setTimeout(() => {
+            ctModal.style.display = "none";
+            ctOverlay.style.display = "none";
+            ctModal.classList.remove("ct-out");
+        }, 150);
+    }
+
+    ctOverlay.addEventListener("click", closeCtModal);
+
+    function renderCtList() {
+        const list = document.getElementById("ct-list");
+        if (!list) return;
+        list.innerHTML = "";
+        if (customThemes.length === 0) {
+            list.innerHTML = `<div style="color:#2a2a2a;font-size:12px;letter-spacing:0.5px;">nothing saved yet</div>`;
+            return;
+        }
+        customThemes.forEach((t, i) => {
+            const row = document.createElement("div");
+            row.style.cssText = "display:flex;align-items:center;gap:10px;padding:6px 0;border-bottom:1px solid #1e1e1e;";
+
+            const swatch = document.createElement("div");
+            const isColor = t.image.startsWith("#") || t.image.startsWith("rgb");
+            swatch.style.cssText = "width:36px;height:36px;flex-shrink:0;border-radius:3px;background-size:cover;background-position:center;";
+            if (isColor) swatch.style.backgroundColor = t.image;
+            else swatch.style.backgroundImage = `url(${t.image})`;
+
+            const label = document.createElement("span");
+            label.textContent = t.name;
+            label.style.cssText = "flex:1;font-size:13px;color:#ccc;overflow:hidden;text-overflow:ellipsis;white-space:nowrap;letter-spacing:0.3px;";
+
+            const delBtn = document.createElement("button");
+            delBtn.textContent = "remove";
+            delBtn.style.cssText = "background:none;color:#3a3a3a;border:none;font-size:11px;cursor:pointer;padding:0;font-family:MinibloxFont,sans-serif;letter-spacing:0.5px;transition:color 0.15s;";
+            delBtn.addEventListener("mouseover", () => delBtn.style.color = "#e74c3c");
+            delBtn.addEventListener("mouseout", () => delBtn.style.color = "#3a3a3a");
+            delBtn.addEventListener("click", () => {
+                const wasActive = ThemesDropdown.value === t.image;
+                customThemes.splice(i, 1);
+                saveCustomThemes();
+                rebuildCustomOptions();
+                renderCtList();
+                if (wasActive || !Array.from(ThemesDropdown.options).some(o => o.value === ThemesDropdown.value)) {
+                    const defaultVal = ThemesDropdown.options[0] ? ThemesDropdown.options[0].value : "#1a1a1a";
+                    ThemesDropdown.value = defaultVal;
+                    ui.style.animation = "";
+                    ui.style.filter = "";
+                    ui.classList.remove("unverified-rainbow-wrap");
+                    applyTheme(defaultVal);
+                }
+                const warn = document.getElementById("ct-limit-warn");
+                if (warn) warn.style.display = "none";
+            });
+
+            row.appendChild(swatch);
+            row.appendChild(label);
+            row.appendChild(delBtn);
+            list.appendChild(row);
+        });
+    }
+
+    const RAINBOW_CODE = "#unverifiedsecret2026";
+    const RAINBOW_CSS = "linear-gradient(124deg,#ff2400,#e81d1d,#e8b71d,#e3e81d,#1de840,#1ddde8,#2b1de8,#dd00f3,#dd00f3)";
+
+    function applyRainbow(el) {
+        if (!document.getElementById("unverified-rainbow-style")) {
+            const s = document.createElement("style");
+            s.id = "unverified-rainbow-style";
+            s.textContent = `
+                @keyframes unverified-rainbow {
+                    0%   { background-position: 0% 50%; }
+                    50%  { background-position: 100% 50%; }
+                    100% { background-position: 0% 50%; }
+                }
+            `;
+            document.head.appendChild(s);
+        }
+        el.style.backgroundImage = "";
+        el.style.backgroundColor = "";
+        el.style.filter = "";
+        el.classList.remove("unverified-rainbow-wrap");
+        el.style.background = "linear-gradient(270deg,#ff0000,#ff7700,#ffff00,#00ff00,#00ffff,#0000ff,#ff00ff,#ff0000)";
+        el.style.backgroundSize = "400% 400%";
+        el.style.animation = "unverified-rainbow 4s ease infinite";
+    }
+
+    ctModal.addEventListener("input", (e) => {
+        if (e.target.id !== "ct-bg") return;
+        const val = e.target.value.trim();
+        const prev = document.getElementById("ct-preview");
+        if (!prev) return;
+        prev.style.cssText = `
+            width:100%;height:90px;margin-bottom:16px;
+            border-radius:4px;box-sizing:border-box;overflow:hidden;
+            display:flex;align-items:center;justify-content:center;
+            font-size:12px;letter-spacing:1px;text-transform:uppercase;
+        `;
+        if (val.toLowerCase() === RAINBOW_CODE) {
+            applyRainbow(prev);
+            prev.textContent = "";
+        } else if (val.startsWith("#") || val.startsWith("rgb")) {
+            prev.style.background = "";
+            prev.style.animation = "";
+            prev.style.backgroundColor = val;
+            prev.style.color = "rgba(255,255,255,0.4)";
+            prev.textContent = val;
+        } else if (val.startsWith("http")) {
+            prev.style.background = "";
+            prev.style.animation = "";
+            prev.style.backgroundImage = `url(${val})`;
+            prev.style.backgroundSize = "cover";
+            prev.style.backgroundPosition = "center";
+            prev.style.backgroundColor = "#1a1a1a";
+            prev.style.color = "transparent";
+            prev.textContent = "";
+        } else {
+            prev.style.background = "";
+            prev.style.animation = "";
+            prev.style.backgroundColor = "#1a1a1a";
+            prev.style.color = "#333";
+            prev.textContent = "no preview";
+        }
+    });
+
+    addThemeBtn.addEventListener("click", () => {
+        const nameIn = document.getElementById("ct-name");
+        const bgIn   = document.getElementById("ct-bg");
+        const prev   = document.getElementById("ct-preview");
+        const warn   = document.getElementById("ct-limit-warn");
+        if (nameIn) nameIn.value = "";
+        if (bgIn)   bgIn.value   = "";
+        if (prev) {
+            prev.style.background = "#1a1a1a";
+            prev.textContent = "no preview";
+        }
+        if (warn) warn.style.display = customThemes.length >= MAX_CUSTOM ? "block" : "none";
+        renderCtList();
+        openCtModal();
+    });
+
+    ctModal.addEventListener("click", (e) => {
+        if (e.target.id === "ct-cancel-btn") {
+            closeCtModal();
+            return;
+        }
+        if (e.target.id === "ct-save") {
+            const name = (document.getElementById("ct-name").value || "").trim();
+            const bg   = (document.getElementById("ct-bg").value   || "").trim();
+            const warn = document.getElementById("ct-limit-warn");
+            if (!name || !bg) { alert("fill in both fields"); return; }
+            if (customThemes.length >= MAX_CUSTOM) {
+                if (warn) warn.style.display = "block";
+                return;
+            }
+            customThemes.push({ name, image: bg });
+            saveCustomThemes();
+            rebuildCustomOptions();
+            renderCtList();
+            if (warn) warn.style.display = "none";
+            ThemesDropdown.value = bg;
+            if (bg.toLowerCase() === RAINBOW_CODE) {
+                applyRainbow(ui);
+            } else {
+                ThemesDropdown.dispatchEvent(new Event("change"));
+            }
+            closeCtModal();
+        }
+    });
     updateLanguage();
 
     let uiVisible = false;
     function toggleUI() {
-				if (uiVisible) {
-					ui.style.display = "none";
-				} else {
-					ui.style.display = "block";
-				}
+        if (uiVisible) {
+            ui.style.display = "none";
+            closeCtModal();
+        } else {
+            ui.style.display = "block";
+        }
         uiVisible = !uiVisible;
     }
 
     document.addEventListener("keydown", (event) => {
         if (event.key === "Shift" && event.location === 2) {
             toggleUI();
+        }
+
+        if (event.key === "Escape" && ctModal.style.display !== "none") {
+            closeCtModal();
         }
 
         for (let moduleName in moduleBindings) {
@@ -2288,13 +2625,11 @@ document.addEventListener("mouseup", () => {
 
     closeButton.addEventListener("click", () => {
         ui.style.display = "none";
+        closeCtModal();
         uiVisible = false;
     });
 
 })();
-
-
-
 
 
 (function() {
