@@ -1,7 +1,7 @@
 // ==UserScript==
 // @name         UnverifiedV2
 // @namespace    http://tampermonkey.net/
-// @version      3.51
+// @version      2.34
 // @description  Look at my license before you modify, I WILL DMCA you.
 // @icon         https://raw.githubusercontent.com/wytlines100/UnverifiedV2/refs/heads/main/logo.jpg
 // @license      Proprietary License
@@ -1257,19 +1257,23 @@ class UnverifiedShortcutMenu {
         moduleContainer.style.justifyContent = "flex-start";
         moduleContainer.classList.add('module-container');
 
+        // ── CHANGE: module title now uses MinibloxFont (Minecraft font) ──
         const moduleTitle = document.createElement("h3");
         moduleTitle.textContent = name;
         moduleTitle.style.color = "#e74c3c";
         moduleTitle.style.fontSize = "23px";
         moduleTitle.style.margin = "0 0 10px 0";
+        moduleTitle.style.fontFamily = 'MinibloxFont, sans-serif';
         moduleContainer.appendChild(moduleTitle);
 
+        // ── CHANGE: module description now uses MinibloxFont (Minecraft font) ──
         const moduleDescription = document.createElement("p");
         moduleDescription.textContent = description;
         moduleDescription.style.color = "#bdc3c7";
         moduleDescription.style.fontSize = "14px";
         moduleDescription.style.margin = "0";
         moduleDescription.style.lineHeight = "1.45";
+        moduleDescription.style.fontFamily = 'MinibloxFont, sans-serif';
         moduleContainer.appendChild(moduleDescription);
 
         gridContainer.appendChild(moduleContainer);
@@ -2238,6 +2242,7 @@ document.addEventListener("mouseup", () => {
     const themes = [
         { name: "Default", image: "#1a1a1a" },
         { name: "Minors??!!", image: "https://media1.tenor.com/m/mn2d2liDsmUAAAAC/ichigo-bleach.gif" },
+        { name: "Nyan Cat", image: "https://media1.tenor.com/m/2roX3uxz_68AAAAC/cat-space.gif" },
         { name: "Beach", image: "https://wallpaperaccess.com/full/174768.jpg" },
         { name: "Fall", image: "https://wallpaperaccess.com/full/185084.jpg" },
         { name: "Ocean", image: "https://wallpaperaccess.com/full/317501.jpg" },
