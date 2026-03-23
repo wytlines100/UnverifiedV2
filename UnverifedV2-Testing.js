@@ -15,13 +15,11 @@
 // @connect      api.jamendo.com
 // @connect      prod-1.storage.jamendo.com
 // ==/UserScript==
-
 class LurkerChecker {
   static lurkerInstalled() {
     return document.getElementById('_L7Banner') !== null;
   }
 }
-
 class UnverifiedIntro {
   constructor() {
     this.container = document.createElement("div");
@@ -32,7 +30,6 @@ class UnverifiedIntro {
       backgroundColor: "black",
       overflow: "hidden", zIndex: 9999,
     });
-
     this.check = document.createElement("div");
     this.check.textContent = "✓";
     Object.assign(this.check.style, {
@@ -40,45 +37,33 @@ class UnverifiedIntro {
       transition: "opacity 1s ease, transform 1s ease",
       textShadow: '0 0 5px red, 0 0 10px red, 0 0 20px red',
     });
-
     this.circle = document.createElement("div");
     Object.assign(this.circle.style, {
-      width: "100px",
-      height: "100px",
-      backgroundColor: "black",
-      border: "2px solid red",
-      borderRadius: "50%",
+      width: "100px", height: "100px", backgroundColor: "black",
+      border: "2px solid red", borderRadius: "50%",
       boxShadow: "0 0 10px red, 0 0 20px red, 0 0 30px red",
-      display: "flex",
-      alignItems: "center",
-      justifyContent: "center",
-      opacity: 0,
-      transition: "opacity 1s ease, transform 1s ease",
+      display: "flex", alignItems: "center", justifyContent: "center",
+      opacity: 0, transition: "opacity 1s ease, transform 1s ease",
     });
     this.circle.appendChild(this.check);
     this.container.appendChild(this.circle);
-
     this.unverifiedText = document.createElement("div");
     this.unverifiedText.textContent = "UnverifiedV2";
     Object.assign(this.unverifiedText.style, {
-      color: "red", fontSize: "60px", opacity: 0,
-      marginTop: "50px",
+      color: "red", fontSize: "60px", opacity: 0, marginTop: "50px",
       transition: "opacity 0.8s ease",
       textShadow: '0 0 5px red, 0 0 10px red, 0 0 20px red',
     });
     this.container.appendChild(this.unverifiedText);
-
     this.creditsText = document.createElement("div");
     this.creditsText.textContent = "\nBy wytlines, DeadFish7\nandreypidd, jet, joudaALT!";
     Object.assign(this.creditsText.style, {
       color: "red", fontSize: "30px", opacity: 0, transition: "opacity 0.8s ease",
-      whiteSpace: 'pre-line',
-      textAlign: "center",
+      whiteSpace: 'pre-line', textAlign: "center",
       textShadow: '0 0 5px red, 0 0 10px red, 0 0 20px red',
     });
     this.container.appendChild(this.creditsText);
   }
-
   playIntro() {
     document.body.appendChild(this.container);
     this.circle.style.opacity = 1;
@@ -92,33 +77,21 @@ class UnverifiedIntro {
       this.unverifiedText.style.opacity = 1;
     }, 1000);
     setTimeout(() => { this.creditsText.style.opacity = 1; }, 1500);
-    setTimeout(() => {
-      this.container.style.transition = "opacity 1s ease";
-      this.container.style.opacity = 0;
-    }, 2500);
+    setTimeout(() => { this.container.style.transition = "opacity 1s ease"; this.container.style.opacity = 0; }, 2500);
     setTimeout(() => { this.container.remove(); }, 3000);
   }
-
   showInitializedNotif() {
-    const initializedNotification = document.createElement("div");
-    initializedNotification.classList.add('initialized-notification');
-    initializedNotification.textContent = "UnverifiedV2 Initialized";
-    document.body.appendChild(initializedNotification);
-    setTimeout(() => {
-      initializedNotification.style.top = "10px";
-      initializedNotification.style.opacity = "1";
-    }, 10);
-    setTimeout(() => {
-      initializedNotification.style.top = "-50px";
-      initializedNotification.style.opacity = "0";
-    }, 2000);
-    setTimeout(() => { initializedNotification.remove(); }, 3000);
+    const n = document.createElement("div");
+    n.classList.add('initialized-notification');
+    n.textContent = "UnverifiedV2 Initialized";
+    document.body.appendChild(n);
+    setTimeout(() => { n.style.top = "10px"; n.style.opacity = "1"; }, 10);
+    setTimeout(() => { n.style.top = "-50px"; n.style.opacity = "0"; }, 2000);
+    setTimeout(() => { n.remove(); }, 3000);
   }
 }
-
 (function() {
   'use strict';
-
   const gameRef = {
     _game: null,
     get game() {
@@ -130,13 +103,9 @@ class UnverifiedIntro {
         const game = fiber?.updateQueue?.baseState?.element?.props?.game;
         if (game) this._game = game;
         return game;
-      } catch (e) {
-        console.warn("[UnverifiedV2] Failed to get game object:", e);
-        return null;
-      }
+      } catch (e) { console.warn("[UnverifiedV2] Failed to get game object:", e); return null; }
     }
   };
-
   const waitForGame = setInterval(() => {
     const game = gameRef.game;
     if (game && game.chat && typeof game.chat.addChat === "function") {
@@ -146,14 +115,12 @@ class UnverifiedIntro {
     }
   }, 500);
 })();
-
 class UnverifiedStyler {
   constructor() {
     this.observer = null;
     this.background = new UnverifiedBackground();
     this.banner = new UnverifiedBanner();
     this.shortcutMenu = new UnverifiedShortcutMenu();
-
     this.visuallyRemoveSelectors = ['.chakra-image.css-1je8qb9', '.chakra-stack.css-7kkhgi'];
     this.backgroundSelectors = ['img.chakra-image.css-rkihvp', 'img.chakra-image.css-mohuzh', '.css-aznra0'];
     this.generalStylingSelectors = new Set([
@@ -204,15 +171,8 @@ class UnverifiedStyler {
       '.chakra-input.css-ypk59i', '.chakra-input.css-1oc9k70', '.chakra-input.css-18whhxd',
     ]);
   }
-
-  visuallyRemove(e) {
-    if (!e) return;
-    e.style.opacity = 0;
-    e.style.zIndex = -1;
-  }
-
+  visuallyRemove(e) { if (!e) return; e.style.opacity = 0; e.style.zIndex = -1; }
   isMainScreen() { return this.shortcutMenu.getPlayButton() !== null; }
-
   addStyleObserver() {
     document.title = 'UnverifiedV2';
     this.observer = new MutationObserver(mutations => {
@@ -235,13 +195,8 @@ class UnverifiedStyler {
             if (node.matches(selector)) this.applySpecificStyle(node, selector);
             node.querySelectorAll(selector).forEach(e => this.applySpecificStyle(e, selector));
           }
-          if (this.isMainScreen()) {
-            this.shortcutMenu.addShortcutMenu();
-            this.banner.addBanner();
-          } else {
-            this.shortcutMenu.removeShortcutMenu();
-            this.banner.removeBanner();
-          }
+          if (this.isMainScreen()) { this.shortcutMenu.addShortcutMenu(); this.banner.addBanner(); }
+          else { this.shortcutMenu.removeShortcutMenu(); this.banner.removeBanner(); }
           for (const selector of this.blackBackgroundSelectors) {
             if (node.matches(selector)) this.removeBlackBackground(node);
             node.querySelectorAll(selector).forEach(e => this.removeBlackBackground(e));
@@ -251,42 +206,27 @@ class UnverifiedStyler {
     });
     this.observer.observe(document.body, { childList: true, subtree: true });
   }
-
   initialTriggerStyleObserver() {
     this.shortcutMenu.getPlayButton().click();
     setTimeout(() => { this.shortcutMenu.getExitButton().click(); }, 70);
   }
-
   applyGeneralStyle(e, selector) {
     e.style.padding = '10px 20px';
     e.style.backgroundColor = (!e.unverifiedMouseIn) ? 'rgba(211, 211, 211, 0.4)' : 'rgba(185, 185, 185, 0.4)';
-    e.style.color = 'white';
-    e.style.border = '1px solid #D3D3D3';
-    e.style.borderRadius = '12px';
-    e.style.fontSize = '16px';
-    e.style.cursor = 'pointer';
-    e.style.transition = 'transform 0.2s ease';
-    e.style.outline = 'none';
-    e.style.boxShadow = 'none';
+    e.style.color = 'white'; e.style.border = '1px solid #D3D3D3'; e.style.borderRadius = '12px';
+    e.style.fontSize = '16px'; e.style.cursor = 'pointer'; e.style.transition = 'transform 0.2s ease';
+    e.style.outline = 'none'; e.style.boxShadow = 'none';
     if (!this.skipMouseInOutListeners.has(selector)) {
       e.addEventListener('mouseover', () => { e.unverifiedMouseIn = true; e.style.backgroundColor = 'rgba(185, 185, 185, 0.4)'; });
       e.addEventListener('mouseout', () => { e.unverifiedMouseIn = false; e.style.backgroundColor = 'rgba(211, 211, 211, 0.4)'; });
     }
   }
-
   applySpecificStyle(e, selector) { this.specificStylingSelectors.get(selector)(e); }
-
   removeBlackBackground(e) {
-    e.style.background = 'transparent';
-    e.style.backgroundColor = 'none';
-    e.style.boxShadow = 'none';
-    if (!e.textContent.startsWith('Browse')) {
-      e.style.backdropFilter = 'blur(1px)';
-      e.style.webkitBackdropFilter = 'blur(1px)';
-    }
+    e.style.background = 'transparent'; e.style.backgroundColor = 'none'; e.style.boxShadow = 'none';
+    if (!e.textContent.startsWith('Browse')) { e.style.backdropFilter = 'blur(1px)'; e.style.webkitBackdropFilter = 'blur(1px)'; }
   }
 }
-
 class UnverifiedBackground {
   constructor() {
     this.bg1 = "https://w0.peakpx.com/wallpaper/810/395/HD-wallpaper-landscape-minecraft-shaders-minecraft.jpg";
@@ -294,43 +234,25 @@ class UnverifiedBackground {
   }
   setBG(e) { e.src = this.currentBG; }
 }
-
 class UnverifiedBanner {
   constructor() {
     this.e = document.createElement('div');
     this.e.textContent = 'UnverifiedV2\n\nBy wytlines, DeadFish7, andreypidd, jet, joudaALT!';
-    this.e.id = 'unverified-banner';
-    this.e.style.whiteSpace = 'pre-line';
-    this.e.style.textAlign = 'center';
-    this.e.style.zIndex = 999;
-    this.e.style.position = "absolute";
-    this.e.style.top = "11.5%";
-    this.e.style.left = "50%";
-    this.e.style.transform = "translate(-50%, -50%)";
-    this.e.style.padding = '10px 20px';
-    this.e.style.backgroundColor = 'rgba(211, 211, 211, 0.4)';
-    this.e.style.color = 'white';
-    this.e.style.border = '1px solid #D3D3D3';
-    this.e.style.borderRadius = '12px';
-    this.e.style.fontSize = '24px';
-    this.e.style.cursor = 'pointer';
+    this.e.id = 'unverified-banner'; this.e.style.whiteSpace = 'pre-line'; this.e.style.textAlign = 'center';
+    this.e.style.zIndex = 999; this.e.style.position = "absolute"; this.e.style.top = "11.5%";
+    this.e.style.left = "50%"; this.e.style.transform = "translate(-50%, -50%)";
+    this.e.style.padding = '10px 20px'; this.e.style.backgroundColor = 'rgba(211, 211, 211, 0.4)';
+    this.e.style.color = 'white'; this.e.style.border = '1px solid #D3D3D3'; this.e.style.borderRadius = '12px';
+    this.e.style.fontSize = '24px'; this.e.style.cursor = 'pointer';
     this.e.style.transition = 'background-color 0.3s ease, transform 0.2s ease, box-shadow 0.3s ease';
-    this.e.style.outline = 'none';
-    this.e.style.boxShadow = 'none';
-    this.e.addEventListener('mouseover', () => {
-      this.e.style.backgroundColor = 'rgba(185, 185, 185, 0.4)';
-      this.e.style.top = "11.5%"; this.e.style.left = "50%";
-    });
-    this.e.addEventListener('mouseout', () => {
-      this.e.style.backgroundColor = 'rgba(211, 211, 211, 0.4)';
-      this.e.style.top = "11.5%"; this.e.style.left = "50%";
-    });
+    this.e.style.outline = 'none'; this.e.style.boxShadow = 'none';
+    this.e.addEventListener('mouseover', () => { this.e.style.backgroundColor = 'rgba(185, 185, 185, 0.4)'; this.e.style.top = "11.5%"; this.e.style.left = "50%"; });
+    this.e.addEventListener('mouseout', () => { this.e.style.backgroundColor = 'rgba(211, 211, 211, 0.4)'; this.e.style.top = "11.5%"; this.e.style.left = "50%"; });
     this.shown = false;
   }
   addBanner() { if (!this.shown) { document.body.appendChild(this.e); this.shown = true; } }
   removeBanner() { if (this.shown) { this.shown = false; this.e.remove(); } }
 }
-
 class UnverifiedShortcutMenu {
   constructor() {
     this.onclicks = [
@@ -342,24 +264,19 @@ class UnverifiedShortcutMenu {
     ];
     this.container = document.createElement("div");
     Object.assign(this.container.style, {
-      position: "absolute", top: "76%", left: "50%",
-      transform: "translate(-50%, -50%)", padding: "20px", borderRadius: "12px",
-      display: "flex", flexDirection: "row", gap: "10px", alignItems: "center", zIndex: "99"
+      position: "absolute", top: "76%", left: "50%", transform: "translate(-50%, -50%)",
+      padding: "20px", borderRadius: "12px", display: "flex", flexDirection: "row",
+      gap: "10px", alignItems: "center", zIndex: "99"
     });
     let i = 0;
     ["KitPVP", "Skywars", "Doubles", "Quads", "ClassicPVP"].forEach(label => {
       const button = document.createElement("button");
       button.textContent = label;
-      button.style.padding = '8px 16px';
-      button.style.backgroundColor = 'rgba(211, 211, 211, 0.4)';
-      button.style.color = 'white';
-      button.style.border = '1px solid #D3D3D3';
-      button.style.borderRadius = '6px';
-      button.style.fontSize = '16px';
-      button.style.cursor = 'pointer';
+      button.style.padding = '8px 16px'; button.style.backgroundColor = 'rgba(211, 211, 211, 0.4)';
+      button.style.color = 'white'; button.style.border = '1px solid #D3D3D3'; button.style.borderRadius = '6px';
+      button.style.fontSize = '16px'; button.style.cursor = 'pointer';
       button.style.transition = 'background-color 0.3s ease, transform 0.2s ease, box-shadow 0.3s ease';
-      button.style.outline = 'none';
-      button.style.boxShadow = 'none';
+      button.style.outline = 'none'; button.style.boxShadow = 'none';
       button.addEventListener('mouseover', () => { button.style.backgroundColor = 'rgba(185, 185, 185, 0.4)'; button.style.transform = 'scale(1.01)'; });
       button.addEventListener('mouseout', () => { button.style.backgroundColor = 'rgba(211, 211, 211, 0.4)'; button.style.transform = 'scale(1)'; });
       button.addEventListener('click', this.onclicks[i++]);
@@ -377,23 +294,43 @@ class UnverifiedShortcutMenu {
   addShortcutMenu() { if (!this.shown) { this.shown = true; document.body.appendChild(this.container); } }
   removeShortcutMenu() { if (this.shown) { this.shown = false; document.body.removeChild(this.container); } }
 }
-
 (function() {
   'use strict';
-
   const intro = new UnverifiedIntro();
   intro.playIntro();
   intro.showInitializedNotif();
-
   const styler = new UnverifiedStyler();
   styler.addStyleObserver();
   try { styler.initialTriggerStyleObserver(); } catch (e) {}
-
   const style = document.createElement('style');
   style.innerHTML = `
     @font-face {
       font-family: 'MinibloxFont';
       src: url('https://cdn.glitch.global/adb12490-d563-43cb-9711-2a69a8bb1c06/Faithful.ttf?v=1735593093308') format('truetype');
+    }
+    @keyframes uv2UIOpen {
+      from { opacity: 0; transform: translate(-50%, -46%) scale(0.94); }
+      to   { opacity: 1; transform: translate(-50%, -50%) scale(1); }
+    }
+    @keyframes uv2UIClose {
+      from { opacity: 1; transform: translate(-50%, -50%) scale(1); }
+      to   { opacity: 0; transform: translate(-50%, -54%) scale(0.94); }
+    }
+    #uv2-main-ui.uv2-animate-in {
+      animation: uv2UIOpen 0.22s cubic-bezier(0.22, 1, 0.36, 1) forwards;
+    }
+    #uv2-main-ui.uv2-animate-out {
+      animation: uv2UIClose 0.18s cubic-bezier(0.22, 1, 0.36, 1) forwards;
+    }
+    @keyframes uv2-title-spin {
+      0%   { transform: rotate(0deg) scale(1); }
+      40%  { transform: rotate(380deg) scale(1.18); }
+      70%  { transform: rotate(350deg) scale(1.12); }
+      100% { transform: rotate(360deg) scale(1); }
+    }
+    @keyframes uv2-title-sweep {
+      0%   { background-position: -200% center; }
+      100% { background-position: 200% center; }
     }
     .bind-popup { position:absolute; background-color:#2c3e50; color:white; padding:20px; border-radius:10px; box-shadow:0 0 10px rgba(0,0,0,0.7); z-index:10001; font-family:'MinibloxFont',sans-serif; display:none; text-align:center; }
     .bind-popup input { background-color:#34495e; color:white; border:2px solid #e74c3c; border-radius:5px; padding:10px; font-size:18px; width:200px; }
@@ -472,8 +409,8 @@ class UnverifiedShortcutMenu {
     #unverified-music-player .mp-msg { padding:10px; color:#2a2a2a; font-size:9px; letter-spacing:1px; text-align:center; font-family:'MinibloxFont',sans-serif; }
   `;
   document.head.appendChild(style);
-
   const ui = document.createElement("div");
+  ui.id = "uv2-main-ui";
   ui.style.position = "fixed";
   ui.style.top = "50%";
   ui.style.left = "50%";
@@ -492,7 +429,6 @@ class UnverifiedShortcutMenu {
   ui.style.overflowY = "auto";
   ui.style.overflowX = "hidden";
   document.body.appendChild(ui);
-
   ['fullscreenchange','webkitfullscreenchange','mozfullscreenchange'].forEach(evt => {
     document.addEventListener(evt, () => {
       const isFS = document.fullscreenElement || document.webkitFullscreenElement || document.mozFullScreenElement;
@@ -500,25 +436,67 @@ class UnverifiedShortcutMenu {
       ui.style.padding = isFS ? "22px" : "28px";
     });
   });
-
   const headerRow = document.createElement("div");
   headerRow.style.cssText = "display:flex;align-items:center;justify-content:space-between;margin-bottom:15px;";
   ui.appendChild(headerRow);
-
   const title = document.createElement("h2");
   title.textContent = "UnverifiedV2";
-  title.style.fontSize = "34px";
-  title.style.color = "#e74c3c";
-  title.style.fontFamily = 'MinibloxFont, sans-serif';
-  title.style.margin = "0";
-  title.style.flex = "1";
-  title.style.textAlign = "center";
+  title.style.fontSize = "34px"; title.style.color = "#e74c3c";
+  title.style.fontFamily = 'MinibloxFont, sans-serif'; title.style.margin = "0";
+  title.style.flex = "1"; title.style.textAlign = "center";
+  title.style.display = "inline-block";
+  title.style.cursor = "pointer";
+  title.style.userSelect = "none";
   headerRow.appendChild(title);
-
   const headerLeft = document.createElement("div");
   headerLeft.style.cssText = "display:flex;align-items:center;gap:8px;flex-shrink:0;";
   headerRow.insertBefore(headerLeft, title);
-
+  let titleClickCount = 0;
+  let titleEggCycle = 0;
+  let titleEggBusy = false;
+  const sweepPalettes = [
+    ['#e74c3c', '#ffffff', '#ffcccc', '#e74c3c'],
+    ['#e74c3c', '#ffd700', '#fff', '#e74c3c'],
+    ['#e74c3c', '#00ffff', '#fff', '#e74c3c'],
+    ['#e74c3c', '#ff69b4', '#ffe0f0', '#e74c3c'],
+    ['#e74c3c', '#7fff00', '#f0ffe0', '#e74c3c'],
+  ];
+  title.addEventListener('click', () => {
+    if (titleEggBusy) return;
+    titleClickCount++;
+    if (titleClickCount < 10) return;
+    titleClickCount = 0;
+    titleEggBusy = true;
+    const effect = titleEggCycle % 2;
+    titleEggCycle++;
+    if (effect === 0) {
+      title.style.transformOrigin = 'center center';
+      title.style.animation = 'uv2-title-spin 0.72s cubic-bezier(0.22,1,0.36,1) forwards';
+      setTimeout(() => {
+        title.style.animation = '';
+        titleEggBusy = false;
+      }, 750);
+    } else {
+      const paletteIndex = Math.floor(titleEggCycle / 2) % sweepPalettes.length;
+      const [c0, c1, c2, c3] = sweepPalettes[paletteIndex];
+      title.style.backgroundImage = `linear-gradient(90deg, ${c0} 15%, ${c1} 42%, ${c2} 55%, ${c3} 85%)`;
+      title.style.backgroundSize = '200% auto';
+      title.style.backgroundClip = 'text';
+      title.style.webkitBackgroundClip = 'text';
+      title.style.webkitTextFillColor = 'transparent';
+      title.style.color = 'transparent';
+      title.style.animation = 'uv2-title-sweep 0.9s ease forwards';
+      setTimeout(() => {
+        title.style.animation = '';
+        title.style.backgroundImage = '';
+        title.style.backgroundClip = '';
+        title.style.webkitBackgroundClip = '';
+        title.style.webkitTextFillColor = '';
+        title.style.color = '#e74c3c';
+        titleEggBusy = false;
+      }, 960);
+    }
+  });
   const settingsIcon = document.createElementNS("http://www.w3.org/2000/svg", "svg");
   settingsIcon.setAttribute("viewBox", "0 0 24 24");
   settingsIcon.style.cssText = "cursor:pointer;width:28px;height:28px;fill:white;transition:transform 0.3s ease;flex-shrink:0;";
@@ -526,11 +504,9 @@ class UnverifiedShortcutMenu {
   settingsIcon.addEventListener("mouseover", () => settingsIcon.style.transform = "rotate(90deg)");
   settingsIcon.addEventListener("mouseout", () => settingsIcon.style.transform = "rotate(0deg)");
   headerLeft.appendChild(settingsIcon);
-
   const languageDropdown = document.createElement("select");
   languageDropdown.style.cssText = "background-color:#e74c3c;color:white;border:none;border-radius:5px;padding:8px 12px;font-size:14px;cursor:pointer;font-family:'MinibloxFont',sans-serif;flex-shrink:0;";
   headerRow.appendChild(languageDropdown);
-
   const settingsOverlay = document.createElement("div");
   settingsOverlay.id = "uv2-settings-overlay";
   settingsOverlay.innerHTML = `
@@ -552,13 +528,36 @@ class UnverifiedShortcutMenu {
               <div><div class="uv2-setting-label">Module Click Sounds</div><div class="uv2-setting-desc">Play a sound when toggling modules on or off</div></div>
               <label class="uv2-toggle"><input type="checkbox" id="uv2-toggle-sounds"><div class="uv2-toggle-track"></div></label>
             </div>
-
           </div>
           <div class="uv2-settings-page" id="uv2-page-visuals">
             <div class="uv2-section-title">Interface</div>
             <div class="uv2-setting-row">
               <div><div class="uv2-setting-label">Show Notifications</div><div class="uv2-setting-desc">Display toast notifications when modules toggle</div></div>
               <label class="uv2-toggle"><input type="checkbox" id="uv2-toggle-notifs"><div class="uv2-toggle-track"></div></label>
+            </div>
+            <div class="uv2-setting-row">
+              <div><div class="uv2-setting-label">Animation</div><div class="uv2-setting-desc">Animate the menu when opening and closing</div></div>
+              <label class="uv2-toggle"><input type="checkbox" id="uv2-toggle-animation"><div class="uv2-toggle-track"></div></label>
+            </div>
+            <div class="uv2-setting-row">
+              <div><div class="uv2-setting-label">Save Modules</div><div class="uv2-setting-desc">Restore your active modules after a page reload</div></div>
+              <label class="uv2-toggle"><input type="checkbox" id="uv2-toggle-saving"><div class="uv2-toggle-track"></div></label>
+            </div>
+            <div class="uv2-section-title" style="margin-top:14px;">Auto AFK</div>
+            <div class="uv2-setting-row">
+              <div><div class="uv2-setting-label">Auto Enable</div><div class="uv2-setting-desc">Turns on Anti-AFK automatically after idling</div></div>
+              <label class="uv2-toggle"><input type="checkbox" id="uv2-toggle-autoafk"><div class="uv2-toggle-track"></div></label>
+            </div>
+            <div class="uv2-setting-row">
+              <div><div class="uv2-setting-label">Sends AFK Message In Chat</div><div class="uv2-setting-desc">Sends a chat message when you go AFK</div></div>
+              <label class="uv2-toggle"><input type="checkbox" id="uv2-toggle-afkchat"><div class="uv2-toggle-track"></div></label>
+            </div>
+            <div class="uv2-setting-row">
+              <div><div class="uv2-setting-label">Idle Delay</div><div class="uv2-setting-desc">Seconds before Anti-AFK auto-enables (5–120)</div></div>
+              <div style="display:flex;align-items:center;gap:6px;flex-shrink:0;">
+                <input type="number" id="uv2-afkdelay-input" min="5" max="120" value="10" style="width:60px;background:#2a2a2a;color:white;border:1px solid #444;border-radius:6px;padding:5px 8px;font-size:14px;font-family:'MinibloxFont',sans-serif;text-align:center;outline:none;">
+                <span style="color:#888;font-size:13px;">s</span>
+              </div>
             </div>
           </div>
           <div class="uv2-settings-page" id="uv2-page-about">
@@ -572,25 +571,31 @@ class UnverifiedShortcutMenu {
     </div>
   `;
   document.body.appendChild(settingsOverlay);
-
   let moduleBindings = {};
   let isBinding = false;
   let lastKeyPressTime = {};
   let uiVisible = false;
+  let uiAnimating = false;
+  let closeUITimeout = null;
   let musicPlayerEl = null;
   let musicAudio = null;
   let musicIsPlaying = false;
   let isMusicPlayerActive = false;
-
+  let isRestoring = false;
   const settings = {
-    moduleSounds: localStorage.getItem('uv2-setting-sounds') !== 'false',
-    showNotifications: localStorage.getItem('uv2-setting-notifs') !== 'false',
+    moduleSounds:      localStorage.getItem('uv2-setting-sounds')    !== 'false',
+    showNotifications: localStorage.getItem('uv2-setting-notifs')    !== 'false',
+    animateUI:         localStorage.getItem('uv2-setting-animation') !== 'false',
+    saving:            localStorage.getItem('uv2-setting-saving')    === 'true',
+    autoAfk:           localStorage.getItem('uv2-setting-autoafk')  === 'true',
+    afkChat:           localStorage.getItem('uv2-setting-afkchat')  !== 'false',
   };
-
-  settingsOverlay.querySelector("#uv2-toggle-sounds").checked = settings.moduleSounds;
-
-  settingsOverlay.querySelector("#uv2-toggle-notifs").checked = settings.showNotifications;
-
+  settingsOverlay.querySelector("#uv2-toggle-sounds").checked    = settings.moduleSounds;
+  settingsOverlay.querySelector("#uv2-toggle-notifs").checked    = settings.showNotifications;
+  settingsOverlay.querySelector("#uv2-toggle-animation").checked = settings.animateUI;
+  settingsOverlay.querySelector("#uv2-toggle-saving").checked    = settings.saving;
+  settingsOverlay.querySelector("#uv2-toggle-autoafk").checked   = settings.autoAfk;
+  settingsOverlay.querySelector("#uv2-toggle-afkchat").checked   = settings.afkChat;
   settingsIcon.addEventListener("click", () => settingsOverlay.classList.toggle("uv2-open"));
   settingsOverlay.querySelector("#uv2-settings-close").addEventListener("click", () => settingsOverlay.classList.remove("uv2-open"));
   settingsOverlay.addEventListener("click", e => { if (e.target === settingsOverlay) settingsOverlay.classList.remove("uv2-open"); });
@@ -606,69 +611,76 @@ class UnverifiedShortcutMenu {
     settings.moduleSounds = this.checked;
     localStorage.setItem('uv2-setting-sounds', this.checked);
   });
-
   settingsOverlay.querySelector("#uv2-toggle-notifs").addEventListener("change", function() {
     settings.showNotifications = this.checked;
     localStorage.setItem('uv2-setting-notifs', this.checked);
   });
-
+  settingsOverlay.querySelector("#uv2-toggle-animation").addEventListener("change", function() {
+    settings.animateUI = this.checked;
+    localStorage.setItem('uv2-setting-animation', this.checked);
+  });
+  settingsOverlay.querySelector("#uv2-toggle-saving").addEventListener("change", function() {
+    settings.saving = this.checked;
+    localStorage.setItem('uv2-setting-saving', this.checked ? 'true' : 'false');
+    if (this.checked) {
+      saveAllModuleStates();
+    } else {
+      Object.keys(localStorage).filter(k => k.startsWith('uv2-module-')).forEach(k => localStorage.removeItem(k));
+    }
+  });
+  settingsOverlay.querySelector("#uv2-toggle-autoafk").addEventListener("change", function() {
+    settings.autoAfk = this.checked;
+    localStorage.setItem('uv2-setting-autoafk', this.checked ? 'true' : 'false');
+    if (this.checked) startAfkDetector(); else stopAfkDetector();
+  });
+  settingsOverlay.querySelector("#uv2-toggle-afkchat").addEventListener("change", function() {
+    settings.afkChat = this.checked;
+    localStorage.setItem('uv2-setting-afkchat', this.checked);
+  });
+  let afkDelay = parseInt(localStorage.getItem('uv2-setting-afkdelay') || '10', 10);
+  if (isNaN(afkDelay) || afkDelay < 5) afkDelay = 5;
+  if (afkDelay > 120) afkDelay = 120;
+  let afkTimer = null;
+  const afkDelayInput = settingsOverlay.querySelector("#uv2-afkdelay-input");
+  afkDelayInput.value = afkDelay;
+  afkDelayInput.addEventListener("change", function() {
+    let val = parseInt(this.value, 10);
+    if (isNaN(val) || val < 5) val = 5;
+    if (val > 120) val = 120;
+    this.value = val;
+    afkDelay = val;
+    localStorage.setItem('uv2-setting-afkdelay', afkDelay);
+    if (settings.autoAfk) {
+      clearTimeout(afkTimer);
+      afkTimer = setTimeout(onAfkTriggered, afkDelay * 1000);
+    }
+  });
   function playModuleClickSound(turningOn) {
     if (!settings.moduleSounds) return;
     try {
       const ctx = new (window.AudioContext || window.webkitAudioContext)();
       const now = ctx.currentTime;
-      const master = ctx.createGain();
-      master.gain.value = 0.6;
-      master.connect(ctx.destination);
-
+      const master = ctx.createGain(); master.gain.value = 0.6; master.connect(ctx.destination);
       if (turningOn) {
-        const click = ctx.createOscillator();
-        click.type = "sine";
-        click.frequency.setValueAtTime(80, now);
-        click.frequency.exponentialRampToValueAtTime(40, now + 0.04);
-        const clickGain = ctx.createGain();
-        clickGain.gain.setValueAtTime(0.5, now);
-        clickGain.gain.exponentialRampToValueAtTime(0.0001, now + 0.04);
-        click.connect(clickGain); clickGain.connect(master);
-        click.start(now); click.stop(now + 0.05);
-
-        const tone1 = ctx.createOscillator();
-        tone1.type = "sine";
-        tone1.frequency.setValueAtTime(520, now + 0.02);
-        const gain1 = ctx.createGain();
-        gain1.gain.setValueAtTime(0.0, now + 0.02);
-        gain1.gain.linearRampToValueAtTime(0.4, now + 0.045);
-        gain1.gain.exponentialRampToValueAtTime(0.0001, now + 0.13);
-        tone1.connect(gain1); gain1.connect(master);
-        tone1.start(now + 0.02); tone1.stop(now + 0.14);
-
-        const tone2 = ctx.createOscillator();
-        tone2.type = "sine";
-        tone2.frequency.setValueAtTime(880, now + 0.1);
-        tone2.frequency.exponentialRampToValueAtTime(1100, now + 0.22);
-        const gain2 = ctx.createGain();
-        gain2.gain.setValueAtTime(0.0, now + 0.1);
-        gain2.gain.linearRampToValueAtTime(0.45, now + 0.13);
-        gain2.gain.exponentialRampToValueAtTime(0.0001, now + 0.28);
-        tone2.connect(gain2); gain2.connect(master);
-        tone2.start(now + 0.1); tone2.stop(now + 0.3);
-
+        const click = ctx.createOscillator(); click.type = "sine";
+        click.frequency.setValueAtTime(80, now); click.frequency.exponentialRampToValueAtTime(40, now + 0.04);
+        const clickGain = ctx.createGain(); clickGain.gain.setValueAtTime(0.5, now); clickGain.gain.exponentialRampToValueAtTime(0.0001, now + 0.04);
+        click.connect(clickGain); clickGain.connect(master); click.start(now); click.stop(now + 0.05);
+        const tone1 = ctx.createOscillator(); tone1.type = "sine"; tone1.frequency.setValueAtTime(520, now + 0.02);
+        const gain1 = ctx.createGain(); gain1.gain.setValueAtTime(0.0, now + 0.02); gain1.gain.linearRampToValueAtTime(0.4, now + 0.045); gain1.gain.exponentialRampToValueAtTime(0.0001, now + 0.13);
+        tone1.connect(gain1); gain1.connect(master); tone1.start(now + 0.02); tone1.stop(now + 0.14);
+        const tone2 = ctx.createOscillator(); tone2.type = "sine"; tone2.frequency.setValueAtTime(880, now + 0.1); tone2.frequency.exponentialRampToValueAtTime(1100, now + 0.22);
+        const gain2 = ctx.createGain(); gain2.gain.setValueAtTime(0.0, now + 0.1); gain2.gain.linearRampToValueAtTime(0.45, now + 0.13); gain2.gain.exponentialRampToValueAtTime(0.0001, now + 0.28);
+        tone2.connect(gain2); gain2.connect(master); tone2.start(now + 0.1); tone2.stop(now + 0.3);
       } else {
-        const tone = ctx.createOscillator();
-        tone.type = "sine";
-        tone.frequency.setValueAtTime(600, now);
-        tone.frequency.exponentialRampToValueAtTime(280, now + 0.18);
-        const gainNode = ctx.createGain();
-        gainNode.gain.setValueAtTime(0.35, now);
-        gainNode.gain.exponentialRampToValueAtTime(0.0001, now + 0.2);
-        tone.connect(gainNode); gainNode.connect(master);
-        tone.start(now); tone.stop(now + 0.22);
+        const tone = ctx.createOscillator(); tone.type = "sine";
+        tone.frequency.setValueAtTime(600, now); tone.frequency.exponentialRampToValueAtTime(280, now + 0.18);
+        const gainNode = ctx.createGain(); gainNode.gain.setValueAtTime(0.35, now); gainNode.gain.exponentialRampToValueAtTime(0.0001, now + 0.2);
+        tone.connect(gainNode); gainNode.connect(master); tone.start(now); tone.stop(now + 0.22);
       }
-
       setTimeout(() => ctx.close(), 600);
     } catch(e) {}
   }
-
   const translations = {
     en: { languageName:"English", title:"UnverifiedV2", autoFullscreen:"Auto Fullscreen", autoFullscreenDesc:"Automatically toggles Fullscreen", keystrokes:"Keystrokes", keystrokesDesc:"Displays the keys you press in real-time.", fpsCounter:"FPS Counter", fpsCounterDesc:"Shows the frames per second (FPS) of the game.", cpsCounter:"CPS Counter", cpsCounterDesc:"Counts how many times you click per second.", muteChat:"Mute Chat", muteChatDesc:"Prevents other players messages from appearing in chat.", pingCounter:"Ping Counter", pingCounterDesc:"Shows the latency between your client and the server.", fpsBooster:"FPS Booster", fpsBoosterDesc:"Changes settings to improve FPS (refresh page)", antiAfk:"Anti-Afk", antiAfkDesc:"Presses WASD on its own to avoid being kicked for being AFK", timeDisplay:"Time Display", timeDisplayDesc:"Shows you the time so you dont have to exit full screen.", musicPlayer:"Music Player", musicPlayerDesc:"Plays music while you play.", closeUI:"Close UI", turnedOn:"was turned on", turnedOff:"was turned off", tooltipBind:"right-click to bind" },
     es: { languageName:"Espanol", title:"UnverifiedV2", autoFullscreen:"Pantalla Completa Automática", autoFullscreenDesc:"Activa/desactiva automáticamente la pantalla completa", keystrokes:"Teclas", keystrokesDesc:"Muestra las teclas que presionas en tiempo real.", fpsCounter:"Contador de FPS", fpsCounterDesc:"Muestra los fotogramas por segundo (FPS) del juego.", cpsCounter:"Contador de CPS", cpsCounterDesc:"Cuenta cuántas veces haces clic por segundo.", muteChat:"Silenciar Chat", muteChatDesc:"Evita que aparezcan mensajes de otros jugadores en el chat.", pingCounter:"Contador de Ping", pingCounterDesc:"Muestra la latencia entre tu cliente y el servidor.", fpsBooster:"Mejorador de FPS", fpsBoosterDesc:"Cambia la configuración para mejorar los FPS (actualiza la página)", antiAfk:"Anti-Inactividad", antiAfkDesc:"Presiona WASD automáticamente para evitar ser expulsado por inactividad", timeDisplay:"Mostrar Hora", timeDisplayDesc:"Te muestra la hora para que no tengas que salir de pantalla completa.", musicPlayer:"Reproductor de Música", musicPlayerDesc:"Reproduce música mientras juegas.", closeUI:"Cerrar UI", turnedOn:"fue activado", turnedOff:"fue desactivado", tooltipBind:"clic derecho para vincular" },
@@ -686,28 +698,23 @@ class UnverifiedShortcutMenu {
     pl: { languageName:"Polski", title:"UnverifiedV2", autoFullscreen:"Automatyczny Pełny Ekran", autoFullscreenDesc:"Automatycznie przełącza pełny ekran", keystrokes:"Naciśnięcia Klawiszy", keystrokesDesc:"Wyświetla klawisze, które naciskasz w czasie rzeczywistym.", fpsCounter:"Licznik FPS", fpsCounterDesc:"Pokazuje liczbę klatek na sekundę (FPS) gry.", cpsCounter:"Licznik CPS", cpsCounterDesc:"Liczy, ile razy klikasz na sekundę.", muteChat:"Wycisz Czat", muteChatDesc:"Zapobiega pojawianiu się wiadomości innych graczy na czacie.", pingCounter:"Licznik Pingu", pingCounterDesc:"Pokazuje opóźnienie między klientem a serwerem.", fpsBooster:"Wzmacniacz FPS", fpsBoosterDesc:"Zmienia ustawienia w celu poprawy FPS (odśwież stronę)", antiAfk:"Anti-AFK", antiAfkDesc:"Automatycznie naciska WASD, aby uniknąć wyrzucenia za bezczynność", timeDisplay:"Wyświetl Czas", timeDisplayDesc:"Pokazuje czas, więc nie musisz wychodzić z pełnego ekranu.", musicPlayer:"Odtwarzacz Muzyki", musicPlayerDesc:"Odtwarza muzykę podczas gry.", closeUI:"Zamknij UI", turnedOn:"został włączony", turnedOff:"został wyłączony", tooltipBind:"kliknij prawym przyciskiem, aby powiązać" },
     sv: { languageName:"Svenska", title:"UnverifiedV2", autoFullscreen:"Auto Helskärm", autoFullscreenDesc:"Växlar automatiskt helskärm", keystrokes:"Tangenttryckningar", keystrokesDesc:"Visar tangenterna du trycker på i realtid.", fpsCounter:"FPS-räknare", fpsCounterDesc:"Visar spelets bilder per sekund (FPS).", cpsCounter:"CPS-räknare", cpsCounterDesc:"Räknar hur många gånger du klickar per sekund.", muteChat:"Tysta Chatt", muteChatDesc:"Förhindrar att andra spelares meddelanden visas i chatten.", pingCounter:"Ping-räknare", pingCounterDesc:"Visar latensen mellan din klient och servern.", fpsBooster:"FPS-förbättrare", fpsBoosterDesc:"Ändrar inställningar för att förbättra FPS (uppdatera sidan)", antiAfk:"Anti-AFK", antiAfkDesc:"Trycker automatiskt på WASD för att undvika att bli kickad för inaktivitet", timeDisplay:"Visa Tid", timeDisplayDesc:"Visar tiden så att du inte behöver lämna helskärm.", musicPlayer:"Musikspelare", musicPlayerDesc:"Spelar musik medan du spelar.", closeUI:"Stäng UI", turnedOn:"aktiverades", turnedOff:"inaktiverades", tooltipBind:"högerklicka för att binda" },
   };
-
   let currentLanguage = localStorage.getItem('unverified-language') || 'en';
   Object.keys(translations).forEach(langCode => {
     const option = document.createElement("option");
-    option.value = langCode;
-    option.textContent = translations[langCode].languageName;
+    option.value = langCode; option.textContent = translations[langCode].languageName;
     if (langCode === currentLanguage) option.selected = true;
     languageDropdown.appendChild(option);
   });
   languageDropdown.addEventListener("change", e => { currentLanguage = e.target.value; localStorage.setItem('unverified-language', currentLanguage); updateLanguage(); });
-
   const gridContainer = document.createElement("div");
   gridContainer.style.display = "grid";
   gridContainer.style.gridTemplateColumns = "repeat(3, 1fr)";
   gridContainer.style.gridGap = "18px";
   gridContainer.style.marginTop = "18px";
   ui.appendChild(gridContainer);
-
   const notificationContainer = document.createElement("div");
   notificationContainer.style.cssText = "position:fixed;bottom:1in;right:20px;z-index:10000;display:flex;flex-direction:column-reverse;align-items:flex-end;";
   document.body.appendChild(notificationContainer);
-
   function showNotification(message, isOn) {
     if (!settings.showNotifications) return;
     const notification = document.createElement("div");
@@ -721,18 +728,12 @@ class UnverifiedShortcutMenu {
       setTimeout(() => { notificationContainer.removeChild(notification); }, 500);
     }, 3000);
   }
-
   function showBindPopup(moduleElement, moduleName) {
     const existingPopup = document.querySelector('.bind-popup');
     if (existingPopup) existingPopup.remove();
-    const popup = document.createElement("div");
-    popup.classList.add("bind-popup");
-    document.body.appendChild(popup);
-    const popupTitle = document.createElement("h3");
-    popupTitle.textContent = `Bind Key for ${moduleName}`;
-    popup.appendChild(popupTitle);
-    const inputBox = document.createElement("input");
-    inputBox.placeholder = "Press a key...";
+    const popup = document.createElement("div"); popup.classList.add("bind-popup"); document.body.appendChild(popup);
+    const popupTitle = document.createElement("h3"); popupTitle.textContent = `Bind Key for ${moduleName}`; popup.appendChild(popupTitle);
+    const inputBox = document.createElement("input"); inputBox.placeholder = "Press a key...";
     if (moduleBindings[moduleName]) inputBox.value = moduleBindings[moduleName];
     popup.appendChild(inputBox);
     const bindButton = document.createElement("button"); bindButton.textContent = "Bind";
@@ -747,56 +748,57 @@ class UnverifiedShortcutMenu {
     const rect = moduleElement.getBoundingClientRect();
     popup.style.top = `${rect.top + window.scrollY + rect.height + 10}px`;
     popup.style.left = `${rect.left + window.scrollX}px`;
-    popup.style.display = "block";
-    isBinding = true;
+    popup.style.display = "block"; isBinding = true;
   }
-
   function createModule(name, description) {
     const moduleContainer = document.createElement("div");
-    moduleContainer.style.padding = "19px";
-    moduleContainer.style.borderRadius = "10px";
-    moduleContainer.style.boxShadow = "0 0 10px rgba(0,0,0,0.5)";
-    moduleContainer.style.cursor = "pointer";
-    moduleContainer.style.transition = "border-color 0.3s ease";
-    moduleContainer.style.border = "5px solid transparent";
-    moduleContainer.style.minHeight = "185px";
-    moduleContainer.style.width = "100%";
-    moduleContainer.style.display = "flex";
-    moduleContainer.style.flexDirection = "column";
+    moduleContainer.style.padding = "19px"; moduleContainer.style.borderRadius = "10px";
+    moduleContainer.style.boxShadow = "0 0 10px rgba(0,0,0,0.5)"; moduleContainer.style.cursor = "pointer";
+    moduleContainer.style.transition = "border-color 0.3s ease"; moduleContainer.style.border = "5px solid transparent";
+    moduleContainer.style.minHeight = "185px"; moduleContainer.style.width = "100%";
+    moduleContainer.style.display = "flex"; moduleContainer.style.flexDirection = "column";
     moduleContainer.style.justifyContent = "flex-start";
     moduleContainer.classList.add('module-container');
+    moduleContainer.dataset.moduleName = name;
+    moduleContainer._uv2Active = false;
     const moduleTitle = document.createElement("h3");
-    moduleTitle.textContent = name;
-    moduleTitle.style.color = "#e74c3c"; moduleTitle.style.fontSize = "23px";
+    moduleTitle.textContent = name; moduleTitle.style.color = "#e74c3c"; moduleTitle.style.fontSize = "23px";
     moduleTitle.style.margin = "0 0 10px 0"; moduleTitle.style.fontFamily = 'MinibloxFont, sans-serif';
     moduleContainer.appendChild(moduleTitle);
     const moduleDescription = document.createElement("p");
-    moduleDescription.textContent = description;
-    moduleDescription.style.color = "#bdc3c7"; moduleDescription.style.fontSize = "14px";
-    moduleDescription.style.margin = "0"; moduleDescription.style.lineHeight = "1.45";
-    moduleDescription.style.fontFamily = 'MinibloxFont, sans-serif';
+    moduleDescription.textContent = description; moduleDescription.style.color = "#bdc3c7";
+    moduleDescription.style.fontSize = "14px"; moduleDescription.style.margin = "0";
+    moduleDescription.style.lineHeight = "1.45"; moduleDescription.style.fontFamily = 'MinibloxFont, sans-serif';
     moduleContainer.appendChild(moduleDescription);
     gridContainer.appendChild(moduleContainer);
-    const tooltip = document.createElement("div");
-    tooltip.classList.add("module-tooltip");
-    tooltip.textContent = "right-click to bind";
+    const tooltip = document.createElement("div"); tooltip.classList.add("module-tooltip"); tooltip.textContent = "right-click to bind";
     moduleContainer.appendChild(tooltip);
-    let isActive = false;
     let tooltipTimeout;
     moduleContainer.addEventListener("mouseenter", () => { tooltipTimeout = setTimeout(() => { tooltip.style.visibility = "visible"; tooltip.style.opacity = 1; }, 1500); });
     moduleContainer.addEventListener("mouseleave", () => { clearTimeout(tooltipTimeout); tooltip.style.visibility = "hidden"; tooltip.style.opacity = 0; });
     moduleContainer.addEventListener("click", () => {
       if (!isBinding) {
-        isActive = !isActive;
-        playModuleClickSound(isActive);
-        if (isActive) { moduleContainer.style.border = "5px solid #2ecc71"; showNotification(`${name} was turned on`, true); }
-        else { moduleContainer.style.border = "5px solid transparent"; showNotification(`${name} was turned off`, false); }
+        moduleContainer._uv2Active = !moduleContainer._uv2Active;
+        const isActive = moduleContainer._uv2Active;
+        if (!isRestoring) {
+          if (settings.saving) localStorage.setItem('uv2-module-' + name, isActive ? 'true' : 'false');
+          playModuleClickSound(isActive);
+        }
+        if (isActive) {
+          moduleContainer.style.border = "5px solid #2ecc71";
+          if (!isRestoring) showNotification(`${name} was turned on`, true);
+        } else {
+          moduleContainer.style.border = "5px solid transparent";
+          if (!isRestoring) showNotification(`${name} was turned off`, false);
+        }
       }
     });
     moduleContainer.addEventListener("contextmenu", event => { event.preventDefault(); showBindPopup(moduleContainer, name); });
     return moduleContainer;
   }
-
+  function setModuleActive(mc, wantActive) {
+    if (mc._uv2Active !== wantActive) mc.click();
+  }
   function updateLanguage() {
     title.textContent = translations[currentLanguage].title;
     closeButton.textContent = translations[currentLanguage].closeUI;
@@ -813,7 +815,6 @@ class UnverifiedShortcutMenu {
       }
     }
   }
-
   const autoFullscreenModule = createModule("Auto Fullscreen", "Automatically toggles Fullscreen");
   let isAutoFullscreenActive = false;
   autoFullscreenModule.addEventListener("click", () => {
@@ -824,15 +825,13 @@ class UnverifiedShortcutMenu {
       (document.exitFullscreen || document.mozCancelFullScreen || document.webkitExitFullscreen || document.msExitFullscreen || (() => {})).call(document);
     }
   });
-
   const keystrokesModule = createModule("Keystrokes", "Displays the keys you press in real-time.");
   let isKeystrokesActive = false;
   keystrokesModule.addEventListener("click", () => {
     isKeystrokesActive = !isKeystrokesActive;
     if (isKeystrokesActive) {
       if (document.getElementById('keystrokes-container')) document.getElementById('keystrokes-container').remove();
-      const kc = document.createElement('div');
-      kc.id = 'keystrokes-container';
+      const kc = document.createElement('div'); kc.id = 'keystrokes-container';
       kc.style.cssText = 'z-index:10000;width:300px;height:230px;position:fixed;opacity:100%;box-shadow:none;background-color:transparent;transform:translate(-50%,-50%);display:flex;flex-direction:column;align-items:center;user-select:none;';
       const savedL = localStorage.getItem('left'), savedT = localStorage.getItem('top');
       kc.style.left = (savedL ? parseInt(savedL) : window.innerWidth/2) + 'px';
@@ -843,8 +842,7 @@ class UnverifiedShortcutMenu {
       document.addEventListener('mousemove', e => { if (isDragging) { kc.style.left = e.clientX + 'px'; kc.style.top = e.clientY + 'px'; localStorage.setItem('left', e.clientX); localStorage.setItem('top', e.clientY); } });
       document.addEventListener('mouseup', () => { isDragging = false; });
       const createKey = (text, style = {}) => {
-        const key = document.createElement('div');
-        key.textContent = text;
+        const key = document.createElement('div'); key.textContent = text;
         Object.assign(key.style, { position:'absolute', color:'#ffffff', fontWeight:'bold', borderRadius:'0', backgroundColor:'rgba(128,128,128,0.7)', border:'3px solid #333333', fontSize:'18px', height:'50px', width:'50px', textAlign:'center', lineHeight:'50px', fontFamily:'Roboto Mono, monospace', zIndex:'10000', ...style });
         return key;
       };
@@ -857,25 +855,21 @@ class UnverifiedShortcutMenu {
       document.addEventListener('mousedown', e => { if(e.button===0) lmb.style.backgroundColor=downColor; if(e.button===2) rmb.style.backgroundColor=downColor; });
       document.addEventListener('mouseup', e => { if(e.button===0) lmb.style.backgroundColor=upColor; if(e.button===2) rmb.style.backgroundColor=upColor; });
     } else {
-      const kc = document.getElementById('keystrokes-container');
-      if (kc) kc.remove();
+      const kc = document.getElementById('keystrokes-container'); if (kc) kc.remove();
     }
   });
-
   createModule("FPS Counter", "Shows the frames per second (FPS) of the game.");
-  const fpsModule = [...gridContainer.children].find(c => c.querySelector("h3")?.textContent === "FPS Counter");
+  const fpsModule = [...gridContainer.children].find(c => c.dataset.moduleName === "FPS Counter");
   let isFPSVisible = false, fpsElement = null, lastFrameTime = performance.now(), frameCount = 0;
   if (fpsModule) {
     fpsModule.addEventListener("click", () => {
       isFPSVisible = !isFPSVisible;
       if (isFPSVisible) {
-        fpsElement = document.createElement("div");
-        fpsElement.id = "fps-counter";
+        fpsElement = document.createElement("div"); fpsElement.id = "fps-counter";
         fpsElement.style.cssText = "position:fixed;top:60px;left:20px;padding:8px 14px;background:rgba(0,0,0,0.6);backdrop-filter:blur(8px);border:1px solid rgba(255,255,255,0.15);border-radius:8px;z-index:99999;cursor:move;user-select:none;font-family:'Segoe UI','Roboto',sans-serif;display:flex;align-items:center;gap:8px;box-shadow:0 4px 12px rgba(0,0,0,0.3);";
         const fpsDot = document.createElement("div"); fpsDot.id = "fps-dot"; fpsDot.style.cssText = "width:10px;height:10px;border-radius:50%;background-color:#4CAF50;box-shadow:0 0 12px rgba(76,175,80,0.9);transition:all 0.3s ease;";
         const fpsValue = document.createElement("div"); fpsValue.id = "fps-value"; fpsValue.textContent = "0 FPS"; fpsValue.style.cssText = "font-size:16px;font-weight:700;color:#FFFFFF;letter-spacing:0.5px;transition:color 0.3s ease;";
-        fpsElement.appendChild(fpsDot); fpsElement.appendChild(fpsValue);
-        document.body.appendChild(fpsElement);
+        fpsElement.appendChild(fpsDot); fpsElement.appendChild(fpsValue); document.body.appendChild(fpsElement);
         let offX=0, offY=0, isDrag=false;
         fpsElement.addEventListener("mousedown", e => { isDrag=true; offX=e.clientX-fpsElement.getBoundingClientRect().left; offY=e.clientY-fpsElement.getBoundingClientRect().top; e.preventDefault(); });
         document.addEventListener("mousemove", e => { if(isDrag){ fpsElement.style.left=`${e.clientX-offX}px`; fpsElement.style.top=`${e.clientY-offY}px`; } });
@@ -893,7 +887,6 @@ class UnverifiedShortcutMenu {
       } else if (fpsElement) { fpsElement.remove(); fpsElement = null; }
     });
   }
-
   const mouseModule = createModule("CPS Counter", "Counts how many times you click per second.");
   let isMouseActive=false, clickTimes=[], mouseElement=null;
   const strokeColor="#FFFFFF", idleFill="rgba(255,255,255,0.1)", activeFill="rgba(255,255,255,0.8)";
@@ -923,7 +916,6 @@ class UnverifiedShortcutMenu {
       if (mouseModule._handler) { document.removeEventListener("mousedown",mouseModule._handler); document.removeEventListener("mouseup",mouseModule._handler); }
     }
   });
-
   const muteChatModule = createModule("Mute Chat", "Prevents other players messages from appearing in chat.");
   let isMuteChatActive=false, originalAddChat=null;
   muteChatModule.addEventListener("click", () => {
@@ -938,7 +930,6 @@ class UnverifiedShortcutMenu {
       }
     } catch(e) {}
   });
-
   const pingModule = createModule("Ping Counter", "Shows the latency between your client and the server.");
   let isPingActive=false, pingElement=null, pingInterval=null;
   pingModule.addEventListener("click", () => {
@@ -963,11 +954,9 @@ class UnverifiedShortcutMenu {
       updatePing(); pingInterval = setInterval(updatePing, 1000);
     } else { if(pingElement){ pingElement.remove(); pingElement=null; } clearInterval(pingInterval); }
   });
-
   createModule("FPS Booster", "Changes settings to improve FPS (refresh page)");
-
   createModule("Anti-Afk", "Presses WASD on its own to avoid being kicked for being AFK");
-  const antiAfkModule = [...gridContainer.children].find(c => c.querySelector("h3")?.textContent === "Anti-Afk");
+  const antiAfkModule = [...gridContainer.children].find(c => c.dataset.moduleName === "Anti-Afk");
   let isAntiAfkActive=false, antiAfkInterval=null, antiAfkBox=null;
   if (antiAfkModule) {
     antiAfkModule.addEventListener("click", () => {
@@ -984,8 +973,7 @@ class UnverifiedShortcutMenu {
         antiAfkBox.addEventListener("mousedown", e => { isDrag=true; offX=e.clientX-antiAfkBox.getBoundingClientRect().left; offY=e.clientY-antiAfkBox.getBoundingClientRect().top; e.preventDefault(); });
         document.addEventListener("mousemove", e => { if(isDrag){ antiAfkBox.style.left=`${e.clientX-offX}px`; antiAfkBox.style.top=`${e.clientY-offY}px`; } });
         document.addEventListener("mouseup", () => { isDrag=false; });
-        const keys=[['w','KeyW',87],['a','KeyA',65],['s','KeyS',83],['d','KeyD',68],[' ','Space',32]];
-        let idx=0;
+        const keys=[['w','KeyW',87],['a','KeyA',65],['s','KeyS',83],['d','KeyD',68],[' ','Space',32]]; let idx=0;
         antiAfkInterval = setInterval(() => {
           const [key,code,keyCode]=keys[idx]; idx=(idx+1)%keys.length;
           const t=document.activeElement||document.body;
@@ -995,9 +983,8 @@ class UnverifiedShortcutMenu {
       } else { if(antiAfkInterval) clearInterval(antiAfkInterval); if(antiAfkBox) antiAfkBox.remove(); }
     });
   }
-
   createModule("Time Display", "Shows you the time so you dont have to exit full screen.");
-  const timeModule = [...gridContainer.children].find(c => c.querySelector("h3")?.textContent === "Time Display");
+  const timeModule = [...gridContainer.children].find(c => c.dataset.moduleName === "Time Display");
   let isTimeVisible=false, timeElement=null;
   if (timeModule) {
     timeModule.addEventListener("click", () => {
@@ -1015,11 +1002,9 @@ class UnverifiedShortcutMenu {
       } else if (timeElement) { clearInterval(timeElement._interval); timeElement.remove(); timeElement=null; }
     });
   }
-
   createModule("Music Player", "Plays music while you play.");
-  const musicModule = [...gridContainer.children].find(c => c.querySelector("h3")?.textContent === "Music Player");
+  const musicModule = [...gridContainer.children].find(c => c.dataset.moduleName === "Music Player");
   const JAMENDO_KEY = "0c5e9d9e";
-
   function jamendoSearch(query) {
     return new Promise((resolve, reject) => {
       GM_xmlhttpRequest({
@@ -1032,77 +1017,44 @@ class UnverifiedShortcutMenu {
       });
     });
   }
-
   if (musicModule) {
     musicModule.addEventListener("click", () => {
       isMusicPlayerActive = !isMusicPlayerActive;
       if (isMusicPlayerActive) {
-        musicPlayerEl = document.createElement("div");
-        musicPlayerEl.id = "unverified-music-player";
+        musicPlayerEl = document.createElement("div"); musicPlayerEl.id = "unverified-music-player";
         musicPlayerEl.innerHTML = `
-          <div class="mp-topbar">
-            <span class="mp-topbar-name">UV2</span>
-            <button class="mp-topbar-close" id="mp-close">&#x2715;</button>
-          </div>
-          <div class="mp-nowplaying">
-            <img class="mp-art" id="mp-album-art" src="" alt=""/>
-            <div class="mp-info">
-              <div class="mp-title" id="mp-song-title">nothing playing</div>
-              <div class="mp-sub" id="mp-artist">—</div>
-            </div>
-          </div>
+          <div class="mp-topbar"><span class="mp-topbar-name">UV2</span><button class="mp-topbar-close" id="mp-close">&#x2715;</button></div>
+          <div class="mp-nowplaying"><img class="mp-art" id="mp-album-art" src="" alt=""/><div class="mp-info"><div class="mp-title" id="mp-song-title">nothing playing</div><div class="mp-sub" id="mp-artist">—</div></div></div>
           <div class="mp-bar"><div class="mp-bar-fill" id="mp-progress-bar"></div></div>
-          <div class="mp-btns">
-            <button class="mp-btn" id="mp-prev-btn">&#9664;&#9664;</button>
-            <button class="mp-btn active" id="mp-play-btn">&#9654;</button>
-            <button class="mp-btn" id="mp-stop-btn">&#9632;</button>
-          </div>
-          <div class="mp-vol">
-            <span class="mp-vol-lbl">VOL</span>
-            <input class="mp-vol-slider" id="mp-volume" type="range" min="0" max="100" value="70"/>
-            <span class="mp-vol-pct" id="mp-vol-label">70%</span>
-          </div>
-          <div class="mp-search-wrap">
-            <input class="mp-search-in" id="mp-search-input" type="text" placeholder="search a song..." autocomplete="off" spellcheck="false"/>
-            <button class="mp-search-go" id="mp-search-btn">GO</button>
-          </div>
-          <div class="mp-search-wrap" style="border-top:none;padding-top:0;">
-            <input class="mp-search-in" id="mp-url-input" type="text" placeholder="or paste audio url (.mp3, .ogg...)" autocomplete="off" spellcheck="false"/>
-            <button class="mp-search-go" id="mp-url-btn">PLAY</button>
-          </div>
-          <div class="mp-results" id="mp-results" style="display:none;"></div>
-        `;
+          <div class="mp-btns"><button class="mp-btn" id="mp-prev-btn">&#9664;&#9664;</button><button class="mp-btn active" id="mp-play-btn">&#9654;</button><button class="mp-btn" id="mp-stop-btn">&#9632;</button></div>
+          <div class="mp-vol"><span class="mp-vol-lbl">VOL</span><input class="mp-vol-slider" id="mp-volume" type="range" min="0" max="100" value="70"/><span class="mp-vol-pct" id="mp-vol-label">70%</span></div>
+          <div class="mp-search-wrap"><input class="mp-search-in" id="mp-search-input" type="text" placeholder="search a song..." autocomplete="off" spellcheck="false"/><button class="mp-search-go" id="mp-search-btn">GO</button></div>
+          <div class="mp-search-wrap" style="border-top:none;padding-top:0;"><input class="mp-search-in" id="mp-url-input" type="text" placeholder="or paste audio url (.mp3, .ogg...)" autocomplete="off" spellcheck="false"/><button class="mp-search-go" id="mp-url-btn">PLAY</button></div>
+          <div class="mp-results" id="mp-results" style="display:none;"></div>`;
         document.body.appendChild(musicPlayerEl);
-
         const playBtn=musicPlayerEl.querySelector("#mp-play-btn"), stopBtn=musicPlayerEl.querySelector("#mp-stop-btn"), prevBtn=musicPlayerEl.querySelector("#mp-prev-btn");
         const volSlider=musicPlayerEl.querySelector("#mp-volume"), volLabel=musicPlayerEl.querySelector("#mp-vol-label");
         const songTitle=musicPlayerEl.querySelector("#mp-song-title"), artistEl=musicPlayerEl.querySelector("#mp-artist");
-        const progressBar=musicPlayerEl.querySelector("#mp-progress-bar");
-        const header=musicPlayerEl.querySelector(".mp-topbar"), albumArt=musicPlayerEl.querySelector("#mp-album-art");
+        const progressBar=musicPlayerEl.querySelector("#mp-progress-bar"), header=musicPlayerEl.querySelector(".mp-topbar"), albumArt=musicPlayerEl.querySelector("#mp-album-art");
         const searchInput=musicPlayerEl.querySelector("#mp-search-input"), searchBtn=musicPlayerEl.querySelector("#mp-search-btn"), resultsBox=musicPlayerEl.querySelector("#mp-results");
-
         musicPlayerEl.querySelector("#mp-close").addEventListener("click", () => {
           if (musicAudio) { musicAudio.pause(); musicAudio.src=""; musicAudio=null; }
           musicIsPlaying=false; isMusicPlayerActive=false; musicPlayerEl.remove(); musicPlayerEl=null;
         });
-
         let isDrag=false, offX=0, offY=0;
         header.addEventListener("mousedown", e => { isDrag=true; offX=e.clientX-musicPlayerEl.getBoundingClientRect().left; offY=e.clientY-musicPlayerEl.getBoundingClientRect().top; e.preventDefault(); });
         document.addEventListener("mousemove", e => { if(!isDrag) return; musicPlayerEl.style.left=(e.clientX-offX)+"px"; musicPlayerEl.style.top=(e.clientY-offY)+"px"; musicPlayerEl.style.bottom="auto"; });
         document.addEventListener("mouseup", () => { isDrag=false; });
-
         function loadAudioSrc(src, title, artist, imageUrl) {
           if (musicAudio) { musicAudio.pause(); musicAudio.src=""; musicAudio=null; }
           musicIsPlaying=false; playBtn.innerHTML="&#9654;";
-          songTitle.textContent=title||src; artistEl.textContent=artist||"—";
-          albumArt.src=imageUrl||"";
+          songTitle.textContent=title||src; artistEl.textContent=artist||"—"; albumArt.src=imageUrl||"";
           musicAudio = new Audio(); musicAudio.crossOrigin="anonymous"; musicAudio.volume=volSlider.value/100; musicAudio.src=src;
           musicAudio.addEventListener("timeupdate", () => { if(musicAudio.duration) progressBar.style.width=((musicAudio.currentTime/musicAudio.duration)*100).toFixed(2)+"%"; });
           musicAudio.addEventListener("ended", () => { playBtn.innerHTML="&#9654;"; musicIsPlaying=false; });
           musicAudio.addEventListener("error", () => { songTitle.textContent="failed to load"; playBtn.innerHTML="&#9654;"; musicIsPlaying=false; });
           musicAudio.play().then(() => { playBtn.innerHTML="&#9646;&#9646;"; musicIsPlaying=true; }).catch(()=>{});
         }
-
         async function doSearch() {
           const q=searchInput.value.trim(); if(!q) return;
           resultsBox.innerHTML=`<div class="mp-msg">searching...</div>`; resultsBox.style.display="block";
@@ -1117,79 +1069,43 @@ class UnverifiedShortcutMenu {
           });
         }
         searchBtn.addEventListener("click", doSearch);
-
-        const urlInput = musicPlayerEl.querySelector("#mp-url-input");
-        const urlBtn = musicPlayerEl.querySelector("#mp-url-btn");
-
+        const urlInput=musicPlayerEl.querySelector("#mp-url-input"), urlBtn=musicPlayerEl.querySelector("#mp-url-btn");
         function playFromUrl() {
-          const raw = urlInput.value.trim();
-          if (!raw) return;
-          const previewBox = musicPlayerEl.querySelector("#mp-url-preview");
-          if (previewBox) previewBox.remove();
-          const preview = document.createElement("div");
-          preview.id = "mp-url-preview";
-          preview.style.cssText = "display:flex;align-items:center;gap:8px;padding:6px 10px;border-bottom:1px solid #161616;background:#111;";
-          const icon = document.createElement("div");
-          icon.style.cssText = "width:32px;height:32px;flex-shrink:0;background:#1a1a1a;display:flex;align-items:center;justify-content:center;font-size:18px;color:#e74c3c;";
-          icon.textContent = "♪";
-          const info = document.createElement("div");
-          info.style.cssText = "flex:1;min-width:0;";
-          const name = document.createElement("div");
-          name.style.cssText = "font-size:10px;color:#bbb;font-family:MinibloxFont,sans-serif;white-space:nowrap;overflow:hidden;text-overflow:ellipsis;";
-          name.textContent = raw.split("/").pop().split("?")[0] || "audio file";
-          const sub = document.createElement("div");
-          sub.style.cssText = "font-size:9px;color:#333;margin-top:2px;font-family:MinibloxFont,sans-serif;";
-          sub.textContent = "direct url";
-          info.appendChild(name);
-          info.appendChild(sub);
-          preview.appendChild(icon);
-          preview.appendChild(info);
-          resultsBox.style.display = "block";
-          resultsBox.innerHTML = "";
-          resultsBox.appendChild(preview);
+          const raw=urlInput.value.trim(); if(!raw) return;
+          const previewBox=musicPlayerEl.querySelector("#mp-url-preview"); if(previewBox) previewBox.remove();
+          const preview=document.createElement("div"); preview.id="mp-url-preview";
+          preview.style.cssText="display:flex;align-items:center;gap:8px;padding:6px 10px;border-bottom:1px solid #161616;background:#111;";
+          const icon=document.createElement("div"); icon.style.cssText="width:32px;height:32px;flex-shrink:0;background:#1a1a1a;display:flex;align-items:center;justify-content:center;font-size:18px;color:#e74c3c;"; icon.textContent="♪";
+          const info=document.createElement("div"); info.style.cssText="flex:1;min-width:0;";
+          const name=document.createElement("div"); name.style.cssText="font-size:10px;color:#bbb;font-family:MinibloxFont,sans-serif;white-space:nowrap;overflow:hidden;text-overflow:ellipsis;"; name.textContent=raw.split("/").pop().split("?")[0]||"audio file";
+          const sub=document.createElement("div"); sub.style.cssText="font-size:9px;color:#333;margin-top:2px;font-family:MinibloxFont,sans-serif;"; sub.textContent="direct url";
+          info.appendChild(name); info.appendChild(sub); preview.appendChild(icon); preview.appendChild(info);
+          resultsBox.style.display="block"; resultsBox.innerHTML=""; resultsBox.appendChild(preview);
           loadAudioSrc(raw, name.textContent, "direct url", null);
         }
-
         urlBtn.addEventListener("click", playFromUrl);
-        urlInput.addEventListener("keydown", e => {
-          e.stopPropagation();
-          if (e.key === "Enter") playFromUrl();
-          if (e.key === "Escape") { resultsBox.style.display = "none"; }
-        });
-        urlInput.addEventListener("keyup", e => e.stopPropagation());
-        urlInput.addEventListener("keypress", e => e.stopPropagation());
+        urlInput.addEventListener("keydown", e => { e.stopPropagation(); if(e.key==="Enter") playFromUrl(); if(e.key==="Escape") resultsBox.style.display="none"; });
+        urlInput.addEventListener("keyup", e => e.stopPropagation()); urlInput.addEventListener("keypress", e => e.stopPropagation());
         searchInput.addEventListener("keydown", e => { e.stopPropagation(); if(e.key==="Enter") doSearch(); if(e.key==="Escape") resultsBox.style.display="none"; });
         searchInput.addEventListener("keyup", e => e.stopPropagation()); searchInput.addEventListener("keypress", e => e.stopPropagation());
-
-        playBtn.addEventListener("click", () => {
-          if (!musicAudio) return;
-          if (musicIsPlaying) { musicAudio.pause(); playBtn.innerHTML="&#9654;"; musicIsPlaying=false; }
-          else { musicAudio.play(); playBtn.innerHTML="&#9646;&#9646;"; musicIsPlaying=true; }
-        });
-        stopBtn.addEventListener("click", () => {
-          if (musicAudio) { musicAudio.pause(); musicAudio.src=""; musicAudio=null; }
-          musicIsPlaying=false; playBtn.innerHTML="&#9654;"; songTitle.textContent="nothing playing"; artistEl.textContent="—"; albumArt.src=""; progressBar.style.width="0%";
-        });
+        playBtn.addEventListener("click", () => { if(!musicAudio) return; if(musicIsPlaying){ musicAudio.pause(); playBtn.innerHTML="&#9654;"; musicIsPlaying=false; } else { musicAudio.play(); playBtn.innerHTML="&#9646;&#9646;"; musicIsPlaying=true; } });
+        stopBtn.addEventListener("click", () => { if(musicAudio){ musicAudio.pause(); musicAudio.src=""; musicAudio=null; } musicIsPlaying=false; playBtn.innerHTML="&#9654;"; songTitle.textContent="nothing playing"; artistEl.textContent="—"; albumArt.src=""; progressBar.style.width="0%"; });
         prevBtn.addEventListener("click", () => { if(musicAudio){ musicAudio.currentTime=0; if(!musicIsPlaying){ musicAudio.play(); playBtn.innerHTML="&#9646;&#9646;"; musicIsPlaying=true; } } });
         volSlider.addEventListener("input", () => { const v=parseInt(volSlider.value,10); volLabel.textContent=v+"%"; if(musicAudio) musicAudio.volume=v/100; });
-
       } else {
-        if (musicAudio) { musicAudio.pause(); musicAudio.src=""; musicAudio=null; }
-        if (musicPlayerEl) { musicPlayerEl.remove(); musicPlayerEl=null; }
+        if(musicAudio){ musicAudio.pause(); musicAudio.src=""; musicAudio=null; }
+        if(musicPlayerEl){ musicPlayerEl.remove(); musicPlayerEl=null; }
         musicIsPlaying=false;
       }
     });
   }
-
   const bottomRow = document.createElement("div");
   bottomRow.style.cssText = "display:flex;align-items:center;justify-content:center;gap:8px;margin-top:18px;";
   ui.appendChild(bottomRow);
-
   const closeButton = document.createElement("button");
   closeButton.textContent = "Close UI";
   closeButton.style.cssText = "background-color:#e74c3c;color:white;border:none;border-radius:5px;padding:10px 20px;font-size:17px;cursor:pointer;";
   bottomRow.appendChild(closeButton);
-
   const ThemesDropdown = document.createElement("select");
   ThemesDropdown.style.cssText = "background-color:#e74c3c;color:white;border:none;border-radius:5px;padding:10px 20px;font-size:17px;cursor:pointer;";
   const themes = [
@@ -1199,7 +1115,6 @@ class UnverifiedShortcutMenu {
     {name:"Sunrise",image:"https://wallpaperaccess.com/full/14240.jpg"}
   ];
   themes.forEach(t => { const o=document.createElement("option"); o.value=t.image; o.textContent=t.name; ThemesDropdown.appendChild(o); });
-
   const RAINBOW_CODE = "#unverifiedsecret2026";
   function applyTheme(value) {
     const isColor = value.startsWith("#")||value.startsWith("rgb");
@@ -1220,7 +1135,6 @@ class UnverifiedShortcutMenu {
     if (e.target.value.toLowerCase()===RAINBOW_CODE) applyRainbow(ui);
     else { ui.style.animation=""; ui.style.filter=""; applyTheme(e.target.value); }
   });
-
   let customThemes = JSON.parse(localStorage.getItem("unverified-custom-themes")||"[]");
   function saveCustomThemes() { localStorage.setItem("unverified-custom-themes",JSON.stringify(customThemes)); }
   function rebuildCustomOptions() {
@@ -1228,13 +1142,11 @@ class UnverifiedShortcutMenu {
     customThemes.forEach(t => { const o=document.createElement("option"); o.value=t.image; o.textContent="\u2605 "+t.name; o.dataset.custom="1"; ThemesDropdown.appendChild(o); });
   }
   rebuildCustomOptions();
-
   const themeRow = document.createElement("div"); themeRow.style.cssText="display:flex;align-items:center;gap:8px;"; themeRow.appendChild(ThemesDropdown);
   const addThemeBtn = document.createElement("button"); addThemeBtn.textContent="+"; addThemeBtn.title="Create custom theme (max 3)";
   addThemeBtn.style.cssText="background-color:#e74c3c;color:white;border:none;border-radius:5px;width:38px;height:38px;font-size:22px;cursor:pointer;flex-shrink:0;";
   addThemeBtn.addEventListener("mouseover",()=>addThemeBtn.style.backgroundColor="#c0392b"); addThemeBtn.addEventListener("mouseout",()=>addThemeBtn.style.backgroundColor="#e74c3c");
   themeRow.appendChild(addThemeBtn); bottomRow.appendChild(themeRow);
-
   const ctOverlay = document.createElement("div"); ctOverlay.id="ct-overlay"; ctOverlay.style.cssText="display:none;position:fixed;inset:0;background:rgba(0,0,0,0.55);z-index:99998;"; document.body.appendChild(ctOverlay);
   const ctModalStyle = document.createElement("style");
   ctModalStyle.textContent=`@keyframes ctSlideIn{from{opacity:0;transform:translate(-50%,-46%) scale(0.96)}to{opacity:1;transform:translate(-50%,-50%) scale(1)}}@keyframes ctSlideOut{from{opacity:1;transform:translate(-50%,-50%) scale(1)}to{opacity:0;transform:translate(-50%,-46%) scale(0.96)}}#ct-modal.ct-in{animation:ctSlideIn 0.18s ease forwards}#ct-modal.ct-out{animation:ctSlideOut 0.15s ease forwards}#ct-name:focus,#ct-bg:focus{border-bottom-color:#e74c3c !important}#ct-save:hover{background:#c0392b !important}#ct-cancel-btn:hover{color:#ccc !important}`;
@@ -1243,11 +1155,9 @@ class UnverifiedShortcutMenu {
   ctModal.style.cssText="display:none;position:fixed;top:50%;left:50%;transform:translate(-50%,-50%);background:#141414;border-top:3px solid #e74c3c;border-radius:6px;padding:20px 22px 22px;z-index:99999;width:300px;box-shadow:0 16px 48px rgba(0,0,0,0.95);font-family:MinibloxFont,sans-serif;color:white;";
   ctModal.innerHTML=`<div style="display:flex;align-items:center;justify-content:space-between;margin-bottom:18px;"><span style="color:#e74c3c;font-size:17px;">New Theme</span><button id="ct-cancel-btn" style="background:none;border:none;color:#555;font-size:20px;cursor:pointer;padding:0;line-height:1;transition:color 0.15s;">&#x2715;</button></div><div style="font-size:11px;color:#555;letter-spacing:1.5px;text-transform:uppercase;margin-bottom:5px;">Name</div><input id="ct-name" maxlength="20" placeholder="My Theme" style="width:100%;box-sizing:border-box;background:#1a1a1a;color:white;border:none;border-bottom:1px solid #2a2a2a;padding:7px 0;font-size:14px;outline:none;margin-bottom:16px;font-family:MinibloxFont,sans-serif;transition:border-color 0.2s;"><div style="font-size:11px;color:#555;letter-spacing:1.5px;text-transform:uppercase;margin-bottom:5px;">Background</div><input id="ct-bg" placeholder="https://... or #hexcolor" style="width:100%;box-sizing:border-box;background:#1a1a1a;color:white;border:none;border-bottom:1px solid #2a2a2a;padding:7px 0;font-size:13px;outline:none;margin-bottom:14px;font-family:MinibloxFont,sans-serif;transition:border-color 0.2s;"><div id="ct-preview" style="width:100%;height:90px;margin-bottom:16px;border-radius:4px;background:#1a1a1a;display:flex;align-items:center;justify-content:center;color:#333;font-size:12px;letter-spacing:1px;text-transform:uppercase;box-sizing:border-box;overflow:hidden;">no preview</div><div id="ct-limit-warn" style="color:#e74c3c;font-size:12px;margin-bottom:12px;display:none;">max 3 themes — delete one first</div><button id="ct-save" style="width:100%;background:#e74c3c;color:white;border:none;padding:10px;font-size:14px;cursor:pointer;font-family:MinibloxFont,sans-serif;border-radius:3px;margin-bottom:20px;transition:background 0.15s;">Save Theme</button><div style="font-size:10px;color:#333;letter-spacing:2px;text-transform:uppercase;margin-bottom:10px;">Saved Themes</div><div id="ct-list" style="display:flex;flex-direction:column;gap:6px;"></div>`;
   document.body.appendChild(ctModal);
-
   function openCtModal() { ctModal.style.display="block"; ctOverlay.style.display="block"; ctModal.classList.remove("ct-out"); ctModal.classList.add("ct-in"); }
   function closeCtModal() { ctModal.classList.remove("ct-in"); ctModal.classList.add("ct-out"); setTimeout(()=>{ ctModal.style.display="none"; ctOverlay.style.display="none"; ctModal.classList.remove("ct-out"); },150); }
   ctOverlay.addEventListener("click", closeCtModal);
-
   function renderCtList() {
     const list=document.getElementById("ct-list"); if(!list) return; list.innerHTML="";
     if (!customThemes.length) { list.innerHTML=`<div style="color:#2a2a2a;font-size:12px;">nothing saved yet</div>`; return; }
@@ -1262,7 +1172,6 @@ class UnverifiedShortcutMenu {
       row.appendChild(swatch); row.appendChild(label); row.appendChild(delBtn); list.appendChild(row);
     });
   }
-
   ctModal.addEventListener("input", e => {
     if (e.target.id!=="ct-bg") return; const val=e.target.value.trim(); const prev=document.getElementById("ct-preview"); if(!prev) return;
     prev.style.cssText="width:100%;height:90px;margin-bottom:16px;border-radius:4px;box-sizing:border-box;overflow:hidden;display:flex;align-items:center;justify-content:center;font-size:12px;letter-spacing:1px;text-transform:uppercase;";
@@ -1271,14 +1180,12 @@ class UnverifiedShortcutMenu {
     else if(val.startsWith("http")){ prev.style.animation=""; prev.style.backgroundImage=`url(${val})`; prev.style.backgroundSize="cover"; prev.style.backgroundPosition="center"; prev.style.backgroundColor="#1a1a1a"; prev.textContent=""; }
     else { prev.style.animation=""; prev.style.backgroundColor="#1a1a1a"; prev.style.color="#333"; prev.textContent="no preview"; }
   });
-
   addThemeBtn.addEventListener("click", () => {
     const ni=document.getElementById("ct-name"), bi=document.getElementById("ct-bg"), pv=document.getElementById("ct-preview"), wn=document.getElementById("ct-limit-warn");
     if(ni) ni.value=""; if(bi) bi.value=""; if(pv){ pv.style.background="#1a1a1a"; pv.textContent="no preview"; }
     if(wn) wn.style.display=customThemes.length>=3?"block":"none";
     renderCtList(); openCtModal();
   });
-
   ctModal.addEventListener("click", e => {
     if(e.target.id==="ct-cancel-btn"){ closeCtModal(); return; }
     if(e.target.id==="ct-save"){
@@ -1292,34 +1199,205 @@ class UnverifiedShortcutMenu {
       closeCtModal();
     }
   });
-
   updateLanguage();
-
-  function toggleUI() {
-    if (uiVisible) { ui.style.display="none"; closeCtModal(); settingsOverlay.classList.remove("uv2-open"); if(musicPlayerEl) musicPlayerEl.style.display="none"; }
-    else { ui.style.display="block"; if(musicPlayerEl) musicPlayerEl.style.display="block"; }
-    uiVisible = !uiVisible;
+  function openUI() {
+    ui.style.display = "block";
+    if (musicPlayerEl) musicPlayerEl.style.display = "block";
+    if (settings.animateUI) {
+      ui.classList.remove("uv2-animate-in", "uv2-animate-out");
+      void ui.offsetWidth;
+      ui.classList.add("uv2-animate-in");
+    }
   }
-
+  function closeUI() {
+    settingsOverlay.classList.remove("uv2-open");
+    closeCtModal();
+    if (closeUITimeout) { clearTimeout(closeUITimeout); closeUITimeout = null; }
+    if (settings.animateUI) {
+      uiAnimating = true;
+      ui.classList.remove("uv2-animate-in");
+      void ui.offsetWidth;
+      ui.classList.add("uv2-animate-out");
+      closeUITimeout = setTimeout(() => {
+        ui.style.display = "none";
+        ui.classList.remove("uv2-animate-out");
+        if (musicPlayerEl) musicPlayerEl.style.display = "none";
+        uiAnimating = false;
+        closeUITimeout = null;
+      }, 180);
+    } else {
+      ui.classList.remove("uv2-animate-in", "uv2-animate-out");
+      ui.style.display = "none";
+      if (musicPlayerEl) musicPlayerEl.style.display = "none";
+      uiAnimating = false;
+    }
+  }
+  function toggleUI() {
+    if (uiAnimating) return;
+    if (uiVisible) { closeUI(); uiVisible = false; }
+    else { openUI(); uiVisible = true; }
+  }
   document.addEventListener("keydown", event => {
-    if (event.key==="Shift" && event.location===2) toggleUI();
-    if (event.key==="Escape" && ctModal.style.display!=="none") closeCtModal();
+    if (event.key === "Shift" && event.location === 2) toggleUI();
+    if (event.key === "Escape" && ctModal.style.display !== "none") closeCtModal();
     for (let moduleName in moduleBindings) {
-      if (moduleBindings[moduleName]===event.key) {
-        const now=Date.now();
-        if (!lastKeyPressTime[moduleName]||now-lastKeyPressTime[moduleName]>200) {
-          const mc=[...gridContainer.children].find(c=>c.querySelector("h3").textContent===moduleName);
-          if(mc) mc.click();
-          lastKeyPressTime[moduleName]=now;
+      if (moduleBindings[moduleName] === event.key) {
+        const now = Date.now();
+        if (!lastKeyPressTime[moduleName] || now - lastKeyPressTime[moduleName] > 200) {
+          const mc = [...gridContainer.children].find(c => c.dataset.moduleName === moduleName);
+          if (mc) mc.click();
+          lastKeyPressTime[moduleName] = now;
         }
       }
     }
   });
-
-  closeButton.addEventListener("click", () => { ui.style.display="none"; closeCtModal(); settingsOverlay.classList.remove("uv2-open"); if(musicPlayerEl) musicPlayerEl.style.display="none"; uiVisible=false; });
-
+  closeButton.addEventListener("click", () => { closeUI(); uiVisible = false; });
+  function restoreModuleStates() {
+    if (!settings.saving) return;
+    isRestoring = true;
+    [...gridContainer.children].forEach(mc => {
+      const savedName = mc.dataset.moduleName;
+      if (!savedName) return;
+      const savedVal = localStorage.getItem('uv2-module-' + savedName);
+      if (savedVal === 'true' && !mc._uv2Active) mc.click();
+      else if (savedVal === 'false' && mc._uv2Active) mc.click();
+    });
+    isRestoring = false;
+  }
+  function saveAllModuleStates() {
+    [...gridContainer.children].forEach(mc => {
+      const savedName = mc.dataset.moduleName;
+      if (!savedName) return;
+      localStorage.setItem('uv2-module-' + savedName, mc._uv2Active ? 'true' : 'false');
+    });
+  }
+  setTimeout(restoreModuleStates, 3400);
+  let afkTriggered = false;
+  let afkAntiAfkWasOff = false;
+  let afkGraceUntil = 0;
+  function showAfkToast() {
+    const existing = document.getElementById('uv2-afk-toast');
+    if (existing) existing.remove();
+    const toast = document.createElement('div');
+    toast.id = 'uv2-afk-toast';
+    toast.textContent = 'You are idle, Anti-AFK enabled.';
+    Object.assign(toast.style, {
+      position: 'fixed', top: '-60px', left: '50%', transform: 'translateX(-50%)',
+      background: '#e74c3c', color: '#fff', padding: '10px 22px',
+      borderRadius: '8px', fontSize: '15px', fontFamily: 'MinibloxFont, sans-serif',
+      zIndex: '99999', transition: 'top 0.5s ease, opacity 0.5s ease', opacity: '0',
+      whiteSpace: 'nowrap', boxShadow: '0 4px 16px rgba(0,0,0,0.5)',
+    });
+    document.body.appendChild(toast);
+    setTimeout(() => { toast.style.top = '18px'; toast.style.opacity = '1'; }, 20);
+    setTimeout(() => { toast.style.top = '-60px'; toast.style.opacity = '0'; }, 3500);
+    setTimeout(() => { if (toast.parentNode) toast.remove(); }, 4200);
+  }
+  function showReturnToast() {
+    const existing = document.getElementById('uv2-return-toast');
+    if (existing) existing.remove();
+    const toast = document.createElement('div');
+    toast.id = 'uv2-return-toast';
+    toast.textContent = 'Welcome back, Anti-AFK disabled.';
+    Object.assign(toast.style, {
+      position: 'fixed', top: '-60px', left: '50%', transform: 'translateX(-50%)',
+      background: '#2ecc71', color: '#fff', padding: '10px 22px',
+      borderRadius: '8px', fontSize: '15px', fontFamily: 'MinibloxFont, sans-serif',
+      zIndex: '99999', transition: 'top 0.5s ease, opacity 0.5s ease', opacity: '0',
+      whiteSpace: 'nowrap', boxShadow: '0 4px 16px rgba(0,0,0,0.5)',
+    });
+    document.body.appendChild(toast);
+    setTimeout(() => { toast.style.top = '18px'; toast.style.opacity = '1'; }, 20);
+    setTimeout(() => { toast.style.top = '-60px'; toast.style.opacity = '0'; }, 3500);
+    setTimeout(() => { if (toast.parentNode) toast.remove(); }, 4200);
+  }
+  function sendAfkChatMessage(msg) {
+    try {
+      const inputs = document.querySelectorAll("input");
+      let chatInput = null;
+      inputs.forEach(i => {
+        if (i.placeholder && i.placeholder.toLowerCase().includes('chat')) chatInput = i;
+      });
+      if (chatInput) {
+        const propsKey = Object.keys(chatInput).find(k => k.startsWith("__reactProps") || k.startsWith("__reactFiber"));
+        if (propsKey) {
+          const props = chatInput[propsKey];
+          const reactProps = props && props.memoizedProps ? props.memoizedProps : props;
+          if (reactProps && reactProps.onChange) {
+            reactProps.onChange({ target: { value: msg } });
+            setTimeout(() => {
+              if (reactProps.onKeyDown) reactProps.onKeyDown({ key: 'Enter', keyCode: 13, which: 13, bubbles: true, preventDefault: () => {} });
+            }, 300);
+            return;
+          }
+        }
+      }
+    } catch(e) {}
+    try {
+      const reactRoot = document.querySelector("#react");
+      if (!reactRoot) return;
+      const fiber = Object.values(reactRoot)[0];
+      const game = fiber && fiber.updateQueue && fiber.updateQueue.baseState && fiber.updateQueue.baseState.element && fiber.updateQueue.baseState.element.props && fiber.updateQueue.baseState.element.props.game;
+      if (game && game.chat && typeof game.chat.addChat === "function") {
+        game.chat.addChat({ text: msg });
+      }
+    } catch(e) {}
+  }
+  function onAfkTriggered() {
+    if (afkTriggered) return;
+    afkTriggered = true;
+    afkGraceUntil = Date.now() + 2000;
+    showAfkToast();
+    if (settings.afkChat) sendAfkChatMessage("I'm currently AFK, This Is An Auto Message, Please Hold On.");
+    const afkMod = [...gridContainer.children].find(c => c.dataset.moduleName === 'Anti-Afk');
+    if (afkMod && !afkMod._uv2Active) {
+      afkAntiAfkWasOff = true;
+      afkMod.click();
+    } else {
+      afkAntiAfkWasOff = false;
+    }
+  }
+  function onUserReturn() {
+    if (!afkTriggered) return;
+    afkTriggered = false;
+    if (afkAntiAfkWasOff) {
+      const afkMod = [...gridContainer.children].find(c => c.dataset.moduleName === 'Anti-Afk');
+      if (afkMod && afkMod._uv2Active) {
+        afkMod.click();
+        showReturnToast();
+      }
+      afkAntiAfkWasOff = false;
+    }
+  }
+  function _afkActivityHandler(e) {
+    if (!settings.autoAfk) return;
+    if (!e.isTrusted) return;
+    if (Date.now() < afkGraceUntil) return;
+    onUserReturn();
+    clearTimeout(afkTimer);
+    afkTimer = setTimeout(onAfkTriggered, afkDelay * 1000);
+  }
+  const _afkEvents = ['mousemove', 'keydown', 'mousedown', 'wheel'];
+  function startAfkDetector() {
+    _afkEvents.forEach(evt => window.addEventListener(evt, _afkActivityHandler));
+    clearTimeout(afkTimer);
+    afkTimer = setTimeout(onAfkTriggered, afkDelay * 1000);
+  }
+  function stopAfkDetector() {
+    _afkEvents.forEach(evt => window.removeEventListener(evt, _afkActivityHandler));
+    clearTimeout(afkTimer);
+    afkTimer = null;
+    if (afkTriggered) {
+      afkTriggered = false;
+      if (afkAntiAfkWasOff) {
+        const afkMod = [...gridContainer.children].find(c => c.dataset.moduleName === 'Anti-Afk');
+        if (afkMod && afkMod._uv2Active) afkMod.click();
+        afkAntiAfkWasOff = false;
+      }
+    }
+  }
+  if (settings.autoAfk) startAfkDetector();
 })();
-
 (function() {
   'use strict';
   window.requestAnimationFrame = function(callback) { return setTimeout(function() { callback(performance.now()); }, 0); };
