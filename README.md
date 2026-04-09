@@ -11,4 +11,4 @@ Contact: wytlines100 — rfd6108@gmail.com
 
 I grant users premission to **USE** the client private and public
 
-Note: wytlines has wnet inactive, you can still attempt to reach him via email
+Note: wytlines has went inactive, you can still attempt to reach him via email!
