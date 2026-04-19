@@ -1101,7 +1101,6 @@ class UnverifiedShortcutMenu {
     });
   }
 
-  // ── SERVER TRANSLATOR MODULE ──────────────────────────────────────────
   const translatorModule = createModule("Server Translator", "Translates non-English server names to English.");
   let isTranslatorActive = false;
 
@@ -1186,7 +1185,6 @@ class UnverifiedShortcutMenu {
       });
     }
   });
-  // ── END SERVER TRANSLATOR ─────────────────────────────────────────────
 
   const bottomRow = document.createElement("div");
   bottomRow.style.cssText = "display:flex;align-items:center;justify-content:center;gap:8px;margin-top:18px;";
