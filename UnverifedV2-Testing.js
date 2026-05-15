@@ -1047,6 +1047,7 @@ class UnverifiedShortcutMenu {
     { name: "Ping Counter",      desc: "Shows the latency between your client and the server." },
     { name: "FPS Booster",       desc: "Changes settings to improve FPS (refresh page)" },
     { name: "Anti-Afk",          desc: "Presses WASD on its own to avoid being kicked for being AFK" },
+    { name: "Keep Sprint",       desc: "Keeps you sprinting automatically." },
     { name: "Time Display",      desc: "Shows you the time so you dont have to exit full screen." },
     { name: "Music Player",      desc: "Plays music while you play." },
     { name: "Server Translator", desc: "Translates non-English server names to English." },
@@ -1380,6 +1381,22 @@ class UnverifiedShortcutMenu {
       document.querySelectorAll('[data-uv-translate]').forEach(el=>{delete el.dataset.uvTranslate;});
     }
   };
+
+  moduleCards["Keep Sprint"]._onToggle = isActive => {
+  if (isActive) {
+    moduleCards["Keep Sprint"]._handler = e => {
+      if (!['KeyW', 'KeyA', 'KeyS', 'KeyD'].includes(e.code)) return;
+      const t = document.activeElement || document.body;
+      t.dispatchEvent(new KeyboardEvent('keydown', { key: 'Shift', code: 'ShiftLeft', keyCode: 16, which: 16, location: 1, bubbles: true, cancelable: true }));
+    };
+    document.addEventListener('keydown', moduleCards["Keep Sprint"]._handler);
+  } else {
+    if (moduleCards["Keep Sprint"]._handler) {
+      document.removeEventListener('keydown', moduleCards["Keep Sprint"]._handler);
+      moduleCards["Keep Sprint"]._handler = null;
+    }
+  }
+};
 
   function openUI() {
     ui.style.display = "block";
