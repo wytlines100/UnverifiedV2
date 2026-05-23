@@ -1,7 +1,7 @@
 // ==UserScript==
 // @name         UnverifiedV2
 // @namespace    http://tampermonkey.net/
-// @version      2.0.5
+// @version      2.0.6
 // @description  Look at my license before you modify, I WILL DMCA you.
 // @icon         https://raw.githubusercontent.com/wytlines100/UnverifiedV2/refs/heads/main/logo.jpg
 // @license      Proprietary License
@@ -14,6 +14,7 @@
 // @grant        unsafeWindow
 // @connect      api.jamendo.com
 // @connect      prod-1.storage.jamendo.com
+// @connect      cdnjs.cloudflare.com
 // ==/UserScript==
 
 class LurkerChecker {
@@ -528,6 +529,7 @@ class UnverifiedShortcutMenu {
 
   const uv2NavDefs = [
     { page: 'main',       label: 'Modules',    icon: 'fa-th-large' },
+    { page: 'alt',        label: 'Custom Modules', icon: 'fa-code'},
     { page: 'gui',        label: 'Themes',     icon: 'fa-paint-brush' },
     { page: 'config',     label: 'Config',     icon: 'fa-cog' },
     { page: 'settings',   label: 'Settings',   icon: 'fa-sliders' },
@@ -565,7 +567,7 @@ class UnverifiedShortcutMenu {
     "font-size:9px;color:#333;letter-spacing:1.5px;text-transform:uppercase;",
     "font-family:MinibloxFont,sans-serif;text-align:center;"
   ].join("");
-  uv2SidebarFooter.textContent = "v2.0.5";
+  uv2SidebarFooter.textContent = "v2.0.6";
   uv2Sidebar.appendChild(uv2SidebarFooter);
 
   ui.appendChild(uv2Sidebar);
@@ -581,6 +583,152 @@ class UnverifiedShortcutMenu {
   uv2MainPage.id = "uv2-page-main-content";
   uv2MainPage.style.cssText = "flex:1;display:flex;flex-direction:column;overflow-y:auto;overflow-x:hidden;padding:22px 24px;";
   uv2ContentArea.appendChild(uv2MainPage);
+
+  const uv2CModulesPage = document.createElement("div");
+  uv2CModulesPage.id = "uv2-cmodules-content";
+  uv2CModulesPage.style.cssText = "flex:1;display:flex;flex-direction:column;overflow-y:auto;overflow-x:hidden;padding:22px 24px;gap:12px;";
+  uv2ContentArea.appendChild(uv2CModulesPage);
+
+  (function buildCustomModulesEditor(){
+    const header = document.createElement('h2'); header.textContent = 'Custom Modules'; header.style.cssText = 'font-size:24px;margin:0;color:#fff;font-family:MinibloxFont,sans-serif;';
+    uv2CModulesPage.appendChild(header);
+
+    const nameRow = document.createElement('div'); nameRow.style.cssText = 'display:flex;gap:8px;align-items:center;margin-top:8px;';
+    const nameInput = document.createElement('input'); nameInput.placeholder = 'Module Name';
+    Object.assign(nameInput.style, { padding:'8px 10px', background:'#191919', color:'#fff', border:'1px solid #333', borderRadius:'6px', flex:'0 0 260px', fontFamily:'MinibloxFont,sans-serif' });
+    nameRow.appendChild(nameInput);
+    const descInput = document.createElement('input'); descInput.placeholder = 'Short description of your module. (optional)';
+    Object.assign(descInput.style, { padding:'8px 10px', background:'#191919', color:'#ccc', border:'1px solid #333', borderRadius:'6px', flex:'1', fontFamily:'MinibloxFont,sans-serif' });
+    nameRow.appendChild(descInput);
+    uv2CModulesPage.appendChild(nameRow);
+
+    // --- CodeMirror 5 editor ---
+    // Inject CodeMirror CSS (One Dark theme)
+    const cmCSS = document.createElement('link');
+    cmCSS.rel = 'stylesheet';
+    cmCSS.href = 'https://cdnjs.cloudflare.com/ajax/libs/codemirror/5.65.16/codemirror.min.css';
+    document.head.appendChild(cmCSS);
+
+    const cmThemeCSS = document.createElement('style');
+    cmThemeCSS.textContent = `
+      .uv2-cm-wrap .CodeMirror {
+        height: 240px;
+        margin-top: 10px;
+        border: 1px solid #333;
+        border-radius: 8px;
+        font-family: Monaco, Consolas, monospace;
+        font-size: 13px;
+        line-height: 1.5;
+        background: #0d0d0d;
+        color: #e6e6e6;
+      }
+      .uv2-cm-wrap .CodeMirror-scroll { border-radius: 8px; }
+      .uv2-cm-wrap .CodeMirror-cursor { border-left: 2px solid #e6e6e6 !important; }
+      .uv2-cm-wrap .CodeMirror-selected { background: rgba(255,255,255,0.1) !important; }
+      .uv2-cm-wrap .CodeMirror-gutters { background: #111; border-right: 1px solid #2a2a2a; }
+      .uv2-cm-wrap .CodeMirror-linenumber { color: #444; }
+      /* One Dark–style token colours */
+      .uv2-cm-wrap .cm-keyword   { color: #c678dd; }
+      .uv2-cm-wrap .cm-def       { color: #61afef; }
+      .uv2-cm-wrap .cm-variable  { color: #e6e6e6; }
+      .uv2-cm-wrap .cm-variable-2{ color: #e06c75; }
+      .uv2-cm-wrap .cm-property  { color: #e6e6e6; }
+      .uv2-cm-wrap .cm-operator  { color: #56b6c2; }
+      .uv2-cm-wrap .cm-string    { color: #98c379; }
+      .uv2-cm-wrap .cm-string-2  { color: #98c379; }
+      .uv2-cm-wrap .cm-number    { color: #d19a66; }
+      .uv2-cm-wrap .cm-atom      { color: #d19a66; }
+      .uv2-cm-wrap .cm-comment   { color: #5c6370; font-style: italic; }
+      .uv2-cm-wrap .cm-tag       { color: #e06c75; }
+      .uv2-cm-wrap .cm-bracket   { color: #abb2bf; }
+      .uv2-cm-wrap .cm-builtin   { color: #e6c07b; }
+      .uv2-cm-wrap .cm-error     { color: #e06c75; }
+      .uv2-cm-wrap .CodeMirror-matchingbracket { color: #fff !important; background: rgba(255,255,255,0.15); border-radius: 2px; }
+    `;
+    document.head.appendChild(cmThemeCSS);
+
+    const cmWrap = document.createElement('div');
+    cmWrap.className = 'uv2-cm-wrap';
+    uv2CModulesPage.appendChild(cmWrap);
+
+    // Hidden textarea — CodeMirror replaces it; we read .getValue() instead
+    const editorTextarea = document.createElement('textarea');
+    editorTextarea.placeholder = 'Build your custom module here....';
+    cmWrap.appendChild(editorTextarea);
+
+    // Load CodeMirror JS then JS mode, then init
+    let cmInstance = null;
+    function getEditorValue() { return cmInstance ? cmInstance.getValue() : editorTextarea.value; }
+    function setEditorValue(v) { if (cmInstance) cmInstance.setValue(v); else editorTextarea.value = v; }
+
+    function initCM() {
+      if (typeof CodeMirror === 'undefined') return;
+      if (cmInstance) return;
+      cmInstance = CodeMirror.fromTextArea(editorTextarea, {
+        mode: 'javascript',
+        lineNumbers: true,
+        matchBrackets: true,
+        indentWithTabs: false,
+        indentUnit: 2,
+        tabSize: 2,
+        lineWrapping: true,
+        autofocus: false,
+        extraKeys: {
+          // Auto-insert space after {
+          '{': function(cm) {
+            cm.replaceSelection('{ ');
+          }
+        }
+      });
+    }
+
+    function loadScript(src, cb) {
+      if (document.querySelector('script[src="' + src + '"]')) { cb(); return; }
+      const s = document.createElement('script'); s.src = src;
+      s.onload = cb; s.onerror = cb;
+      document.head.appendChild(s);
+    }
+
+    const CM_BASE = 'https://cdnjs.cloudflare.com/ajax/libs/codemirror/5.65.16/';
+    loadScript(CM_BASE + 'codemirror.min.js', () => {
+      loadScript(CM_BASE + 'mode/javascript/javascript.min.js', () => {
+        loadScript(CM_BASE + 'addon/edit/matchbrackets.min.js', () => {
+          initCM();
+        });
+      });
+    });
+    // --- end CodeMirror editor ---
+
+    const btnRow = document.createElement('div'); btnRow.style.cssText = 'display:flex;gap:8px;margin-top:8px;';
+    const saveDraftBtn = document.createElement('button'); saveDraftBtn.textContent = 'Save Draft';
+    const loadDraftBtn = document.createElement('button'); loadDraftBtn.textContent = 'Load Draft';
+    const addModuleBtn = document.createElement('button'); addModuleBtn.textContent = 'Add Module';
+    [saveDraftBtn, loadDraftBtn, addModuleBtn].forEach(b => { b.style.cssText = 'padding:8px 12px;border-radius:6px;background:#222;border:1px solid #333;color:#fff;cursor:pointer;font-family:MinibloxFont,sans-serif;'; btnRow.appendChild(b); });
+    uv2CModulesPage.appendChild(btnRow);
+
+    saveDraftBtn.addEventListener('click', () => {
+      const draft = { name: nameInput.value || '', desc: descInput.value || '', code: getEditorValue() };
+      localStorage.setItem('uv2-cmod-draft', JSON.stringify(draft));
+      showNotification('Custom module draft saved', true);
+    });
+    loadDraftBtn.addEventListener('click', () => {
+      const d = localStorage.getItem('uv2-cmod-draft'); if (!d) { showNotification('No draft found', false); return; }
+      try { const draft = JSON.parse(d); nameInput.value = draft.name || ''; descInput.value = draft.desc || ''; setEditorValue(draft.code || ''); showNotification('Draft loaded', true); } catch(e){ showNotification('Failed to load draft', false); }
+    });
+    addModuleBtn.addEventListener('click', () => {
+      const name = nameInput.value.trim() || ('Custom Module ' + (Math.floor(Math.random()*9000)+1000));
+      const desc = descInput.value.trim() || 'Custom module';
+      const mc = createModule(name, desc);
+      mc._customCode = getEditorValue();
+      mc._isCustom = true;
+      if (mc._deleteBtn) { mc._deleteBtn.style.opacity = '1'; mc._deleteBtn.style.pointerEvents = 'auto'; }
+      // persist custom module code if saving enabled
+      const saved = JSON.parse(localStorage.getItem('uv2-custom-modules') || '[]');
+      saved.push({ name, desc, code: mc._customCode });
+      localStorage.setItem('uv2-custom-modules', JSON.stringify(saved));
+      showNotification(`${name} added`, true);
+    });
+  })();
 
   
   const uv2GUIPage = document.createElement("div");
@@ -600,7 +748,6 @@ class UnverifiedShortcutMenu {
   uv2SettingsPage.id = "uv2-page-settings-content";
   uv2SettingsPage.style.cssText = "flex:1;display:none;overflow:hidden;";
   uv2ContentArea.appendChild(uv2SettingsPage);
-
   
   const UV2_THEMES = [
     {
@@ -960,6 +1107,7 @@ class UnverifiedShortcutMenu {
     uv2GUIPage.style.display         = page === 'gui'          ? 'flex' : 'none';
     uv2ConfigPage.style.display      = page === 'config'       ? 'flex' : 'none';
     uv2SettingsPage.style.display    = page === 'settings'     ? 'flex' : 'none';
+    uv2CModulesPage.style.display    = page === 'alt'          ? 'flex' : 'none';
     Object.entries(uv2NavEls).forEach(([p, el]) => {
       const active = p === page;
       el.dataset.active       = active ? "1" : "0";
@@ -1091,7 +1239,7 @@ class UnverifiedShortcutMenu {
           </div>
           <div class="uv2-settings-page" id="uv2-page-about">
             <div class="uv2-section-title">Info</div>
-            <div class="uv2-setting-row"><div><div class="uv2-setting-label">Version</div><div class="uv2-setting-desc">2.0.5</div></div></div>
+            <div class="uv2-setting-row"><div><div class="uv2-setting-label">Version</div><div class="uv2-setting-desc">2.0.6</div></div></div>
             <div class="uv2-setting-row"><div><div class="uv2-setting-label">Authors</div><div class="uv2-setting-desc">wytlines, DeadFish7, andreypidd, jet, joudaALT!</div></div></div>
             <div class="uv2-setting-row"><div><div class="uv2-setting-label">License</div><div class="uv2-setting-desc">Proprietary, do not redistribute</div></div></div>
           </div>
@@ -1261,6 +1409,21 @@ class UnverifiedShortcutMenu {
   });
   languageDropdown.addEventListener("change", e => { currentLanguage = e.target.value; localStorage.setItem('unverified-language', currentLanguage); updateLanguage(); });
   
+
+  const MODULE_NAMES = {
+    AUTO_FULLSCREEN: "Auto Fullscreen",
+    KEYSTROKES:      "Keystrokes",
+    FPS_COUNTER:     "FPS Counter",
+    CPS_COUNTER:     "CPS Counter",
+    MUTE_CHAT:       "Mute Chat",
+    PING_COUNTER:    "Ping Counter",
+    FPS_BOOSTER:     "FPS Booster",
+    ANTI_AFK:        "Anti-Afk",
+    KEEP_SPRINT:     "Keep Sprint",
+    TIME_DISPLAY:    "Time Display",
+    MUSIC_PLAYER:    "Music Player",
+  };
+
   const gridContainer = document.createElement("div");
   gridContainer.style.display = "flex";
   gridContainer.style.flexDirection = "column";
@@ -1287,6 +1450,19 @@ class UnverifiedShortcutMenu {
       notification.style.transform = "translateX(100%)"; notification.style.opacity = "0";
       setTimeout(() => { notificationContainer.removeChild(notification); }, 500);
     }, 3000);
+  }
+
+  function showCustomNotification(message, success = true) {
+    if (!settings.showNotifications) return;
+    const notification = document.createElement('div');
+    notification.classList.add('other-notification');
+    notification.textContent = message;
+    const progressBar = document.createElement('div');
+    progressBar.classList.add('notification-progress');
+    notification.appendChild(progressBar);
+    notificationContainer.appendChild(notification);
+    setTimeout(() => { notification.style.transform = 'translateX(0)'; notification.style.opacity = '1'; }, 10);
+    setTimeout(() => { notification.style.transform = 'translateX(100%)'; notification.style.opacity = '0'; setTimeout(() => { notificationContainer.removeChild(notification); }, 500); }, 3000);
   }
   
   function showBindPopup(moduleElement, moduleName) {
@@ -1349,6 +1525,37 @@ class UnverifiedShortcutMenu {
     toggleWrap.appendChild(toggleKnob);
     moduleContainer.appendChild(toggleWrap);
 
+    const deleteBtn = document.createElement("button");
+    deleteBtn.textContent = "✕";
+    deleteBtn.title = "Delete module";
+    deleteBtn.style.cssText = [
+      "display:none;margin-left:10px;flex-shrink:0;",
+      "width:22px;height:22px;border-radius:5px;",
+      "background:rgba(231,76,60,0.15);border:1px solid rgba(231,76,60,0.35);",
+      "color:#e74c3c;font-size:12px;line-height:1;cursor:pointer;",
+      "transition:background 0.15s ease,border-color 0.15s ease;",
+      "display:flex;align-items:center;justify-content:center;padding:0;",
+      "opacity:0;pointer-events:none;"
+    ].join("");
+    deleteBtn.addEventListener("mouseenter", () => { deleteBtn.style.background = "rgba(231,76,60,0.35)"; deleteBtn.style.borderColor = "#e74c3c"; });
+    deleteBtn.addEventListener("mouseleave", () => { deleteBtn.style.background = "rgba(231,76,60,0.15)"; deleteBtn.style.borderColor = "rgba(231,76,60,0.35)"; });
+    deleteBtn.addEventListener("click", (e) => {
+      e.stopPropagation();
+      if (!moduleContainer._isCustom) return;
+      const saved = JSON.parse(localStorage.getItem('uv2-custom-modules') || '[]');
+      const updated = saved.filter(s => s.name !== name);
+      localStorage.setItem('uv2-custom-modules', JSON.stringify(updated));
+      localStorage.removeItem('uv2-module-' + name);
+      if (moduleContainer._uv2Active) {
+        try { const offFn = moduleContainer._customExports?.OnToggledOff; if (typeof offFn === 'function') offFn(); } catch(ex) {}
+        if (moduleContainer._customStop) { try { moduleContainer._customStop(); } catch(ex) {} moduleContainer._customStop = null; }
+      }
+      moduleContainer.remove();
+      showNotification(`${name} deleted`, false);
+    });
+    moduleContainer.appendChild(deleteBtn);
+    moduleContainer._deleteBtn = deleteBtn;
+
     const tooltip = document.createElement("div");
     tooltip.classList.add("module-tooltip");
     tooltip.textContent = translations[currentLanguage]?.tooltipBind || "right-click to bind";
@@ -1385,6 +1592,21 @@ class UnverifiedShortcutMenu {
           toggleWrap.style.background = `${guiPrimaryColor}40`; toggleWrap.style.borderColor = `${guiPrimaryColor}60`;
           toggleKnob.style.background = guiPrimaryColor; toggleKnob.style.transform = "translateX(16px)";
           if (!isRestoring) showNotification(`${name} was turned on`, true);
+          if (moduleContainer._isCustom && moduleContainer._customCode) {
+            try {
+              const unv = {
+                CustomNotification: (msg, success = true) => showCustomNotification(msg, success),
+                CustomNotifcation: (msg, success = true) => showCustomNotification(msg, success)
+              };
+              const wrapped = new Function('unv', moduleContainer._customCode + '\nreturn { OnToggledOn: typeof OnToggledOn === "function" ? OnToggledOn : null, OnToggledOff: typeof OnToggledOff === "function" ? OnToggledOff : null };');
+              moduleContainer._customExports = wrapped(unv) || {};
+              const onFn = moduleContainer._customExports.OnToggledOn;
+              if (typeof onFn === 'function') {
+                const res = onFn();
+                if (typeof res === 'function') moduleContainer._customStop = res;
+              }
+            } catch (err) { console.error('[uv2] custom module error', err); showCustomNotification(`${name} error`, false); }
+          }
         } else {
           moduleContainer.style.border = "1px solid rgba(255,255,255,0.07)";
           moduleContainer.style.background = "linear-gradient(135deg,#242424,#1c1c1c)";
@@ -1392,12 +1614,34 @@ class UnverifiedShortcutMenu {
           toggleWrap.style.background = "#252525"; toggleWrap.style.borderColor = "rgba(255,255,255,0.07)";
           toggleKnob.style.background = "#4a4a4a"; toggleKnob.style.transform = "translateX(0)";
           if (!isRestoring) showNotification(`${name} was turned off`, false);
+          if (moduleContainer._isCustom) {
+            try { const offFn = moduleContainer._customExports?.OnToggledOff; if (typeof offFn === 'function') offFn(); } catch (e) { console.error('[uv2] custom module OnToggledOff error', e); }
+            if (moduleContainer._customStop) { try { moduleContainer._customStop(); } catch (e) { console.error('[uv2] custom module cleanup error', e); } moduleContainer._customStop = null; }
+            moduleContainer._customExports = null;
         }
       }
     });
     moduleContainer.addEventListener("contextmenu", event => { event.preventDefault(); showBindPopup(moduleContainer, name); });
     return moduleContainer;
   }
+  (function restoreCustomModules(){
+    try {
+      const saved = JSON.parse(localStorage.getItem('uv2-custom-modules') || '[]');
+      if (Array.isArray(saved)) {
+        saved.forEach(s => {
+          try {
+            const mc = createModule(s.name || ('Custom Module ' + (Math.floor(Math.random()*9000)+1000)), s.desc || 'Custom module');
+            mc._isCustom = true;
+            mc._customCode = s.code || '';
+            if (mc._deleteBtn) { mc._deleteBtn.style.opacity = '1'; mc._deleteBtn.style.pointerEvents = 'auto'; }
+            if (settings.saving && localStorage.getItem('uv2-module-' + mc.dataset.moduleName) === 'true') {
+              mc.click();
+            }
+          } catch(e){ console.error('[uv2] restore custom module error', e); }
+        });
+      }
+    } catch(e) { console.error('[uv2] failed to parse saved custom modules', e); }
+  })();
   
   function updateLanguage() {
     title.textContent = translations[currentLanguage]?.title || "UnverifiedV2";
@@ -1417,7 +1661,7 @@ class UnverifiedShortcutMenu {
   }
   
   
-  const autoFullscreenModule = createModule("Auto Fullscreen", "Automatically toggles Fullscreen");
+  const autoFullscreenModule = createModule(MODULE_NAMES.AUTO_FULLSCREEN, "Automatically toggles Fullscreen");
   let isAutoFullscreenActive = false;
   autoFullscreenModule.addEventListener("click", () => {
     isAutoFullscreenActive = !isAutoFullscreenActive;
@@ -1428,7 +1672,7 @@ class UnverifiedShortcutMenu {
     }
   });
   
-  const keystrokesModule = createModule("Keystrokes", "Displays the keys you press in real-time.");
+  const keystrokesModule = createModule(MODULE_NAMES.KEYSTROKES, "Displays the keys you press in real-time.");
   let isKeystrokesActive = false;
   keystrokesModule.addEventListener("click", () => {
     isKeystrokesActive = !isKeystrokesActive;
@@ -1462,8 +1706,8 @@ class UnverifiedShortcutMenu {
     }
   });
   
-  createModule("FPS Counter", "Shows the frames per second (FPS) of the game.");
-  const fpsModule = [...gridContainer.children].find(c => c.dataset.moduleName === "FPS Counter");
+  createModule(MODULE_NAMES.FPS_COUNTER, "Shows the frames per second (FPS) of the game.");
+  const fpsModule = [...gridContainer.children].find(c => c.dataset.moduleName === MODULE_NAMES.FPS_COUNTER);
   let isFPSVisible = false, fpsElement = null, lastFrameTime = performance.now(), frameCount = 0;
   if (fpsModule) {
     fpsModule.addEventListener("click", () => {
@@ -1492,7 +1736,7 @@ class UnverifiedShortcutMenu {
     });
   }
   
-  const mouseModule = createModule("CPS Counter", "Counts how many times you click per second.");
+  const mouseModule = createModule(MODULE_NAMES.CPS_COUNTER, "Counts how many times you click per second.");
   let isMouseActive=false, clickTimes=[], mouseElement=null;
   const strokeColor="#FFFFFF", idleFill="rgba(255,255,255,0.1)", activeFill="rgba(255,255,255,0.8)";
   mouseModule.addEventListener("click", () => {
@@ -1522,7 +1766,7 @@ class UnverifiedShortcutMenu {
     }
   });
   
-  const muteChatModule = createModule("Mute Chat", "Prevents other players messages from appearing in chat.");
+  const muteChatModule = createModule(MODULE_NAMES.MUTE_CHAT, "Prevents other players messages from appearing in chat.");
   let isMuteChatActive=false, originalAddChat=null;
   muteChatModule.addEventListener("click", () => {
     isMuteChatActive = !isMuteChatActive;
@@ -1537,7 +1781,7 @@ class UnverifiedShortcutMenu {
     } catch(e) {}
   });
   
-  const pingModule = createModule("Ping Counter", "Shows the latency between your client and the server.");
+  const pingModule = createModule(MODULE_NAMES.PING_COUNTER, "Shows the latency between your client and the server.");
   let isPingActive=false, pingElement=null, pingInterval=null;
   pingModule.addEventListener("click", () => {
     isPingActive = !isPingActive;
@@ -1562,9 +1806,9 @@ class UnverifiedShortcutMenu {
     } else { if(pingElement){ pingElement.remove(); pingElement=null; } clearInterval(pingInterval); }
   });
   
-  createModule("FPS Booster", "Changes settings to improve FPS (refresh page)");
-  createModule("Anti-Afk", "Presses WASD on its own to avoid being kicked for being AFK");
-  const antiAfkModule = [...gridContainer.children].find(c => c.dataset.moduleName === "Anti-Afk");
+  createModule(MODULE_NAMES.FPS_BOOSTER, "Changes settings to improve FPS (refresh page)");
+  createModule(MODULE_NAMES.ANTI_AFK, "Presses WASD on its own to avoid being kicked for being AFK");
+  const antiAfkModule = [...gridContainer.children].find(c => c.dataset.moduleName === MODULE_NAMES.ANTI_AFK);
   let isAntiAfkActive=false, antiAfkInterval=null, antiAfkBox=null;
   if (antiAfkModule) {
     antiAfkModule.addEventListener("click", () => {
@@ -1592,8 +1836,8 @@ class UnverifiedShortcutMenu {
     });
   }
   
-  createModule("Keep Sprint", "Keeps you sprinting automatically.");
-  const keepSprintModule = [...gridContainer.children].find(c => c.dataset.moduleName === "Keep Sprint");
+  createModule(MODULE_NAMES.KEEP_SPRINT, "Keeps you sprinting automatically.");
+  const keepSprintModule = [...gridContainer.children].find(c => c.dataset.moduleName === MODULE_NAMES.KEEP_SPRINT);
   let keepSprintHandler = null;
   if (keepSprintModule) {
     keepSprintModule.addEventListener("click", () => {
@@ -1617,8 +1861,8 @@ class UnverifiedShortcutMenu {
     });
   }
   
-  createModule("Time Display", "Shows you the time so you dont have to exit full screen.");
-  const timeModule = [...gridContainer.children].find(c => c.dataset.moduleName === "Time Display");
+  createModule(MODULE_NAMES.TIME_DISPLAY, "Shows you the time so you dont have to exit full screen.");
+  const timeModule = [...gridContainer.children].find(c => c.dataset.moduleName === MODULE_NAMES.TIME_DISPLAY);
   let isTimeVisible=false, timeElement=null;
   if (timeModule) {
     timeModule.addEventListener("click", () => {
@@ -1637,8 +1881,8 @@ class UnverifiedShortcutMenu {
     });
   }
   
-  createModule("Music Player", "Plays music while you play.");
-  const musicModule = [...gridContainer.children].find(c => c.dataset.moduleName === "Music Player");
+  createModule(MODULE_NAMES.MUSIC_PLAYER, "Plays music while you play.");
+  const musicModule = [...gridContainer.children].find(c => c.dataset.moduleName === MODULE_NAMES.MUSIC_PLAYER);
   const JAMENDO_KEY = "0c5e9d9e";
   function jamendoSearch(query) {
     return new Promise((resolve, reject) => {
@@ -1892,7 +2136,7 @@ class UnverifiedShortcutMenu {
     afkGraceUntil = Date.now() + 2000;
     showAfkToast();
     if (settings.afkChat) sendAfkChatMessage("I'm currently AFK, This Is An Auto Message, Please Hold On.");
-    const afkMod = [...gridContainer.children].find(c => c.dataset.moduleName === 'Anti-Afk');
+    const afkMod = [...gridContainer.children].find(c => c.dataset.moduleName === MODULE_NAMES.ANTI_AFK);
     if (afkMod && !afkMod._uv2Active) {
       afkAntiAfkWasOff = true;
       afkMod.click();
@@ -1904,7 +2148,7 @@ class UnverifiedShortcutMenu {
     if (!afkTriggered) return;
     afkTriggered = false;
     if (afkAntiAfkWasOff) {
-      const afkMod = [...gridContainer.children].find(c => c.dataset.moduleName === 'Anti-Afk');
+      const afkMod = [...gridContainer.children].find(c => c.dataset.moduleName === MODULE_NAMES.ANTI_AFK);
       if (afkMod && afkMod._uv2Active) {
         afkMod.click();
         showReturnToast();
@@ -1933,7 +2177,7 @@ class UnverifiedShortcutMenu {
     if (afkTriggered) {
       afkTriggered = false;
       if (afkAntiAfkWasOff) {
-        const afkMod = [...gridContainer.children].find(c => c.dataset.moduleName === 'Anti-Afk');
+        const afkMod = [...gridContainer.children].find(c => c.dataset.moduleName === MODULE_NAMES.ANTI_AFK);
         if (afkMod && afkMod._uv2Active) afkMod.click();
         afkAntiAfkWasOff = false;
       }
