@@ -39,7 +39,7 @@ function OnToggledOn() {
 
 ## `OnToggledOff()`
 
-Runs when the user turns the module off. Disables the entire module.`OnToggledOn` 
+Runs when the user turns the module off. Disables the entire module.
 
 ```js
 let box;
