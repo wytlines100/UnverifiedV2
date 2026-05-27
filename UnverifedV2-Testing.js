@@ -1,7 +1,7 @@
 // ==UserScript==
 // @name         UnverifiedV2
 // @namespace    http://tampermonkey.net/
-// @version      2.0.6
+// @version      2.0.7
 // @description  Look at my license before you modify, I WILL DMCA you.
 // @icon         https://raw.githubusercontent.com/wytlines100/UnverifiedV2/refs/heads/main/logo.jpg
 // @license      Proprietary License
@@ -567,7 +567,7 @@ class UnverifiedShortcutMenu {
     "font-size:9px;color:#333;letter-spacing:1.5px;text-transform:uppercase;",
     "font-family:MinibloxFont,sans-serif;text-align:center;"
   ].join("");
-  uv2SidebarFooter.textContent = "v2.0.6";
+  uv2SidebarFooter.textContent = "v2.0.7";
   uv2Sidebar.appendChild(uv2SidebarFooter);
 
   ui.appendChild(uv2Sidebar);
@@ -1239,7 +1239,7 @@ class UnverifiedShortcutMenu {
           </div>
           <div class="uv2-settings-page" id="uv2-page-about">
             <div class="uv2-section-title">Info</div>
-            <div class="uv2-setting-row"><div><div class="uv2-setting-label">Version</div><div class="uv2-setting-desc">2.0.6</div></div></div>
+            <div class="uv2-setting-row"><div><div class="uv2-setting-label">Version</div><div class="uv2-setting-desc">2.0.7</div></div></div>
             <div class="uv2-setting-row"><div><div class="uv2-setting-label">Authors</div><div class="uv2-setting-desc">wytlines, DeadFish7, andreypidd, jet, joudaALT!</div></div></div>
             <div class="uv2-setting-row"><div><div class="uv2-setting-label">License</div><div class="uv2-setting-desc">Proprietary, do not redistribute</div></div></div>
           </div>
@@ -1615,7 +1615,7 @@ class UnverifiedShortcutMenu {
           toggleKnob.style.background = "#4a4a4a"; toggleKnob.style.transform = "translateX(0)";
           if (!isRestoring) showNotification(`${name} was turned off`, false);
           if (moduleContainer._isCustom) {
-            try { const offFn = moduleContainer._customExports?.OnToggledOff; if (typeof offFn === 'function') offFn(); } catch (e) { console.error('[uv2] custom module OnToggledOff error', e); }
+            try { const offFn = moduleContainer._customExports?.OnToggledOff; if (typeof offFn === 'function') offFn(); } catch (e) { console.error('[uv2] custom module OnToggledOff error', e); }}
             if (moduleContainer._customStop) { try { moduleContainer._customStop(); } catch (e) { console.error('[uv2] custom module cleanup error', e); } moduleContainer._customStop = null; }
             moduleContainer._customExports = null;
         }
