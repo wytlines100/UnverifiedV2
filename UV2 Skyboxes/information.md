@@ -5,6 +5,7 @@ This folder contains skybox textures extracted from resource packs to be ported 
 ## Contents
 
 * Skybox textures grouped by resource pack.
+* 6 images of the skybox (cubemap) which can be converted to a 3d skybox used in game
 
 ## Credits
 
