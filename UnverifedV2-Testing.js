@@ -527,6 +527,7 @@ class UnverifiedShortcutMenu {
   ].join("");
   uv2Sidebar.appendChild(uv2SidebarLogo);
 
+
   const uv2ProfileCard = document.createElement("div");
   uv2ProfileCard.id = "uv2-profile-card";
   uv2ProfileCard.style.cssText = "padding:10px;margin:10px;display:flex;flex-direction:column;align-items:center;gap:8px;";
@@ -544,23 +545,6 @@ class UnverifiedShortcutMenu {
   removeBtn.textContent = "✕";
   removeBtn.style.cssText = "position:absolute;top:-5px;right:-5px;background:#e74c3c;color:white;border:none;border-radius:50%;width:20px;height:20px;cursor:pointer;font-size:12px;opacity:0;transition:opacity 0.2s;";
   removeBtn.addEventListener("click", () => {
-    const now = Date.now();
-    const lastReset = parseInt(localStorage.getItem("uv2-profile-limit-reset")) || 0;
-    const timePassed = now - lastReset;
-    const tenMins = 10 * 60 * 1000;
-
-    if (timePassed > tenMins) {
-      localStorage.setItem("uv2-profile-changes", "0");
-      localStorage.setItem("uv2-profile-limit-reset", now);
-    }
-
-    const changes = parseInt(localStorage.getItem("uv2-profile-changes")) || 0;
-
-    if (changes >= 30) {
-      alert("Profile change limit reached! Try again in 10 minutes.");
-      return;
-    }
-
     const randomImages = [
       "https://i.pravatar.cc/150?img=" + Math.floor(Math.random()*70),
       "https://api.dicebear.com/7.x/avataaars/svg?seed=" + Math.random(),
@@ -570,10 +554,6 @@ class UnverifiedShortcutMenu {
     profileCircle.style.backgroundImage = `url('${randomImage}')`;
     profileCircle.textContent = "";
     localStorage.setItem("uv2-profile-image", randomImage);
-    localStorage.setItem("uv2-profile-changes", changes + 1);
-
-    const remaining = 30 - (changes + 1);
-    console.log(`Profile changes: ${changes + 1}/30 | Remaining: ${remaining}`);
   });
   profileWrapper.appendChild(removeBtn);
 
@@ -593,8 +573,6 @@ class UnverifiedShortcutMenu {
         profileCircle.style.backgroundImage = `url('${event.target.result}')`;
         profileCircle.textContent = "";
         localStorage.setItem("uv2-profile-image", event.target.result);
-        const changes = parseInt(localStorage.getItem("uv2-profile-changes")) || 0;
-        localStorage.setItem("uv2-profile-changes", changes + 1);
         console.log("Custom profile uploaded!");
       };
       reader.readAsDataURL(file);
@@ -658,7 +636,6 @@ class UnverifiedShortcutMenu {
     profileCircle.style.backgroundImage = `url('${savedImage}')`;
     profileCircle.textContent = "";
   }
-
   const uv2NavDefs = [
     { page: 'main',       label: 'Modules',    icon: 'fa-th-large' },
     { page: 'alt',        label: 'Custom Modules', icon: 'fa-code'},
