@@ -459,7 +459,7 @@ class UnverifiedShortcutMenu {
       50% { transform: scale(1.02); }
       100% { transform: scale(1); }
     }
-      
+
     select, .uv2-setting-row select, #gui-text-grad-dir, .config-select {
       background: #2a2a2a !important;
       color: white !important;
@@ -527,6 +527,138 @@ class UnverifiedShortcutMenu {
   ].join("");
   uv2Sidebar.appendChild(uv2SidebarLogo);
 
+  const uv2ProfileCard = document.createElement("div");
+  uv2ProfileCard.id = "uv2-profile-card";
+  uv2ProfileCard.style.cssText = "padding:10px;margin:10px;display:flex;flex-direction:column;align-items:center;gap:8px;";
+
+  const profileWrapper = document.createElement("div");
+  profileWrapper.style.cssText = "position:relative;width:50px;height:50px;";
+
+  const profileCircle = document.createElement("div");
+  profileCircle.id = "uv2-country-circle";
+  profileCircle.style.cssText = "width:50px;height:50px;border-radius:50%;border:2px solid #e74c3c;background-size:cover;background-position:center;display:flex;align-items:center;justify-content:center;font-size:20px;";
+  profileCircle.textContent = "🌍";
+  profileWrapper.appendChild(profileCircle);
+
+  const removeBtn = document.createElement("button");
+  removeBtn.textContent = "✕";
+  removeBtn.style.cssText = "position:absolute;top:-5px;right:-5px;background:#e74c3c;color:white;border:none;border-radius:50%;width:20px;height:20px;cursor:pointer;font-size:12px;opacity:0;transition:opacity 0.2s;";
+  removeBtn.addEventListener("click", () => {
+    const now = Date.now();
+    const lastReset = parseInt(localStorage.getItem("uv2-profile-limit-reset")) || 0;
+    const timePassed = now - lastReset;
+    const tenMins = 10 * 60 * 1000;
+
+    if (timePassed > tenMins) {
+      localStorage.setItem("uv2-profile-changes", "0");
+      localStorage.setItem("uv2-profile-limit-reset", now);
+    }
+
+    const changes = parseInt(localStorage.getItem("uv2-profile-changes")) || 0;
+
+    if (changes >= 30) {
+      alert("Profile change limit reached! Try again in 10 minutes.");
+      return;
+    }
+
+    const randomImages = [
+      "https://i.pravatar.cc/150?img=" + Math.floor(Math.random()*70),
+      "https://api.dicebear.com/7.x/avataaars/svg?seed=" + Math.random(),
+      "https://api.dicebear.com/7.x/pixel-art/svg?seed=" + Math.random()
+    ];
+    const randomImage = randomImages[Math.floor(Math.random()*randomImages.length)];
+    profileCircle.style.backgroundImage = `url('${randomImage}')`;
+    profileCircle.textContent = "";
+    localStorage.setItem("uv2-profile-image", randomImage);
+    localStorage.setItem("uv2-profile-changes", changes + 1);
+
+    const remaining = 30 - (changes + 1);
+    console.log(`Profile changes: ${changes + 1}/30 | Remaining: ${remaining}`);
+  });
+  profileWrapper.appendChild(removeBtn);
+
+  const uploadBtn = document.createElement("button");
+  uploadBtn.textContent = "⬆";
+  uploadBtn.style.cssText = "position:absolute;top:-5px;left:-5px;background:#4CAF50;color:white;border:none;border-radius:50%;width:20px;height:20px;cursor:pointer;font-size:12px;opacity:0;transition:opacity 0.2s;";
+
+  const fileInput = document.createElement("input");
+  fileInput.type = "file";
+  fileInput.accept = "image/*";
+  fileInput.style.cssText = "display:none;";
+  fileInput.addEventListener("change", (e) => {
+    const file = e.target.files[0];
+    if (file) {
+      const reader = new FileReader();
+      reader.onload = (event) => {
+        profileCircle.style.backgroundImage = `url('${event.target.result}')`;
+        profileCircle.textContent = "";
+        localStorage.setItem("uv2-profile-image", event.target.result);
+        const changes = parseInt(localStorage.getItem("uv2-profile-changes")) || 0;
+        localStorage.setItem("uv2-profile-changes", changes + 1);
+        console.log("Custom profile uploaded!");
+      };
+      reader.readAsDataURL(file);
+    }
+  });
+  document.body.appendChild(fileInput);
+
+  uploadBtn.addEventListener("click", () => {
+    fileInput.click();
+  });
+  profileWrapper.appendChild(uploadBtn);
+
+  const resetBtn = document.createElement("button");
+  resetBtn.textContent = "↻";
+  resetBtn.style.cssText = "position:absolute;bottom:-5px;right:-5px;background:#888;color:white;border:none;border-radius:50%;width:20px;height:20px;cursor:pointer;font-size:12px;opacity:0;transition:opacity 0.2s;";
+  resetBtn.addEventListener("click", () => {
+    fetch('https://ipapi.co/json/').then(r => r.json()).then(d => {
+      const countryCode = d.country_code;
+      profileCircle.style.backgroundImage = `url('https://flagcdn.com/256x192/${countryCode.toLowerCase()}.png')`;
+      profileCircle.textContent = "";
+      localStorage.removeItem("uv2-profile-image");
+    });
+  });
+  profileWrapper.appendChild(resetBtn);
+
+  profileWrapper.style.cursor = "pointer";
+  profileWrapper.addEventListener("mouseenter", () => {
+    removeBtn.style.opacity = "1";
+    uploadBtn.style.opacity = "1";
+    resetBtn.style.opacity = "1";
+  });
+  profileWrapper.addEventListener("mouseleave", () => {
+    removeBtn.style.opacity = "0";
+    uploadBtn.style.opacity = "0";
+    resetBtn.style.opacity = "0";
+  });
+
+  uv2ProfileCard.appendChild(profileWrapper);
+
+  const userDiv = document.createElement("div");
+  userDiv.textContent = "User" + Math.floor(Math.random()*100000);
+  userDiv.style.cssText = "font-size:11px;color:#888;";
+  uv2ProfileCard.appendChild(userDiv);
+
+  uv2Sidebar.appendChild(uv2ProfileCard);
+
+  fetch('https://ipapi.co/json/').then(r => r.json()).then(d => {
+    const savedImage = localStorage.getItem("uv2-profile-image");
+    if (savedImage) {
+      profileCircle.style.backgroundImage = `url('${savedImage}')`;
+      profileCircle.textContent = "";
+    } else {
+      const countryCode = d.country_code;
+      profileCircle.style.backgroundImage = `url('https://flagcdn.com/256x192/${countryCode.toLowerCase()}.png')`;
+      profileCircle.textContent = "";
+    }
+  }).catch(() => {});
+
+  const savedImage = localStorage.getItem("uv2-profile-image");
+  if (savedImage) {
+    profileCircle.style.backgroundImage = `url('${savedImage}')`;
+    profileCircle.textContent = "";
+  }
+
   const uv2NavDefs = [
     { page: 'main',       label: 'Modules',    icon: 'fa-th-large' },
     { page: 'alt',        label: 'Custom Modules', icon: 'fa-code'},
@@ -560,7 +692,7 @@ class UnverifiedShortcutMenu {
   });
   uv2Sidebar.appendChild(uv2SidebarNav);
 
-  
+
   const uv2SidebarFooter = document.createElement("div");
   uv2SidebarFooter.style.cssText = [
     "padding:12px 14px;border-top:1px solid rgba(255,255,255,0.05);",
@@ -573,12 +705,12 @@ class UnverifiedShortcutMenu {
   ui.appendChild(uv2Sidebar);
 
 
-  
+
   const uv2ContentArea = document.createElement("div");
   uv2ContentArea.style.cssText = "flex:1;display:flex;flex-direction:column;overflow:hidden;min-width:0;";
   ui.appendChild(uv2ContentArea);
 
-  
+
   const uv2MainPage = document.createElement("div");
   uv2MainPage.id = "uv2-page-main-content";
   uv2MainPage.style.cssText = "flex:1;display:flex;flex-direction:column;overflow-y:auto;overflow-x:hidden;padding:22px 24px;";
@@ -730,25 +862,25 @@ class UnverifiedShortcutMenu {
     });
   })();
 
-  
+
   const uv2GUIPage = document.createElement("div");
   uv2GUIPage.id = "uv2-page-gui-content";
   uv2GUIPage.style.cssText = "flex:1;display:none;flex-direction:column;overflow-y:auto;overflow-x:hidden;padding:22px 24px;";
   uv2ContentArea.appendChild(uv2GUIPage);
 
 
-  
+
   const uv2ConfigPage = document.createElement("div");
   uv2ConfigPage.id = "uv2-page-config-content";
   uv2ConfigPage.style.cssText = "flex:1;display:none;flex-direction:column;overflow-y:auto;overflow-x:hidden;padding:22px 24px;";
   uv2ContentArea.appendChild(uv2ConfigPage);
 
-  
+
   const uv2SettingsPage = document.createElement("div");
   uv2SettingsPage.id = "uv2-page-settings-content";
   uv2SettingsPage.style.cssText = "flex:1;display:none;overflow:hidden;";
   uv2ContentArea.appendChild(uv2SettingsPage);
-  
+
   const UV2_THEMES = [
     {
       id:         'frost',
@@ -975,7 +1107,7 @@ class UnverifiedShortcutMenu {
           moduleBindings: moduleBindings,
           moduleStates: {},
         };
-        
+
         [...gridContainer.children].forEach(mc => {
           const name = mc.dataset.moduleName;
           if (name) config.moduleStates[name] = mc._uv2Active;
@@ -1005,7 +1137,7 @@ class UnverifiedShortcutMenu {
         reader.onload = (event) => {
           try {
             const config = JSON.parse(event.target.result);
-            
+
             if (config.gui) {
               if (config.gui.themeId) {
                 applyTheme(config.gui.themeId);
@@ -1026,7 +1158,7 @@ class UnverifiedShortcutMenu {
                 buildGUIPage();
               }
             }
-            
+
             if (config.settings) {
               if (typeof config.settings.moduleSounds === 'boolean') {
                 settings.moduleSounds = config.settings.moduleSounds;
@@ -1071,11 +1203,11 @@ class UnverifiedShortcutMenu {
                 if (afkDelayInput) afkDelayInput.value = afkDelay;
               }
             }
-            
+
             if (config.moduleBindings) {
               moduleBindings = config.moduleBindings;
             }
-            
+
             setTimeout(() => {
               if (config.moduleStates) {
                 isRestoring = true;
@@ -1101,7 +1233,7 @@ class UnverifiedShortcutMenu {
     }
   }
 
-  
+
   function switchUv2Page(page) {
     uv2MainPage.style.display        = page === 'main'         ? 'flex' : 'none';
     uv2GUIPage.style.display         = page === 'gui'          ? 'flex' : 'none';
@@ -1119,12 +1251,12 @@ class UnverifiedShortcutMenu {
     });
   }
 
-  
-  
+
+
   const headerRow = document.createElement("div");
   headerRow.style.cssText = "display:flex;align-items:center;justify-content:center;margin-bottom:18px;padding-bottom:16px;border-bottom:1px solid rgba(255,255,255,0.07);position:relative;";
   uv2MainPage.appendChild(headerRow);
-  
+
   const title = document.createElement("h2");
   title.textContent = "UnverifiedV2";
   title.style.fontSize = "30px"; title.style.color = guiPrimaryColor;
@@ -1134,13 +1266,13 @@ class UnverifiedShortcutMenu {
   title.style.cursor = "pointer";
   title.style.userSelect = "none";
   headerRow.appendChild(title);
-  
-  
+
+
   const languageDropdown = document.createElement("select");
   languageDropdown.style.cssText = `background:${guiBackgroundColor};color:${guiTextColor};border:1px solid ${guiPrimaryColor};border-radius:8px;padding:8px 14px;font-size:13px;cursor:pointer;font-family:'MinibloxFont',sans-serif;position:absolute;right:0;top:50%;transform:translateY(-50%);`;
   headerRow.appendChild(languageDropdown);
-  
-  
+
+
   let titleClickCount = 0;
   let titleEggCycle = 0;
   let titleEggBusy = false;
@@ -1188,7 +1320,7 @@ class UnverifiedShortcutMenu {
     }
   });
 
-  
+
   const settingsOverlay = document.createElement("div");
   settingsOverlay.id = "uv2-settings-overlay";
   settingsOverlay.innerHTML = `
@@ -1248,8 +1380,8 @@ class UnverifiedShortcutMenu {
     </div>
   `;
   document.body.appendChild(settingsOverlay);
-  
-  
+
+
   const uv2InlineSettings = settingsOverlay.querySelector('#uv2-settings-panel');
   if (uv2InlineSettings) {
     uv2InlineSettings.style.width      = "100%";
@@ -1263,15 +1395,15 @@ class UnverifiedShortcutMenu {
   settingsOverlay.style.display        = "none";
   settingsOverlay.style.pointerEvents  = "none";
 
-  
+
   buildGUIPage();
   buildConfigPage();
   applyGUIStyles();
 
-  
+
   switchUv2Page('main');
 
-  
+
   ['fullscreenchange','webkitfullscreenchange','mozfullscreenchange'].forEach(evt => {
     document.addEventListener(evt, () => {
       const isFS = document.fullscreenElement || document.webkitFullscreenElement || document.mozFullScreenElement;
@@ -1279,7 +1411,7 @@ class UnverifiedShortcutMenu {
     });
   });
 
-  
+
   document.querySelector("#uv2-settings-close")?.addEventListener("click", () => switchUv2Page('main'));
   document.querySelector("#uv2-toggle-sounds")?.addEventListener("change", function() {
     settings.moduleSounds = this.checked;
@@ -1323,7 +1455,7 @@ class UnverifiedShortcutMenu {
   let musicIsPlaying = false;
   let isMusicPlayerActive = false;
   let isRestoring = false;
-  
+
   const settings = {
     moduleSounds:      localStorage.getItem('uv2-setting-sounds')    !== 'false',
     showNotifications: localStorage.getItem('uv2-setting-notifs')    !== 'false',
@@ -1332,8 +1464,8 @@ class UnverifiedShortcutMenu {
     autoAfk:           localStorage.getItem('uv2-setting-autoafk')  === 'true',
     afkChat:           localStorage.getItem('uv2-setting-afkchat')  !== 'false',
   };
-  
-  
+
+
   const soundsToggle = document.querySelector("#uv2-toggle-sounds");
   if (soundsToggle) soundsToggle.checked = settings.moduleSounds;
   const notifsToggle = document.querySelector("#uv2-toggle-notifs");
@@ -1393,13 +1525,13 @@ class UnverifiedShortcutMenu {
     } catch(e) {}
   }
 
-  
+
   const translations = {
     en: { languageName:"English", title:"UnverifiedV2", autoFullscreen:"Auto Fullscreen", autoFullscreenDesc:"Automatically toggles Fullscreen", keystrokes:"Keystrokes", keystrokesDesc:"Displays the keys you press in real-time.", fpsCounter:"FPS Counter", fpsCounterDesc:"Shows the frames per second (FPS) of the game.", cpsCounter:"CPS Counter", cpsCounterDesc:"Counts how many times you click per second.", muteChat:"Mute Chat", muteChatDesc:"Prevents other players messages from appearing in chat.", pingCounter:"Ping Counter", pingCounterDesc:"Shows the latency between your client and the server.", fpsBooster:"FPS Booster", fpsBoosterDesc:"Changes settings to improve FPS (refresh page)", antiAfk:"Anti-Afk", antiAfkDesc:"Presses WASD on its own to avoid being kicked for being AFK", keepSprint:"Keep Sprint", keepSprintDesc:"Keeps you sprinting automatically.", timeDisplay:"Time Display", timeDisplayDesc:"Shows you the time so you dont have to exit full screen.", musicPlayer:"Music Player", musicPlayerDesc:"Plays music while you play.", closeUI:"Close UI", turnedOn:"was turned on", turnedOff:"was turned off", tooltipBind:"right-click to bind" },
     es: { languageName:"Espanol", title:"UnverifiedV2", autoFullscreen:"Pantalla Completa Automática", autoFullscreenDesc:"Activa/desactiva automáticamente la pantalla completa", keystrokes:"Teclas", keystrokesDesc:"Muestra las teclas que presionas en tiempo real.", fpsCounter:"Contador de FPS", fpsCounterDesc:"Muestra los fotogramas por segundo (FPS) del juego.", cpsCounter:"Contador de CPS", cpsCounterDesc:"Cuenta cuántas veces haces clic por segundo.", muteChat:"Silenciar Chat", muteChatDesc:"Evita que aparezcan mensajes de otros jugadores en el chat.", pingCounter:"Contador de Ping", pingCounterDesc:"Muestra la latencia entre tu cliente y el servidor.", fpsBooster:"Mejorador de FPS", fpsBoosterDesc:"Cambia la configuración para mejorar los FPS (actualiza la página)", antiAfk:"Anti-Inactividad", antiAfkDesc:"Presiona WASD automáticamente para evitar ser expulsado por inactividad", keepSprint:"Mantener Sprint", keepSprintDesc:"Te mantiene corriendo automáticamente.", timeDisplay:"Mostrar Hora", timeDisplayDesc:"Te muestra la hora para que no tengas que salir de pantalla completa.", musicPlayer:"Reproductor de Música", musicPlayerDesc:"Reproduce música mientras juegas.", closeUI:"Cerrar UI", turnedOn:"fue activado", turnedOff:"fue desactivado", tooltipBind:"clic derecho para vincular" },
-    
+
   };
-  
+
   let currentLanguage = localStorage.getItem('unverified-language') || 'en';
   Object.keys(translations).forEach(langCode => {
     const option = document.createElement("option");
@@ -1408,7 +1540,7 @@ class UnverifiedShortcutMenu {
     languageDropdown.appendChild(option);
   });
   languageDropdown.addEventListener("change", e => { currentLanguage = e.target.value; localStorage.setItem('unverified-language', currentLanguage); updateLanguage(); });
-  
+
 
   const MODULE_NAMES = {
     AUTO_FULLSCREEN: "Auto Fullscreen",
@@ -1430,11 +1562,11 @@ class UnverifiedShortcutMenu {
   gridContainer.style.gap = "8px";
   gridContainer.style.marginTop = "16px";
   uv2MainPage.appendChild(gridContainer);
-  
+
   const notificationContainer = document.createElement("div");
   notificationContainer.style.cssText = "position:fixed;bottom:1in;right:20px;z-index:10000;display:flex;flex-direction:column-reverse;align-items:flex-end;";
   document.body.appendChild(notificationContainer);
-  
+
   function showNotification(message, isOn) {
     if (!settings.showNotifications) return;
     const notification = document.createElement("div");
@@ -1464,7 +1596,7 @@ class UnverifiedShortcutMenu {
     setTimeout(() => { notification.style.transform = 'translateX(0)'; notification.style.opacity = '1'; }, 10);
     setTimeout(() => { notification.style.transform = 'translateX(100%)'; notification.style.opacity = '0'; setTimeout(() => { notificationContainer.removeChild(notification); }, 500); }, 3000);
   }
-  
+
   function showBindPopup(moduleElement, moduleName) {
     const existingPopup = document.querySelector('.bind-popup');
     if (existingPopup) existingPopup.remove();
@@ -1487,7 +1619,7 @@ class UnverifiedShortcutMenu {
     popup.style.left = `${rect.left + window.scrollX}px`;
     popup.style.display = "block"; isBinding = true;
   }
-  
+
   function createModule(name, description) {
     const moduleContainer = document.createElement("div");
     moduleContainer.style.cssText = [
@@ -1642,7 +1774,7 @@ class UnverifiedShortcutMenu {
       }
     } catch(e) { console.error('[uv2] failed to parse saved custom modules', e); }
   })();
-  
+
   function updateLanguage() {
     title.textContent = translations[currentLanguage]?.title || "UnverifiedV2";
     closeButton.textContent = translations[currentLanguage]?.closeUI || "Close UI";
@@ -1659,8 +1791,8 @@ class UnverifiedShortcutMenu {
       }
     }
   }
-  
-  
+
+
   const autoFullscreenModule = createModule(MODULE_NAMES.AUTO_FULLSCREEN, "Automatically toggles Fullscreen");
   let isAutoFullscreenActive = false;
   autoFullscreenModule.addEventListener("click", () => {
@@ -1671,7 +1803,7 @@ class UnverifiedShortcutMenu {
       (document.exitFullscreen || document.mozCancelFullScreen || document.webkitExitFullscreen || document.msExitFullscreen || (() => {})).call(document);
     }
   });
-  
+
   const keystrokesModule = createModule(MODULE_NAMES.KEYSTROKES, "Displays the keys you press in real-time.");
   let isKeystrokesActive = false;
   keystrokesModule.addEventListener("click", () => {
@@ -1705,7 +1837,7 @@ class UnverifiedShortcutMenu {
       const kc = document.getElementById('keystrokes-container'); if (kc) kc.remove();
     }
   });
-  
+
   createModule(MODULE_NAMES.FPS_COUNTER, "Shows the frames per second (FPS) of the game.");
   const fpsModule = [...gridContainer.children].find(c => c.dataset.moduleName === MODULE_NAMES.FPS_COUNTER);
   let isFPSVisible = false, fpsElement = null, lastFrameTime = performance.now(), frameCount = 0;
@@ -1735,7 +1867,7 @@ class UnverifiedShortcutMenu {
       } else if (fpsElement) { fpsElement.remove(); fpsElement = null; }
     });
   }
-  
+
   const mouseModule = createModule(MODULE_NAMES.CPS_COUNTER, "Counts how many times you click per second.");
   let isMouseActive=false, clickTimes=[], mouseElement=null;
   const strokeColor="#FFFFFF", idleFill="rgba(255,255,255,0.1)", activeFill="rgba(255,255,255,0.8)";
@@ -1765,7 +1897,7 @@ class UnverifiedShortcutMenu {
       if (mouseModule._handler) { document.removeEventListener("mousedown",mouseModule._handler); document.removeEventListener("mouseup",mouseModule._handler); }
     }
   });
-  
+
   const muteChatModule = createModule(MODULE_NAMES.MUTE_CHAT, "Prevents other players messages from appearing in chat.");
   let isMuteChatActive=false, originalAddChat=null;
   muteChatModule.addEventListener("click", () => {
@@ -1780,7 +1912,7 @@ class UnverifiedShortcutMenu {
       }
     } catch(e) {}
   });
-  
+
   const pingModule = createModule(MODULE_NAMES.PING_COUNTER, "Shows the latency between your client and the server.");
   let isPingActive=false, pingElement=null, pingInterval=null;
   pingModule.addEventListener("click", () => {
@@ -1805,7 +1937,7 @@ class UnverifiedShortcutMenu {
       updatePing(); pingInterval = setInterval(updatePing, 1000);
     } else { if(pingElement){ pingElement.remove(); pingElement=null; } clearInterval(pingInterval); }
   });
-  
+
   createModule(MODULE_NAMES.FPS_BOOSTER, "Changes settings to improve FPS (refresh page)");
   createModule(MODULE_NAMES.ANTI_AFK, "Presses WASD on its own to avoid being kicked for being AFK");
   const antiAfkModule = [...gridContainer.children].find(c => c.dataset.moduleName === MODULE_NAMES.ANTI_AFK);
@@ -1835,7 +1967,7 @@ class UnverifiedShortcutMenu {
       } else { if(antiAfkInterval) clearInterval(antiAfkInterval); if(antiAfkBox) antiAfkBox.remove(); }
     });
   }
-  
+
   createModule(MODULE_NAMES.KEEP_SPRINT, "Keeps you sprinting automatically.");
   const keepSprintModule = [...gridContainer.children].find(c => c.dataset.moduleName === MODULE_NAMES.KEEP_SPRINT);
   let keepSprintHandler = null;
@@ -1860,7 +1992,7 @@ class UnverifiedShortcutMenu {
       }
     });
   }
-  
+
   createModule(MODULE_NAMES.TIME_DISPLAY, "Shows you the time so you dont have to exit full screen.");
   const timeModule = [...gridContainer.children].find(c => c.dataset.moduleName === MODULE_NAMES.TIME_DISPLAY);
   let isTimeVisible=false, timeElement=null;
@@ -1880,7 +2012,7 @@ class UnverifiedShortcutMenu {
       } else if (timeElement) { clearInterval(timeElement._interval); timeElement.remove(); timeElement=null; }
     });
   }
-  
+
   createModule(MODULE_NAMES.MUSIC_PLAYER, "Plays music while you play.");
   const musicModule = [...gridContainer.children].find(c => c.dataset.moduleName === MODULE_NAMES.MUSIC_PLAYER);
   const JAMENDO_KEY = "0c5e9d9e";
@@ -1978,7 +2110,7 @@ class UnverifiedShortcutMenu {
       }
     });
   }
-  
+
   const bottomRow = document.createElement("div");
   bottomRow.style.cssText = "display:flex;align-items:center;justify-content:center;gap:8px;margin-top:18px;";
   uv2MainPage.appendChild(bottomRow);
@@ -1986,7 +2118,7 @@ class UnverifiedShortcutMenu {
   closeButton.textContent = "Close UI";
   closeButton.style.cssText = `background:${guiPrimaryColor};color:white;border:none;border-radius:6px;padding:10px 30px;font-size:15px;cursor:pointer;font-family:'MinibloxFont',sans-serif;letter-spacing:0.5px;box-shadow:0 2px 14px ${guiPrimaryColor}73;transition:all 0.2s ease;`;
   bottomRow.appendChild(closeButton);
-  
+
   function openUI() {
     ui.style.display = "flex";
     if (musicPlayerEl) musicPlayerEl.style.display = "block";
@@ -2037,7 +2169,7 @@ class UnverifiedShortcutMenu {
     }
   });
   closeButton.addEventListener("click", () => { closeUI(); uiVisible = false; });
-  
+
   function restoreModuleStates() {
     if (!settings.saving) return;
     isRestoring = true;
@@ -2058,7 +2190,7 @@ class UnverifiedShortcutMenu {
     });
   }
   setTimeout(restoreModuleStates, 3400);
-  
+
   let afkTriggered = false;
   let afkAntiAfkWasOff = false;
   let afkGraceUntil = 0;
