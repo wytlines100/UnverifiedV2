@@ -1,7 +1,7 @@
 // ==UserScript==
 // @name         UnverifiedV2
 // @namespace    http://tampermonkey.net/
-// @version      2.0.7
+// @version      2.0.9
 // @description  Look at my license before you modify, I WILL DMCA you.
 // @icon         https://raw.githubusercontent.com/wytlines100/UnverifiedV2/refs/heads/main/logo.jpg
 // @license      Proprietary License
@@ -676,7 +676,7 @@ class UnverifiedShortcutMenu {
     "font-size:9px;color:#333;letter-spacing:1.5px;text-transform:uppercase;",
     "font-family:MinibloxFont,sans-serif;text-align:center;"
   ].join("");
-  uv2SidebarFooter.textContent = "v2.0.7";
+  uv2SidebarFooter.textContent = "v2.0.9";
   uv2Sidebar.appendChild(uv2SidebarFooter);
 
   ui.appendChild(uv2Sidebar);
@@ -1348,7 +1348,7 @@ class UnverifiedShortcutMenu {
           </div>
           <div class="uv2-settings-page" id="uv2-page-about">
             <div class="uv2-section-title">Info</div>
-            <div class="uv2-setting-row"><div><div class="uv2-setting-label">Version</div><div class="uv2-setting-desc">2.0.7</div></div></div>
+            <div class="uv2-setting-row"><div><div class="uv2-setting-label">Version</div><div class="uv2-setting-desc">2.0.9</div></div></div>
             <div class="uv2-setting-row"><div><div class="uv2-setting-label">Authors</div><div class="uv2-setting-desc">wytlines, DeadFish7, andreypidd, jet, joudaALT, TrustIsOver</div></div></div>
             <div class="uv2-setting-row"><div><div class="uv2-setting-label">License</div><div class="uv2-setting-desc">Proprietary, do not redistribute</div></div></div>
           </div>
@@ -1504,8 +1504,8 @@ class UnverifiedShortcutMenu {
 
 
   const translations = {
-    en: { languageName:"English", title:"UnverifiedV2", autoFullscreen:"Auto Fullscreen", autoFullscreenDesc:"Automatically toggles Fullscreen", keystrokes:"Keystrokes", keystrokesDesc:"Displays the keys you press in real-time.", fpsCounter:"FPS Counter", fpsCounterDesc:"Shows the frames per second (FPS) of the game.", cpsCounter:"CPS Counter", cpsCounterDesc:"Counts how many times you click per second.", muteChat:"Mute Chat", muteChatDesc:"Prevents other players messages from appearing in chat.", pingCounter:"Ping Counter", pingCounterDesc:"Shows the latency between your client and the server.", fpsBooster:"FPS Booster", fpsBoosterDesc:"Changes settings to improve FPS (refresh page)", antiAfk:"Anti-Afk", antiAfkDesc:"Presses WASD on its own to avoid being kicked for being AFK", keepSprint:"Keep Sprint", keepSprintDesc:"Keeps you sprinting automatically.", timeDisplay:"Time Display", timeDisplayDesc:"Shows you the time so you dont have to exit full screen.", musicPlayer:"Music Player", musicPlayerDesc:"Plays music while you play.", closeUI:"Close UI", turnedOn:"was turned on", turnedOff:"was turned off", tooltipBind:"right-click to bind" },
-    es: { languageName:"Espanol", title:"UnverifiedV2", autoFullscreen:"Pantalla Completa Automática", autoFullscreenDesc:"Activa/desactiva automáticamente la pantalla completa", keystrokes:"Teclas", keystrokesDesc:"Muestra las teclas que presionas en tiempo real.", fpsCounter:"Contador de FPS", fpsCounterDesc:"Muestra los fotogramas por segundo (FPS) del juego.", cpsCounter:"Contador de CPS", cpsCounterDesc:"Cuenta cuántas veces haces clic por segundo.", muteChat:"Silenciar Chat", muteChatDesc:"Evita que aparezcan mensajes de otros jugadores en el chat.", pingCounter:"Contador de Ping", pingCounterDesc:"Muestra la latencia entre tu cliente y el servidor.", fpsBooster:"Mejorador de FPS", fpsBoosterDesc:"Cambia la configuración para mejorar los FPS (actualiza la página)", antiAfk:"Anti-Inactividad", antiAfkDesc:"Presiona WASD automáticamente para evitar ser expulsado por inactividad", keepSprint:"Mantener Sprint", keepSprintDesc:"Te mantiene corriendo automáticamente.", timeDisplay:"Mostrar Hora", timeDisplayDesc:"Te muestra la hora para que no tengas que salir de pantalla completa.", musicPlayer:"Reproductor de Música", musicPlayerDesc:"Reproduce música mientras juegas.", closeUI:"Cerrar UI", turnedOn:"fue activado", turnedOff:"fue desactivado", tooltipBind:"clic derecho para vincular" },
+    en: { languageName:"English", title:"UnverifiedV2", autoFullscreen:"Auto Fullscreen", autoFullscreenDesc:"Automatically toggles Fullscreen", keystrokes:"Keystrokes", keystrokesDesc:"Displays the keys you press in real-time.", muteChat:"Mute Chat", muteChatDesc:"Prevents other players messages from appearing in chat.", antiAfk:"Anti-Afk", antiAfkDesc:"Presses WASD on its own to avoid being kicked for being AFK", keepSprint:"Keep Sprint", keepSprintDesc:"Keeps you sprinting automatically.", timeDisplay:"Time Display", timeDisplayDesc:"Shows you the time so you dont have to exit full screen.", musicPlayer:"Music Player", musicPlayerDesc:"Plays music while you play.", closeUI:"Close UI", turnedOn:"was turned on", turnedOff:"was turned off", tooltipBind:"right-click to bind" },
+    es: { languageName:"Espanol", title:"UnverifiedV2", autoFullscreen:"Pantalla Completa Automática", autoFullscreenDesc:"Activa/desactiva automáticamente la pantalla completa", keystrokes:"Teclas", keystrokesDesc:"Muestra las teclas que presionas en tiempo real.", muteChat:"Silenciar Chat", muteChatDesc:"Evita que aparezcan mensajes de otros jugadores en el chat.", antiAfk:"Anti-Inactividad", antiAfkDesc:"Presiona WASD automáticamente para evitar ser expulsado por inactividad", keepSprint:"Mantener Sprint", keepSprintDesc:"Te mantiene corriendo automáticamente.", timeDisplay:"Mostrar Hora", timeDisplayDesc:"Te muestra la hora para que no tengas que salir de pantalla completa.", musicPlayer:"Reproductor de Música", musicPlayerDesc:"Reproduce música mientras juegas.", closeUI:"Cerrar UI", turnedOn:"fue activado", turnedOff:"fue desactivado", tooltipBind:"clic derecho para vincular" },
 
   };
 
@@ -1522,11 +1522,7 @@ class UnverifiedShortcutMenu {
   const MODULE_NAMES = {
     AUTO_FULLSCREEN: "Auto Fullscreen",
     KEYSTROKES:      "Keystrokes",
-    FPS_COUNTER:     "FPS Counter",
-    CPS_COUNTER:     "CPS Counter",
     MUTE_CHAT:       "Mute Chat",
-    PING_COUNTER:    "Ping Counter",
-    FPS_BOOSTER:     "FPS Booster",
     ANTI_AFK:        "Anti-Afk",
     KEEP_SPRINT:     "Keep Sprint",
     TIME_DISPLAY:    "Time Display",
@@ -1756,7 +1752,7 @@ class UnverifiedShortcutMenu {
     title.textContent = translations[currentLanguage]?.title || "UnverifiedV2";
     closeButton.textContent = translations[currentLanguage]?.closeUI || "Close UI";
     const modules = gridContainer.children;
-    const moduleKeys = ['autoFullscreen','keystrokes','fpsCounter','cpsCounter','muteChat','pingCounter','fpsBooster','antiAfk','keepSprint','timeDisplay','musicPlayer'];
+    const moduleKeys = ['autoFullscreen','keystrokes','muteChat','antiAfk','keepSprint','timeDisplay','musicPlayer'];
     for (let i = 0; i < modules.length; i++) {
       const moduleTitle = modules[i].querySelector("span");
       const moduleDesc = modules[i].querySelector("p");
@@ -1815,66 +1811,6 @@ class UnverifiedShortcutMenu {
     }
   });
 
-  createModule(MODULE_NAMES.FPS_COUNTER, "Shows the frames per second (FPS) of the game.");
-  const fpsModule = [...gridContainer.children].find(c => c.dataset.moduleName === MODULE_NAMES.FPS_COUNTER);
-  let isFPSVisible = false, fpsElement = null, lastFrameTime = performance.now(), frameCount = 0;
-  if (fpsModule) {
-    fpsModule.addEventListener("click", () => {
-      isFPSVisible = !isFPSVisible;
-      if (isFPSVisible) {
-        fpsElement = document.createElement("div"); fpsElement.id = "fps-counter";
-        fpsElement.style.cssText = "position:fixed;top:60px;left:20px;padding:8px 14px;background:rgba(0,0,0,0.6);backdrop-filter:blur(8px);border:1px solid rgba(255,255,255,0.15);border-radius:8px;z-index:99999;cursor:move;user-select:none;font-family:'Segoe UI','Roboto',sans-serif;display:flex;align-items:center;gap:8px;box-shadow:0 4px 12px rgba(0,0,0,0.3);";
-        const fpsDot = document.createElement("div"); fpsDot.id = "fps-dot"; fpsDot.style.cssText = `width:10px;height:10px;border-radius:50%;background-color:${guiPrimaryColor};box-shadow:0 0 12px ${guiPrimaryColor}99;transition:all 0.3s ease;`;
-        const fpsValue = document.createElement("div"); fpsValue.id = "fps-value"; fpsValue.textContent = "0 FPS"; fpsValue.style.cssText = "font-size:16px;font-weight:700;color:#FFFFFF;letter-spacing:0.5px;transition:color 0.3s ease;";
-        fpsElement.appendChild(fpsDot); fpsElement.appendChild(fpsValue); document.body.appendChild(fpsElement);
-        let offX=0, offY=0, isDrag=false;
-        fpsElement.addEventListener("mousedown", e => { isDrag=true; offX=e.clientX-fpsElement.getBoundingClientRect().left; offY=e.clientY-fpsElement.getBoundingClientRect().top; e.preventDefault(); });
-        document.addEventListener("mousemove", e => { if(isDrag){ fpsElement.style.left=`${e.clientX-offX}px`; fpsElement.style.top=`${e.clientY-offY}px`; } });
-        document.addEventListener("mouseup", () => { isDrag=false; });
-        const updateFPS = () => {
-          const now = performance.now(); frameCount++;
-          if (now - lastFrameTime >= 1000) {
-            const fps = frameCount; const v = document.getElementById("fps-value"); const d = document.getElementById("fps-dot");
-            if (v && d) { v.textContent = `${fps} FPS`; const c = fps>=60?"#4CAF50":fps>=45?"#8BC34A":fps>=30?"#FFC107":fps>=20?"#FF9800":"#F44336"; v.style.color=c; d.style.backgroundColor=c; d.style.boxShadow=`0 0 12px ${c}99`; }
-            frameCount = 0; lastFrameTime = now;
-          }
-          if (isFPSVisible) requestAnimationFrame(updateFPS);
-        };
-        requestAnimationFrame(updateFPS);
-      } else if (fpsElement) { fpsElement.remove(); fpsElement = null; }
-    });
-  }
-
-  const mouseModule = createModule(MODULE_NAMES.CPS_COUNTER, "Counts how many times you click per second.");
-  let isMouseActive=false, clickTimes=[], mouseElement=null;
-  const strokeColor="#FFFFFF", idleFill="rgba(255,255,255,0.1)", activeFill="rgba(255,255,255,0.8)";
-  mouseModule.addEventListener("click", () => {
-    isMouseActive = !isMouseActive;
-    if (isMouseActive) {
-      if (!mouseElement) {
-        mouseElement = document.createElement("div"); mouseElement.id = "mouse-strokes-hud";
-        mouseElement.style.cssText = "position:fixed;top:100px;left:20px;padding:10px;z-index:99999;user-select:none;cursor:move;display:flex;flex-direction:column;align-items:center;gap:5px;filter:drop-shadow(0px 0px 8px rgba(0,0,0,0.8));";
-        mouseElement.innerHTML = `<svg id="mouse-svg" width="70" height="95" viewBox="0 0 100 140"><path id="m-left" d="M10 40 Q 10 10, 48 10 L 48 65 L 10 65 Z" fill="${idleFill}" stroke="${strokeColor}" stroke-width="6"/><path id="m-right" d="M90 40 Q 90 10, 52 10 L 52 65 L 90 65 Z" fill="${idleFill}" stroke="${strokeColor}" stroke-width="6"/><path d="M10 65 L 90 65 Q 90 130, 50 130 Q 10 130, 10 65" fill="none" stroke="${strokeColor}" stroke-width="6"/><rect x="43" y="22" width="14" height="24" rx="7" fill="${strokeColor}"/></svg><div id="cps-display" style="color:white;font-size:20px;font-weight:900;text-shadow:0px 0px 10px rgba(0,0,0,1);">0 CPS</div>`;
-        document.body.appendChild(mouseElement);
-        let isDrag=false, offX, offY;
-        mouseElement.addEventListener("mousedown", e => { isDrag=true; offX=e.clientX-mouseElement.getBoundingClientRect().left; offY=e.clientY-mouseElement.getBoundingClientRect().top; });
-        document.addEventListener("mousemove", e => { if(isDrag){ mouseElement.style.left=(e.clientX-offX)+"px"; mouseElement.style.top=(e.clientY-offY)+"px"; } });
-        document.addEventListener("mouseup", () => isDrag=false);
-      }
-      const handleInteraction = e => {
-        if (e.type==="mousedown") { if(e.button===0) document.getElementById("m-left").setAttribute("fill",activeFill); if(e.button===2) document.getElementById("m-right").setAttribute("fill",activeFill); clickTimes.push(Date.now()); }
-        else if (e.type==="mouseup") { if(e.button===0) document.getElementById("m-left").setAttribute("fill",idleFill); if(e.button===2) document.getElementById("m-right").setAttribute("fill",idleFill); }
-      };
-      document.addEventListener("mousedown", handleInteraction); document.addEventListener("mouseup", handleInteraction);
-      document.addEventListener("contextmenu", e => e.preventDefault());
-      function updateLoop() { const now=Date.now(); clickTimes=clickTimes.filter(t=>now-t<=1000); const d=document.getElementById("cps-display"); if(d) d.textContent=`${clickTimes.length} CPS`; if(isMouseActive) requestAnimationFrame(updateLoop); }
-      updateLoop(); mouseModule._handler = handleInteraction;
-    } else {
-      if (mouseElement) { mouseElement.remove(); mouseElement=null; }
-      if (mouseModule._handler) { document.removeEventListener("mousedown",mouseModule._handler); document.removeEventListener("mouseup",mouseModule._handler); }
-    }
-  });
-
   const muteChatModule = createModule(MODULE_NAMES.MUTE_CHAT, "Prevents other players messages from appearing in chat.");
   let isMuteChatActive=false, originalAddChat=null;
   muteChatModule.addEventListener("click", () => {
@@ -1890,32 +1826,6 @@ class UnverifiedShortcutMenu {
     } catch(e) {}
   });
 
-  const pingModule = createModule(MODULE_NAMES.PING_COUNTER, "Shows the latency between your client and the server.");
-  let isPingActive=false, pingElement=null, pingInterval=null;
-  pingModule.addEventListener("click", () => {
-    isPingActive = !isPingActive;
-    if (isPingActive) {
-      pingElement = document.createElement("div"); pingElement.id="ping-counter";
-      pingElement.style.cssText = "position:fixed;top:20px;left:20px;padding:8px 14px;background:rgba(0,0,0,0.6);backdrop-filter:blur(8px);border:1px solid rgba(255,255,255,0.15);border-radius:8px;z-index:10000;cursor:move;user-select:none;font-family:'Segoe UI','Roboto',sans-serif;display:flex;align-items:center;gap:8px;box-shadow:0 4px 12px rgba(0,0,0,0.3);";
-      const pingDot = document.createElement("div"); pingDot.id="ping-dot"; pingDot.style.cssText = `width:10px;height:10px;border-radius:50%;background-color:${guiPrimaryColor};box-shadow:0 0 12px ${guiPrimaryColor}99;transition:all 0.3s ease;`;
-      const pingValue = document.createElement("div"); pingValue.id="ping-value"; pingValue.textContent="--- ms"; pingValue.style.cssText="font-size:16px;font-weight:700;color:#FFFFFF;letter-spacing:0.5px;transition:color 0.3s ease;";
-      pingElement.appendChild(pingDot); pingElement.appendChild(pingValue); document.body.appendChild(pingElement);
-      let isDrag=false, offX=0, offY=0;
-      pingElement.addEventListener("mousedown", e => { isDrag=true; offX=e.clientX-pingElement.getBoundingClientRect().left; offY=e.clientY-pingElement.getBoundingClientRect().top; e.preventDefault(); });
-      document.addEventListener("mousemove", e => { if(isDrag){ pingElement.style.left=`${e.clientX-offX}px`; pingElement.style.top=`${e.clientY-offY}px`; } });
-      document.addEventListener("mouseup", () => { isDrag=false; });
-      const updatePing = () => {
-        const start = Date.now();
-        fetch(window.location.href, {method:'HEAD',cache:"no-cache"}).then(() => {
-          const ping=Date.now()-start; const v=document.getElementById("ping-value"); const d=document.getElementById("ping-dot");
-          if(v&&d){ v.textContent=`${ping} ms`; const c=ping<50?"#4CAF50":ping<100?"#8BC34A":ping<150?"#FFC107":ping<200?"#FF9800":"#F44336"; v.style.color=c; d.style.backgroundColor=c; d.style.boxShadow=`0 0 12px ${c}99`; }
-        }).catch(() => { const v=document.getElementById("ping-value"); const d=document.getElementById("ping-dot"); if(v&&d){ v.textContent="N/A"; v.style.color="#9E9E9E"; d.style.backgroundColor="#9E9E9E"; } });
-      };
-      updatePing(); pingInterval = setInterval(updatePing, 1000);
-    } else { if(pingElement){ pingElement.remove(); pingElement=null; } clearInterval(pingInterval); }
-  });
-
-  createModule(MODULE_NAMES.FPS_BOOSTER, "Changes settings to improve FPS (refresh page)");
   createModule(MODULE_NAMES.ANTI_AFK, "Presses WASD on its own to avoid being kicked for being AFK");
   const antiAfkModule = [...gridContainer.children].find(c => c.dataset.moduleName === MODULE_NAMES.ANTI_AFK);
   let isAntiAfkActive=false, antiAfkInterval=null, antiAfkBox=null;
@@ -2293,8 +2203,4 @@ class UnverifiedShortcutMenu {
     }
   }
   if (settings.autoAfk) startAfkDetector();
-})();
-(function() {
-  'use strict';
-  window.requestAnimationFrame = function(callback) { return setTimeout(function() { callback(performance.now()); }, 0); };
 })();
