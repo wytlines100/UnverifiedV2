@@ -58,7 +58,7 @@ class UnverifiedIntro {
     });
     this.container.appendChild(this.unverifiedText);
     this.creditsText = document.createElement("div");
-    this.creditsText.textContent = "\nBy wytlines, DeadFish7\nandreypidd, jet, joudaALT!";
+    this.creditsText.textContent = "\nBy wytlines, DeadFish7\nandreypidd, jet, joudaALT, TrustIsOver";
     Object.assign(this.creditsText.style, {
       color: "red", fontSize: "30px", opacity: 0, transition: "opacity 0.8s ease",
       whiteSpace: 'pre-line', textAlign: "center",
@@ -112,7 +112,7 @@ class UnverifiedIntro {
     const game = gameRef.game;
     if (game && game.chat && typeof game.chat.addChat === "function") {
       clearInterval(waitForGame);
-      game.chat.addChat({ text: "\\#00FFFF\\[UnverifiedV2]\\reset\\ Hello, Thank You For Using The Unverified Client." });
+      game.chat.addChat({ text: "\\#00FFFF\\[UnverifiedV2]\\reset\\ Hello, Thank You For Using Unverified Client." });
     }
   }, 500);
 })();
@@ -238,7 +238,7 @@ class UnverifiedBackground {
 class UnverifiedBanner {
   constructor() {
     this.e = document.createElement('div');
-    this.e.textContent = 'UnverifiedV2\n\nBy wytlines, DeadFish7, andreypidd, jet, joudaALT!';
+    this.e.textContent = 'UnverifiedV2\n\nBy wytlines, DeadFish7, andreypidd, jet, joudaALT, TrustIsOver';
     this.e.id = 'unverified-banner'; this.e.style.whiteSpace = 'pre-line'; this.e.style.textAlign = 'center';
     this.e.style.zIndex = 999; this.e.style.position = "absolute"; this.e.style.top = "11.5%";
     this.e.style.left = "50%"; this.e.style.transform = "translate(-50%, -50%)";
@@ -1349,7 +1349,7 @@ class UnverifiedShortcutMenu {
           <div class="uv2-settings-page" id="uv2-page-about">
             <div class="uv2-section-title">Info</div>
             <div class="uv2-setting-row"><div><div class="uv2-setting-label">Version</div><div class="uv2-setting-desc">2.0.7</div></div></div>
-            <div class="uv2-setting-row"><div><div class="uv2-setting-label">Authors</div><div class="uv2-setting-desc">wytlines, DeadFish7, andreypidd, jet, joudaALT!</div></div></div>
+            <div class="uv2-setting-row"><div><div class="uv2-setting-label">Authors</div><div class="uv2-setting-desc">wytlines, DeadFish7, andreypidd, jet, joudaALT, TrustIsOver</div></div></div>
             <div class="uv2-setting-row"><div><div class="uv2-setting-label">License</div><div class="uv2-setting-desc">Proprietary, do not redistribute</div></div></div>
           </div>
         </div>
