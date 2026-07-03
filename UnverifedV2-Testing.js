@@ -5,7 +5,7 @@
 // @description  Look at my license before you modify, I WILL DMCA you.
 // @icon         https://raw.githubusercontent.com/wytlines100/UnverifiedV2/refs/heads/main/logo.jpg
 // @license      Proprietary License
-// @author       wytlines, DeadFish7, andreypidd, jet, joudaALT!
+// @author       wytlines, DeadFish7, andreypidd, jet, joudaALT, TrustIsOver
 // @match        https://miniblox.io/*
 // @match        https://miniblox.org/*
 // @match        https://miniblox.com/*
