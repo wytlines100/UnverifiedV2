@@ -1,0 +1,5 @@
+figure out how miniblox implements skyboxes:
+- using 6 face cubemaps
+- pngs 
+
+sighh
