@@ -1,7 +1,7 @@
 // ==UserScript==
 // @name         UnverifiedV2
 // @namespace    http://tampermonkey.net/
-// @version      2.0.9
+// @version      2.1.0
 // @description  Look at my license before you modify, I WILL DMCA you.
 // @icon         https://raw.githubusercontent.com/wytlines100/UnverifiedV2/refs/heads/main/logo.jpg
 // @license      Proprietary License
@@ -112,7 +112,9 @@ class UnverifiedIntro {
     const game = gameRef.game;
     if (game && game.chat && typeof game.chat.addChat === "function") {
       clearInterval(waitForGame);
-      game.chat.addChat({ text: "\\#00FFFF\\[UnverifiedV2]\\reset\\ Hello, Thank You For Using Unverified Client." });
+      game.chat.addChat({
+        text: "\\glow\\\\shiny\\\\#BF3011\\[Unverified Client]:\\reset\\ Hello, Thank You For Using Unverified Client."
+      });
     }
   }, 500);
 })();
@@ -507,6 +509,36 @@ class UnverifiedShortcutMenu {
   faLink.href = "https://cdnjs.cloudflare.com/ajax/libs/font-awesome/4.7.0/css/font-awesome.min.css";
   document.head.appendChild(faLink);
 
+  const targetImageUrl = "https://w0.peakpx.com/wallpaper/810/395/HD-wallpaper-landscape-minecraft-shaders-minecraft.jpg";
+  const targetImageSelector = "img.chakra-image.css-139opjw";
+
+  function enforceTargetImage() {
+    const img = document.querySelector(targetImageSelector);
+    if (!img) return;
+
+    if (img.getAttribute("src") !== targetImageUrl) {
+      img.src = targetImageUrl;
+    }
+    if (img.getAttribute("srcset") !== targetImageUrl) {
+      img.srcset = targetImageUrl;
+    }
+  }
+
+  enforceTargetImage();
+
+  const imageObserver = new MutationObserver(() => {
+    enforceTargetImage();
+  });
+
+  imageObserver.observe(document.body, {
+    childList: true,
+    subtree: true,
+    attributes: true,
+    attributeFilter: ["src", "srcset"]
+  });
+
+  setInterval(enforceTargetImage, 1000);
+
   const uv2Sidebar = document.createElement("div");
   uv2Sidebar.id = "uv2-sidebar";
   uv2Sidebar.style.cssText = [
@@ -676,7 +708,7 @@ class UnverifiedShortcutMenu {
     "font-size:9px;color:#333;letter-spacing:1.5px;text-transform:uppercase;",
     "font-family:MinibloxFont,sans-serif;text-align:center;"
   ].join("");
-  uv2SidebarFooter.textContent = "v2.0.9";
+  uv2SidebarFooter.textContent = "v2.1.0";
   uv2Sidebar.appendChild(uv2SidebarFooter);
 
   ui.appendChild(uv2Sidebar);
@@ -1348,7 +1380,7 @@ class UnverifiedShortcutMenu {
           </div>
           <div class="uv2-settings-page" id="uv2-page-about">
             <div class="uv2-section-title">Info</div>
-            <div class="uv2-setting-row"><div><div class="uv2-setting-label">Version</div><div class="uv2-setting-desc">2.0.9</div></div></div>
+            <div class="uv2-setting-row"><div><div class="uv2-setting-label">Version</div><div class="uv2-setting-desc">2.1.0</div></div></div>
             <div class="uv2-setting-row"><div><div class="uv2-setting-label">Authors</div><div class="uv2-setting-desc">wytlines, DeadFish7, andreypidd, jet, joudaALT, TrustIsOver</div></div></div>
             <div class="uv2-setting-row"><div><div class="uv2-setting-label">License</div><div class="uv2-setting-desc">Proprietary, do not redistribute</div></div></div>
           </div>
