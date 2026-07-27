@@ -2164,7 +2164,7 @@ class UnverifiedShortcutMenu {
           if (reactProps && reactProps.onChange) {
             reactProps.onChange({ target: { value: msg } });
             setTimeout(() => {
-              if (reactProps.onKeyDown) reactProps.onKeyDown({ key: 'Enter', keyCode: 13, which: 13, bubbles: true, preventDefault: () => {} });
+              if (reactProps.onKeyDown) reactProps.onKeyDown({ key: 'Enter', keyCode: 13, which: 13, bubbles: true, target: { value: msg }, nativeEvent: { isComposing: false }, preventDefault: () => {} });
             }, 300);
             return;
           }
