@@ -15,7 +15,6 @@
 // @connect      api.jamendo.com
 // @connect      prod-1.storage.jamendo.com
 // @connect      cdnjs.cloudflare.com
-// @connect      ip-api.com
 // ==/UserScript==
 
 class LurkerChecker {
@@ -744,6 +743,8 @@ class UnverifiedShortcutMenu {
     nameRow.appendChild(descInput);
     uv2CModulesPage.appendChild(nameRow);
 
+    // --- CodeMirror 5 editor ---
+    // Inject CodeMirror CSS (One Dark theme)
     const cmCSS = document.createElement('link');
     cmCSS.rel = 'stylesheet';
     cmCSS.href = 'https://cdnjs.cloudflare.com/ajax/libs/codemirror/5.65.16/codemirror.min.css';
@@ -791,10 +792,12 @@ class UnverifiedShortcutMenu {
     cmWrap.className = 'uv2-cm-wrap';
     uv2CModulesPage.appendChild(cmWrap);
 
+    // Hidden textarea — CodeMirror replaces it; we read .getValue() instead
     const editorTextarea = document.createElement('textarea');
     editorTextarea.placeholder = 'Build your custom module here....';
     cmWrap.appendChild(editorTextarea);
 
+    // Load CodeMirror JS then JS mode, then init
     let cmInstance = null;
     function getEditorValue() { return cmInstance ? cmInstance.getValue() : editorTextarea.value; }
     function setEditorValue(v) { if (cmInstance) cmInstance.setValue(v); else editorTextarea.value = v; }
@@ -812,6 +815,7 @@ class UnverifiedShortcutMenu {
         lineWrapping: true,
         autofocus: false,
         extraKeys: {
+          // Auto-insert space after {
           '{': function(cm) {
             cm.replaceSelection('{ ');
           }
@@ -834,6 +838,7 @@ class UnverifiedShortcutMenu {
         });
       });
     });
+    // --- end CodeMirror editor ---
 
     const btnRow = document.createElement('div'); btnRow.style.cssText = 'display:flex;gap:8px;margin-top:8px;';
     const saveDraftBtn = document.createElement('button'); saveDraftBtn.textContent = 'Save Draft';
@@ -858,6 +863,7 @@ class UnverifiedShortcutMenu {
       mc._customCode = getEditorValue();
       mc._isCustom = true;
       if (mc._deleteBtn) { mc._deleteBtn.style.opacity = '1'; mc._deleteBtn.style.pointerEvents = 'auto'; }
+      // persist custom module code if saving enabled
       const saved = JSON.parse(localStorage.getItem('uv2-custom-modules') || '[]');
       saved.push({ name, desc, code: mc._customCode });
       localStorage.setItem('uv2-custom-modules', JSON.stringify(saved));
@@ -1450,7 +1456,6 @@ class UnverifiedShortcutMenu {
   let moduleBindings = {};
   let isBinding = false;
   let lastKeyPressTime = {};
-  let vpnGateDismissed = sessionStorage.getItem('uv2-vpn-gate-dismissed') === 'true';
   let uiVisible = false;
   let uiAnimating = false;
   let closeUITimeout = null;
@@ -2033,102 +2038,6 @@ class UnverifiedShortcutMenu {
   closeButton.style.cssText = `background:${guiPrimaryColor};color:white;border:none;border-radius:6px;padding:10px 30px;font-size:15px;cursor:pointer;font-family:'MinibloxFont',sans-serif;letter-spacing:0.5px;box-shadow:0 2px 14px ${guiPrimaryColor}73;transition:all 0.2s ease;`;
   bottomRow.appendChild(closeButton);
 
-  function checkIsVpn(callback) {
-    try {
-      GM_xmlhttpRequest({
-        method: "GET",
-        url: "http://ip-api.com/json/?fields=status,proxy,hosting,query",
-        timeout: 5000,
-        onload(r) {
-          try {
-            const data = JSON.parse(r.responseText);
-            const flagged = data.status === "success" && (data.proxy === true || data.hosting === true);
-            callback(flagged);
-          } catch (e) { callback(false); }
-        },
-        onerror() { callback(false); },
-        ontimeout() { callback(false); }
-      });
-    } catch (e) { callback(false); }
-  }
-
-  function showVpnGate(onContinue) {
-    const existing = document.getElementById('uv2-vpn-gate');
-    if (existing) existing.remove();
-
-    if (document.pointerLockElement) {
-      try { document.exitPointerLock(); } catch (e) {}
-    }
-
-    const overlay = document.createElement('div');
-    overlay.id = 'uv2-vpn-gate';
-    overlay.style.cssText = [
-      'position:fixed;inset:0;z-index:100000;',
-      'display:flex;align-items:center;justify-content:center;',
-      'background:rgba(0,0,0,0.35);backdrop-filter:blur(8px);-webkit-backdrop-filter:blur(8px);',
-      'opacity:0;transition:opacity 0.2s ease;'
-    ].join('');
-
-    const box = document.createElement('div');
-    box.style.cssText = [
-      'background:#141414;border:1px solid rgba(255,255,255,0.08);border-radius:10px;',
-      'padding:28px 32px;max-width:360px;width:90%;text-align:center;',
-      'box-shadow:0 24px 60px rgba(0,0,0,0.7);font-family:MinibloxFont,sans-serif;color:#fff;'
-    ].join('');
-
-    const gateTitle = document.createElement('div');
-    gateTitle.textContent = 'VPN Detected!';
-    gateTitle.style.cssText = 'font-size:22px;color:#e74c3c;margin-bottom:10px;text-shadow:0 0 12px rgba(231,76,60,0.5);';
-    box.appendChild(gateTitle);
-
-    const desc = document.createElement('div');
-    desc.textContent = "We detected that your connection is coming through a VPN or proxy.";
-    desc.style.cssText = 'font-size:13px;color:#888;margin-bottom:22px;line-height:1.5;';
-    box.appendChild(desc);
-
-    const btnRow = document.createElement('div');
-    btnRow.style.cssText = 'display:flex;gap:10px;justify-content:center;';
-
-    const ignoreBtn = document.createElement('button');
-    ignoreBtn.textContent = 'Ignore';
-    ignoreBtn.style.cssText = 'background:#7fff00;color:#111;border:none;border-radius:6px;padding:10px 18px;font-size:14px;font-weight:600;cursor:pointer;font-family:MinibloxFont,sans-serif;transition:transform 0.15s ease;';
-    ignoreBtn.addEventListener('mouseenter', () => ignoreBtn.style.transform = 'scale(1.03)');
-    ignoreBtn.addEventListener('mouseleave', () => ignoreBtn.style.transform = 'scale(1)');
-
-    const notVpnBtn = document.createElement('button');
-    notVpnBtn.textContent = "I'm not using a VPN";
-    notVpnBtn.style.cssText = 'background:#2a2a2a;color:#fff;border:1px solid #444;border-radius:6px;padding:10px 18px;font-size:14px;cursor:pointer;font-family:MinibloxFont,sans-serif;transition:background 0.15s ease;';
-    notVpnBtn.addEventListener('mouseenter', () => notVpnBtn.style.background = '#3a3a3a');
-    notVpnBtn.addEventListener('mouseleave', () => notVpnBtn.style.background = '#2a2a2a');
-
-    function dismiss() {
-      overlay.style.opacity = '0';
-      setTimeout(() => overlay.remove(), 200);
-    }
-
-    ignoreBtn.addEventListener('click', () => {
-      vpnGateDismissed = true;
-      sessionStorage.setItem('uv2-vpn-gate-dismissed', 'true');
-      dismiss();
-      if (typeof onContinue === 'function') onContinue();
-    });
-
-    notVpnBtn.addEventListener('click', () => {
-      window.open('https://discord.com/channels/1328755084066160831/1474909551810842715', '_blank');
-      vpnGateDismissed = true;
-      sessionStorage.setItem('uv2-vpn-gate-dismissed', 'true');
-      dismiss();
-      if (typeof onContinue === 'function') onContinue();
-    });
-
-    btnRow.appendChild(ignoreBtn);
-    btnRow.appendChild(notVpnBtn);
-    box.appendChild(btnRow);
-    overlay.appendChild(box);
-    document.body.appendChild(overlay);
-    setTimeout(() => { overlay.style.opacity = '1'; }, 10);
-  }
-
   function openUI() {
     ui.style.display = "flex";
     if (musicPlayerEl) musicPlayerEl.style.display = "block";
@@ -2163,17 +2072,7 @@ class UnverifiedShortcutMenu {
   function toggleUI() {
     if (uiAnimating) return;
     if (uiVisible) { closeUI(); uiVisible = false; }
-    else if (vpnGateDismissed) {
-      openUI(); uiVisible = true;
-    } else {
-      checkIsVpn(isVpn => {
-        if (isVpn) {
-          showVpnGate(() => { openUI(); uiVisible = true; });
-        } else {
-          openUI(); uiVisible = true;
-        }
-      });
-    }
+    else { openUI(); uiVisible = true; }
   }
   document.addEventListener("keydown", event => {
     if (event.key === "Shift" && event.location === 2) toggleUI();
@@ -2265,17 +2164,7 @@ class UnverifiedShortcutMenu {
           if (reactProps && reactProps.onChange) {
             reactProps.onChange({ target: { value: msg } });
             setTimeout(() => {
-              if (reactProps.onKeyDown) {
-                reactProps.onKeyDown({
-                  key: 'Enter',
-                  keyCode: 13,
-                  which: 13,
-                  bubbles: true,
-                  target: { value: msg },
-                  nativeEvent: { isComposing: false },
-                  preventDefault: () => {}
-                });
-              }
+              if (reactProps.onKeyDown) reactProps.onKeyDown({ key: 'Enter', keyCode: 13, which: 13, bubbles: true, target: { value: msg }, nativeEvent: { isComposing: false }, preventDefault: () => {} });
             }, 300);
             return;
           }
