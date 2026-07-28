@@ -2324,12 +2324,17 @@ class UnverifiedShortcutMenu {
       }
     } catch(e) {}
   }
+  function isInMatch() {
+    try {
+      return /\/join\//.test(window.location.pathname);
+    } catch (e) { return false; }
+  }
   function onAfkTriggered() {
     if (afkTriggered) return;
     afkTriggered = true;
     afkGraceUntil = Date.now() + 2000;
     showAfkToast();
-    if (settings.afkChat) sendAfkChatMessage("I'm currently AFK, This Is An Auto Message, Please Hold On.");
+    if (settings.afkChat && isInMatch() && !styler.isMainScreen()) sendAfkChatMessage("I'm currently AFK, This Is An Auto Message, Please Hold On.");
     const afkMod = [...gridContainer.children].find(c => c.dataset.moduleName === MODULE_NAMES.ANTI_AFK);
     if (afkMod && !afkMod._uv2Active) {
       afkAntiAfkWasOff = true;
