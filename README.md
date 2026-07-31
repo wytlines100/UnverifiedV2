@@ -25,6 +25,7 @@ A custom client for Miniblox, in active development since October 2024.
 - Profile avatar: a sidebar profile picture that is auto-detected by country via IP lookup, uploadable from a local image, or randomizable
 - Settings panel: toggles for module click sounds, toast notifications, UI open/close animation, module-state persistence across reloads, and the idle delay used by Anti-AFK
 - Idle delay configuration: adjustable from 5 to 120 seconds, controlling how long you can be inactive before Anti-AFK auto-enables
+- Chat Filter: Blocks profanity from game.chat
 
 ## Installation
 
