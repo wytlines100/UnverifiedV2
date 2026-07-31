@@ -25,7 +25,6 @@ A custom client for Miniblox, in active development since October 2024.
 - Profile avatar: a sidebar profile picture that is auto-detected by country via IP lookup, uploadable from a local image, or randomizable
 - Settings panel: toggles for module click sounds, toast notifications, UI open/close animation, module-state persistence across reloads, and the idle delay used by Anti-AFK
 - Idle delay configuration: adjustable from 5 to 120 seconds, controlling how long you can be inactive before Anti-AFK auto-enables
-- Custom Module API: build your own modules using simple `OnToggledOn` and `OnToggledOff` functions (see API.md)
 
 ## Installation
 
@@ -34,20 +33,6 @@ A custom client for Miniblox, in active development since October 2024.
 3. Save the script and make sure it is enabled.
 4. Visit a supported site listed under Requirements. The client will initialize automatically.
 5. Press the right Shift key to open or close the client menu.
-
-## Developing Modules
-
-Custom modules are defined using two required functions, `OnToggledOn` and `OnToggledOff`, along with an optional `unv` helper object for notifications.
-
-```js
-function OnToggledOn() {
-  unv.CustomNotification('Module started!');
-}
-
-function OnToggledOff() {
-  unv.CustomNotification('Module stopped.', false);
-}
-```
 
 See API.md for the full API reference, including cleanup functions and notification options.
 
