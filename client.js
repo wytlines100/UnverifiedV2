@@ -1400,10 +1400,31 @@ class UnverifiedShortcutMenu {
 
 
   const translations = {
-    en: { languageName:"English", title:"UnverifiedV2", autoFullscreen:"Auto Fullscreen", autoFullscreenDesc:"Automatically toggles Fullscreen", keystrokes:"Keystrokes", keystrokesDesc:"Displays the keys you press in real-time.", muteChat:"Mute Chat", muteChatDesc:"Prevents other players messages from appearing in chat.", antiAfk:"Anti-Afk", antiAfkDesc:"Presses WASD on its own to avoid being kicked for being AFK", keepSprint:"Keep Sprint", keepSprintDesc:"Keeps you sprinting automatically.", timeDisplay:"Time Display", timeDisplayDesc:"Shows you the time so you dont have to exit full screen.", musicPlayer:"Music Player", musicPlayerDesc:"Plays music while you play.", closeUI:"Close UI", turnedOn:"was turned on", turnedOff:"was turned off", tooltipBind:"right-click to bind" },
-    es: { languageName:"Espanol", title:"UnverifiedV2", autoFullscreen:"Pantalla Completa Automática", autoFullscreenDesc:"Activa/desactiva automáticamente la pantalla completa", keystrokes:"Teclas", keystrokesDesc:"Muestra las teclas que presionas en tiempo real.", muteChat:"Silenciar Chat", muteChatDesc:"Evita que aparezcan mensajes de otros jugadores en el chat.", antiAfk:"Anti-Inactividad", antiAfkDesc:"Presiona WASD automáticamente para evitar ser expulsado por inactividad", keepSprint:"Mantener Sprint", keepSprintDesc:"Te mantiene corriendo automáticamente.", timeDisplay:"Mostrar Hora", timeDisplayDesc:"Te muestra la hora para que no tengas que salir de pantalla completa.", musicPlayer:"Reproductor de Música", musicPlayerDesc:"Reproduce música mientras juegas.", closeUI:"Cerrar UI", turnedOn:"fue activado", turnedOff:"fue desactivado", tooltipBind:"clic derecho para vincular" },
-
-  };
+  en: {
+    languageName:"English", title:"UnverifiedV2",
+    autoFullscreen:"Auto Fullscreen", autoFullscreenDesc:"Automatically toggles Fullscreen",
+    keystrokes:"Keystrokes", keystrokesDesc:"Displays the keys you press in real-time.",
+    muteChat:"Mute Chat", muteChatDesc:"Prevents other players messages from appearing in chat.",
+    chatFilter:"Chat Filter", chatFilterDesc:"Blocks swear words and spam from appearing in chat.",
+    antiAfk:"Anti-Afk", antiAfkDesc:"Presses WASD on its own to avoid being kicked for being AFK",
+    keepSprint:"Keep Sprint", keepSprintDesc:"Keeps you sprinting automatically.",
+    timeDisplay:"Time Display", timeDisplayDesc:"Shows you the time so you dont have to exit full screen.",
+    musicPlayer:"Music Player", musicPlayerDesc:"Plays music while you play.",
+    closeUI:"Close UI", turnedOn:"was turned on", turnedOff:"was turned off", tooltipBind:"right-click to bind"
+  },
+  es: {
+    languageName:"Espanol", title:"UnverifiedV2",
+    autoFullscreen:"Pantalla Completa Automática", autoFullscreenDesc:"Activa/desactiva automáticamente la pantalla completa",
+    keystrokes:"Teclas", keystrokesDesc:"Muestra las teclas que presionas en tiempo real.",
+    muteChat:"Silenciar Chat", muteChatDesc:"Evita que aparezcan mensajes de otros jugadores en el chat.",
+    chatFilter:"Filtro de Chat", chatFilterDesc:"Bloquea palabrotas y spam del chat.",
+    antiAfk:"Anti-Inactividad", antiAfkDesc:"Presiona WASD automáticamente para evitar ser expulsado por inactividad",
+    keepSprint:"Mantener Sprint", keepSprintDesc:"Te mantiene corriendo automáticamente.",
+    timeDisplay:"Mostrar Hora", timeDisplayDesc:"Te muestra la hora para que no tengas que salir de pantalla completa.",
+    musicPlayer:"Reproductor de Música", musicPlayerDesc:"Reproduce música mientras juegas.",
+    closeUI:"Cerrar UI", turnedOn:"fue activado", turnedOff:"fue desactivado", tooltipBind:"clic derecho para vincular"
+  },
+};
 
   let currentLanguage = localStorage.getItem('unverified-language') || 'en';
   Object.keys(translations).forEach(langCode => {
@@ -1415,260 +1436,418 @@ class UnverifiedShortcutMenu {
   languageDropdown.addEventListener("change", e => { currentLanguage = e.target.value; localStorage.setItem('unverified-language', currentLanguage); updateLanguage(); });
 
 
-  const MODULE_NAMES = {
-    AUTO_FULLSCREEN: "Auto Fullscreen",
-    KEYSTROKES:      "Keystrokes",
-    MUTE_CHAT:       "Mute Chat",
-    ANTI_AFK:        "Anti-Afk",
-    KEEP_SPRINT:     "Keep Sprint",
-    TIME_DISPLAY:    "Time Display",
-    MUSIC_PLAYER:    "Music Player",
-  };
+  const BAD_WORDS = [
+  'fuck', 'fucking', 'fucker', 'fucked', 'fucks', 'motherfucker', 'motherfuckers',
+  'shit', 'shitty', 'shitter', 'bullshit', 'shithead', 'shitfaced',
+  'bitch', 'bitches', 'bitching', 'bitchy',
+  'asshole', 'assholes', 'arse', 'arsehole', 'asses', 'ass',
+  'damn', 'dammit', 'goddamn', 'goddamnit', 'damned',
+  'crap', 'crappy', 'crapping',
+  'bastard', 'bastards',
+  'dick', 'dicks', 'dickhead', 'dickheads',
+  'cock', 'cocks', 'cocksucker', 'cocksuckers',
+  'pussy', 'pussies',
+  'piss', 'pissed', 'pissing', 'pissoff',
+  'cunt', 'cunts',
+  'twat', 'twats',
+  'wanker', 'wankers', 'wank',
+  'bollocks', 'bollock',
+  'prick', 'pricks',
+  'douche', 'douchebag', 'douchebags',
+  'slut', 'sluts', 'whore', 'whores',
+  'fag', 'faggot', 'fags', 'faggots',
+  'dyke', 'dykes',
+  'nigger', 'niggers', 'nigga', 'niggas', 'nigg', 'n1gga', 'n1gger',
+  'retard', 'retarded', 'retards',
+  'nazi', 'nazis',
+  'kike', 'kikes',
+  'chink', 'chinks',
+  'spic', 'spics',
+  'wetback', 'wetbacks',
+  'tranny', 'trannies',
+  'gook', 'gooks',
+  'beaner', 'beaners',
+  'paki', 'pakis',
+  'towelhead', 'towelheads',
+  'coon', 'coons',
+  'gypsy', 'gypsies',
+  'porn', 'porno', 'pornography', 'pornhub',
+  'rape', 'raping', 'raped', 'rapist', 'rapists',
+  'hentai',
+  'fuk', 'fck', 'fuc', 'fucc', 'phuck', 'fvck', 'fxck',
+  'sht', 'shyt', 'sh1t',
+  'btch', 'b1tch', 'biatch',
+  'azz', 'a$$', 'a55',
+  'dck', 'd1ck',
+  'cnt', 'c*nt',
+  'kys', 'killyourself', 'kms',
+];
 
-  const gridContainer = document.createElement("div");
-  gridContainer.style.display = "flex";
-  gridContainer.style.flexDirection = "column";
-  gridContainer.style.gap = "8px";
-  gridContainer.style.marginTop = "16px";
-  uv2MainPage.appendChild(gridContainer);
+const CHAT_FILTER_CONFIG = {
+  blockBadWords: true,
+  blockSpam: true,
+  blockAllCaps: false
+};
 
-  const notificationContainer = document.createElement("div");
-  notificationContainer.style.cssText = "position:fixed;bottom:1in;right:20px;z-index:10000;display:flex;flex-direction:column-reverse;align-items:flex-end;";
-  document.body.appendChild(notificationContainer);
+function chatFilterStripSeparators(text) {
+  return text.replace(/[\s\.\-\_\*\|\~\+\=]/g, '');
+}
 
-  function showNotification(message, isOn) {
-    if (!settings.showNotifications) return;
-    const notification = document.createElement("div");
-    const moduleName = message.split(' was ')[0];
-    notification.textContent = `${moduleName} ${isOn ? (translations[currentLanguage]?.turnedOn || "was turned on") : (translations[currentLanguage]?.turnedOff || "was turned off")}`;
-    notification.classList.add('other-notification');
-    const progressBar = document.createElement("div");
-    progressBar.classList.add("notification-progress");
-    notification.appendChild(progressBar);
-    notificationContainer.appendChild(notification);
-    setTimeout(() => { notification.style.transform = "translateX(0)"; notification.style.opacity = "1"; }, 10);
-    setTimeout(() => {
-      notification.style.transform = "translateX(100%)"; notification.style.opacity = "0";
-      setTimeout(() => { notificationContainer.removeChild(notification); }, 500);
-    }, 3000);
-  }
+function chatFilterContainsBadWords(text) {
+  const cleanText = text.replace(/\\#[0-9A-Fa-f]{6}\\/g, '')
+    .replace(/\\reset\\/g, '')
+    .replace(/\\glow\\/g, '')
+    .toLowerCase();
 
-  function showBindPopup(moduleElement, moduleName) {
-    const existingPopup = document.querySelector('.bind-popup');
-    if (existingPopup) existingPopup.remove();
-    const popup = document.createElement("div"); popup.classList.add("bind-popup"); document.body.appendChild(popup);
-    const popupTitle = document.createElement("h3"); popupTitle.textContent = `Bind Key for ${moduleName}`; popup.appendChild(popupTitle);
-    const inputBox = document.createElement("input"); inputBox.placeholder = "Press a key...";
-    if (moduleBindings[moduleName]) inputBox.value = moduleBindings[moduleName];
-    popup.appendChild(inputBox);
-    const bindButton = document.createElement("button"); bindButton.textContent = "Bind";
-    const resetButton = document.createElement("button"); resetButton.textContent = "Unbind";
-    const closeBtn = document.createElement("button"); closeBtn.textContent = "Close";
-    popup.appendChild(bindButton); popup.appendChild(resetButton); popup.appendChild(closeBtn);
-    closeBtn.addEventListener("click", () => { popup.style.display = "none"; isBinding = false; });
-    let keyBinding = null;
-    inputBox.addEventListener("keydown", e => { e.preventDefault(); keyBinding = e.key; inputBox.value = e.key; });
-    bindButton.addEventListener("click", () => { if (keyBinding) { moduleBindings[moduleName] = keyBinding; showNotification(`Bound ${moduleName} to ${keyBinding}`, true); } popup.style.display = "none"; isBinding = false; });
-    resetButton.addEventListener("click", () => { delete moduleBindings[moduleName]; showNotification(`${moduleName} unbound`, false); popup.style.display = "none"; isBinding = false; });
-    const rect = moduleElement.getBoundingClientRect();
-    popup.style.top = `${rect.top + window.scrollY + rect.height + 10}px`;
-    popup.style.left = `${rect.left + window.scrollX}px`;
-    popup.style.display = "block"; isBinding = true;
-  }
+  const strippedText = chatFilterStripSeparators(cleanText);
 
-  function createModule(name, description) {
-    const moduleContainer = document.createElement("div");
-    moduleContainer.style.cssText = [
-      "display:flex;align-items:center;height:52px;padding:0 16px;",
-      "border-radius:8px;background:linear-gradient(135deg,#242424,#1c1c1c);",
-      "border:1px solid rgba(255,255,255,0.07);cursor:pointer;",
-      "transition:all 0.18s ease;box-shadow:0 1px 4px rgba(0,0,0,0.4);",
-      "position:relative;user-select:none;width:100%;box-sizing:border-box;flex-shrink:0;"
-    ].join("");
-    moduleContainer.classList.add('module-container');
-    moduleContainer.dataset.moduleName = name;
-    moduleContainer._uv2Active = false;
+  for (let word of BAD_WORDS) {
+    const wordLower = word.toLowerCase();
+    const escapedWord = wordLower.replace(/[.*+?^${}()|[\]\\]/g, '\\$&');
+    const regex = new RegExp('(^|[^a-z])' + escapedWord + '($|[^a-z])', 'i');
 
-    const nameSection = document.createElement("div");
-    nameSection.style.cssText = "min-width:155px;flex-shrink:0;display:flex;align-items:center;gap:9px;";
-    const moduleTitleEl = document.createElement("span");
-    moduleTitleEl.textContent = name;
-    moduleTitleEl.style.cssText = `color:${guiPrimaryColor};font-size:13.5px;font-family:MinibloxFont,sans-serif;white-space:nowrap;text-shadow:0 0 18px ${guiPrimaryColor}40;`;
-    nameSection.appendChild(moduleTitleEl);
-    moduleContainer.appendChild(nameSection);
+    if (regex.test(cleanText)) {
+      return true;
+    }
 
-    const divider = document.createElement("div");
-    divider.style.cssText = "width:1px;height:22px;background:rgba(255,255,255,0.09);flex-shrink:0;margin:0 16px;";
-    moduleContainer.appendChild(divider);
-
-    const descEl = document.createElement("p");
-    descEl.textContent = description;
-    descEl.style.cssText = "flex:1;color:#555;font-size:12px;font-family:MinibloxFont,sans-serif;margin:0;white-space:nowrap;overflow:hidden;text-overflow:ellipsis;";
-    moduleContainer.appendChild(descEl);
-
-    const toggleWrap = document.createElement("div");
-    toggleWrap.style.cssText = "width:36px;height:20px;border-radius:10px;background:#252525;flex-shrink:0;margin-left:14px;position:relative;transition:background 0.2s ease;border:1px solid rgba(255,255,255,0.07);";
-    const toggleKnob = document.createElement("div");
-    toggleKnob.style.cssText = "position:absolute;top:2px;left:2px;width:14px;height:14px;border-radius:50%;background:#4a4a4a;transition:all 0.2s ease;";
-    toggleWrap.appendChild(toggleKnob);
-    moduleContainer.appendChild(toggleWrap);
-
-    const tooltip = document.createElement("div");
-    tooltip.classList.add("module-tooltip");
-    tooltip.textContent = translations[currentLanguage]?.tooltipBind || "right-click to bind";
-    moduleContainer.appendChild(tooltip);
-
-    moduleContainer._toggleWrap = toggleWrap;
-    moduleContainer._toggleKnob = toggleKnob;
-
-    gridContainer.appendChild(moduleContainer);
-
-    let tooltipTimeout;
-    moduleContainer.addEventListener("mouseenter", () => {
-      tooltipTimeout = setTimeout(() => { tooltip.style.visibility = "visible"; tooltip.style.opacity = 1; }, 1500);
-      if (!moduleContainer._uv2Active) moduleContainer.style.background = "linear-gradient(135deg,#2c2c2c,#222222)";
-    });
-    moduleContainer.addEventListener("mouseleave", () => {
-      clearTimeout(tooltipTimeout); tooltip.style.visibility = "hidden"; tooltip.style.opacity = 0;
-      if (!moduleContainer._uv2Active) moduleContainer.style.background = "linear-gradient(135deg,#242424,#1c1c1c)";
-    });
-    moduleContainer.addEventListener("click", () => {
-      if (!isBinding) {
-        moduleContainer._uv2Active = !moduleContainer._uv2Active;
-        const isActive = moduleContainer._uv2Active;
-        moduleContainer.classList.add('module-toggle-animation');
-        setTimeout(() => moduleContainer.classList.remove('module-toggle-animation'), 300);
-        if (!isRestoring) {
-          if (settings.saving) localStorage.setItem('uv2-module-' + name, isActive ? 'true' : 'false');
-          playModuleClickSound(isActive);
-        }
-        if (isActive) {
-          moduleContainer.style.border = `1px solid ${guiPrimaryColor}80`;
-          moduleContainer.style.background = "linear-gradient(135deg,#1d2b1f,#182018)";
-          moduleContainer.style.boxShadow = `0 0 0 3px ${guiPrimaryColor}14, 0 1px 4px rgba(0,0,0,0.4)`;
-          toggleWrap.style.background = `${guiPrimaryColor}40`; toggleWrap.style.borderColor = `${guiPrimaryColor}60`;
-          toggleKnob.style.background = guiPrimaryColor; toggleKnob.style.transform = "translateX(16px)";
-          if (!isRestoring) showNotification(`${name} was turned on`, true);
-        } else {
-          moduleContainer.style.border = "1px solid rgba(255,255,255,0.07)";
-          moduleContainer.style.background = "linear-gradient(135deg,#242424,#1c1c1c)";
-          moduleContainer.style.boxShadow = "0 1px 4px rgba(0,0,0,0.4)";
-          toggleWrap.style.background = "#252525"; toggleWrap.style.borderColor = "rgba(255,255,255,0.07)";
-          toggleKnob.style.background = "#4a4a4a"; toggleKnob.style.transform = "translateX(0)";
-          if (!isRestoring) showNotification(`${name} was turned off`, false);
-        }
-      }
-    });
-    moduleContainer.addEventListener("contextmenu", event => { event.preventDefault(); showBindPopup(moduleContainer, name); });
-    return moduleContainer;
-  }
-
-  function updateLanguage() {
-    title.textContent = translations[currentLanguage]?.title || "UnverifiedV2";
-    closeButton.textContent = translations[currentLanguage]?.closeUI || "Close UI";
-    const modules = gridContainer.children;
-    const moduleKeys = ['autoFullscreen','keystrokes','muteChat','antiAfk','keepSprint','timeDisplay','musicPlayer'];
-    for (let i = 0; i < modules.length; i++) {
-      const moduleTitle = modules[i].querySelector("span");
-      const moduleDesc = modules[i].querySelector("p");
-      const tooltip = modules[i].querySelector(".module-tooltip");
-      if (moduleTitle && moduleKeys[i]) {
-        moduleTitle.textContent = translations[currentLanguage]?.[moduleKeys[i]] || moduleKeys[i];
-        moduleDesc.textContent = translations[currentLanguage]?.[moduleKeys[i] + 'Desc'] || "";
-        tooltip.textContent = translations[currentLanguage]?.tooltipBind || "right-click to bind";
-      }
+    if (strippedText.includes(wordLower)) {
+      return true;
     }
   }
 
+  return false;
+}
 
-  const autoFullscreenModule = createModule(MODULE_NAMES.AUTO_FULLSCREEN, "Automatically toggles Fullscreen");
-  let isAutoFullscreenActive = false;
-  autoFullscreenModule.addEventListener("click", () => {
-    isAutoFullscreenActive = !isAutoFullscreenActive;
-    if (isAutoFullscreenActive) {
-      (document.documentElement.requestFullscreen || document.documentElement.mozRequestFullScreen || document.documentElement.webkitRequestFullscreen || document.documentElement.msRequestFullscreen || (() => {})).call(document.documentElement);
-    } else {
-      (document.exitFullscreen || document.mozCancelFullScreen || document.webkitExitFullscreen || document.msExitFullscreen || (() => {})).call(document);
-    }
+function chatFilterIsAllCaps(text) {
+  const letters = text.replace(/[^a-zA-Z]/g, '');
+  if (letters.length < 10) return false;
+  return letters === letters.toUpperCase();
+}
+
+const MODULE_NAMES = {
+  AUTO_FULLSCREEN: "Auto Fullscreen",
+  KEYSTROKES:      "Keystrokes",
+  MUTE_CHAT:       "Mute Chat",
+  CHAT_FILTER:     "Chat Filter",
+  ANTI_AFK:        "Anti-Afk",
+  KEEP_SPRINT:     "Keep Sprint",
+  TIME_DISPLAY:    "Time Display",
+  MUSIC_PLAYER:    "Music Player",
+};
+
+const gridContainer = document.createElement("div");
+gridContainer.style.display = "flex";
+gridContainer.style.flexDirection = "column";
+gridContainer.style.gap = "8px";
+gridContainer.style.marginTop = "16px";
+uv2MainPage.appendChild(gridContainer);
+
+const notificationContainer = document.createElement("div");
+notificationContainer.style.cssText = "position:fixed;bottom:1in;right:20px;z-index:10000;display:flex;flex-direction:column-reverse;align-items:flex-end;";
+document.body.appendChild(notificationContainer);
+
+function showNotification(message, isOn) {
+  if (!settings.showNotifications) return;
+  const notification = document.createElement("div");
+  const moduleName = message.split(' was ')[0];
+  notification.textContent = `${moduleName} ${isOn ? (translations[currentLanguage]?.turnedOn || "was turned on") : (translations[currentLanguage]?.turnedOff || "was turned off")}`;
+  notification.classList.add('other-notification');
+  const progressBar = document.createElement("div");
+  progressBar.classList.add("notification-progress");
+  notification.appendChild(progressBar);
+  notificationContainer.appendChild(notification);
+  setTimeout(() => { notification.style.transform = "translateX(0)"; notification.style.opacity = "1"; }, 10);
+  setTimeout(() => {
+    notification.style.transform = "translateX(100%)"; notification.style.opacity = "0";
+    setTimeout(() => { notificationContainer.removeChild(notification); }, 500);
+  }, 3000);
+}
+
+function showBindPopup(moduleElement, moduleName) {
+  const existingPopup = document.querySelector('.bind-popup');
+  if (existingPopup) existingPopup.remove();
+  const popup = document.createElement("div"); popup.classList.add("bind-popup"); document.body.appendChild(popup);
+  const popupTitle = document.createElement("h3"); popupTitle.textContent = `Bind Key for ${moduleName}`; popup.appendChild(popupTitle);
+  const inputBox = document.createElement("input"); inputBox.placeholder = "Press a key...";
+  if (moduleBindings[moduleName]) inputBox.value = moduleBindings[moduleName];
+  popup.appendChild(inputBox);
+  const bindButton = document.createElement("button"); bindButton.textContent = "Bind";
+  const resetButton = document.createElement("button"); resetButton.textContent = "Unbind";
+  const closeBtn = document.createElement("button"); closeBtn.textContent = "Close";
+  popup.appendChild(bindButton); popup.appendChild(resetButton); popup.appendChild(closeBtn);
+  closeBtn.addEventListener("click", () => { popup.style.display = "none"; isBinding = false; });
+  let keyBinding = null;
+  inputBox.addEventListener("keydown", e => { e.preventDefault(); keyBinding = e.key; inputBox.value = e.key; });
+  bindButton.addEventListener("click", () => { if (keyBinding) { moduleBindings[moduleName] = keyBinding; showNotification(`Bound ${moduleName} to ${keyBinding}`, true); } popup.style.display = "none"; isBinding = false; });
+  resetButton.addEventListener("click", () => { delete moduleBindings[moduleName]; showNotification(`${moduleName} unbound`, false); popup.style.display = "none"; isBinding = false; });
+  const rect = moduleElement.getBoundingClientRect();
+  popup.style.top = `${rect.top + window.scrollY + rect.height + 10}px`;
+  popup.style.left = `${rect.left + window.scrollX}px`;
+  popup.style.display = "block"; isBinding = true;
+}
+
+function createModule(name, description) {
+  const moduleContainer = document.createElement("div");
+  moduleContainer.style.cssText = [
+    "display:flex;align-items:center;height:52px;padding:0 16px;",
+    "border-radius:8px;background:linear-gradient(135deg,#242424,#1c1c1c);",
+    "border:1px solid rgba(255,255,255,0.07);cursor:pointer;",
+    "transition:all 0.18s ease;box-shadow:0 1px 4px rgba(0,0,0,0.4);",
+    "position:relative;user-select:none;width:100%;box-sizing:border-box;flex-shrink:0;"
+  ].join("");
+  moduleContainer.classList.add('module-container');
+  moduleContainer.dataset.moduleName = name;
+  moduleContainer._uv2Active = false;
+
+  const nameSection = document.createElement("div");
+  nameSection.style.cssText = "min-width:155px;flex-shrink:0;display:flex;align-items:center;gap:9px;";
+  const moduleTitleEl = document.createElement("span");
+  moduleTitleEl.textContent = name;
+  moduleTitleEl.style.cssText = `color:${guiPrimaryColor};font-size:13.5px;font-family:MinibloxFont,sans-serif;white-space:nowrap;text-shadow:0 0 18px ${guiPrimaryColor}40;`;
+  nameSection.appendChild(moduleTitleEl);
+  moduleContainer.appendChild(nameSection);
+
+  const divider = document.createElement("div");
+  divider.style.cssText = "width:1px;height:22px;background:rgba(255,255,255,0.09);flex-shrink:0;margin:0 16px;";
+  moduleContainer.appendChild(divider);
+
+  const descEl = document.createElement("p");
+  descEl.textContent = description;
+  descEl.style.cssText = "flex:1;color:#555;font-size:12px;font-family:MinibloxFont,sans-serif;margin:0;white-space:nowrap;overflow:hidden;text-overflow:ellipsis;";
+  moduleContainer.appendChild(descEl);
+
+  const toggleWrap = document.createElement("div");
+  toggleWrap.style.cssText = "width:36px;height:20px;border-radius:10px;background:#252525;flex-shrink:0;margin-left:14px;position:relative;transition:background 0.2s ease;border:1px solid rgba(255,255,255,0.07);";
+  const toggleKnob = document.createElement("div");
+  toggleKnob.style.cssText = "position:absolute;top:2px;left:2px;width:14px;height:14px;border-radius:50%;background:#4a4a4a;transition:all 0.2s ease;";
+  toggleWrap.appendChild(toggleKnob);
+  moduleContainer.appendChild(toggleWrap);
+
+  const tooltip = document.createElement("div");
+  tooltip.classList.add("module-tooltip");
+  tooltip.textContent = translations[currentLanguage]?.tooltipBind || "right-click to bind";
+  moduleContainer.appendChild(tooltip);
+
+  moduleContainer._toggleWrap = toggleWrap;
+  moduleContainer._toggleKnob = toggleKnob;
+
+  gridContainer.appendChild(moduleContainer);
+
+  let tooltipTimeout;
+  moduleContainer.addEventListener("mouseenter", () => {
+    tooltipTimeout = setTimeout(() => { tooltip.style.visibility = "visible"; tooltip.style.opacity = 1; }, 1500);
+    if (!moduleContainer._uv2Active) moduleContainer.style.background = "linear-gradient(135deg,#2c2c2c,#222222)";
   });
-
-  const keystrokesModule = createModule(MODULE_NAMES.KEYSTROKES, "Displays the keys you press in real-time.");
-  let isKeystrokesActive = false;
-  keystrokesModule.addEventListener("click", () => {
-    isKeystrokesActive = !isKeystrokesActive;
-    if (isKeystrokesActive) {
-      if (document.getElementById('keystrokes-container')) document.getElementById('keystrokes-container').remove();
-      const kc = document.createElement('div'); kc.id = 'keystrokes-container';
-      kc.style.cssText = 'z-index:10000;width:300px;height:230px;position:fixed;opacity:100%;box-shadow:none;background-color:transparent;transform:translate(-50%,-50%);display:flex;flex-direction:column;align-items:center;user-select:none;';
-      const savedL = localStorage.getItem('left'), savedT = localStorage.getItem('top');
-      kc.style.left = (savedL ? parseInt(savedL) : window.innerWidth/2) + 'px';
-      kc.style.top = (savedT ? parseInt(savedT) : window.innerHeight/2) + 'px';
-      document.body.appendChild(kc);
-      let isDragging = false;
-      kc.addEventListener('mousedown', e => { if (e.target.nodeName !== 'INPUT') isDragging = true; });
-      document.addEventListener('mousemove', e => { if (isDragging) { kc.style.left = e.clientX + 'px'; kc.style.top = e.clientY + 'px'; localStorage.setItem('left', e.clientX); localStorage.setItem('top', e.clientY); } });
-      document.addEventListener('mouseup', () => { isDragging = false; });
-      const createKey = (text, style = {}) => {
-        const key = document.createElement('div'); key.textContent = text;
-        Object.assign(key.style, { position:'absolute', color:'#ffffff', fontWeight:'bold', borderRadius:'0', backgroundColor:'rgba(128,128,128,0.7)', border:'3px solid #333333', fontSize:'18px', height:'50px', width:'50px', textAlign:'center', lineHeight:'50px', fontFamily:'Roboto Mono, monospace', zIndex:'10000', ...style });
-        return key;
-      };
-      const wkey = createKey('W', {top:'0px',left:'125px'}), akey = createKey('A', {top:'55px',left:'70px'}), skey = createKey('S', {top:'55px',left:'125px'}), dkey = createKey('D', {top:'55px',left:'180px'});
-      const lmb = createKey('LMB', {top:'110px',left:'70px',width:'79px'}), rmb = createKey('RMB', {top:'110px',left:'150px',width:'79px'}), space = createKey('_____', {top:'170px',left:'70px',width:'160px'});
-      kc.append(wkey, akey, skey, dkey, lmb, rmb, space);
-      const downColor = '#8B0000', upColor = 'rgba(128,128,128,0.7)';
-      document.addEventListener('keydown', e => { if(e.code==='KeyW') wkey.style.backgroundColor=downColor; if(e.code==='KeyS') skey.style.backgroundColor=downColor; if(e.code==='KeyA') akey.style.backgroundColor=downColor; if(e.code==='KeyD') dkey.style.backgroundColor=downColor; if(e.code==='Space') space.style.backgroundColor=downColor; });
-      document.addEventListener('keyup', e => { if(e.code==='KeyW') wkey.style.backgroundColor=upColor; if(e.code==='KeyS') skey.style.backgroundColor=upColor; if(e.code==='KeyA') akey.style.backgroundColor=upColor; if(e.code==='KeyD') dkey.style.backgroundColor=upColor; if(e.code==='Space') space.style.backgroundColor=upColor; });
-      document.addEventListener('mousedown', e => { if(e.button===0) lmb.style.backgroundColor=downColor; if(e.button===2) rmb.style.backgroundColor=downColor; });
-      document.addEventListener('mouseup', e => { if(e.button===0) lmb.style.backgroundColor=upColor; if(e.button===2) rmb.style.backgroundColor=upColor; });
-    } else {
-      const kc = document.getElementById('keystrokes-container'); if (kc) kc.remove();
-    }
+  moduleContainer.addEventListener("mouseleave", () => {
+    clearTimeout(tooltipTimeout); tooltip.style.visibility = "hidden"; tooltip.style.opacity = 0;
+    if (!moduleContainer._uv2Active) moduleContainer.style.background = "linear-gradient(135deg,#242424,#1c1c1c)";
   });
-
-  const muteChatModule = createModule(MODULE_NAMES.MUTE_CHAT, "Prevents other players messages from appearing in chat.");
-  let isMuteChatActive=false, originalAddChat=null;
-  muteChatModule.addEventListener("click", () => {
-    isMuteChatActive = !isMuteChatActive;
-    const reactRoot = document.querySelector("#react"); if (!reactRoot) return;
-    try {
-      const fiber = Object.values(reactRoot)[0];
-      const game = fiber?.updateQueue?.baseState?.element?.props?.game;
-      if (game && game.chat) {
-        if (isMuteChatActive) { if(!originalAddChat) originalAddChat=game.chat.addChat; game.chat.addChat=function(){}; }
-        else { if(originalAddChat) game.chat.addChat=originalAddChat; }
+  moduleContainer.addEventListener("click", () => {
+    if (!isBinding) {
+      moduleContainer._uv2Active = !moduleContainer._uv2Active;
+      const isActive = moduleContainer._uv2Active;
+      moduleContainer.classList.add('module-toggle-animation');
+      setTimeout(() => moduleContainer.classList.remove('module-toggle-animation'), 300);
+      if (!isRestoring) {
+        if (settings.saving) localStorage.setItem('uv2-module-' + name, isActive ? 'true' : 'false');
+        playModuleClickSound(isActive);
       }
-    } catch(e) {}
+      if (isActive) {
+        moduleContainer.style.border = `1px solid ${guiPrimaryColor}80`;
+        moduleContainer.style.background = "linear-gradient(135deg,#1d2b1f,#182018)";
+        moduleContainer.style.boxShadow = `0 0 0 3px ${guiPrimaryColor}14, 0 1px 4px rgba(0,0,0,0.4)`;
+        toggleWrap.style.background = `${guiPrimaryColor}40`; toggleWrap.style.borderColor = `${guiPrimaryColor}60`;
+        toggleKnob.style.background = guiPrimaryColor; toggleKnob.style.transform = "translateX(16px)";
+        if (!isRestoring) showNotification(`${name} was turned on`, true);
+      } else {
+        moduleContainer.style.border = "1px solid rgba(255,255,255,0.07)";
+        moduleContainer.style.background = "linear-gradient(135deg,#242424,#1c1c1c)";
+        moduleContainer.style.boxShadow = "0 1px 4px rgba(0,0,0,0.4)";
+        toggleWrap.style.background = "#252525"; toggleWrap.style.borderColor = "rgba(255,255,255,0.07)";
+        toggleKnob.style.background = "#4a4a4a"; toggleKnob.style.transform = "translateX(0)";
+        if (!isRestoring) showNotification(`${name} was turned off`, false);
+      }
+    }
   });
+  moduleContainer.addEventListener("contextmenu", event => { event.preventDefault(); showBindPopup(moduleContainer, name); });
+  return moduleContainer;
+}
 
-  createModule(MODULE_NAMES.ANTI_AFK, "Presses WASD on its own to avoid being kicked for being AFK");
-  const antiAfkModule = [...gridContainer.children].find(c => c.dataset.moduleName === MODULE_NAMES.ANTI_AFK);
-  let isAntiAfkActive=false, antiAfkInterval=null, antiAfkBox=null;
-  if (antiAfkModule) {
-    antiAfkModule.addEventListener("click", () => {
-      isAntiAfkActive = !isAntiAfkActive;
-      if (isAntiAfkActive) {
-        antiAfkBox = document.createElement("div"); antiAfkBox.id="anti-afk-counter";
-        antiAfkBox.style.cssText = "position:fixed;top:100px;left:20px;padding:8px 14px;background:rgba(0,0,0,0.6);backdrop-filter:blur(8px);border:1px solid rgba(255,255,255,0.15);border-radius:8px;z-index:9999;cursor:move;user-select:none;font-family:'Segoe UI','Roboto',sans-serif;display:flex;align-items:center;gap:8px;box-shadow:0 4px 12px rgba(0,0,0,0.3);";
-        const afkDot = document.createElement("div"); afkDot.style.cssText = `width:10px;height:10px;border-radius:50%;background-color:${guiPrimaryColor};box-shadow:0 0 12px ${guiPrimaryColor}99;animation:afkPulse 1.5s infinite;`;
-        const afkText = document.createElement("div"); afkText.textContent="Anti-AFK"; afkText.style.cssText = `font-size:16px;font-weight:700;color:${guiPrimaryColor};letter-spacing:0.5px;`;
-        antiAfkBox.appendChild(afkDot); antiAfkBox.appendChild(afkText);
-        const afkStyle = document.createElement("style"); afkStyle.textContent="@keyframes afkPulse{0%,100%{opacity:1;transform:scale(1)}50%{opacity:0.5;transform:scale(1.2)}}"; document.head.appendChild(afkStyle);
-        document.body.appendChild(antiAfkBox);
-        let isDrag=false, offX=0, offY=0;
-        antiAfkBox.addEventListener("mousedown", e => { isDrag=true; offX=e.clientX-antiAfkBox.getBoundingClientRect().left; offY=e.clientY-antiAfkBox.getBoundingClientRect().top; e.preventDefault(); });
-        document.addEventListener("mousemove", e => { if(isDrag){ antiAfkBox.style.left=`${e.clientX-offX}px`; antiAfkBox.style.top=`${e.clientY-offY}px`; } });
-        document.addEventListener("mouseup", () => { isDrag=false; });
-        const keys=[['w','KeyW',87],['a','KeyA',65],['s','KeyS',83],['d','KeyD',68],[' ','Space',32]]; let idx=0;
-        antiAfkInterval = setInterval(() => {
-          const [key,code,keyCode]=keys[idx]; idx=(idx+1)%keys.length;
-          const t=document.activeElement||document.body;
-          t.dispatchEvent(new KeyboardEvent('keydown',{key,code,keyCode,which:keyCode,bubbles:true,cancelable:true}));
-          setTimeout(()=>t.dispatchEvent(new KeyboardEvent('keyup',{key,code,keyCode,which:keyCode,bubbles:true,cancelable:true})),50);
-        }, 500);
-      } else { if(antiAfkInterval) clearInterval(antiAfkInterval); if(antiAfkBox) antiAfkBox.remove(); }
-    });
+function updateLanguage() {
+  title.textContent = translations[currentLanguage]?.title || "UnverifiedV2";
+  closeButton.textContent = translations[currentLanguage]?.closeUI || "Close UI";
+  const modules = gridContainer.children;
+  const moduleKeys = ['autoFullscreen','keystrokes','muteChat','chatFilter','antiAfk','keepSprint','timeDisplay','musicPlayer'];
+  for (let i = 0; i < modules.length; i++) {
+    const moduleTitle = modules[i].querySelector("span");
+    const moduleDesc = modules[i].querySelector("p");
+    const tooltip = modules[i].querySelector(".module-tooltip");
+    if (moduleTitle && moduleKeys[i]) {
+      moduleTitle.textContent = translations[currentLanguage]?.[moduleKeys[i]] || moduleKeys[i];
+      moduleDesc.textContent = translations[currentLanguage]?.[moduleKeys[i] + 'Desc'] || "";
+      tooltip.textContent = translations[currentLanguage]?.tooltipBind || "right-click to bind";
+    }
   }
+}
+
+const autoFullscreenModule = createModule(MODULE_NAMES.AUTO_FULLSCREEN, "Automatically toggles Fullscreen");
+let isAutoFullscreenActive = false;
+autoFullscreenModule.addEventListener("click", () => {
+  isAutoFullscreenActive = !isAutoFullscreenActive;
+  if (isAutoFullscreenActive) {
+    (document.documentElement.requestFullscreen || document.documentElement.mozRequestFullScreen || document.documentElement.webkitRequestFullscreen || document.documentElement.msRequestFullscreen || (() => {})).call(document.documentElement);
+  } else {
+    (document.exitFullscreen || document.mozCancelFullScreen || document.webkitExitFullscreen || document.msExitFullscreen || (() => {})).call(document);
+  }
+});
+
+const keystrokesModule = createModule(MODULE_NAMES.KEYSTROKES, "Displays the keys you press in real-time.");
+let isKeystrokesActive = false;
+keystrokesModule.addEventListener("click", () => {
+  isKeystrokesActive = !isKeystrokesActive;
+  if (isKeystrokesActive) {
+    if (document.getElementById('keystrokes-container')) document.getElementById('keystrokes-container').remove();
+    const kc = document.createElement('div'); kc.id = 'keystrokes-container';
+    kc.style.cssText = 'z-index:10000;width:300px;height:230px;position:fixed;opacity:100%;box-shadow:none;background-color:transparent;transform:translate(-50%,-50%);display:flex;flex-direction:column;align-items:center;user-select:none;';
+    const savedL = localStorage.getItem('left'), savedT = localStorage.getItem('top');
+    kc.style.left = (savedL ? parseInt(savedL) : window.innerWidth/2) + 'px';
+    kc.style.top = (savedT ? parseInt(savedT) : window.innerHeight/2) + 'px';
+    document.body.appendChild(kc);
+    let isDragging = false;
+    kc.addEventListener('mousedown', e => { if (e.target.nodeName !== 'INPUT') isDragging = true; });
+    document.addEventListener('mousemove', e => { if (isDragging) { kc.style.left = e.clientX + 'px'; kc.style.top = e.clientY + 'px'; localStorage.setItem('left', e.clientX); localStorage.setItem('top', e.clientY); } });
+    document.addEventListener('mouseup', () => { isDragging = false; });
+    const createKey = (text, style = {}) => {
+      const key = document.createElement('div'); key.textContent = text;
+      Object.assign(key.style, { position:'absolute', color:'#ffffff', fontWeight:'bold', borderRadius:'0', backgroundColor:'rgba(128,128,128,0.7)', border:'3px solid #333333', fontSize:'18px', height:'50px', width:'50px', textAlign:'center', lineHeight:'50px', fontFamily:'Roboto Mono, monospace', zIndex:'10000', ...style });
+      return key;
+    };
+    const wkey = createKey('W', {top:'0px',left:'125px'}), akey = createKey('A', {top:'55px',left:'70px'}), skey = createKey('S', {top:'55px',left:'125px'}), dkey = createKey('D', {top:'55px',left:'180px'});
+    const lmb = createKey('LMB', {top:'110px',left:'70px',width:'79px'}), rmb = createKey('RMB', {top:'110px',left:'150px',width:'79px'}), space = createKey('_____', {top:'170px',left:'70px',width:'160px'});
+    kc.append(wkey, akey, skey, dkey, lmb, rmb, space);
+    const downColor = '#8B0000', upColor = 'rgba(128,128,128,0.7)';
+    document.addEventListener('keydown', e => { if(e.code==='KeyW') wkey.style.backgroundColor=downColor; if(e.code==='KeyS') skey.style.backgroundColor=downColor; if(e.code==='KeyA') akey.style.backgroundColor=downColor; if(e.code==='KeyD') dkey.style.backgroundColor=downColor; if(e.code==='Space') space.style.backgroundColor=downColor; });
+    document.addEventListener('keyup', e => { if(e.code==='KeyW') wkey.style.backgroundColor=upColor; if(e.code==='KeyS') skey.style.backgroundColor=upColor; if(e.code==='KeyA') akey.style.backgroundColor=upColor; if(e.code==='KeyD') dkey.style.backgroundColor=upColor; if(e.code==='Space') space.style.backgroundColor=upColor; });
+    document.addEventListener('mousedown', e => { if(e.button===0) lmb.style.backgroundColor=downColor; if(e.button===2) rmb.style.backgroundColor=downColor; });
+    document.addEventListener('mouseup', e => { if(e.button===0) lmb.style.backgroundColor=upColor; if(e.button===2) rmb.style.backgroundColor=upColor; });
+  } else {
+    const kc = document.getElementById('keystrokes-container'); if (kc) kc.remove();
+  }
+});
+
+const muteChatModule = createModule(MODULE_NAMES.MUTE_CHAT, "Prevents other players messages from appearing in chat.");
+let isMuteChatActive=false, originalAddChat=null;
+muteChatModule.addEventListener("click", () => {
+  isMuteChatActive = !isMuteChatActive;
+  const reactRoot = document.querySelector("#react"); if (!reactRoot) return;
+  try {
+    const fiber = Object.values(reactRoot)[0];
+    const game = fiber?.updateQueue?.baseState?.element?.props?.game;
+    if (game && game.chat) {
+      if (isMuteChatActive) { if(!originalAddChat) originalAddChat=game.chat.addChat; game.chat.addChat=function(){}; }
+      else { if(originalAddChat) game.chat.addChat=originalAddChat; }
+    }
+  } catch(e) {}
+});
+
+const chatFilterModule = createModule(MODULE_NAMES.CHAT_FILTER, "Blocks swear words and spam from appearing in chat.");
+let isChatFilterActive = false;
+let chatFilterOriginalAddChat = null;
+let chatFilterMessageCache = [];
+const CHAT_FILTER_SPAM_THRESHOLD = 3;
+const CHAT_FILTER_SPAM_WINDOW = 10000;
+
+function chatFilterIsSpam(text) {
+  const now = Date.now();
+  chatFilterMessageCache = chatFilterMessageCache.filter(m => now - m.time < CHAT_FILTER_SPAM_WINDOW);
+
+  const similarMessages = chatFilterMessageCache.filter(m => m.text === text);
+  if (similarMessages.length >= CHAT_FILTER_SPAM_THRESHOLD - 1) {
+    return true;
+  }
+
+  chatFilterMessageCache.push({ text, time: now });
+  return false;
+}
+
+function chatFilterShouldBlock(chatObj) {
+  if (!chatObj || !chatObj.text) return false;
+
+  const text = chatObj.text;
+
+  if (text.includes('Message Blocked!')) {
+    return false;
+  }
+
+  if (CHAT_FILTER_CONFIG.blockBadWords && chatFilterContainsBadWords(text)) {
+    return true;
+  }
+
+  if (CHAT_FILTER_CONFIG.blockSpam && chatFilterIsSpam(text)) {
+    return true;
+  }
+
+  if (CHAT_FILTER_CONFIG.blockAllCaps && chatFilterIsAllCaps(text)) {
+    return true;
+  }
+
+  return false;
+}
+
+chatFilterModule.addEventListener("click", () => {
+  isChatFilterActive = !isChatFilterActive;
+  const reactRoot = document.querySelector("#react");
+  if (!reactRoot) return;
+  try {
+    const fiber = Object.values(reactRoot)[0];
+    const game = fiber?.updateQueue?.baseState?.element?.props?.game;
+    if (game && game.chat) {
+      if (isChatFilterActive) {
+        if (!chatFilterOriginalAddChat) chatFilterOriginalAddChat = game.chat.addChat;
+        game.chat.addChat = function(chatObj) {
+          if (chatFilterShouldBlock(chatObj)) {
+            chatFilterOriginalAddChat.call(this, {
+              text: "\\#FF0000\\Message Blocked!\\reset\\"
+            });
+            return;
+          }
+          chatFilterOriginalAddChat.call(this, chatObj);
+        };
+      } else {
+        if (chatFilterOriginalAddChat) game.chat.addChat = chatFilterOriginalAddChat;
+      }
+    }
+  } catch(e) {}
+});
+
+createModule(MODULE_NAMES.ANTI_AFK, "Presses WASD on its own to avoid being kicked for being AFK");
+const antiAfkModule = [...gridContainer.children].find(c => c.dataset.moduleName === MODULE_NAMES.ANTI_AFK);
+let isAntiAfkActive=false, antiAfkInterval=null, antiAfkBox=null;
+if (antiAfkModule) {
+  antiAfkModule.addEventListener("click", () => {
+    isAntiAfkActive = !isAntiAfkActive;
+    if (isAntiAfkActive) {
+      antiAfkBox = document.createElement("div"); antiAfkBox.id="anti-afk-counter";
+      antiAfkBox.style.cssText = "position:fixed;top:100px;left:20px;padding:8px 14px;background:rgba(0,0,0,0.6);backdrop-filter:blur(8px);border:1px solid rgba(255,255,255,0.15);border-radius:8px;z-index:9999;cursor:move;user-select:none;font-family:'Segoe UI','Roboto',sans-serif;display:flex;align-items:center;gap:8px;box-shadow:0 4px 12px rgba(0,0,0,0.3);";
+      const afkDot = document.createElement("div"); afkDot.style.cssText = `width:10px;height:10px;border-radius:50%;background-color:${guiPrimaryColor};box-shadow:0 0 12px ${guiPrimaryColor}99;animation:afkPulse 1.5s infinite;`;
+      const afkText = document.createElement("div"); afkText.textContent="Anti-AFK"; afkText.style.cssText = `font-size:16px;font-weight:700;color:${guiPrimaryColor};letter-spacing:0.5px;`;
+      antiAfkBox.appendChild(afkDot); antiAfkBox.appendChild(afkText);
+      const afkStyle = document.createElement("style"); afkStyle.textContent="@keyframes afkPulse{0%,100%{opacity:1;transform:scale(1)}50%{opacity:0.5;transform:scale(1.2)}}"; document.head.appendChild(afkStyle);
+      document.body.appendChild(antiAfkBox);
+      let isDrag=false, offX=0, offY=0;
+      antiAfkBox.addEventListener("mousedown", e => { isDrag=true; offX=e.clientX-antiAfkBox.getBoundingClientRect().left; offY=e.clientY-antiAfkBox.getBoundingClientRect().top; e.preventDefault(); });
+      document.addEventListener("mousemove", e => { if(isDrag){ antiAfkBox.style.left=`${e.clientX-offX}px`; antiAfkBox.style.top=`${e.clientY-offY}px`; } });
+      document.addEventListener("mouseup", () => { isDrag=false; });
+      const keys=[['w','KeyW',87],['a','KeyA',65],['s','KeyS',83],['d','KeyD',68],[' ','Space',32]]; let idx=0;
+      antiAfkInterval = setInterval(() => {
+        const [key,code,keyCode]=keys[idx]; idx=(idx+1)%keys.length;
+        const t=document.activeElement||document.body;
+        t.dispatchEvent(new KeyboardEvent('keydown',{key,code,keyCode,which:keyCode,bubbles:true,cancelable:true}));
+        setTimeout(()=>t.dispatchEvent(new KeyboardEvent('keyup',{key,code,keyCode,which:keyCode,bubbles:true,cancelable:true})),50);
+      }, 500);
+    } else { if(antiAfkInterval) clearInterval(antiAfkInterval); if(antiAfkBox) antiAfkBox.remove(); }
+  });
+}
 
   createModule(MODULE_NAMES.KEEP_SPRINT, "Keeps you sprinting automatically.");
   const keepSprintModule = [...gridContainer.children].find(c => c.dataset.moduleName === MODULE_NAMES.KEEP_SPRINT);
