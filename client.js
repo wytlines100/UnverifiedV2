@@ -1,11 +1,11 @@
 // ==UserScript==
-// @name         UnverifiedV2
+// @name         Unverified V2
 // @namespace    http://tampermonkey.net/
 // @version      2.1.1
 // @description  Look at my license before you modify, I WILL DMCA you.
 // @icon         https://raw.githubusercontent.com/wytlines100/UnverifiedV2/refs/heads/main/logo.jpg
 // @license      Proprietary License
-// @author       wytlines, DeadFish7, andreypidd, jet, joudaALT TrustIsOver, TheM1ddleM1n
+// @author       wytlines, DeadFish7, andreypidd, jet, joudaALT, TrustIsOver, TheM1ddleM1n
 // @match        https://miniblox.io/
 // @grant        GM_xmlhttpRequest
 // @grant        unsafeWindow
@@ -83,7 +83,7 @@ class UnverifiedIntro {
   showInitializedNotif() {
     const n = document.createElement("div");
     n.classList.add('initialized-notification');
-    n.textContent = "UnverifiedV2 Initialized";
+    n.textContent = "UnverifiedV2 Initialized!";
     document.body.appendChild(n);
     setTimeout(() => { n.style.top = "10px"; n.style.opacity = "1"; }, 10);
     setTimeout(() => { n.style.top = "-50px"; n.style.opacity = "0"; }, 2000);
@@ -111,7 +111,7 @@ class UnverifiedIntro {
     if (game && game.chat && typeof game.chat.addChat === "function") {
       clearInterval(waitForGame);
       game.chat.addChat({
-        text: "\\glow\\\\shiny\\\\#BF3011\\[Unverified Client]:\\reset\\ Hello, Thank You For Using Unverified Client."
+        text: "\\glow\\\\shiny\\\\#BF3011\\[Unverified Client]:\\reset\\ Hello, thanks for using Unverified Client! Join our discord for updates/support!"
       });
     }
   }, 500);
@@ -557,7 +557,6 @@ class UnverifiedShortcutMenu {
   ].join("");
   uv2Sidebar.appendChild(uv2SidebarLogo);
 
-
   const uv2ProfileCard = document.createElement("div");
   uv2ProfileCard.id = "uv2-profile-card";
   uv2ProfileCard.style.cssText = "padding:10px;margin:10px;display:flex;flex-direction:column;align-items:center;gap:8px;";
@@ -710,31 +709,24 @@ class UnverifiedShortcutMenu {
 
   ui.appendChild(uv2Sidebar);
 
-
-
   const uv2ContentArea = document.createElement("div");
   uv2ContentArea.style.cssText = "flex:1;display:flex;flex-direction:column;overflow:hidden;min-width:0;";
   ui.appendChild(uv2ContentArea);
-
 
   const uv2MainPage = document.createElement("div");
   uv2MainPage.id = "uv2-page-main-content";
   uv2MainPage.style.cssText = "flex:1;display:flex;flex-direction:column;overflow-y:auto;overflow-x:hidden;padding:22px 24px;";
   uv2ContentArea.appendChild(uv2MainPage);
 
-
   const uv2GUIPage = document.createElement("div");
   uv2GUIPage.id = "uv2-page-gui-content";
   uv2GUIPage.style.cssText = "flex:1;display:none;flex-direction:column;overflow-y:auto;overflow-x:hidden;padding:22px 24px;";
   uv2ContentArea.appendChild(uv2GUIPage);
 
-
-
   const uv2ConfigPage = document.createElement("div");
   uv2ConfigPage.id = "uv2-page-config-content";
   uv2ConfigPage.style.cssText = "flex:1;display:none;flex-direction:column;overflow-y:auto;overflow-x:hidden;padding:22px 24px;";
   uv2ContentArea.appendChild(uv2ConfigPage);
-
 
   const uv2SettingsPage = document.createElement("div");
   uv2SettingsPage.id = "uv2-page-settings-content";
@@ -1093,7 +1085,6 @@ class UnverifiedShortcutMenu {
     }
   }
 
-
   function switchUv2Page(page) {
     uv2MainPage.style.display        = page === 'main'         ? 'flex' : 'none';
     uv2GUIPage.style.display         = page === 'gui'          ? 'flex' : 'none';
@@ -1110,8 +1101,6 @@ class UnverifiedShortcutMenu {
     });
   }
 
-
-
   const headerRow = document.createElement("div");
   headerRow.style.cssText = "display:flex;align-items:center;justify-content:center;margin-bottom:18px;padding-bottom:16px;border-bottom:1px solid rgba(255,255,255,0.07);position:relative;";
   uv2MainPage.appendChild(headerRow);
@@ -1126,11 +1115,9 @@ class UnverifiedShortcutMenu {
   title.style.userSelect = "none";
   headerRow.appendChild(title);
 
-
   const languageDropdown = document.createElement("select");
   languageDropdown.style.cssText = `background:${guiBackgroundColor};color:${guiTextColor};border:1px solid ${guiPrimaryColor};border-radius:8px;padding:8px 14px;font-size:13px;cursor:pointer;font-family:'MinibloxFont',sans-serif;position:absolute;right:0;top:50%;transform:translateY(-50%);`;
   headerRow.appendChild(languageDropdown);
-
 
   let titleClickCount = 0;
   let titleEggCycle = 0;
@@ -1178,7 +1165,6 @@ class UnverifiedShortcutMenu {
       }, 960);
     }
   });
-
 
   const settingsOverlay = document.createElement("div");
   settingsOverlay.id = "uv2-settings-overlay";
@@ -1245,7 +1231,6 @@ class UnverifiedShortcutMenu {
   `;
   document.body.appendChild(settingsOverlay);
 
-
   const uv2InlineSettings = settingsOverlay.querySelector('#uv2-settings-panel');
   if (uv2InlineSettings) {
     uv2InlineSettings.style.width      = "100%";
@@ -1259,14 +1244,11 @@ class UnverifiedShortcutMenu {
   settingsOverlay.style.display        = "none";
   settingsOverlay.style.pointerEvents  = "none";
 
-
   buildGUIPage();
   buildConfigPage();
   applyGUIStyles();
 
-
   switchUv2Page('main');
-
 
   ['fullscreenchange','webkitfullscreenchange','mozfullscreenchange'].forEach(evt => {
     document.addEventListener(evt, () => {
@@ -1274,7 +1256,6 @@ class UnverifiedShortcutMenu {
       ui.style.maxHeight = isFS ? "95vh" : "90vh";
     });
   });
-
 
   document.querySelector("#uv2-settings-close")?.addEventListener("click", () => switchUv2Page('main'));
   document.querySelector("#uv2-toggle-sounds")?.addEventListener("change", function() {
@@ -1335,7 +1316,6 @@ class UnverifiedShortcutMenu {
     afkChat:           localStorage.getItem('uv2-setting-afkchat')  !== 'false',
     vpnWarning:        localStorage.getItem('uv2-setting-vpnwarning') !== 'false',
   };
-
 
   const soundsToggle = document.querySelector("#uv2-toggle-sounds");
   if (soundsToggle) soundsToggle.checked = settings.moduleSounds;
@@ -1398,7 +1378,6 @@ class UnverifiedShortcutMenu {
     } catch(e) {}
   }
 
-
   const translations = {
   en: {
     languageName:"English", title:"UnverifiedV2",
@@ -1435,7 +1414,6 @@ class UnverifiedShortcutMenu {
   });
   languageDropdown.addEventListener("change", e => { currentLanguage = e.target.value; localStorage.setItem('unverified-language', currentLanguage); updateLanguage(); });
 
-
   const BAD_WORDS = [
   'fuck', 'fucking', 'fucker', 'fucked', 'fucks', 'motherfucker', 'motherfuckers',
   'shit', 'shitty', 'shitter', 'bullshit', 'shithead', 'shitfaced',
@@ -1446,7 +1424,7 @@ class UnverifiedShortcutMenu {
   'bastard', 'bastards',
   'dick', 'dicks', 'dickhead', 'dickheads',
   'cock', 'cocks', 'cocksucker', 'cocksuckers',
-  'pussy', 'pussies',
+  'pussy', 'pussies', 'penis', 'pen1s',
   'piss', 'pissed', 'pissing', 'pissoff',
   'cunt', 'cunts',
   'twat', 'twats',
@@ -1470,7 +1448,7 @@ class UnverifiedShortcutMenu {
   'paki', 'pakis',
   'towelhead', 'towelheads',
   'coon', 'coons',
-  'gypsy', 'gypsies',
+  'gypsy', 'gypsies', 'slapper',
   'porn', 'porno', 'pornography', 'pornhub',
   'rape', 'raping', 'raped', 'rapist', 'rapists',
   'hentai',
@@ -1480,7 +1458,7 @@ class UnverifiedShortcutMenu {
   'azz', 'a$$', 'a55',
   'dck', 'd1ck',
   'cnt', 'c*nt',
-  'kys', 'killyourself', 'kms',
+  'kys', 'killyourself', 'kms', 'hell'
 ];
 
 const CHAT_FILTER_CONFIG = {
@@ -1807,7 +1785,7 @@ chatFilterModule.addEventListener("click", () => {
         game.chat.addChat = function(chatObj) {
           if (chatFilterShouldBlock(chatObj)) {
             chatFilterOriginalAddChat.call(this, {
-              text: "\\#FF0000\\Message Blocked!\\reset\\"
+              text: "\\#FF0000\\Message was Blocked!\\reset\\"
             });
             return;
           }
@@ -2223,7 +2201,7 @@ if (antiAfkModule) {
     if (existing) existing.remove();
     const toast = document.createElement('div');
     toast.id = 'uv2-return-toast';
-    toast.textContent = 'Welcome back, Anti-AFK disabled.';
+    toast.textContent = 'Welcome back! Anti-AFK disabled.';
     Object.assign(toast.style, {
       position: 'fixed', top: '-60px', left: '50%', transform: 'translateX(-50%)',
       background: '#2ecc71', color: '#fff', padding: '10px 22px',
@@ -2288,7 +2266,7 @@ if (antiAfkModule) {
     afkTriggered = true;
     afkGraceUntil = Date.now() + 2000;
     showAfkToast();
-    if (settings.afkChat && isInMatch() && !styler.isMainScreen()) sendAfkChatMessage("I'm currently AFK, This Is An Auto Message, Please Hold On.");
+    if (settings.afkChat && isInMatch() && !styler.isMainScreen()) sendAfkChatMessage("I am Currently AFK, Be back shortly. Please Do not disturb me in the meantime.");
     const afkMod = [...gridContainer.children].find(c => c.dataset.moduleName === MODULE_NAMES.ANTI_AFK);
     if (afkMod && !afkMod._uv2Active) {
       afkAntiAfkWasOff = true;
