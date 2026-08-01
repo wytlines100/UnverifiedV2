@@ -1,7 +1,7 @@
 // ==UserScript==
 // @name         UnverifiedV2
 // @namespace    http://tampermonkey.net/
-// @version      2.1.0
+// @version      2.1.1
 // @description  Look at my license before you modify, I WILL DMCA you.
 // @icon         https://raw.githubusercontent.com/wytlines100/UnverifiedV2/refs/heads/main/logo.jpg
 // @license      Proprietary License
@@ -56,7 +56,7 @@ class UnverifiedIntro {
     });
     this.container.appendChild(this.unverifiedText);
     this.creditsText = document.createElement("div");
-    this.creditsText.textContent = "\nBy wytlines, DeadFish7\nandreypidd, jet, joudaALT, TrustIsOver";
+    this.creditsText.textContent = "\nBy wytlines, DeadFish7\nandreypidd, jet, joudaALT, TrustIsOver, TheM1ddleM1n";
     Object.assign(this.creditsText.style, {
       color: "red", fontSize: "30px", opacity: 0, transition: "opacity 0.8s ease",
       whiteSpace: 'pre-line', textAlign: "center",
@@ -705,7 +705,7 @@ class UnverifiedShortcutMenu {
     "font-size:9px;color:#333;letter-spacing:1.5px;text-transform:uppercase;",
     "font-family:MinibloxFont,sans-serif;text-align:center;"
   ].join("");
-  uv2SidebarFooter.textContent = "v2.1.0";
+  uv2SidebarFooter.textContent = "v2.1.1";
   uv2Sidebar.appendChild(uv2SidebarFooter);
 
   ui.appendChild(uv2Sidebar);
@@ -1235,8 +1235,8 @@ class UnverifiedShortcutMenu {
           </div>
           <div class="uv2-settings-page" id="uv2-page-about">
             <div class="uv2-section-title">Info</div>
-            <div class="uv2-setting-row"><div><div class="uv2-setting-label">Version</div><div class="uv2-setting-desc">2.1.0</div></div></div>
-            <div class="uv2-setting-row"><div><div class="uv2-setting-label">Authors</div><div class="uv2-setting-desc">wytlines, DeadFish7, andreypidd, jet, joudaALT, TrustIsOver</div></div></div>
+            <div class="uv2-setting-row"><div><div class="uv2-setting-label">Version</div><div class="uv2-setting-desc">2.1.1</div></div></div>
+            <div class="uv2-setting-row"><div><div class="uv2-setting-label">Authors</div><div class="uv2-setting-desc">wytlines, DeadFish7, andreypidd, jet, joudaALT, TrustIsOver, TheM1ddleM1n</div></div></div>
             <div class="uv2-setting-row"><div><div class="uv2-setting-label">License</div><div class="uv2-setting-desc">Proprietary, do not redistribute</div></div></div>
           </div>
         </div>
