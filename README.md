@@ -25,15 +25,15 @@ A custom client for Miniblox, in active development since October 2024.
 - Profile avatar: a sidebar profile picture that is auto-detected by country via IP lookup, uploadable from a local image, or randomizable
 - Settings panel: toggles for module click sounds, toast notifications, UI open/close animation, module-state persistence across reloads, and the idle delay used by Anti-AFK
 - Idle delay configuration: adjustable from 5 to 120 seconds, controlling how long you can be inactive before Anti-AFK auto-enables
-- Chat Filter: Blocks profanity from game.chat
+- Chat Filter: Blocks profanity from `game.chat`
 
 ## Installation
 
-1. Install a userscript manager such as Tampermonkey for your browser.
-2. Add a new script in Tampermonkey and paste in the contents of `client.js` (or install directly from the repository if a hosted raw link is provided).
+1. Install a userscript manager such as Tampermonkey for your browser. (Make sure Allow UserScripts is on!)
+2. Add a new script in Tampermonkey and paste in the contents of `client.js`.
 3. Save the script and make sure it is enabled.
-4. Visit a supported site listed under Requirements. The client will initialize automatically.
-5. Press the right Shift key to open or close the client menu.
+4. Visit miniblox.io. The client will initialize automatically.
+5. Press the Right Shift key to open or close the client menu.
 
 See API.md for the full API reference, including cleanup functions and notification options.
 
@@ -50,7 +50,7 @@ Contributions are welcome. If you would like to report a bug, suggest a feature,
 
 Current contributors: wytlines, DeadFish7, andreypidd, jet, joudaALT, TrustIsOver, TheM1ddleM1n
 
-## Changelog
+## Latest Version
 
 ### 2.1.0
 - Added Settings panel with sound, notification, animation, and module-persistence toggles
@@ -60,14 +60,7 @@ Current contributors: wytlines, DeadFish7, andreypidd, jet, joudaALT, TrustIsOve
 - Added config save/load via JSON
 - Added multi-language support (English, Spanish)
 - Added profile avatar system
-
-### 1.9
-- Initial client with core modules: Auto Fullscreen, Keystrokes, FPS Counter, CPS Counter, Hitboxes, Ping Counter, Armor HUD, FPS Booster, Render Distance Bypasser
-- Added key binding support
-- Added theme dropdown for background customization
-
-### 1.0
-- Initial release!
+- Added Chat Profanity Checker
 
 ## Credits
 
@@ -83,4 +76,4 @@ Users are granted permission to use the client for personal or public use, subje
 
 ## Community
 
-Join the Discord for updates and support: https://dsc.gg/unverifiedv2
+Join the Discord for updates / support: https://dsc.gg/unverifiedv2
