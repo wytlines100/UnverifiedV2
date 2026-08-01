@@ -50,7 +50,12 @@ Contributions are welcome. If you would like to report a bug, suggest a feature,
 
 Current contributors: wytlines, DeadFish7, andreypidd, jet, joudaALT, TrustIsOver, TheM1ddleM1n
 
-## Latest Version
+## Changelog
+
+### 2.1.1
+- Added Chat Profanity Checker
+- Updated authors
+- Bumped version from 2.1.0 -> 2.1.1
 
 ### 2.1.0
 - Added Settings panel with sound, notification, animation, and module-persistence toggles
@@ -60,7 +65,6 @@ Current contributors: wytlines, DeadFish7, andreypidd, jet, joudaALT, TrustIsOve
 - Added config save/load via JSON
 - Added multi-language support (English, Spanish)
 - Added profile avatar system
-- Added Chat Profanity Checker
 
 ## Credits
 
