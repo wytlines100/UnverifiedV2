@@ -1458,7 +1458,7 @@ class UnverifiedShortcutMenu {
   'azz', 'a$$', 'a55',
   'dck', 'd1ck',
   'cnt', 'c*nt',
-  'kys', 'killyourself', 'kms', 'hell'
+  'kys', 'killyourself', 'kms', 'hell', 'badword1'
 ];
 
 const CHAT_FILTER_CONFIG = {
@@ -1730,7 +1730,7 @@ muteChatModule.addEventListener("click", () => {
 
 const chatFilterModule = createModule(MODULE_NAMES.CHAT_FILTER, "Blocks swear words and spam from appearing in chat.");
 let isChatFilterActive = false;
-let chatFilterOriginalAddChat = null;
+let chatFilterOriginalSubmit = null;
 let chatFilterMessageCache = [];
 const CHAT_FILTER_SPAM_THRESHOLD = 3;
 const CHAT_FILTER_SPAM_WINDOW = 10000;
@@ -1738,64 +1738,64 @@ const CHAT_FILTER_SPAM_WINDOW = 10000;
 function chatFilterIsSpam(text) {
   const now = Date.now();
   chatFilterMessageCache = chatFilterMessageCache.filter(m => now - m.time < CHAT_FILTER_SPAM_WINDOW);
-
   const similarMessages = chatFilterMessageCache.filter(m => m.text === text);
   if (similarMessages.length >= CHAT_FILTER_SPAM_THRESHOLD - 1) {
     return true;
   }
-
   chatFilterMessageCache.push({ text, time: now });
   return false;
 }
 
-function chatFilterShouldBlock(chatObj) {
-  if (!chatObj || !chatObj.text) return false;
-
-  const text = chatObj.text;
-
-  if (text.includes('Message Blocked!')) {
-    return false;
-  }
-
+function chatFilterGetBlockReason(text) {
   if (CHAT_FILTER_CONFIG.blockBadWords && chatFilterContainsBadWords(text)) {
-    return true;
+    return 'profanity';
   }
-
   if (CHAT_FILTER_CONFIG.blockSpam && chatFilterIsSpam(text)) {
-    return true;
+    return 'spam';
   }
-
   if (CHAT_FILTER_CONFIG.blockAllCaps && chatFilterIsAllCaps(text)) {
-    return true;
+    return 'caps';
   }
+  return null;
+}
 
-  return false;
+function chatFilterShowBlockedNotice(reason) {
+  try {
+    const reactRoot = document.querySelector("#react");
+    if (!reactRoot) return;
+    const fiber = Object.values(reactRoot)[0];
+    const game = fiber?.updateQueue?.baseState?.element?.props?.game;
+    if (game && game.chat && typeof game.chat.addChat === "function") {
+      const message = reason === 'spam' ? "No Spamming Please!" : "Message was Blocked!";
+      game.chat.addChat({ text: `\\#FF0000\\${message}\\reset\\` });
+    }
+  } catch(e) {}
 }
 
 chatFilterModule.addEventListener("click", () => {
   isChatFilterActive = !isChatFilterActive;
   const reactRoot = document.querySelector("#react");
   if (!reactRoot) return;
-  try {
-    const fiber = Object.values(reactRoot)[0];
-    const game = fiber?.updateQueue?.baseState?.element?.props?.game;
-    if (game && game.chat) {
-      if (isChatFilterActive) {
-        if (!chatFilterOriginalAddChat) chatFilterOriginalAddChat = game.chat.addChat;
-        game.chat.addChat = function(chatObj) {
-          if (chatFilterShouldBlock(chatObj)) {
-            chatFilterOriginalAddChat.call(this, {
-              text: "\\#FF0000\\Message was Blocked!\\reset\\"
-            });
-            return;
-          }
-          chatFilterOriginalAddChat.call(this, chatObj);
-        };
-      } else {
-        if (chatFilterOriginalAddChat) game.chat.addChat = chatFilterOriginalAddChat;
+  const fiber = Object.values(reactRoot)[0];
+  const game = fiber?.updateQueue?.baseState?.element?.props?.game;
+  if (!game || !game.chat) return;
+  if (isChatFilterActive) {
+    if (!chatFilterOriginalSubmit) chatFilterOriginalSubmit = game.chat.submit.bind(game.chat);
+    game.chat.submit = function(...args) {
+      const text = game.chat.inputValue;
+      if (text) {
+        const reason = chatFilterGetBlockReason(text);
+        if (reason) {
+          game.chat.setInputValue('');
+          chatFilterShowBlockedNotice(reason);
+          return;
+        }
       }
-    }
-  } catch(e) {}
+      return chatFilterOriginalSubmit(...args);
+    };
+  } else {
+    if (chatFilterOriginalSubmit) game.chat.submit = chatFilterOriginalSubmit;
+  }
 });
 
 createModule(MODULE_NAMES.ANTI_AFK, "Presses WASD on its own to avoid being kicked for being AFK");
