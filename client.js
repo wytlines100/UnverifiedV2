@@ -1,7 +1,7 @@
 // ==UserScript==
 // @name         Unverified V2
 // @namespace    http://tampermonkey.net/
-// @version      2.1.1
+// @version      2.1.2
 // @description  Look at my license before you modify, I WILL DMCA you.
 // @icon         https://raw.githubusercontent.com/wytlines100/UnverifiedV2/refs/heads/main/logo.jpg
 // @license      Proprietary License
@@ -704,7 +704,7 @@ class UnverifiedShortcutMenu {
     "font-size:9px;color:#333;letter-spacing:1.5px;text-transform:uppercase;",
     "font-family:MinibloxFont,sans-serif;text-align:center;"
   ].join("");
-  uv2SidebarFooter.textContent = "v2.1.1";
+  uv2SidebarFooter.textContent = "v2.1.2";
   uv2Sidebar.appendChild(uv2SidebarFooter);
 
   ui.appendChild(uv2Sidebar);
@@ -1221,7 +1221,7 @@ class UnverifiedShortcutMenu {
           </div>
           <div class="uv2-settings-page" id="uv2-page-about">
             <div class="uv2-section-title">Info</div>
-            <div class="uv2-setting-row"><div><div class="uv2-setting-label">Version</div><div class="uv2-setting-desc">2.1.1</div></div></div>
+            <div class="uv2-setting-row"><div><div class="uv2-setting-label">Version</div><div class="uv2-setting-desc">2.1.2</div></div></div>
             <div class="uv2-setting-row"><div><div class="uv2-setting-label">Authors</div><div class="uv2-setting-desc">wytlines, DeadFish7, andreypidd, jet, joudaALT, TrustIsOver, TheM1ddleM1n</div></div></div>
             <div class="uv2-setting-row"><div><div class="uv2-setting-label">License</div><div class="uv2-setting-desc">Proprietary, do not redistribute</div></div></div>
           </div>
@@ -1437,13 +1437,13 @@ class UnverifiedShortcutMenu {
   'dyke', 'dykes',
   'nigger', 'niggers', 'nigga', 'niggas', 'nigg', 'n1gga', 'n1gger',
   'retard', 'retarded', 'retards',
-  'nazi', 'nazis',
+  'nazi', 'nazis', 'naz1'
   'kike', 'kikes',
   'chink', 'chinks',
   'spic', 'spics',
   'wetback', 'wetbacks',
   'tranny', 'trannies',
-  'gook', 'gooks',
+  'gook', 'gooks', 'gooner', 'goons', 'goon',
   'beaner', 'beaners',
   'paki', 'pakis',
   'towelhead', 'towelheads',
@@ -1452,13 +1452,13 @@ class UnverifiedShortcutMenu {
   'porn', 'porno', 'pornography', 'pornhub',
   'rape', 'raping', 'raped', 'rapist', 'rapists',
   'hentai',
-  'fuk', 'fck', 'fuc', 'fucc', 'phuck', 'fvck', 'fxck',
+  'fuk', 'fck', 'fuc', 'fucc', 'phuck', 'fvck', 'fxck', 'fuckme'
   'sht', 'shyt', 'sh1t',
-  'btch', 'b1tch', 'biatch',
-  'azz', 'a$$', 'a55',
+  'btch', 'b1tch', 'biatch', 'b1tch',
+  'azz', 'a$$', 'a55', 'azzcrack', 'a$$crack', 'asscrack', 'crack', 'cracking', 'cracked', 'cracks',
   'dck', 'd1ck',
   'cnt', 'c*nt',
-  'kys', 'killyourself', 'kms', 'hell', 'badword1'
+  'kys', 'killyourself', 'kms', 'hell',
 ];
 
 const CHAT_FILTER_CONFIG = {
@@ -1713,24 +1713,10 @@ keystrokesModule.addEventListener("click", () => {
   }
 });
 
-const muteChatModule = createModule(MODULE_NAMES.MUTE_CHAT, "Prevents other players messages from appearing in chat.");
-let isMuteChatActive=false, originalAddChat=null;
-muteChatModule.addEventListener("click", () => {
-  isMuteChatActive = !isMuteChatActive;
-  const reactRoot = document.querySelector("#react"); if (!reactRoot) return;
-  try {
-    const fiber = Object.values(reactRoot)[0];
-    const game = fiber?.updateQueue?.baseState?.element?.props?.game;
-    if (game && game.chat) {
-      if (isMuteChatActive) { if(!originalAddChat) originalAddChat=game.chat.addChat; game.chat.addChat=function(){}; }
-      else { if(originalAddChat) game.chat.addChat=originalAddChat; }
-    }
-  } catch(e) {}
-});
-
 const chatFilterModule = createModule(MODULE_NAMES.CHAT_FILTER, "Blocks swear words and spam from appearing in chat.");
 let isChatFilterActive = false;
 let chatFilterOriginalSubmit = null;
+let chatFilterOriginalAddChat = null;
 let chatFilterMessageCache = [];
 const CHAT_FILTER_SPAM_THRESHOLD = 3;
 const CHAT_FILTER_SPAM_WINDOW = 10000;
@@ -1793,8 +1779,24 @@ chatFilterModule.addEventListener("click", () => {
       }
       return chatFilterOriginalSubmit(...args);
     };
+
+    if (!chatFilterOriginalAddChat) chatFilterOriginalAddChat = game.chat.addChat.bind(game.chat);
+    game.chat.addChat = function(chatObj) {
+      if (!chatObj || typeof chatObj.text !== 'string') {
+        return chatFilterOriginalAddChat(chatObj);
+      }
+      if (chatObj.text.includes('No Spamming Please!') || chatObj.text.includes('Message was Blocked!')) {
+        return chatFilterOriginalAddChat(chatObj);
+      }
+      const reason = chatFilterGetBlockReason(chatObj.text);
+      if (reason) {
+        return;
+      }
+      return chatFilterOriginalAddChat(chatObj);
+    };
   } else {
     if (chatFilterOriginalSubmit) game.chat.submit = chatFilterOriginalSubmit;
+    if (chatFilterOriginalAddChat) game.chat.addChat = chatFilterOriginalAddChat;
   }
 });
 
