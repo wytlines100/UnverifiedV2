@@ -46,7 +46,7 @@ See API.md for the full API reference, including cleanup functions and notificat
 
 ## Contributing
 
-Contributions are welcome. If you would like to report a bug, suggest a feature, or submit a fix, reach out via the contact details below or through the Discord community.
+Contributions are welcome. If you would like to report a bug or suggest a feature, please reach out via the contact details below or through the Discord community.
 
 Current contributors: wytlines, DeadFish7, andreypidd, jet, joudaALT, TrustIsOver, TheM1ddleM1n
 
@@ -80,4 +80,4 @@ Users are granted permission to use the client for personal or public use, subje
 
 ## Community
 
-Join the Discord for updates / support: https://dsc.gg/unverifiedv2
+# Join the Discord for updates / support: https://dsc.gg/unverifiedv2
