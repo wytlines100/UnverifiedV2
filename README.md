@@ -6,7 +6,7 @@ A custom client for Miniblox, in active development since October 2024.
 
 - A userscript manager, such as Tampermonkey
 - A supported browser (Chrome, Firefox, Edge, or any Chromium-based browser that supports userscript extensions)
-- Miniblox.io (main site almost everyone uses this or Crazygames)
+- Miniblox.io (main domain almost everyone uses this or Crazygames)
 
 ## Features
 
@@ -25,17 +25,15 @@ A custom client for Miniblox, in active development since October 2024.
 - Profile avatar: a sidebar profile picture that is auto-detected by country via IP lookup, uploadable from a local image, or randomizable
 - Settings panel: toggles for module click sounds, toast notifications, UI open/close animation, module-state persistence across reloads, and the idle delay used by Anti-AFK
 - Idle delay configuration: adjustable from 5 to 120 seconds, controlling how long you can be inactive before Anti-AFK auto-enables
-- Chat Filter: Blocks profanity from `game.chat`
+- Chat Filter: Blocks profanity/Spam from `game.chat`
 
-## Installation
+## Client Installation 
 
-1. Install a userscript manager such as Tampermonkey for your browser. (Make sure Allow UserScripts is on!)
-2. Add a new script in Tampermonkey and paste in the contents of `client.js`.
-3. Save the script and make sure it is enabled.
-4. Visit miniblox.io. The client will initialize automatically.
+1. Install a Userscript manager such as Tampermonkey for your browser. (Make sure Allow UserScripts is on!)
+2. Add a new script in Tampermonkey and paste all of `client.js`.
+3. Save the script and make sure it is enabled. (Ctrl S)
+4. Visit miniblox.io the client will initialize automatically.
 5. Press the Right Shift key to open or close the client menu.
-
-See API.md for the full API reference, including cleanup functions and notification options.
 
 ## Known Limitations
 
@@ -46,7 +44,7 @@ See API.md for the full API reference, including cleanup functions and notificat
 
 ## Contributing
 
-Contributions are welcome. If you would like to report a bug or suggest a feature, please reach out via the contact details below or through the Discord community.
+Contributions are welcome. If you would like to report a bug or suggest a feature, please reach out via the contact email below or through our Discord server.
 
 Current contributors: wytlines, DeadFish7, andreypidd, jet, joudaALT, TrustIsOver, TheM1ddleM1n
 
@@ -56,6 +54,7 @@ Current contributors: wytlines, DeadFish7, andreypidd, jet, joudaALT, TrustIsOve
 - Added Chat Profanity Checker
 - Updated authors
 - Bumped version from 2.1.0 -> 2.1.1
+- Refined updates for docs
 
 ### 2.1.0
 - Added Settings panel with sound, notification, animation, and module-persistence toggles
@@ -68,7 +67,7 @@ Current contributors: wytlines, DeadFish7, andreypidd, jet, joudaALT, TrustIsOve
 
 ## Credits
 
-Credit to Miniblox for the base game this project extends.
+- Miniblox for creating the base of the game.
 
 ## License
 
@@ -80,4 +79,4 @@ Users are granted permission to use the client for personal or public use, subje
 
 ## Community
 
-# Join the Discord for updates / support: https://dsc.gg/unverifiedv2
+# Please Join Our Discord Server for updates / support: https://dsc.gg/unverifiedv2
