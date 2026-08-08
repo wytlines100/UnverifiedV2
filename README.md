@@ -40,11 +40,12 @@ A custom client for Miniblox, in active development since October 2024.
 - This client modifies a third-party game's front end by injecting scripts and styles; it is not affiliated with or endorsed by Miniblox.
 - Features rely on matching specific DOM selectors and class names used by the game. Updates to the game's front end may break individual modules until the client is updated to match.
 - VPN and proxy detection relies on a third-party IP lookup service and may occasionally produce false positives or negatives.
-- Use of this client is at your own risk. The maintainers are not responsible for any account actions taken as a result of using it.
+- Use this client at your own risk. The maintainers will NOT be responsible for any account actions taken as a result of using it.
 
 ## Contributing
 
 Contributions are welcome. If you would like to report a bug or suggest a feature, please reach out via the contact email below or through our Discord server.
+
 
 Current contributors: wytlines, DeadFish7, andreypidd, jet, joudaALT, TrustIsOver, TheM1ddleM1n
 
