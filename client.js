@@ -774,6 +774,14 @@ class UnverifiedShortcutMenu {
       text:       '#fff8e7',
       gradient:   'linear-gradient(135deg, #b7770d, #f39c12)',
     },
+      {
+  id:         'rose',
+  name:       'Rose',
+  primary:    '#ff5c8a',
+  background: '#000000',
+  text:       '#fff0f4',
+  gradient:   'linear-gradient(135deg, #b3134f, #ff5c8a)',
+},
   ];
 
   let activeThemeId = localStorage.getItem('uv2-theme-id') || 'default';
@@ -1389,10 +1397,11 @@ class UnverifiedShortcutMenu {
     keepSprint:"Keep Sprint", keepSprintDesc:"Keeps you sprinting automatically.",
     timeDisplay:"Time Display", timeDisplayDesc:"Shows you the time so you dont have to exit full screen.",
     musicPlayer:"Music Player", musicPlayerDesc:"Plays music while you play.",
+    armorHud: "Armor HUD", armorHudDesc: "Shows armor durability percentages, enchantments and icons.",
     closeUI:"Close UI", turnedOn:"was turned on", turnedOff:"was turned off", tooltipBind:"right-click to bind"
   },
   es: {
-    languageName:"Espanol", title:"UnverifiedV2",
+    languageName:"Spanish", title:"UnverifiedV2",
     autoFullscreen:"Pantalla Completa Automática", autoFullscreenDesc:"Activa/desactiva automáticamente la pantalla completa",
     keystrokes:"Teclas", keystrokesDesc:"Muestra las teclas que presionas en tiempo real.",
     muteChat:"Silenciar Chat", muteChatDesc:"Evita que aparezcan mensajes de otros jugadores en el chat.",
@@ -1401,8 +1410,48 @@ class UnverifiedShortcutMenu {
     keepSprint:"Mantener Sprint", keepSprintDesc:"Te mantiene corriendo automáticamente.",
     timeDisplay:"Mostrar Hora", timeDisplayDesc:"Te muestra la hora para que no tengas que salir de pantalla completa.",
     musicPlayer:"Reproductor de Música", musicPlayerDesc:"Reproduce música mientras juegas.",
+    armorHud: "HUD de armadura", armorHudDesc: "Muestra los porcentajes de durabilidad de la armadura, los encantamientos y los iconos.",
     closeUI:"Cerrar UI", turnedOn:"fue activado", turnedOff:"fue desactivado", tooltipBind:"clic derecho para vincular"
   },
+      fr: {
+  languageName:"French", title:"UnverifiedV2",
+  autoFullscreen:"Plein Ecran Auto", autoFullscreenDesc:"Active/desactive automatiquement le plein ecran",
+  keystrokes:"Touches", keystrokesDesc:"Affiche les touches que vous appuyez en temps reel.",
+  muteChat:"Muet Chat", muteChatDesc:"Empeche les messages des autres joueurs d'apparaitre dans le chat.",
+  chatFilter:"Filtre de Chat", chatFilterDesc:"Bloque les gros mots et le spam du chat.",
+  antiAfk:"Anti-Afk", antiAfkDesc:"Appuie sur WASD automatiquement pour eviter d'etre expulse pour inactivite",
+  keepSprint:"Garder Sprint", keepSprintDesc:"Vous fait sprinter automatiquement.",
+  timeDisplay:"Affichage Heure", timeDisplayDesc:"Affiche l'heure pour ne pas avoir a quitter le plein ecran.",
+  musicPlayer:"Lecteur Musique", musicPlayerDesc:"Joue de la musique pendant que vous jouez.",
+  armorHud:"HUD Armure", armorHudDesc:"Affiche les pourcentages de durabilite et les enchantements de l'armure.",
+  closeUI:"Fermer UI", turnedOn:"a ete active", turnedOff:"a ete desactive", tooltipBind:"clic droit pour lier"
+},
+  nl: {
+  languageName:"Dutch", title:"UnverifiedV2",
+  autoFullscreen:"Auto Volledig Scherm", autoFullscreenDesc:"Schakelt automatisch volledig scherm in/uit",
+  keystrokes:"Toetsen", keystrokesDesc:"Toont de toetsen die je in realtime indrukt.",
+  muteChat:"Chat Dempen", muteChatDesc:"Voorkomt dat berichten van andere spelers in de chat verschijnen.",
+  chatFilter:"Chatfilter", chatFilterDesc:"Blokkeert scheldwoorden en spam uit de chat.",
+  antiAfk:"Anti-Afk", antiAfkDesc:"Drukt automatisch op WASD om te voorkomen dat je wordt gekickt wegens afwezigheid",
+  keepSprint:"Blijf Sprinten", keepSprintDesc:"Laat je automatisch blijven sprinten.",
+  timeDisplay:"Tijdweergave", timeDisplayDesc:"Toont de tijd zodat je niet uit volledig scherm hoeft te gaan.",
+  musicPlayer:"Muziekspeler", musicPlayerDesc:"Speelt muziek af terwijl je speelt.",
+  armorHud:"Wapenrusting HUD", armorHudDesc:"Toont duurzaamheidspercentages en betoveringen van je wapenrusting.",
+  closeUI:"UI Sluiten", turnedOn:"werd ingeschakeld", turnedOff:"werd uitgeschakeld", tooltipBind:"rechtsklik om te binden"
+},
+  ru: {
+  languageName:"Russian", title:"UnverifiedV2",
+  autoFullscreen:"Avto Polnyy Ekran", autoFullscreenDesc:"Avtomaticheski pereklyuchaet polnyy ekran",
+  keystrokes:"Klavishi", keystrokesDesc:"Pokazyvaet klavishi, kotorye vy nazhimayete v realnom vremeni.",
+  muteChat:"Otklyuchit Chat", muteChatDesc:"Skryvaet soobshcheniya drugikh igrokov v chate.",
+  chatFilter:"Filtr Chata", chatFilterDesc:"Blokiruyet mat i spam v chate.",
+  antiAfk:"Anti-Afk", antiAfkDesc:"Avtomaticheski nazhimayet WASD, chtoby izbezhat kika za bezdeystviye",
+  keepSprint:"Postoyannyy Sprint", keepSprintDesc:"Avtomaticheski podderzhivayet beg.",
+  timeDisplay:"Otobrazheniye Vremeni", timeDisplayDesc:"Pokazyvayet vremya, chtoby ne vykhodit iz polnogo ekrana.",
+  musicPlayer:"Muzykalnyy Pleyer", musicPlayerDesc:"Vosproizvodit muzyku vo vremya igry.",
+  armorHud:"HUD Broni", armorHudDesc:"Pokazyvayet prochnost i charakteristiki brony v protsentakh.",
+  closeUI:"Zakryt UI", turnedOn:"bylo vklyucheno", turnedOff:"bylo vyklyucheno", tooltipBind:"pravaya knopka mishi dlya privyazki"
+},
 };
 
   let currentLanguage = localStorage.getItem('unverified-language') || 'en';
@@ -1447,7 +1496,7 @@ class UnverifiedShortcutMenu {
   'beaner', 'beaners',
   'paki', 'pakis',
   'towelhead', 'towelheads',
-  'coon', 'coons', 'goon', 'gooner', 'goons', 'cum', 'cums', 
+  'coon', 'coons', 'goon', 'gooner', 'goons', 'cum', 'cums',
   'gypsy', 'gypsies', 'slapper',
   'porn', 'porno', 'pornography', 'pornhub',
   'rape', 'raping', 'raped', 'rapist', 'rapists',
@@ -1502,16 +1551,9 @@ function chatFilterIsAllCaps(text) {
   return letters === letters.toUpperCase();
 }
 
-const MODULE_NAMES = {
-  AUTO_FULLSCREEN: "Auto Fullscreen",
-  KEYSTROKES:      "Keystrokes",
-  MUTE_CHAT:       "Mute Chat",
-  CHAT_FILTER:     "Chat Filter",
-  ANTI_AFK:        "Anti-Afk",
-  KEEP_SPRINT:     "Keep Sprint",
-  TIME_DISPLAY:    "Time Display",
-  MUSIC_PLAYER:    "Music Player",
-};
+const MODULE_NAMES = { AUTO_FULLSCREEN: "Auto Fullscreen", KEYSTROKES: "Keystrokes", MUTE_CHAT: "Mute Chat",
+  CHAT_FILTER: "Chat Filter", ANTI_AFK: "Anti-Afk", KEEP_SPRINT: "Keep Sprint", TIME_DISPLAY: "Time Display",
+  MUSIC_PLAYER: "Music Player", ARMOR_HUD: "Armor HUD" };
 
 const gridContainer = document.createElement("div");
 gridContainer.style.display = "flex";
@@ -1655,7 +1697,7 @@ function updateLanguage() {
   title.textContent = translations[currentLanguage]?.title || "UnverifiedV2";
   closeButton.textContent = translations[currentLanguage]?.closeUI || "Close UI";
   const modules = gridContainer.children;
-  const moduleKeys = ['autoFullscreen','keystrokes','muteChat','chatFilter','antiAfk','keepSprint','timeDisplay','musicPlayer'];
+  const moduleKeys = ['autoFullscreen','keystrokes','muteChat','chatFilter','antiAfk','keepSprint','timeDisplay','musicPlayer','armorHud'];
   for (let i = 0; i < modules.length; i++) {
     const moduleTitle = modules[i].querySelector("span");
     const moduleDesc = modules[i].querySelector("p");
@@ -2004,6 +2046,240 @@ if (antiAfkModule) {
       }
     });
   }
+    const ARMOR_SLOT_LABELS = ['Helmet', 'Chestplate', 'Leggings', 'Boots'];
+const ARMOR_ROMAN = ['', 'I', 'II', 'III', 'IV', 'V', 'VI', 'VII', 'VIII', 'IX', 'X'];
+const ARMOR_SPRITESHEET_URL = 'https://miniblox.io/textures/spritesheet.36511680aea3.png';
+const ARMOR_SPRITESHEET_SIZE = 1024;
+const ARMOR_ICON_TILE_SIZE = 16;
+const ARMOR_ICON_DISPLAY_SIZE = 24;
+
+const ARMOR_ENCHANT_ABBR = {
+  protection: 'Prot',
+  fire_protection: 'Fire Prot',
+  feather_falling: 'Feath Fall',
+  blast_protection: 'Blast Prot',
+  projectile_protection: 'Proj Prot',
+  respiration: 'Resp',
+  aqua_affinity: 'Aqua Aff',
+  thorns: 'Thorns',
+  depth_strider: 'Depth Str',
+  soul_speed: 'Soul Speed',
+  swift_sneak: 'Swift Sneak',
+  sharpness: 'Sharp',
+  smite: 'Smite',
+  bane_of_arthropods: 'Bane',
+  knockback: 'KB',
+  fire_aspect: 'Fire Asp',
+  looting: 'Loot',
+  efficiency: 'Eff',
+  silk_touch: 'Silk Touch',
+  unbreaking: 'Unb',
+  fortune: 'Fort',
+  power: 'Power',
+  punch: 'Punch',
+  flame: 'Flame',
+  infinity: 'Inf',
+  luck_of_the_sea: 'Luck',
+  lure: 'Lure',
+  mending: 'Mend',
+  density: 'Dens',
+  breach: 'Breach',
+  wind_burst: 'Wind Burst',
+  lunge: 'Lunge'
+};
+
+function armorHudColorForPercent(percent) {
+  if (percent >= 60) return '#2ecc71';
+  if (percent >= 30) return '#f39c12';
+  return '#e74c3c';
+}
+
+function armorHudFormatEnchantName(rawName) {
+  return rawName
+    .split('_')
+    .map(w => w.charAt(0).toUpperCase() + w.slice(1))
+    .join(' ');
+}
+
+function armorHudGetEnchantLabels(slot) {
+  const list = slot.data?.ench;
+  if (!list || !list.length || !unsafeWindow.Enchantment) return [];
+
+  return list.map(e => {
+    const def = unsafeWindow.Enchantment.getEnchantmentById(e.id);
+    const rawName = def?.name;
+    const fullName = rawName ? armorHudFormatEnchantName(rawName) : `Enchant ${e.id}`;
+    const shortName = rawName && ARMOR_ENCHANT_ABBR[rawName] ? ARMOR_ENCHANT_ABBR[rawName] : fullName;
+    const roman = ARMOR_ROMAN[e.lvl] || e.lvl;
+    return {
+      short: `${shortName} ${roman}`,
+      full: `${fullName} ${roman}`
+    };
+  });
+}
+
+function armorHudGetIconStyle(itemName) {
+  const spriteMap = unsafeWindow.spriteMap;
+  if (!spriteMap || !spriteMap.get) return '';
+
+  const sprite = spriteMap.get(itemName);
+  if (!sprite) return '';
+
+  const pixelX = sprite.x * sprite.size;
+  const pixelY = sprite.y * sprite.size;
+
+  const scale = ARMOR_ICON_DISPLAY_SIZE / ARMOR_ICON_TILE_SIZE;
+  const bgWidth = ARMOR_SPRITESHEET_SIZE * scale;
+  const bgHeight = ARMOR_SPRITESHEET_SIZE * scale;
+  const posX = -pixelX * scale;
+  const posY = -pixelY * scale;
+
+  return `width:${ARMOR_ICON_DISPLAY_SIZE}px;height:${ARMOR_ICON_DISPLAY_SIZE}px;background-image:url('${ARMOR_SPRITESHEET_URL}');background-position:${posX}px ${posY}px;background-size:${bgWidth}px ${bgHeight}px;image-rendering:pixelated;flex-shrink:0;`;
+}
+
+function armorHudIsInMatch() {
+  try {
+    return /\/join\//.test(window.location.pathname);
+  } catch (e) {
+    return false;
+  }
+}
+
+createModule(MODULE_NAMES.ARMOR_HUD, "Shows armor durability percentages, enchantments and icons.");
+const armorHudModule = [...gridContainer.children].find(c => c.dataset.moduleName === MODULE_NAMES.ARMOR_HUD);
+let isArmorHudActive = false;
+let armorHudEl = null;
+let armorHudInterval = null;
+let armorHudDrag = false;
+let armorHudOffX = 0;
+let armorHudOffY = 0;
+
+function armorHudClampToViewport() {
+  if (!armorHudEl) return;
+  const rect = armorHudEl.getBoundingClientRect();
+  let left = rect.left;
+  let top = rect.top;
+
+  const maxLeft = window.innerWidth - rect.width;
+  const maxTop = window.innerHeight - rect.height;
+
+  if (left < 0) left = 0;
+  if (top < 0) top = 0;
+  if (left > maxLeft) left = maxLeft;
+  if (top > maxTop) top = maxTop;
+
+  armorHudEl.style.left = left + 'px';
+  armorHudEl.style.top = top + 'px';
+  armorHudEl.style.right = 'auto';
+}
+
+function armorHudRender() {
+  if (!armorHudEl) return;
+
+  if (!armorHudIsInMatch()) {
+    armorHudEl.style.display = 'none';
+    return;
+  }
+
+  const reactRoot = document.querySelector("#react");
+  const fiber = reactRoot ? Object.values(reactRoot)[0] : null;
+  const game = fiber?.updateQueue?.baseState?.element?.props?.game;
+  const armor = game?.player?.inventory?.armor;
+
+  if (!armor) {
+    armorHudEl.style.display = 'none';
+    return;
+  }
+
+  armorHudEl.style.display = 'block';
+
+  let html = `<div style="font-weight:600;margin-bottom:8px;letter-spacing:0.5px;color:${guiPrimaryColor};">Armor HUD</div>`;
+
+  for (let i = 0; i < 4; i++) {
+    const slot = armor[i];
+    const label = ARMOR_SLOT_LABELS[i];
+
+    if (!slot) {
+      html += `<div style="display:flex;align-items:center;gap:10px;opacity:0.4;padding:4px 0;"><div style="width:${ARMOR_ICON_DISPLAY_SIZE}px;height:${ARMOR_ICON_DISPLAY_SIZE}px;flex-shrink:0;"></div><span style="flex:1;">${label}</span><span>empty</span></div>`;
+      continue;
+    }
+
+    const damage = slot.itemDamage || 0;
+    const max = slot.item?.maxDurability;
+    const percent = max ? Math.round((1 - damage / max) * 100) : 100;
+    const color = armorHudColorForPercent(percent);
+    const name = slot.item?.displayName || label;
+    const enchants = armorHudGetEnchantLabels(slot);
+    const iconStyle = armorHudGetIconStyle(slot.item?.name);
+
+    html += `<div style="display:flex;align-items:center;gap:10px;padding:4px 0;">`;
+    html += `<div style="${iconStyle}"></div>`;
+    html += `<div style="flex:1;min-width:0;">`;
+    html += `<div style="display:flex;justify-content:space-between;gap:12px;"><span>${name}</span><span style="color:${color};font-weight:600;">${percent}%</span></div>`;
+
+    if (enchants.length) {
+      const spans = enchants
+        .map(e => `<span title="${e.full}" style="cursor:default;">${e.short}</span>`)
+        .join(', ');
+      html += `<div style="opacity:0.7;font-size:11px;">${spans}</div>`;
+    }
+
+    html += `</div></div>`;
+  }
+
+  armorHudEl.innerHTML = html;
+  armorHudClampToViewport();
+}
+
+if (armorHudModule) {
+  armorHudModule.addEventListener("click", () => {
+    isArmorHudActive = !isArmorHudActive;
+    if (isArmorHudActive) {
+      armorHudEl = document.createElement('div');
+      armorHudEl.id = 'armor-hud';
+      armorHudEl.style.cssText = 'position:fixed;top:100px;right:20px;padding:10px 14px;background:rgba(0,0,0,0.6);backdrop-filter:blur(8px);border:1px solid rgba(255,255,255,0.15);border-radius:8px;z-index:9999;cursor:move;user-select:none;font-family:Segoe UI,Roboto,sans-serif;font-size:14px;color:white;min-width:220px;display:none;';
+      document.body.appendChild(armorHudEl);
+
+      armorHudEl.addEventListener('mousedown', e => {
+        armorHudDrag = true;
+        armorHudOffX = e.clientX - armorHudEl.getBoundingClientRect().left;
+        armorHudOffY = e.clientY - armorHudEl.getBoundingClientRect().top;
+        e.preventDefault();
+      });
+
+      document.addEventListener('mousemove', e => {
+        if (!armorHudDrag || !armorHudEl) return;
+        let left = e.clientX - armorHudOffX;
+        let top = e.clientY - armorHudOffY;
+
+        const rect = armorHudEl.getBoundingClientRect();
+        const maxLeft = window.innerWidth - rect.width;
+        const maxTop = window.innerHeight - rect.height;
+
+        if (left < 0) left = 0;
+        if (top < 0) top = 0;
+        if (left > maxLeft) left = maxLeft;
+        if (top > maxTop) top = maxTop;
+
+        armorHudEl.style.left = left + 'px';
+        armorHudEl.style.top = top + 'px';
+        armorHudEl.style.right = 'auto';
+      });
+
+      document.addEventListener('mouseup', () => {
+        armorHudDrag = false;
+      });
+
+      window.addEventListener('resize', armorHudClampToViewport);
+
+      armorHudInterval = setInterval(armorHudRender, 500);
+      armorHudRender();
+    } else {
+      if (armorHudInterval) clearInterval(armorHudInterval);
+      if (armorHudEl) { armorHudEl.remove(); armorHudEl = null; }
+    }
+  });
+}
 
   const bottomRow = document.createElement("div");
   bottomRow.style.cssText = "display:flex;align-items:center;justify-content:center;gap:8px;margin-top:18px;";
