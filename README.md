@@ -26,6 +26,7 @@ A custom client for Miniblox, in active development since October 2024.
 - Settings panel: toggles for module click sounds, toast notifications, UI open/close animation, module-state persistence across reloads, and the idle delay used by Anti-AFK
 - Idle delay configuration: adjustable from 5 to 120 seconds, controlling how long you can be inactive before Anti-AFK auto-enables
 - Chat Filter: Blocks profanity/Spam from `game.chat`
+- Armor HUD - Shows Enchantments/Icons/Armor as a standalone draggable box. Will only work ingame. Does not show on menu.
 
 ## Client Installation 
 
@@ -50,6 +51,14 @@ Contributions are welcome. If you would like to report a bug or suggest a featur
 Current contributors: wytlines, DeadFish7, andreypidd, jet, joudaALT, TrustIsOver, TheM1ddleM1n
 
 ## Changelog
+
+### 2.2 - Big Update!
+- Armor HUD added!
+- Logic added for Armor HUD to show only ingame and NOT in menu.
+- 3 New languages! (French, Dutch, Russian)
+- 1 More new theme added!
+- Bumped version to 2.2
+- Documentation changes.
 
 ### 2.1.1
 - Added Chat Profanity Checker
