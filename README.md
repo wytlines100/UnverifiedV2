@@ -47,7 +47,6 @@ A custom client for Miniblox, in active development since October 2024.
 
 Contributions are welcome. If you would like to report a bug or suggest a feature, please reach out via the contact email below or through our Discord server.
 
-
 Current contributors: wytlines, DeadFish7, andreypidd, jet, joudaALT, TrustIsOver, TheM1ddleM1n
 
 ## Changelog
@@ -57,14 +56,14 @@ Current contributors: wytlines, DeadFish7, andreypidd, jet, joudaALT, TrustIsOve
 - Logic added for Armor HUD to show only ingame and NOT in menu.
 - 3 New languages! (French, Dutch, Russian)
 - 1 More new theme added!
-- Bumped version to 2.2
-- Documentation changes.
+- Bumped version from `2.1.1 -> 2.2`
+- Documentation changes again.
 
 ### 2.1.1
 - Added Chat Profanity Checker
 - Updated authors
-- Bumped version from 2.1.0 -> 2.1.1
-- Refined updates for docs
+- Bumped version from `2.1.0 -> 2.1.1`
+- Refined updates for `README.md`
 
 ### 2.1.0
 - Added Settings panel with sound, notification, animation, and module-persistence toggles
@@ -76,11 +75,9 @@ Current contributors: wytlines, DeadFish7, andreypidd, jet, joudaALT, TrustIsOve
 - Added profile avatar system
 
 ## Credits
-
 - Miniblox for creating the base of the game.
 
 ## License
-
 This project is licensed under a proprietary "All Rights Reserved" license. You may not use, copy, modify, or distribute this code without prior written permission from the copyright holder.
 
 Contact: wytlines100 — rfd6108@gmail.com
@@ -88,5 +85,4 @@ Contact: wytlines100 — rfd6108@gmail.com
 Users are granted permission to use the client for personal or public use, subject to the above restrictions on redistribution and modification.
 
 ## Community
-
-# Please Join Our Discord Server for updates / support: https://dsc.gg/unverifiedv2
+Please Join Our Discord Server for updates / support: https://dsc.gg/unverifiedv2
