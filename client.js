@@ -249,64 +249,6 @@ class UnverifiedBackground {
     .module-container:hover {
       border-radius: 8px !important;
     }
-
-    /* Updated notification styles with progress bar */
-    .other-notification {
-      font-family: 'MinibloxFont', sans-serif;
-      font-size: 14px;
-      color: white;
-      background: linear-gradient(135deg, #e74c3c, #c0392b);
-      padding: 12px 24px;
-      border-radius: 8px;
-      margin-bottom: 12px;
-      box-shadow: 0 4px 15px rgba(0,0,0,0.3);
-      transition: opacity 0.4s ease, transform 0.4s ease;
-      opacity: 0;
-      transform: translateX(100%);
-      border-left: 4px solid #ffcc00;
-      font-weight: 500;
-      letter-spacing: 0.5px;
-      position: relative;
-      overflow: hidden;
-    }
-    .notification-progress {
-      position: absolute;
-      bottom: 0;
-      left: 0;
-      height: 3px;
-      background: #ffcc00;
-      width: 100%;
-      animation: notificationProgress 3s linear forwards;
-    }
-
-    /* Animation for module toggles */
-    .module-toggle-animation {
-      animation: modulePulse 0.3s ease;
-    }
-    @keyframes modulePulse {
-      0% { transform: scale(1); }
-      50% { transform: scale(1.02); }
-      100% { transform: scale(1); }
-    }
-
-    select, .uv2-setting-row select, #gui-text-grad-dir, .config-select {
-      background: #2a2a2a !important;
-      color: white !important;
-      border: 1px solid #444 !important;
-      border-radius: 6px !important;
-      padding: 6px 10px !important;
-      font-family: 'MinibloxFont', sans-serif !important;
-      cursor: pointer !important;
-      transition: all 0.2s ease !important;
-    }
-    select:hover, .uv2-setting-row select:hover {
-      background: #3a3a3a !important;
-      border-color: #e74c3c !important;
-    }
-    select option {
-      background: #2a2a2a !important;
-      color: white !important;
-    }
   `;
   document.head.appendChild(style);
   const ui = document.createElement("div");
