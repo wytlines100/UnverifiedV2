@@ -15,11 +15,6 @@
 // @connect      ip-api.com
 // ==/UserScript==
 
-class LurkerChecker {
-  static lurkerInstalled() {
-    return document.getElementById('_L7Banner') !== null;
-  }
-}
 class UnverifiedIntro {
   constructor() {
     this.container = document.createElement("div");
@@ -70,10 +65,6 @@ class UnverifiedIntro {
     this.check.style.opacity = 1;
     setTimeout(() => { this.check.style.transform = "rotate(180deg)"; }, 800);
     setTimeout(() => {
-      if (LurkerChecker.lurkerInstalled()) {
-        this.unverifiedText.textContent = 'UnverifiedV2 x Lurker';
-        document.title = 'UnverifiedV2 x Lurker';
-      }
       this.unverifiedText.style.opacity = 1;
     }, 1600);
     setTimeout(() => { this.creditsText.style.opacity = 1; }, 2400);
