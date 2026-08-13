@@ -13,7 +13,7 @@ A custom client for Miniblox, in active development since October 2024.
 - Auto Fullscreen: automatically toggles fullscreen mode
 - Keystrokes: displays the keys you press in real time
 - Mute Chat: hides other players' messages from chat
-- Anti-AFK: automatically presses movement keys to prevent being kicked for inactivity, with an optional auto-enable on idle and an optional chat notification
+- Anti-AFK: automatically presses movement keys to prevent being kicked for inactivity, with an optional auto-enable on idle and an optional chat notification. (ONLY ingame -> Not on menu :D)
 - Keep Sprint: keeps you sprinting automatically while moving
 - Time Display: shows a draggable on-screen clock
 - Music Player: search and play tracks, or load audio from a direct URL, with volume control and a draggable interface
@@ -26,7 +26,7 @@ A custom client for Miniblox, in active development since October 2024.
 - Settings panel: toggles for module click sounds, toast notifications, UI open/close animation, module-state persistence across reloads, and the idle delay used by Anti-AFK
 - Idle delay configuration: adjustable from 5 to 120 seconds, controlling how long you can be inactive before Anti-AFK auto-enables
 - Chat Filter: Blocks profanity/Spam from `game.chat`
-- Armor HUD - Shows Enchantments/Icons/Armor as a standalone draggable box. Will only work ingame. Does not show on menu.
+- Armor HUD - Shows Enchantments/Icons/Armor as a standalone draggable box. (Will only work ingame. Does not show on menu.)
 
 ## Client Installation 
 
