@@ -2344,19 +2344,23 @@ if (armorHudModule) {
     } catch (e) { return false; }
   }
   function onAfkTriggered() {
-    if (afkTriggered) return;
-    afkTriggered = true;
-    afkGraceUntil = Date.now() + 2000;
-    showAfkToast();
-    if (settings.afkChat && isInMatch() && !styler.isMainScreen()) sendAfkChatMessage("I am Currently AFK, Be back shortly. Please Do not disturb me in the meantime.");
-    const afkMod = [...gridContainer.children].find(c => c.dataset.moduleName === MODULE_NAMES.ANTI_AFK);
-    if (afkMod && !afkMod._uv2Active) {
-      afkAntiAfkWasOff = true;
-      afkMod.click();
-    } else {
-      afkAntiAfkWasOff = false;
-    }
+  if (afkTriggered) return;
+  if (!isInMatch()) {
+    afkTimer = setTimeout(onAfkTriggered, afkDelay * 1000);
+    return;
   }
+  afkTriggered = true;
+  afkGraceUntil = Date.now() + 2000;
+  showAfkToast();
+  if (settings.afkChat) sendAfkChatMessage("I am Currently AFK, Be back shortly.");
+  const afkMod = [...gridContainer.children].find(c => c.dataset.moduleName === MODULE_NAMES.ANTI_AFK);
+  if (afkMod && !afkMod._uv2Active) {
+    afkAntiAfkWasOff = true;
+    afkMod.click();
+  } else {
+    afkAntiAfkWasOff = false;
+  }
+}
   function onUserReturn() {
     if (!afkTriggered) return;
     afkTriggered = false;
