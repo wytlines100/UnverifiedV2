@@ -47,6 +47,8 @@ A custom client for Miniblox, in active development since October 2024.
 
 Contributions are welcome. If you would like to report a bug or suggest a feature, please reach out via the contact email below or through our Discord server.
 
+By submitting a contribution, you agree it becomes part of the project under this license and grant the maintainers full rights to use, modify, and distribute it.
+
 Current contributors: wytlines, DeadFish7, andreypidd, jet, joudaALT, TrustIsOver, TheM1ddleM1n
 
 ## Changelog
