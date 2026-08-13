@@ -1366,7 +1366,7 @@ function chatFilterContainsBadWords(text) {
       return true;
     }
 
-    if (strippedText.includes(wordLower)) {
+    if (regex.test(strippedText)) {
       return true;
     }
   }
