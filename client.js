@@ -34,7 +34,7 @@ class UnverifiedIntro {
     this.check.textContent = "✓";
     Object.assign(this.check.style, {
       color: "red", fontSize: "5rem", opacity: 0.05,
-      transition: "opacity 1s ease, transform 1s ease",
+      transition: "opacity 1.4s ease, transform 1.4s ease",
       textShadow: '0 0 5px red, 0 0 10px red, 0 0 20px red',
     });
     this.circle = document.createElement("div");
@@ -43,7 +43,7 @@ class UnverifiedIntro {
       border: "2px solid red", borderRadius: "50%",
       boxShadow: "0 0 10px red, 0 0 20px red, 0 0 30px red",
       display: "flex", alignItems: "center", justifyContent: "center",
-      opacity: 0, transition: "opacity 1s ease, transform 1s ease",
+      opacity: 0, transition: "opacity 1.4s ease, transform 1.4s ease",
     });
     this.circle.appendChild(this.check);
     this.container.appendChild(this.circle);
@@ -51,14 +51,14 @@ class UnverifiedIntro {
     this.unverifiedText.textContent = "UnverifiedV2";
     Object.assign(this.unverifiedText.style, {
       color: "red", fontSize: "60px", opacity: 0, marginTop: "50px",
-      transition: "opacity 0.8s ease",
+      transition: "opacity 1.1s ease",
       textShadow: '0 0 5px red, 0 0 10px red, 0 0 20px red',
     });
     this.container.appendChild(this.unverifiedText);
     this.creditsText = document.createElement("div");
     this.creditsText.textContent = "\nBy wytlines, DeadFish7\nandreypidd, jet, joudaALT, TrustIsOver, TheM1ddleM1n";
     Object.assign(this.creditsText.style, {
-      color: "red", fontSize: "30px", opacity: 0, transition: "opacity 0.8s ease",
+      color: "red", fontSize: "30px", opacity: 0, transition: "opacity 1.1s ease",
       whiteSpace: 'pre-line', textAlign: "center",
       textShadow: '0 0 5px red, 0 0 10px red, 0 0 20px red',
     });
@@ -68,17 +68,17 @@ class UnverifiedIntro {
     document.body.appendChild(this.container);
     this.circle.style.opacity = 1;
     this.check.style.opacity = 1;
-    setTimeout(() => { this.check.style.transform = "rotate(180deg)"; }, 500);
+    setTimeout(() => { this.check.style.transform = "rotate(180deg)"; }, 800);
     setTimeout(() => {
       if (LurkerChecker.lurkerInstalled()) {
         this.unverifiedText.textContent = 'UnverifiedV2 x Lurker';
         document.title = 'UnverifiedV2 x Lurker';
       }
       this.unverifiedText.style.opacity = 1;
-    }, 1000);
-    setTimeout(() => { this.creditsText.style.opacity = 1; }, 1500);
-    setTimeout(() => { this.container.style.transition = "opacity 1s ease"; this.container.style.opacity = 0; }, 2500);
-    setTimeout(() => { this.container.remove(); }, 3000);
+    }, 1600);
+    setTimeout(() => { this.creditsText.style.opacity = 1; }, 2400);
+    setTimeout(() => { this.container.style.transition = "opacity 1.4s ease"; this.container.style.opacity = 0; }, 5600);
+    setTimeout(() => { this.container.remove(); }, 6400);
   }
   showInitializedNotif() {
     const n = document.createElement("div");
@@ -86,10 +86,11 @@ class UnverifiedIntro {
     n.textContent = "UnverifiedV2 Initialized!";
     document.body.appendChild(n);
     setTimeout(() => { n.style.top = "10px"; n.style.opacity = "1"; }, 10);
-    setTimeout(() => { n.style.top = "-50px"; n.style.opacity = "0"; }, 2000);
-    setTimeout(() => { n.remove(); }, 3000);
+    setTimeout(() => { n.style.top = "-50px"; n.style.opacity = "0"; }, 3200);
+    setTimeout(() => { n.remove(); }, 4200);
   }
 }
+
 (function() {
   'use strict';
   const gameRef = {
@@ -116,185 +117,23 @@ class UnverifiedIntro {
     }
   }, 500);
 })();
+
 class UnverifiedStyler {
   constructor() {
     this.observer = null;
-    this.background = new UnverifiedBackground();
-    this.banner = new UnverifiedBanner();
-    this.shortcutMenu = new UnverifiedShortcutMenu();
-    this.visuallyRemoveSelectors = ['.chakra-image.css-1je8qb9', '.chakra-stack.css-7kkhgi'];
-    this.backgroundSelectors = ['img.chakra-image.css-rkihvp', 'img.chakra-image.css-mohuzh', '.css-aznra0'];
-    this.generalStylingSelectors = new Set([
-      '.chakra-button.css-cuh8pi', '.chakra-button.css-32lhf4', '.chakra-button.css-5ov7ui',
-      '.chakra-button.css-18wnugv', '.chakra-button.css-he6upe', '.chakra-button.css-1oxqv3t',
-      '.chakra-button.css-1dkorm4', '.css-10y588r', 'button.chakra-button.css-livqej',
-      'button.chakra-button.css-1jg2qv0', 'div.css-aidfhd', 'div.css-1kd330l',
-      'button.chakra-button.css-14mkusw', 'button.chakra-button.css-8q1apo', '.css-1a6laq6',
-      'button.chakra-button.css-1axaj8o', 'button.chakra-button.css-xircll', '.css-1xy2x8',
-      '.css-i1x0qw', '.css-jnnvp4', '.css-hk5viu', '.css-55x3n6', '.css-n15lby',
-      '.css-1xqsddr', '.css-1ibhl1y', '.chakra-stack.css-1c10cfa', '.chakra-form-control.css-1kxonj9',
-      '.chakra-button.css-1dcrejx', '.chakra-button.css-1ote1yx', '.css-qkv95g', '.css-1r8eeg2',
-      '.chakra-input.css-18whhxd', '.chakra-input.css-ypk59i', '.chakra-input.css-1oc9k70',
-      '.css-nizmkx', '.css-r7134l', '.css-qzh2oi', '.chakra-button.css-137k3gn',
-      '.chakra-button.css-1n378o7', '.css-1f34n7d', '.css-tncl4j', '.css-1tyymsb',
-      '.css-ol7umz', '.chakra-button.css-12t4nq4',
-    ]);
-    this.specificStylingSelectors = new Map([
-      ['button.chakra-button.css-1axaj8o', e => { e.style.fontSize = '24px'; e.style.padding = '1px 1px'; }],
-      ['.chakra-button.css-cuh8pi', e => { e.style.fontSize = '20px'; }],
-      ['.css-1xy2x8', e => { e.style.border = '2px solid purple'; e.style.padding = '0 10px'; }],
-      ['.css-i1x0qw', e => { e.style.border = '2px solid green'; e.style.padding = '0 10px'; }],
-      ['.css-jnnvp4', e => { e.style.border = '2px solid yellow'; e.style.padding = '0 10px'; }],
-      ['.css-hk5viu', e => { e.style.border = '2px solid gray'; e.style.padding = '0 10px'; }],
-      ['.css-qzh2oi', e => { e.style.border = '2px solid white'; }],
-      ['.chakra-button.css-1iuk66d', e => { e.style.border = '1px solid white'; e.style.borderRadius = '12px'; }],
-      ['.chakra-button.css-73nw7g', e => { e.style.border = '1px solid white'; e.style.borderRadius = '12px'; }],
-      ['.css-55x3n6', e => { e.style.border = '2px solid white'; e.style.padding = '0 10px'; }],
-      ['.css-n15lby', e => { e.style.border = '2px solid lime'; e.style.padding = '0 10px'; }],
-      ['.css-1xqsddr', e => { e.style.border = '2px solid pink'; e.style.padding = '0 10px'; }],
-      ['.css-1ibhl1y', e => { e.style.border = '2px solid orange'; e.style.padding = '0 10px'; }],
-      ['.chakra-input.css-ypk59i', e => { e.style.border = 'none'; e.style.background = 'none'; }],
-      ['.chakra-input.css-1oc9k70', e => { e.style.border = 'none'; e.style.background = 'none'; }],
-      ['.chakra-input.css-18whhxd', e => { e.style.border = 'none'; e.style.background = 'none'; }],
-      ['.css-nizmkx', e => { e.style.padding = '0 0'; }],
-      ['.chakra-slider', e => { e.style.padding = '0 0'; e.style.borderRadius = '12px'; }],
-      ['.css-1a6laq6', e => { e.style.padding = '0 0'; }],
-      ['.chakra-slider__filled-track.css-li9pez', e => { e.style.borderRadius = '12px'; }],
-    ]);
-    this.blackBackgroundSelectors = [
-      '.chakra-stack.css-1cklnv0', '.chakra-stack.css-oou8ol', '.chakra-stack.css-owjkmg',
-      '.chakra-stack.css-15uwvcw', '.chakra-stack.css-1hj4r72', '.chakra-stack.css-10tqh5h',
-      '.chakra-stack.css-wv1k6p', '.chakra-stack.css-b1sb84',
-      '.chakra-modal__content.css-1n1g7m4', '.chakra-modal__content.css-1ah3qhl',
-      '.chakra-modal__content.css-1yhxaze',
-    ];
-    this.skipMouseInOutListeners = new Set([
-      '.chakra-input.css-ypk59i', '.chakra-input.css-1oc9k70', '.chakra-input.css-18whhxd',
-    ]);
   }
-  visuallyRemove(e) { if (!e) return; e.style.opacity = 0; e.style.zIndex = -1; }
-  isMainScreen() { return this.shortcutMenu.getPlayButton() !== null; }
   addStyleObserver() {
     document.title = 'UnverifiedV2';
-    this.observer = new MutationObserver(mutations => {
-      for (const mutation of mutations) {
-        for (const node of mutation.addedNodes) {
-          if (node.nodeType !== Node.ELEMENT_NODE) continue;
-          for (const selector of this.visuallyRemoveSelectors) {
-            if (node.matches(selector)) this.visuallyRemove(node);
-            node.querySelectorAll(selector).forEach(e => this.visuallyRemove(node));
-          }
-          for (const selector of this.backgroundSelectors) {
-            if (node.matches(selector)) this.background.setBG(node);
-            node.querySelectorAll(selector).forEach(e => this.background.setBG());
-          }
-          for (const selector of this.generalStylingSelectors) {
-            if (node.matches(selector)) this.applyGeneralStyle(node, selector);
-            node.querySelectorAll(selector).forEach(e => this.applyGeneralStyle(e, selector));
-          }
-          for (const selector of this.specificStylingSelectors.keys()) {
-            if (node.matches(selector)) this.applySpecificStyle(node, selector);
-            node.querySelectorAll(selector).forEach(e => this.applySpecificStyle(e, selector));
-          }
-          if (this.isMainScreen()) { this.shortcutMenu.addShortcutMenu(); this.banner.addBanner(); }
-          else { this.shortcutMenu.removeShortcutMenu(); this.banner.removeBanner(); }
-          for (const selector of this.blackBackgroundSelectors) {
-            if (node.matches(selector)) this.removeBlackBackground(node);
-            node.querySelectorAll(selector).forEach(e => this.removeBlackBackground(e));
-          }
-        }
-      }
-    });
-    this.observer.observe(document.body, { childList: true, subtree: true });
-  }
-  initialTriggerStyleObserver() {
-    this.shortcutMenu.getPlayButton().click();
-    setTimeout(() => { this.shortcutMenu.getExitButton().click(); }, 70);
-  }
-  applyGeneralStyle(e, selector) {
-    e.style.padding = '10px 20px';
-    e.style.backgroundColor = (!e.unverifiedMouseIn) ? 'rgba(211, 211, 211, 0.4)' : 'rgba(185, 185, 185, 0.4)';
-    e.style.color = 'white'; e.style.border = '1px solid #D3D3D3'; e.style.borderRadius = '8px';
-    e.style.fontSize = '16px'; e.style.cursor = 'pointer'; e.style.transition = 'transform 0.2s ease';
-    e.style.outline = 'none'; e.style.boxShadow = 'none';
-    if (!this.skipMouseInOutListeners.has(selector)) {
-      e.addEventListener('mouseover', () => { e.unverifiedMouseIn = true; e.style.backgroundColor = 'rgba(185, 185, 185, 0.4)'; });
-      e.addEventListener('mouseout', () => { e.unverifiedMouseIn = false; e.style.backgroundColor = 'rgba(211, 211, 211, 0.4)'; });
-    }
-  }
-  applySpecificStyle(e, selector) { this.specificStylingSelectors.get(selector)(e); }
-  removeBlackBackground(e) {
-    e.style.background = 'transparent'; e.style.backgroundColor = 'none'; e.style.boxShadow = 'none';
-    if (!e.textContent.startsWith('Browse')) { e.style.backdropFilter = 'blur(1px)'; e.style.webkitBackdropFilter = 'blur(1px)'; }
   }
 }
 class UnverifiedBackground {
   constructor() {
-    this.bg1 = "https://w0.peakpx.com/wallpaper/810/395/HD-wallpaper-landscape-minecraft-shaders-minecraft.jpg";
+    this.bg1 = "https://images3.alphacoders.com/133/1333794.jpeg";
     this.currentBG = this.bg1;
   }
   setBG(e) { e.src = this.currentBG; }
 }
-class UnverifiedBanner {
-  constructor() {
-    this.e = document.createElement('div');
-    this.e.textContent = 'UnverifiedV2\n\nBy wytlines, DeadFish7, andreypidd, jet, joudaALT, TrustIsOver';
-    this.e.id = 'unverified-banner'; this.e.style.whiteSpace = 'pre-line'; this.e.style.textAlign = 'center';
-    this.e.style.zIndex = 999; this.e.style.position = "absolute"; this.e.style.top = "11.5%";
-    this.e.style.left = "50%"; this.e.style.transform = "translate(-50%, -50%)";
-    this.e.style.padding = '10px 20px'; this.e.style.backgroundColor = 'rgba(211, 211, 211, 0.4)';
-    this.e.style.color = 'white'; this.e.style.border = '1px solid #D3D3D3'; this.e.style.borderRadius = '8px';
-    this.e.style.fontSize = '24px'; this.e.style.cursor = 'pointer';
-    this.e.style.transition = 'background-color 0.3s ease, transform 0.2s ease, box-shadow 0.3s ease';
-    this.e.style.outline = 'none'; this.e.style.boxShadow = 'none';
-    this.e.addEventListener('mouseover', () => { this.e.style.backgroundColor = 'rgba(185, 185, 185, 0.4)'; this.e.style.top = "11.5%"; this.e.style.left = "50%"; });
-    this.e.addEventListener('mouseout', () => { this.e.style.backgroundColor = 'rgba(211, 211, 211, 0.4)'; this.e.style.top = "11.5%"; this.e.style.left = "50%"; });
-    this.shown = false;
-  }
-  addBanner() { if (!this.shown) { document.body.appendChild(this.e); this.shown = true; } }
-  removeBanner() { if (this.shown) { this.shown = false; this.e.remove(); } }
-}
-class UnverifiedShortcutMenu {
-  constructor() {
-    this.onclicks = [
-      () => { this.getPlayButton().click(); setTimeout(() => this.getKitPVPButton().click(), 70); document.body.removeChild(this.container); },
-      () => { this.getPlayButton().click(); setTimeout(() => this.getSkywarsButton().click(), 70); document.body.removeChild(this.container); },
-      () => { this.getPlayButton().click(); setTimeout(() => this.getDoublesButton().click(), 70); document.body.removeChild(this.container); },
-      () => { this.getPlayButton().click(); setTimeout(() => this.getQuadsButton().click(), 70); document.body.removeChild(this.container); },
-      () => { this.getPlayButton().click(); setTimeout(() => this.getClassicPVPButton().click(), 70); document.body.removeChild(this.container); },
-    ];
-    this.container = document.createElement("div");
-    Object.assign(this.container.style, {
-      position: "absolute", top: "76%", left: "50%", transform: "translate(-50%, -50%)",
-      padding: "20px", borderRadius: "8px", display: "flex", flexDirection: "row",
-      gap: "10px", alignItems: "center", zIndex: "99"
-    });
-    let i = 0;
-    ["KitPVP", "Skywars", "Doubles", "Quads", "ClassicPVP"].forEach(label => {
-      const button = document.createElement("button");
-      button.textContent = label;
-      button.style.padding = '8px 16px'; button.style.backgroundColor = 'rgba(211, 211, 211, 0.4)';
-      button.style.color = 'white'; button.style.border = '1px solid #D3D3D3'; button.style.borderRadius = '6px';
-      button.style.fontSize = '16px'; button.style.cursor = 'pointer';
-      button.style.transition = 'background-color 0.3s ease, transform 0.2s ease, box-shadow 0.3s ease';
-      button.style.outline = 'none'; button.style.boxShadow = 'none';
-      button.addEventListener('mouseover', () => { button.style.backgroundColor = 'rgba(185, 185, 185, 0.4)'; button.style.transform = 'scale(1.01)'; });
-      button.addEventListener('mouseout', () => { button.style.backgroundColor = 'rgba(211, 211, 211, 0.4)'; button.style.transform = 'scale(1)'; });
-      button.addEventListener('click', this.onclicks[i++]);
-      this.container.appendChild(button);
-    });
-    this.shown = false;
-  }
-  getPlayButton() { return document.querySelector('.chakra-button.css-cuh8pi'); }
-  getExitButton() { return document.querySelectorAll('.chakra-button.css-1axaj8o')[1]; }
-  getKitPVPButton() { return document.querySelector('.css-1idq8wm'); }
-  getSkywarsButton() { return document.querySelector('.css-rsqc3q'); }
-  getDoublesButton() { return document.querySelector('.css-6umr0e'); }
-  getQuadsButton() { return document.querySelector('.css-sbvzy'); }
-  getClassicPVPButton() { return document.querySelector('.css-1w536sc'); }
-  addShortcutMenu() { if (!this.shown) { this.shown = true; document.body.appendChild(this.container); } }
-  removeShortcutMenu() { if (this.shown) { this.shown = false; document.body.removeChild(this.container); } }
-}
+
 (function() {
   'use strict';
   const intro = new UnverifiedIntro();
@@ -302,7 +141,6 @@ class UnverifiedShortcutMenu {
   intro.showInitializedNotif();
   const styler = new UnverifiedStyler();
   styler.addStyleObserver();
-  try { styler.initialTriggerStyleObserver(); } catch (e) {}
   const style = document.createElement('style');
   style.innerHTML = `
     @font-face {
@@ -507,7 +345,7 @@ class UnverifiedShortcutMenu {
   faLink.href = "https://cdnjs.cloudflare.com/ajax/libs/font-awesome/4.7.0/css/font-awesome.min.css";
   document.head.appendChild(faLink);
 
-  const targetImageUrl = "https://w0.peakpx.com/wallpaper/810/395/HD-wallpaper-landscape-minecraft-shaders-minecraft.jpg";
+  const targetImageUrl = "https://images3.alphacoders.com/133/1333794.jpeg";
   const targetImageSelector = "img.chakra-image.css-139opjw";
 
   function enforceTargetImage() {
@@ -775,13 +613,13 @@ class UnverifiedShortcutMenu {
       gradient:   'linear-gradient(135deg, #b7770d, #f39c12)',
     },
       {
-  id:         'rose',
-  name:       'Rose',
-  primary:    '#ff5c8a',
-  background: '#000000',
-  text:       '#fff0f4',
-  gradient:   'linear-gradient(135deg, #b3134f, #ff5c8a)',
-},
+          id:         'rose',
+          name:       'Rose',
+          primary:    '#ff5c8a',
+          background: '#000000',
+          text:       '#fff0f4',
+          gradient:   'linear-gradient(135deg, #b3134f, #ff5c8a)',
+      },
   ];
 
   let activeThemeId = localStorage.getItem('uv2-theme-id') || 'default';
