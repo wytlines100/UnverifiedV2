@@ -33,7 +33,7 @@ A custom client for Miniblox, in active development since October 2024.
 1. Install a Userscript manager such as Tampermonkey for your browser. (Make sure Allow UserScripts is on!)
 2. Add a new script in Tampermonkey and paste all of `client.js`.
 3. Save the script and make sure it is enabled. (Ctrl S)
-4. Visit miniblox.io the client will initialize automatically.
+4. Visit miniblox.io the client will initialize automatically (Notification at top should appear)
 5. Press the Right Shift key to open or close the client menu.
 
 ## Known Limitations
@@ -50,6 +50,13 @@ Contributions are welcome. If you would like to report a bug or suggest a featur
 Current contributors: wytlines, DeadFish7, andreypidd, jet, joudaALT, TrustIsOver, TheM1ddleM1n
 
 ## Changelog
+
+### 2.2.1 - CSS/Intro Update
+- Most CSS buttons were removed (due to new title screen vector created.)
+- New Background for title screen :D
+- Only Background CSS remains (cause Vector did not change that and only focused on other game objects including remapping things.)
+- Intro extended by 3-4 seconds so you can read authors
+- Build size decreased from 139KB to 125KB
 
 ### 2.2 - Big Update!
 - Armor HUD added!
