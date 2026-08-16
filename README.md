@@ -54,9 +54,9 @@ Current contributors: wytlines, DeadFish7, andreypidd, jet, joudaALT, TrustIsOve
 ## Changelog
 
 ### 2.2.1 - CSS/Intro Update
-- Most CSS buttons were removed (due to new title screen vector created.)
+- Most CSS buttons were removed (due to new title screen)
 - New Background for title screen :D
-- Only Background CSS remains (cause Vector did not change that and only focused on other game objects including remapping things.)
+- Only Background CSS remains
 - Intro extended by 3-4 seconds so you can read authors
 - Build size decreased from 139KB to 125KB
 
