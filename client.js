@@ -1284,7 +1284,6 @@ class UnverifiedBackground {
 const CHAT_FILTER_CONFIG = {
   blockBadWords: true,
   blockSpam: true,
-  blockAllCaps: false
 };
 
 function chatFilterStripSeparators(text) {
@@ -1314,12 +1313,6 @@ function chatFilterContainsBadWords(text) {
   }
 
   return false;
-}
-
-function chatFilterIsAllCaps(text) {
-  const letters = text.replace(/[^a-zA-Z]/g, '');
-  if (letters.length < 10) return false;
-  return letters === letters.toUpperCase();
 }
 
 const MODULE_NAMES = { AUTO_FULLSCREEN: "Auto Fullscreen", KEYSTROKES: "Keystrokes", MUTE_CHAT: "Mute Chat",
@@ -1552,9 +1545,6 @@ function chatFilterGetBlockReason(text) {
   if (CHAT_FILTER_CONFIG.blockSpam && chatFilterIsSpam(text)) {
     return 'spam';
   }
-  if (CHAT_FILTER_CONFIG.blockAllCaps && chatFilterIsAllCaps(text)) {
-    return 'caps';
-  }
   return null;
 }
 
@@ -1565,7 +1555,7 @@ function chatFilterShowBlockedNotice(reason) {
     const fiber = Object.values(reactRoot)[0];
     const game = fiber?.updateQueue?.baseState?.element?.props?.game;
     if (game && game.chat && typeof game.chat.addChat === "function") {
-      const message = reason === 'spam' ? "No Spamming Please!" : "Message was Blocked!";
+      const message = reason === 'spam' ? "Please do not spam." : "Message included Profanity.";
       game.chat.addChat({ text: `\\#FF0000\\${message}\\reset\\` });
     }
   } catch(e) {}
@@ -1590,7 +1580,7 @@ function ensureChatAddChatPatched() {
     if (!chatObj || typeof chatObj.text !== 'string') {
       return chatOriginalAddChat(chatObj);
     }
-    if (chatObj.text.includes('No Spamming Please!') || chatObj.text.includes('Message was Blocked!')) {
+    if (chatObj.text.includes('Please do not spam.') || chatObj.text.includes('Message included Profanity.')) {
       return chatOriginalAddChat(chatObj);
     }
     if (isChatFilterActive) {
