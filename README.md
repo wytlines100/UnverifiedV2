@@ -86,6 +86,12 @@ Current contributors: wytlines, DeadFish7, andreypidd, jet, joudaALT, TrustIsOve
 ## Credits
 - Miniblox for creating the base of the game.
 
+## Other Clients for Miniblox
+- Waddle (Discontinued.)
+- MiniFeather (Goated Client!)
+- Back 2 Basics (might work idk.)
+- High-resolution-texture-pack (SmoothDude created this!)
+
 ## License
 This project is licensed under a proprietary "All Rights Reserved" license. You may not use, copy, modify, or distribute this code without prior written permission from the copyright holder.
 
