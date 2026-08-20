@@ -16,7 +16,7 @@ A custom client for Miniblox, in active development since October 2024.
 - Anti-AFK: automatically presses movement keys to prevent being kicked for inactivity, with an optional auto-enable on idle and an optional chat notification. (ONLY ingame -> Not on menu :D)
 - Keep Sprint: keeps you sprinting automatically while moving
 - Time Display: shows a draggable on-screen clock
-- Music Player: search and play tracks, or load audio from a direct URL, with volume control and a draggable interface
+- Music Player: load audio from YT (coming soon...) (as a direct URL), with a draggable interface
 - Theme selection: choose from multiple color themes for the UI
 - Config management: save your settings and module states to a JSON file and reload them later
 - Key binding: right-click any module to assign a custom keybind
