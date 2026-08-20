@@ -59,6 +59,8 @@ Current contributors: wytlines, DeadFish7, andreypidd, jet, joudaALT, TrustIsOve
 - Only Background CSS remains
 - Intro extended by 3-4 seconds so you can read authors
 - Build size decreased from 139KB to 125KB
+- New improved Music Player coming soon
+- documentation changes! 
 
 ### 2.2 - Big Update!
 - Armor HUD added!
