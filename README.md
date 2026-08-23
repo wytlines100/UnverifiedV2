@@ -50,9 +50,13 @@ Contributions are welcome. If you would like to report a bug or suggest a featur
 
 By submitting a contribution, you agree it becomes part of the project under this license and grant the maintainers full rights to use, modify, and distribute it.
 
-Current contributors: wytlines, joudaALT, TrustIsOver, TheM1ddleM1n, DeadFish7, andreypidd, jet
+Current contributors: wytlines, DeadFish7, andreypidd, jet, joudaALT, TrustIsOver, TheM1ddleM1n
 
 ## Changelog
+
+### 2.2.2 - Shine/Music Player Updates
+- Shine for Modules has been added!
+- Improved Music Player will be added shortly!
 
 ### 2.2.1 - CSS/Intro Update
 - Most CSS buttons were removed (due to new title screen)
