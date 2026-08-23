@@ -1,8 +1,8 @@
 // ==UserScript==
-// @name         UnverifiedV2 Player Compact
+// @name         UnverifiedV2 Music Player
 // @namespace    http://tampermonkey.net/
-// @version      1.7.0
-// @description  Compact single-bar YouTube player with song queue
+// @version      2.2.1
+// @description  something
 // @match        https://miniblox.io/
 // @grant        none
 // ==/UserScript==
