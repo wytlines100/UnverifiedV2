@@ -1,7 +1,7 @@
 // ==UserScript==
 // @name         Unverified V2
 // @namespace    http://tampermonkey.net/
-// @version      2.2.1
+// @version      2.2.2
 // @description  Look at my license before you modify, I WILL DMCA you.
 // @icon         https://raw.githubusercontent.com/wytlines100/UnverifiedV2/refs/heads/main/logo.jpg
 // @license      Proprietary License
@@ -9,8 +9,6 @@
 // @match        https://miniblox.io/
 // @grant        GM_xmlhttpRequest
 // @grant        unsafeWindow
-// @connect      api.jamendo.com
-// @connect      prod-1.storage.jamendo.com
 // @connect      cdnjs.cloudflare.com
 // @connect      ip-api.com
 // ==/UserScript==
@@ -205,43 +203,6 @@ class UnverifiedBackground {
     .uv2-toggle-track::after { content:''; position:absolute; top:3px; left:3px; width:16px; height:16px; background:#fff; border-radius:50%; transition:transform 0.2s; }
     .uv2-toggle input:checked + .uv2-toggle-track { background:#e74c3c; }
     .uv2-toggle input:checked + .uv2-toggle-track::after { transform:translateX(20px); }
-    #unverified-music-player { position:fixed; bottom:24px; left:24px; width:260px; background:#0f0f0f; border-left:3px solid #e74c3c; z-index:99999; font-family:'MinibloxFont',sans-serif; color:white; box-shadow:0 4px 24px rgba(0,0,0,0.8); user-select:none; border-radius:8px; }
-    #unverified-music-player .mp-topbar { display:flex; align-items:center; justify-content:space-between; padding:7px 10px; background:#0a0a0a; cursor:move; border-bottom:1px solid #1f1f1f; border-radius:8px 8px 0 0; }
-    #unverified-music-player .mp-topbar-name { font-size:9px; color:#e74c3c; letter-spacing:3px; text-transform:uppercase; }
-    #unverified-music-player .mp-topbar-close { background:none; border:none; color:#333; font-size:14px; cursor:pointer; padding:0; line-height:1; transition:color 0.15s; }
-    #unverified-music-player .mp-topbar-close:hover { color:#e74c3c; }
-    #unverified-music-player .mp-nowplaying { display:flex; align-items:center; gap:10px; padding:10px; border-bottom:1px solid #1a1a1a; }
-    #unverified-music-player .mp-art { width:44px; height:44px; background:#1a1a1a; flex-shrink:0; object-fit:cover; border-radius:4px; }
-    #unverified-music-player .mp-info { flex:1; min-width:0; }
-    #unverified-music-player .mp-title { font-size:11px; color:#ddd; white-space:nowrap; overflow:hidden; text-overflow:ellipsis; font-family:'MinibloxFont',sans-serif; }
-    #unverified-music-player .mp-sub { font-size:10px; color:#3a3a3a; margin-top:3px; white-space:nowrap; overflow:hidden; text-overflow:ellipsis; font-family:'MinibloxFont',sans-serif; }
-    #unverified-music-player .mp-bar { height:2px; background:#1a1a1a; }
-    #unverified-music-player .mp-bar-fill { height:100%; width:0%; background:#e74c3c; transition:width 0.5s linear; }
-    #unverified-music-player .mp-btns { display:flex; border-bottom:1px solid #1a1a1a; }
-    #unverified-music-player .mp-btn { flex:1; background:none; border:none; border-right:1px solid #1a1a1a; color:#444; padding:9px 0; font-size:13px; cursor:pointer; transition:color 0.15s,background 0.15s; display:flex; align-items:center; justify-content:center; }
-    #unverified-music-player .mp-btn:last-child { border-right:none; }
-    #unverified-music-player .mp-btn:hover { color:#fff; background:#1a1a1a; }
-    #unverified-music-player .mp-btn.active { color:#e74c3c; }
-    #unverified-music-player .mp-vol { display:flex; align-items:center; gap:8px; padding:7px 10px; border-bottom:1px solid #1a1a1a; }
-    #unverified-music-player .mp-vol-lbl { font-size:9px; color:#2a2a2a; letter-spacing:2px; flex-shrink:0; }
-    #unverified-music-player .mp-vol-slider { flex:1; accent-color:#e74c3c; height:2px; cursor:pointer; }
-    #unverified-music-player .mp-vol-pct { font-size:9px; color:#2a2a2a; min-width:26px; text-align:right; }
-    #unverified-music-player .mp-search-wrap { padding:8px 10px; border-bottom:1px solid #1a1a1a; display:flex; gap:0; }
-    #unverified-music-player .mp-search-in { flex:1; background:#1a1a1a; color:#ccc; border:none; padding:7px 9px; font-size:10px; outline:none; font-family:'MinibloxFont',sans-serif; }
-    #unverified-music-player .mp-search-in::placeholder { color:#2a2a2a; }
-    #unverified-music-player .mp-search-go { background:#e74c3c; color:white; border:none; padding:7px 11px; font-size:10px; cursor:pointer; font-family:'MinibloxFont',sans-serif; letter-spacing:1px; transition:background 0.15s; flex-shrink:0; border-radius:4px; }
-    #unverified-music-player .mp-search-go:hover { background:#c0392b; }
-    #unverified-music-player .mp-results { max-height:120px; overflow-y:auto; }
-    #unverified-music-player .mp-results::-webkit-scrollbar { width:2px; }
-    #unverified-music-player .mp-results::-webkit-scrollbar-thumb { background:#e74c3c; }
-    #unverified-music-player .mp-result { display:flex; align-items:center; gap:8px; padding:6px 10px; cursor:pointer; border-bottom:1px solid #161616; transition:background 0.1s; }
-    #unverified-music-player .mp-result:last-child { border-bottom:none; }
-    #unverified-music-player .mp-result:hover { background:#1a1a1a; }
-    #unverified-music-player .mp-result-img { width:32px; height:32px; object-fit:cover; flex-shrink:0; background:#1a1a1a; border-radius:4px; }
-    #unverified-music-player .mp-result-name { font-size:10px; color:#bbb; font-family:'MinibloxFont',sans-serif; white-space:nowrap; overflow:hidden; text-overflow:ellipsis; }
-    #unverified-music-player .mp-result-by { font-size:9px; color:#333; margin-top:2px; white-space:nowrap; overflow:hidden; text-overflow:ellipsis; font-family:'MinibloxFont',sans-serif; }
-    #unverified-music-player .mp-msg { padding:10px; color:#2a2a2a; font-size:9px; letter-spacing:1px; text-align:center; font-family:'MinibloxFont',sans-serif; }
-
     /* Module container styles - rectangle with slight curve */
     .module-container {
       border-radius: 8px !important;
@@ -475,7 +436,7 @@ class UnverifiedBackground {
     "font-size:9px;color:#333;letter-spacing:1.5px;text-transform:uppercase;",
     "font-family:MinibloxFont,sans-serif;text-align:center;"
   ].join("");
-  uv2SidebarFooter.textContent = "v2.2.1";
+  uv2SidebarFooter.textContent = "v2.2.2";
   uv2Sidebar.appendChild(uv2SidebarFooter);
 
   ui.appendChild(uv2Sidebar);
@@ -1000,7 +961,7 @@ class UnverifiedBackground {
           </div>
           <div class="uv2-settings-page" id="uv2-page-about">
             <div class="uv2-section-title">Info</div>
-            <div class="uv2-setting-row"><div><div class="uv2-setting-label">Version</div><div class="uv2-setting-desc">2.2.1</div></div></div>
+            <div class="uv2-setting-row"><div><div class="uv2-setting-label">Version</div><div class="uv2-setting-desc">2.2.2</div></div></div>
             <div class="uv2-setting-row"><div><div class="uv2-setting-label">Authors</div><div class="uv2-setting-desc">wytlines, DeadFish7, andreypidd, jet, joudaALT, TrustIsOver, TheM1ddleM1n</div></div></div>
             <div class="uv2-setting-row"><div><div class="uv2-setting-label">License</div><div class="uv2-setting-desc">Proprietary, do not redistribute</div></div></div>
           </div>
@@ -1080,10 +1041,6 @@ class UnverifiedBackground {
   let uiVisible = false;
   let uiAnimating = false;
   let closeUITimeout = null;
-  let musicPlayerEl = null;
-  let musicAudio = null;
-  let musicIsPlaying = false;
-  let isMusicPlayerActive = false;
   let isRestoring = false;
 
   const settings = {
@@ -1167,7 +1124,6 @@ class UnverifiedBackground {
     antiAfk:"Anti-Afk", antiAfkDesc:"Presses WASD on its own to avoid being kicked for being AFK",
     keepSprint:"Keep Sprint", keepSprintDesc:"Keeps you sprinting automatically.",
     timeDisplay:"Time Display", timeDisplayDesc:"Shows you the time so you dont have to exit full screen.",
-    musicPlayer:"Music Player", musicPlayerDesc:"Plays music while you play.",
     armorHud: "Armor HUD", armorHudDesc: "Shows armor durability percentages, enchantments and icons.",
     closeUI:"Close UI", turnedOn:"was turned on", turnedOff:"was turned off", tooltipBind:"right-click to bind"
   },
@@ -1180,7 +1136,6 @@ class UnverifiedBackground {
     antiAfk:"Anti-Inactividad", antiAfkDesc:"Presiona WASD automáticamente para evitar ser expulsado por inactividad",
     keepSprint:"Mantener Sprint", keepSprintDesc:"Te mantiene corriendo automáticamente.",
     timeDisplay:"Mostrar Hora", timeDisplayDesc:"Te muestra la hora para que no tengas que salir de pantalla completa.",
-    musicPlayer:"Reproductor de Música", musicPlayerDesc:"Reproduce música mientras juegas.",
     armorHud: "HUD de armadura", armorHudDesc: "Muestra los porcentajes de durabilidad de la armadura, los encantamientos y los iconos.",
     closeUI:"Cerrar UI", turnedOn:"fue activado", turnedOff:"fue desactivado", tooltipBind:"clic derecho para vincular"
   },
@@ -1193,7 +1148,6 @@ class UnverifiedBackground {
   antiAfk:"Anti-Afk", antiAfkDesc:"Appuie sur WASD automatiquement pour eviter d'etre expulse pour inactivite",
   keepSprint:"Garder Sprint", keepSprintDesc:"Vous fait sprinter automatiquement.",
   timeDisplay:"Affichage Heure", timeDisplayDesc:"Affiche l'heure pour ne pas avoir a quitter le plein ecran.",
-  musicPlayer:"Lecteur Musique", musicPlayerDesc:"Joue de la musique pendant que vous jouez.",
   armorHud:"HUD Armure", armorHudDesc:"Affiche les pourcentages de durabilite et les enchantements de l'armure.",
   closeUI:"Fermer UI", turnedOn:"a ete active", turnedOff:"a ete desactive", tooltipBind:"clic droit pour lier"
 },
@@ -1206,7 +1160,6 @@ class UnverifiedBackground {
   antiAfk:"Anti-Afk", antiAfkDesc:"Drukt automatisch op WASD om te voorkomen dat je wordt gekickt wegens afwezigheid",
   keepSprint:"Blijf Sprinten", keepSprintDesc:"Laat je automatisch blijven sprinten.",
   timeDisplay:"Tijdweergave", timeDisplayDesc:"Toont de tijd zodat je niet uit volledig scherm hoeft te gaan.",
-  musicPlayer:"Muziekspeler", musicPlayerDesc:"Speelt muziek af terwijl je speelt.",
   armorHud:"Wapenrusting HUD", armorHudDesc:"Toont duurzaamheidspercentages en betoveringen van je wapenrusting.",
   closeUI:"UI Sluiten", turnedOn:"werd ingeschakeld", turnedOff:"werd uitgeschakeld", tooltipBind:"rechtsklik om te binden"
 },
@@ -1219,7 +1172,6 @@ class UnverifiedBackground {
   antiAfk:"Anti-Afk", antiAfkDesc:"Avtomaticheski nazhimayet WASD, chtoby izbezhat kika za bezdeystviye",
   keepSprint:"Postoyannyy Sprint", keepSprintDesc:"Avtomaticheski podderzhivayet beg.",
   timeDisplay:"Otobrazheniye Vremeni", timeDisplayDesc:"Pokazyvayet vremya, chtoby ne vykhodit iz polnogo ekrana.",
-  musicPlayer:"Muzykalnyy Pleyer", musicPlayerDesc:"Vosproizvodit muzyku vo vremya igry.",
   armorHud:"HUD Broni", armorHudDesc:"Pokazyvayet prochnost i charakteristiki brony v protsentakh.",
   closeUI:"Zakryt UI", turnedOn:"bylo vklyucheno", turnedOff:"bylo vyklyucheno", tooltipBind:"pravaya knopka mishi dlya privyazki"
 },
@@ -1317,7 +1269,7 @@ function chatFilterContainsBadWords(text) {
 
 const MODULE_NAMES = { AUTO_FULLSCREEN: "Auto Fullscreen", KEYSTROKES: "Keystrokes", MUTE_CHAT: "Mute Chat",
   CHAT_FILTER: "Chat Filter", ANTI_AFK: "Anti-Afk", KEEP_SPRINT: "Keep Sprint", TIME_DISPLAY: "Time Display",
-  MUSIC_PLAYER: "Music Player", ARMOR_HUD: "Armor HUD" };
+  ARMOR_HUD: "Armor HUD" };
 
 const gridContainer = document.createElement("div");
 gridContainer.style.display = "flex";
@@ -1492,7 +1444,7 @@ function updateLanguage() {
   title.textContent = translations[currentLanguage]?.title || "UnverifiedV2";
   closeButton.textContent = translations[currentLanguage]?.closeUI || "Close UI";
   const modules = gridContainer.children;
-  const moduleKeys = ['autoFullscreen','keystrokes','muteChat','chatFilter','antiAfk','keepSprint','timeDisplay','musicPlayer','armorHud'];
+  const moduleKeys = ['autoFullscreen','keystrokes','muteChat','chatFilter','antiAfk','keepSprint','timeDisplay','armorHud'];
   for (let i = 0; i < modules.length; i++) {
     const moduleTitle = modules[i].querySelector("span");
     const moduleDesc = modules[i].querySelector("p");
@@ -1740,105 +1692,7 @@ if (antiAfkModule) {
       } else if (timeElement) { clearInterval(timeElement._interval); timeElement.remove(); timeElement=null; }
     });
   }
-
-  createModule(MODULE_NAMES.MUSIC_PLAYER, "Plays music while you play.");
-  const musicModule = [...gridContainer.children].find(c => c.dataset.moduleName === MODULE_NAMES.MUSIC_PLAYER);
-  const JAMENDO_KEY = "0c5e9d9e";
-  function jamendoSearch(query) {
-    return new Promise((resolve, reject) => {
-      GM_xmlhttpRequest({
-        method: "GET",
-        url: `https://api.jamendo.com/v3.0/tracks/?client_id=${JAMENDO_KEY}&format=json&limit=10&search=${encodeURIComponent(query)}&include=musicinfo`,
-        timeout: 8000,
-        onload(r) { try { resolve(JSON.parse(r.responseText).results || []); } catch(e) { reject(e); } },
-        onerror() { reject(new Error("Network error")); },
-        ontimeout() { reject(new Error("Timeout")); }
-      });
-    });
-  }
-  if (musicModule) {
-    musicModule.addEventListener("click", () => {
-      isMusicPlayerActive = !isMusicPlayerActive;
-      if (isMusicPlayerActive) {
-        musicPlayerEl = document.createElement("div"); musicPlayerEl.id = "unverified-music-player";
-        musicPlayerEl.innerHTML = `
-          <div class="mp-topbar"><span class="mp-topbar-name">UV2</span><button class="mp-topbar-close" id="mp-close">&#x2715;</button></div>
-          <div class="mp-nowplaying"><img class="mp-art" id="mp-album-art" src="" alt=""/><div class="mp-info"><div class="mp-title" id="mp-song-title">nothing playing</div><div class="mp-sub" id="mp-artist">—</div></div></div>
-          <div class="mp-bar"><div class="mp-bar-fill" id="mp-progress-bar"></div></div>
-          <div class="mp-btns"><button class="mp-btn" id="mp-prev-btn">&#9664;&#9664;</button><button class="mp-btn active" id="mp-play-btn">&#9654;</button><button class="mp-btn" id="mp-stop-btn">&#9632;</button></div>
-          <div class="mp-vol"><span class="mp-vol-lbl">VOL</span><input class="mp-vol-slider" id="mp-volume" type="range" min="0" max="100" value="70"/><span class="mp-vol-pct" id="mp-vol-label">70%</span></div>
-          <div class="mp-search-wrap"><input class="mp-search-in" id="mp-search-input" type="text" placeholder="search a song..." autocomplete="off" spellcheck="false"/><button class="mp-search-go" id="mp-search-btn">GO</button></div>
-          <div class="mp-search-wrap" style="border-top:none;padding-top:0;"><input class="mp-search-in" id="mp-url-input" type="text" placeholder="or paste audio url (.mp3, .ogg...)" autocomplete="off" spellcheck="false"/><button class="mp-search-go" id="mp-url-btn">PLAY</button></div>
-          <div class="mp-results" id="mp-results" style="display:none;"></div>`;
-        document.body.appendChild(musicPlayerEl);
-        const playBtn=musicPlayerEl.querySelector("#mp-play-btn"), stopBtn=musicPlayerEl.querySelector("#mp-stop-btn"), prevBtn=musicPlayerEl.querySelector("#mp-prev-btn");
-        const volSlider=musicPlayerEl.querySelector("#mp-volume"), volLabel=musicPlayerEl.querySelector("#mp-vol-label");
-        const songTitle=musicPlayerEl.querySelector("#mp-song-title"), artistEl=musicPlayerEl.querySelector("#mp-artist");
-        const progressBar=musicPlayerEl.querySelector("#mp-progress-bar"), header=musicPlayerEl.querySelector(".mp-topbar"), albumArt=musicPlayerEl.querySelector("#mp-album-art");
-        const searchInput=musicPlayerEl.querySelector("#mp-search-input"), searchBtn=musicPlayerEl.querySelector("#mp-search-btn"), resultsBox=musicPlayerEl.querySelector("#mp-results");
-        musicPlayerEl.querySelector("#mp-close").addEventListener("click", () => {
-          if (musicAudio) { musicAudio.pause(); musicAudio.src=""; musicAudio=null; }
-          musicIsPlaying=false; isMusicPlayerActive=false; musicPlayerEl.remove(); musicPlayerEl=null;
-        });
-        let isDrag=false, offX=0, offY=0;
-        header.addEventListener("mousedown", e => { isDrag=true; offX=e.clientX-musicPlayerEl.getBoundingClientRect().left; offY=e.clientY-musicPlayerEl.getBoundingClientRect().top; e.preventDefault(); });
-        document.addEventListener("mousemove", e => { if(!isDrag) return; musicPlayerEl.style.left=(e.clientX-offX)+"px"; musicPlayerEl.style.top=(e.clientY-offY)+"px"; musicPlayerEl.style.bottom="auto"; });
-        document.addEventListener("mouseup", () => { isDrag=false; });
-        function loadAudioSrc(src, title, artist, imageUrl) {
-          if (musicAudio) { musicAudio.pause(); musicAudio.src=""; musicAudio=null; }
-          musicIsPlaying=false; playBtn.innerHTML="&#9654;";
-          songTitle.textContent=title||src; artistEl.textContent=artist||"—"; albumArt.src=imageUrl||"";
-          musicAudio = new Audio(); musicAudio.crossOrigin="anonymous"; musicAudio.volume=volSlider.value/100; musicAudio.src=src;
-          musicAudio.addEventListener("timeupdate", () => { if(musicAudio.duration) progressBar.style.width=((musicAudio.currentTime/musicAudio.duration)*100).toFixed(2)+"%"; });
-          musicAudio.addEventListener("ended", () => { playBtn.innerHTML="&#9654;"; musicIsPlaying=false; });
-          musicAudio.addEventListener("error", () => { songTitle.textContent="failed to load"; playBtn.innerHTML="&#9654;"; musicIsPlaying=false; });
-          musicAudio.play().then(() => { playBtn.innerHTML="&#9646;&#9646;"; musicIsPlaying=true; }).catch(()=>{});
-        }
-        async function doSearch() {
-          const q=searchInput.value.trim(); if(!q) return;
-          resultsBox.innerHTML=`<div class="mp-msg">searching...</div>`; resultsBox.style.display="block";
-          let tracks; try { tracks=await jamendoSearch(q); } catch(e) { tracks=[]; }
-          resultsBox.innerHTML="";
-          if (!tracks.length) { resultsBox.innerHTML=`<div class="mp-msg">nothing found</div>`; return; }
-          tracks.forEach(track => {
-            const row=document.createElement("div"); row.className="mp-result";
-            row.innerHTML=`<img class="mp-result-img" src="${track.image||""}" alt="" loading="lazy"/><div class="mp-result-info"><div class="mp-result-name">${track.name}</div><div class="mp-result-by">${track.artist_name}</div></div>`;
-            row.addEventListener("click", () => { resultsBox.style.display="none"; resultsBox.innerHTML=""; loadAudioSrc(`https://prod-1.storage.jamendo.com/?trackid=${track.id}&format=mp31&from=app-97dab294`, track.name, track.artist_name, track.image||null); });
-            resultsBox.appendChild(row);
-          });
-        }
-        searchBtn.addEventListener("click", doSearch);
-        const urlInput=musicPlayerEl.querySelector("#mp-url-input"), urlBtn=musicPlayerEl.querySelector("#mp-url-btn");
-        function playFromUrl() {
-          const raw=urlInput.value.trim(); if(!raw) return;
-          const previewBox=musicPlayerEl.querySelector("#mp-url-preview"); if(previewBox) previewBox.remove();
-          const preview=document.createElement("div"); preview.id="mp-url-preview";
-          preview.style.cssText="display:flex;align-items:center;gap:8px;padding:6px 10px;border-bottom:1px solid #161616;background:#111;";
-          const icon=document.createElement("div"); icon.style.cssText="width:32px;height:32px;flex-shrink:0;background:#1a1a1a;display:flex;align-items:center;justify-content:center;font-size:18px;color:#e74c3c;"; icon.textContent="♪";
-          const info=document.createElement("div"); info.style.cssText="flex:1;min-width:0;";
-          const name=document.createElement("div"); name.style.cssText="font-size:10px;color:#bbb;font-family:MinibloxFont,sans-serif;white-space:nowrap;overflow:hidden;text-overflow:ellipsis;"; name.textContent=raw.split("/").pop().split("?")[0]||"audio file";
-          const sub=document.createElement("div"); sub.style.cssText="font-size:9px;color:#333;margin-top:2px;font-family:MinibloxFont,sans-serif;"; sub.textContent="direct url";
-          info.appendChild(name); info.appendChild(sub); preview.appendChild(icon); preview.appendChild(info);
-          resultsBox.style.display="block"; resultsBox.innerHTML=""; resultsBox.appendChild(preview);
-          loadAudioSrc(raw, name.textContent, "direct url", null);
-        }
-        urlBtn.addEventListener("click", playFromUrl);
-        urlInput.addEventListener("keydown", e => { e.stopPropagation(); if(e.key==="Enter") playFromUrl(); if(e.key==="Escape") resultsBox.style.display="none"; });
-        urlInput.addEventListener("keyup", e => e.stopPropagation()); urlInput.addEventListener("keypress", e => e.stopPropagation());
-        searchInput.addEventListener("keydown", e => { e.stopPropagation(); if(e.key==="Enter") doSearch(); if(e.key==="Escape") resultsBox.style.display="none"; });
-        searchInput.addEventListener("keyup", e => e.stopPropagation()); searchInput.addEventListener("keypress", e => e.stopPropagation());
-        playBtn.addEventListener("click", () => { if(!musicAudio) return; if(musicIsPlaying){ musicAudio.pause(); playBtn.innerHTML="&#9654;"; musicIsPlaying=false; } else { musicAudio.play(); playBtn.innerHTML="&#9646;&#9646;"; musicIsPlaying=true; } });
-        stopBtn.addEventListener("click", () => { if(musicAudio){ musicAudio.pause(); musicAudio.src=""; musicAudio=null; } musicIsPlaying=false; playBtn.innerHTML="&#9654;"; songTitle.textContent="nothing playing"; artistEl.textContent="—"; albumArt.src=""; progressBar.style.width="0%"; });
-        prevBtn.addEventListener("click", () => { if(musicAudio){ musicAudio.currentTime=0; if(!musicIsPlaying){ musicAudio.play(); playBtn.innerHTML="&#9646;&#9646;"; musicIsPlaying=true; } } });
-        volSlider.addEventListener("input", () => { const v=parseInt(volSlider.value,10); volLabel.textContent=v+"%"; if(musicAudio) musicAudio.volume=v/100; });
-      } else {
-        if(musicAudio){ musicAudio.pause(); musicAudio.src=""; musicAudio=null; }
-        if(musicPlayerEl){ musicPlayerEl.remove(); musicPlayerEl=null; }
-        musicIsPlaying=false;
-      }
-    });
-  }
-    const ARMOR_SLOT_LABELS = ['Helmet', 'Chestplate', 'Leggings', 'Boots'];
+const ARMOR_SLOT_LABELS = ['Helmet', 'Chestplate', 'Leggings', 'Boots'];
 const ARMOR_ROMAN = ['', 'I', 'II', 'III', 'IV', 'V', 'VI', 'VII', 'VIII', 'IX', 'X'];
 const ARMOR_SPRITESHEET_URL = 'https://miniblox.io/textures/spritesheet.36511680aea3.png';
 const ARMOR_SPRITESHEET_SIZE = 1024;
@@ -2198,7 +2052,6 @@ if (armorHudModule) {
 
   function openUI() {
     ui.style.display = "flex";
-    if (musicPlayerEl) musicPlayerEl.style.display = "block";
     if (settings.animateUI) {
       ui.classList.remove("uv2-animate-in", "uv2-animate-out");
       void ui.offsetWidth;
@@ -2216,14 +2069,12 @@ if (armorHudModule) {
       closeUITimeout = setTimeout(() => {
         ui.style.display = "none";
         ui.classList.remove("uv2-animate-out");
-        if (musicPlayerEl) musicPlayerEl.style.display = "none";
         uiAnimating = false;
         closeUITimeout = null;
       }, 180);
     } else {
       ui.classList.remove("uv2-animate-in", "uv2-animate-out");
       ui.style.display = "none";
-      if (musicPlayerEl) musicPlayerEl.style.display = "none";
       uiAnimating = false;
     }
   }
