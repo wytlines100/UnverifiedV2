@@ -57,6 +57,7 @@ Current contributors: wytlines, DeadFish7, andreypidd, jet, joudaALT, TrustIsOve
 ### 2.2.2 - Shine/Music Player update
 - Shine for Modules has been added!
 - Music Player removed from `client.js` and added to `MusicPlayer.js`
+- Build size decreased once again from 125KB to 109KB
 
 ### 2.2.1 - CSS/Intro Update
 - Most CSS buttons were removed (due to new title screen)
