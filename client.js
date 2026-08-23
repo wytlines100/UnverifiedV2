@@ -5,7 +5,7 @@
 // @description  Look at my license before you modify, I WILL DMCA you.
 // @icon         https://raw.githubusercontent.com/wytlines100/UnverifiedV2/refs/heads/main/logo.jpg
 // @license      Proprietary License
-// @author       wytlines, joudaALT, TrustIsOver, TheM1ddleM1n, DeadFish7, andreypidd, jet
+// @author       wytlines, DeadFish7, andreypidd, jet, joudaALT, TrustIsOver, TheM1ddleM1n
 // @match        https://miniblox.io/
 // @grant        GM_xmlhttpRequest
 // @grant        unsafeWindow
@@ -170,7 +170,7 @@ class UnverifiedBackground {
     .bind-popup input { background-color:#34495e; color:white; border:2px solid #e74c3c; border-radius:5px; padding:10px; font-size:18px; width:200px; }
     .bind-popup button { background-color:#e74c3c; color:white; border:none; border-radius:5px; padding:10px 20px; margin-top:10px; cursor:pointer; }
     .bind-popup button:hover { background-color:#c0392b; }
-    .module-tooltip { visibility:hidden; position:absolute; background-color:#2c3e50; color:white; padding:5px 10px; border-radius:5px; font-size:14px; z-index:10000; opacity:0; transition:opacity 0.3s ease; }
+    .module-tooltip { visibility:hidden; position:absolute; background-color:#2c3e50; color:white; padding:5px 10px; border-radius:5px; font-size:14px; z-index:10000; opacity:0; transition:opacity 0.3s ease; bottom:6px; right:10px; white-space:nowrap; pointer-events:none; }
     .initialized-notification { font-family:'MinibloxFont',sans-serif; font-size:20px; color:#e74c3c; position:absolute; top:-50px; left:50%; transform:translateX(-50%); padding:10px 20px; background-color:black; border:1px solid white; border-radius:10px; z-index:10000; opacity:0; transition:top 1s ease,opacity 1s ease; }
     .other-notification { font-family:'MinibloxFont',sans-serif; font-size:14px; color:white; background:linear-gradient(135deg, #e74c3c, #c0392b); padding:12px 24px; border-radius:8px; margin-bottom:12px; box-shadow:0 4px 15px rgba(0,0,0,0.3); transition:opacity 0.4s ease, transform 0.4s ease; opacity:0; transform:translateX(100%); border-left:4px solid #ffcc00; font-weight:500; letter-spacing:0.5px; position:relative; overflow:hidden; }
     .notification-progress { position:absolute; bottom:0; left:0; height:3px; background:#ffcc00; width:100%; animation: notificationProgress 3s linear forwards; }
@@ -1377,11 +1377,42 @@ function createModule(name, description) {
     "border-radius:8px;background:linear-gradient(135deg,#242424,#1c1c1c);",
     "border:1px solid rgba(255,255,255,0.07);cursor:pointer;",
     "transition:all 0.18s ease;box-shadow:0 1px 4px rgba(0,0,0,0.4);",
-    "position:relative;user-select:none;width:100%;box-sizing:border-box;flex-shrink:0;"
+    "position:relative;user-select:none;width:100%;box-sizing:border-box;flex-shrink:0;",
+    "overflow:hidden;"
   ].join("");
   moduleContainer.classList.add('module-container');
   moduleContainer.dataset.moduleName = name;
   moduleContainer._uv2Active = false;
+
+    const shine = document.createElement("div");
+  shine.style.cssText = [
+    "position:absolute;top:0;left:-100%;width:60%;height:100%;",
+    "background:linear-gradient(120deg,transparent 0%,rgba(255,255,255,0.13) 45%,rgba(255,255,255,0.22) 50%,rgba(255,255,255,0.13) 55%,transparent 100%);",
+    "transform:skewX(-15deg);pointer-events:none;"
+  ].join("");
+  moduleContainer.appendChild(shine);
+
+    let shineAnim = null;
+  function runShineLoop() {
+    shine.style.transition = "none";
+    shine.style.left = "-100%";
+    void shine.offsetWidth;
+        shine.style.transition = "left 8s cubic-bezier(0.4,0,0.2,1)";
+    shine.style.left = "160%";
+    shineAnim = setTimeout(runShineLoop, 9800);
+  }
+
+  moduleContainer.addEventListener("mouseenter", () => {
+    runShineLoop();
+    if (!moduleContainer._uv2Active) moduleContainer.style.background = "linear-gradient(135deg,#2c2c2c,#222222)";
+  });
+  moduleContainer.addEventListener("mouseleave", () => {
+    clearTimeout(shineAnim);
+    shineAnim = null;
+    shine.style.transition = "none";
+    shine.style.left = "-100%";
+    if (!moduleContainer._uv2Active) moduleContainer.style.background = "linear-gradient(135deg,#242424,#1c1c1c)";
+  });
 
   const nameSection = document.createElement("div");
   nameSection.style.cssText = "min-width:155px;flex-shrink:0;display:flex;align-items:center;gap:9px;";
