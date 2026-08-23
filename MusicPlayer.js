@@ -1,9 +1,8 @@
 // ==UserScript==
-// @name         UnverifiedV2 Music Player
+// @name         UnverifiedV2 Player Compact
 // @namespace    http://tampermonkey.net/
-// @version      1.4.0
-// @description  Compact Music Player with track, artist, live time, collapsible favorites, viewport clamping, and fast loading
-// @author       TheM1ddleM1n
+// @version      1.7.0
+// @description  Compact single-bar YouTube player with song queue
 // @match        https://miniblox.io/
 // @grant        none
 // ==/UserScript==
@@ -11,729 +10,357 @@
 (function() {
   'use strict';
 
-  const FAVORITES_KEY = 'uv2ytlmp-favorites';
-  const OEMBED_CACHE_KEY = 'uv2ytlmp-oembed-cache';
-  const OEMBED_CACHE_LIMIT = 200;
+  const QK = 'uv2ytlmp-queue';
+  const CK = 'uv2ytlmp-oembed-cache';
+  const CLIM = 200;
 
-  function loadFavorites() {
-    try {
-      return JSON.parse(localStorage.getItem(FAVORITES_KEY) || '[]');
-    } catch (e) {
-      return [];
-    }
+  function loadQ() {
+    try { return JSON.parse(localStorage.getItem(QK) || '[]'); } catch (e) { return []; }
   }
-
-  function saveFavorites(list) {
-    localStorage.setItem(FAVORITES_KEY, JSON.stringify(list));
+  function saveQ(q) { localStorage.setItem(QK, JSON.stringify(q)); }
+  function loadC() {
+    try { return JSON.parse(localStorage.getItem(CK) || '{}'); } catch (e) { return {}; }
   }
-
-  function loadOEmbedCache() {
-    try {
-      return JSON.parse(localStorage.getItem(OEMBED_CACHE_KEY) || '{}');
-    } catch (e) {
-      return {};
-    }
+  function idle(fn) {
+    if (typeof window.requestIdleCallback === 'function') window.requestIdleCallback(fn);
+    else setTimeout(fn, 0);
   }
-
-  function scheduleIdle(callback) {
-    if (typeof window.requestIdleCallback === 'function') {
-      window.requestIdleCallback(callback);
-    } else {
-      setTimeout(callback, 0);
-    }
-  }
-
-  function saveOEmbedCache(cache) {
-    scheduleIdle(() => {
-      const keys = Object.keys(cache);
-      if (keys.length > OEMBED_CACHE_LIMIT) {
-        const excess = keys.length - OEMBED_CACHE_LIMIT;
-        keys.slice(0, excess).forEach(k => delete cache[k]);
-      }
-      localStorage.setItem(OEMBED_CACHE_KEY, JSON.stringify(cache));
+  function saveC(c) {
+    idle(() => {
+      const k = Object.keys(c);
+      if (k.length > CLIM) k.slice(0, k.length - CLIM).forEach(x => delete c[x]);
+      localStorage.setItem(CK, JSON.stringify(c));
     });
   }
 
-  let oEmbedCache = loadOEmbedCache();
+  let cache = loadC();
+  let queue = loadQ();
 
-  function extractVideoId(url) {
-    const patterns = [
+  function extractId(url) {
+    const p = [
       /(?:youtube\.com\/watch\?v=)([\w-]{11})/,
       /(?:youtu\.be\/)([\w-]{11})/,
       /(?:youtube\.com\/embed\/)([\w-]{11})/,
       /(?:youtube\.com\/shorts\/)([\w-]{11})/
     ];
-    for (const pattern of patterns) {
-      const match = url.match(pattern);
-      if (match) return match[1];
-    }
+    for (const r of p) { const m = url.match(r); if (m) return m[1]; }
     return null;
   }
 
-  function hashStringToHue(str) {
-    let hash = 0;
-    for (let i = 0; i < str.length; i++) {
-      hash = str.charCodeAt(i) + ((hash << 5) - hash);
-    }
-    return Math.abs(hash) % 360;
+  function hue(s) {
+    let h = 0;
+    for (let i = 0; i < s.length; i++) h = s.charCodeAt(i) + ((h << 5) - h);
+    return Math.abs(h) % 360;
   }
 
-  function colorForVideo(id) {
-    const hue = hashStringToHue(id);
-    return {
-      primary: `hsl(${hue}, 78%, 58%)`
-    };
+  function fmt(s) {
+    if (!isFinite(s) || s < 0) return '0:00';
+    const m = Math.floor(s / 60), sec = Math.floor(s % 60);
+    return `${m}:${sec < 10 ? '0' : ''}${sec}`;
   }
 
-  function formatTime(seconds) {
-    if (!isFinite(seconds) || seconds < 0) return '0:00';
-    const mins = Math.floor(seconds / 60);
-    const secs = Math.floor(seconds % 60);
-    return `${mins}:${secs < 10 ? '0' : ''}${secs}`;
+  function link(rel, href, as) {
+    const l = document.createElement('link');
+    l.rel = rel; l.href = href;
+    if (as) l.as = as;
+    document.head.appendChild(l);
   }
+  link('preconnect', 'https://www.youtube.com');
+  link('preconnect', 'https://i.ytimg.com');
+  link('preload', 'https://www.youtube.com/iframe_api', 'script');
 
-  function addPreconnect(href) {
-    const link = document.createElement('link');
-    link.rel = 'preconnect';
-    link.href = href;
-    document.head.appendChild(link);
-  }
-
-  function addPreload(href, as) {
-    const link = document.createElement('link');
-    link.rel = 'preload';
-    link.href = href;
-    link.as = as;
-    document.head.appendChild(link);
-  }
-
-  addPreconnect('https://www.youtube.com');
-  addPreconnect('https://i.ytimg.com');
-  addPreload('https://www.youtube.com/iframe_api', 'script');
-
-  const icons = {
-    play: '<svg viewBox="0 0 24 24" width="18" height="18"><path fill="currentColor" d="M8 5v14l11-7z"/></svg>',
-    pause: '<svg viewBox="0 0 24 24" width="18" height="18"><path fill="currentColor" d="M6 5h4v14H6zM14 5h4v14h-4z"/></svg>',
-    next: '<svg viewBox="0 0 24 24" width="16" height="16"><path fill="currentColor" d="M16 6h2v12h-2zM6 6l8.5 6L6 18z"/></svg>',
-    repeatOff: '<svg viewBox="0 0 24 24" width="16" height="16"><path fill="currentColor" d="M7 7h10v3l4-4-4-4v3H5v6h2zm10 10H7v-3l-4 4 4 4v-3h12v-6h-2z"/></svg>',
-    repeatOn: '<svg viewBox="0 0 24 24" width="16" height="16"><path fill="currentColor" d="M7 7h10v3l4-4-4-4v3H5v6h2zm10 10H7v-3l-4 4 4 4v-3h12v-6h-2zM12 9.5v5l3.5-2.5z"/></svg>',
-    heartOutline: '<svg viewBox="0 0 24 24" width="16" height="16"><path fill="none" stroke="currentColor" stroke-width="2" d="M12 21s-7-4.6-9.5-8.5C.7 9.3 2 5.5 6 5c2.2-.3 3.8 1 6 3.2C14.2 6 15.8 4.7 18 5c4 .5 5.3 4.3 3.5 7.5C19 16.4 12 21 12 21z"/></svg>',
-    heartFilled: '<svg viewBox="0 0 24 24" width="16" height="16"><path fill="currentColor" d="M12 21s-7-4.6-9.5-8.5C.7 9.3 2 5.5 6 5c2.2-.3 3.8 1 6 3.2C14.2 6 15.8 4.7 18 5c4 .5 5.3 4.3 3.5 7.5C19 16.4 12 21 12 21z"/></svg>',
+  const ic = {
+    play: '<svg viewBox="0 0 24 24" width="20" height="20"><path fill="currentColor" d="M8 5v14l11-7z"/></svg>',
+    pause: '<svg viewBox="0 0 24 24" width="20" height="20"><path fill="currentColor" d="M6 5h4v14H6zM14 5h4v14h-4z"/></svg>',
+    repeat: '<svg viewBox="0 0 24 24" width="16" height="16"><path fill="currentColor" d="M7 7h10v3l4-4-4-4v3H5v6h2zm10 10H7v-3l-4 4 4 4v-3h12v-6h-2z"/></svg>',
+    heart: '<svg viewBox="0 0 24 24" width="16" height="16"><path fill="none" stroke="currentColor" stroke-width="2" d="M12 21s-7-4.6-9.5-8.5C.7 9.3 2 5.5 6 5c2.2-.3 3.8 1 6 3.2C14.2 6 15.8 4.7 18 5c4 .5 5.3 4.3 3.5 7.5C19 16.4 12 21 12 21z"/></svg>',
     load: '<svg viewBox="0 0 24 24" width="16" height="16"><path fill="currentColor" d="M19 13v6H5v-6H3v8h18v-8zm-8-11v13.17l-4.59-4.58L5 12l7 7 7-7-1.41-1.41L13 15.17V2z"/></svg>',
     list: '<svg viewBox="0 0 24 24" width="16" height="16"><path fill="currentColor" d="M4 6h16v2H4zm0 5h16v2H4zm0 5h16v2H4z"/></svg>',
-    musicNote: '<svg viewBox="0 0 24 24" width="22" height="22"><path fill="currentColor" d="M12 3v10.55A4 4 0 1 0 14 17V7h4V3z"/></svg>'
+    note: '<svg viewBox="0 0 24 24" width="22" height="22"><path fill="currentColor" d="M12 3v10.55A4 4 0 1 0 14 17V7h4V3z"/></svg>'
   };
 
-  const style = document.createElement('style');
-  style.textContent = `
-    #uv2ytc-root {
-      position: fixed;
-      bottom: 24px;
-      right: 24px;
-      width: 390px;
-      background: #0a0a0a;
-      border: 1px solid rgba(255,255,255,0.08);
-      border-radius: 12px;
-      box-shadow: 0 8px 28px rgba(0,0,0,0.55);
-      font-family: 'Segoe UI', sans-serif;
-      color: #fff;
-      z-index: 99999;
-      overflow: hidden;
-      user-select: none;
-    }
-    #uv2ytc-bar {
-      display: flex;
-      align-items: center;
-      gap: 12px;
-      padding: 14px 16px;
-      cursor: move;
-    }
-    #uv2ytc-ytmount {
-      position: absolute;
-      width: 1px;
-      height: 1px;
-      opacity: 0;
-      pointer-events: none;
-      overflow: hidden;
-    }
-    #uv2ytc-thumbwrap {
-      width: 48px;
-      height: 48px;
-      border-radius: 50%;
-      background: #161616;
-      flex-shrink: 0;
-      box-shadow: 0 0 12px var(--uv2ytc-glow, rgba(231,76,60,0.4));
-      transition: box-shadow 0.4s ease;
-      display: flex;
-      align-items: center;
-      justify-content: center;
-      overflow: hidden;
-    }
-    #uv2ytc-thumb {
-      width: 100%;
-      height: 100%;
-      object-fit: cover;
-      display: none;
-    }
-    #uv2ytc-thumbicon {
-      color: #444;
-      display: flex;
-      align-items: center;
-      justify-content: center;
-    }
-    #uv2ytc-info {
-      flex: 1;
-      min-width: 0;
-    }
-    #uv2ytc-title {
-      font-size: 17px;
-      font-weight: 700;
-      white-space: nowrap;
-      overflow: hidden;
-      text-overflow: ellipsis;
-      color: var(--uv2ytc-primary, #fff);
-    }
-    #uv2ytc-meta {
-      display: flex;
-      align-items: baseline;
-      gap: 7px;
-      margin-top: 2px;
-    }
-    #uv2ytc-artist {
-      font-size: 13px;
-      color: #999;
-      white-space: nowrap;
-      overflow: hidden;
-      text-overflow: ellipsis;
-      max-width: 140px;
-    }
-    #uv2ytc-timelabel {
-      font-size: 12px;
-      color: #555;
-      flex-shrink: 0;
-    }
-    #uv2ytc-controls {
-      display: flex;
-      align-items: center;
-      gap: 8px;
-      flex-shrink: 0;
-    }
-    #uv2ytc-controls button {
-      background: none;
-      border: none;
-      color: #999;
-      cursor: pointer;
-      display: flex;
-      align-items: center;
-      justify-content: center;
-      padding: 5px;
-      transition: color 0.15s ease, transform 0.15s ease;
-    }
-    #uv2ytc-controls button:hover {
-      color: var(--uv2ytc-primary, #fff);
-      transform: scale(1.1);
-    }
-    #uv2ytc-playbtn {
-      width: 34px;
-      height: 34px;
-      border-radius: 50%;
-      background: var(--uv2ytc-primary, #e74c3c);
-      color: #000 !important;
-    }
-    #uv2ytc-playbtn:hover {
-      color: #000 !important;
-      transform: scale(1.06);
-    }
-    #uv2ytc-repeatbtn.active, #uv2ytc-favbtn.active, #uv2ytc-listbtn.active {
-      color: var(--uv2ytc-primary, #e74c3c);
-    }
-    #uv2ytc-progressbar {
-      width: 100%;
-      height: 4px;
-      background: #1a1a1a;
-      cursor: pointer;
-    }
-    #uv2ytc-progressfill {
-      height: 100%;
-      width: 0%;
-      background: var(--uv2ytc-primary, #e74c3c);
-    }
-    #uv2ytc-urlwrap {
-      display: flex;
-      gap: 0;
-      padding: 10px 12px;
-      border-top: 1px solid rgba(255,255,255,0.06);
-    }
-    #uv2ytc-urlinput {
-      flex: 1;
-      background: #161616;
-      border: 1px solid rgba(255,255,255,0.07);
-      color: #ccc;
-      padding: 8px 10px;
-      font-size: 12px;
-      border-radius: 6px 0 0 6px;
-      outline: none;
-    }
-    #uv2ytc-loadbtn {
-      background: var(--uv2ytc-primary, #e74c3c);
-      color: #000;
-      border: none;
-      padding: 8px 12px;
-      border-radius: 0 6px 6px 0;
-      cursor: pointer;
-      display: flex;
-      align-items: center;
-    }
-    #uv2ytc-favlist {
-      max-height: 0;
-      overflow-y: auto;
-      transition: max-height 0.2s ease;
-      border-top: 1px solid transparent;
-    }
-    #uv2ytc-favlist.open {
-      max-height: 180px;
-      border-top: 1px solid rgba(255,255,255,0.06);
-    }
-    #uv2ytc-favlist::-webkit-scrollbar {
-      width: 3px;
-    }
-    #uv2ytc-favlist::-webkit-scrollbar-thumb {
-      background: var(--uv2ytc-primary, #e74c3c);
-    }
-    .uv2ytc-favrow {
-      display: flex;
-      align-items: center;
-      gap: 10px;
-      padding: 8px 14px;
-      cursor: pointer;
-      border-bottom: 1px solid #141414;
-    }
-    .uv2ytc-favrow:hover {
-      background: #131313;
-    }
-    .uv2ytc-favrow img {
-      width: 30px;
-      height: 30px;
-      border-radius: 5px;
-      object-fit: cover;
-      background: #1a1a1a;
-      flex-shrink: 0;
-    }
-    .uv2ytc-favrow-text {
-      flex: 1;
-      min-width: 0;
-    }
-    .uv2ytc-favrow-name {
-      font-size: 12.5px;
-      color: #ddd;
-      white-space: nowrap;
-      overflow: hidden;
-      text-overflow: ellipsis;
-    }
-    .uv2ytc-favrow-remove {
-      color: #444;
-      flex-shrink: 0;
-      background: none;
-      border: none;
-      cursor: pointer;
-      font-size: 13px;
-    }
-    .uv2ytc-favrow-remove:hover {
-      color: #e74c3c;
-    }
-    #uv2ytc-msg {
-      padding: 13px;
-      text-align: center;
-      font-size: 11px;
-      color: #444;
-    }
-  `;
-  document.head.appendChild(style);
+  const st = document.createElement('style');
+  st.textContent = `.u2c-fc{display:flex;align-items:center;justify-content:center}
+#u2c-root{position:fixed;bottom:24px;right:24px;width:390px;background:#0a0a0a;border:1px solid rgba(255,255,255,.08);border-radius:12px;box-shadow:0 8px 28px rgba(0,0,0,.55);font-family:'Segoe UI',sans-serif;color:#fff;z-index:99999;overflow:hidden;user-select:none}
+#u2c-bar{display:flex;align-items:center;gap:12px;padding:14px 16px;cursor:move}
+#u2c-mount{position:absolute;width:1px;height:1px;opacity:0;pointer-events:none;overflow:hidden}
+#u2c-thumbwrap{width:48px;height:48px;border-radius:50%;background:#161616;flex-shrink:0;box-shadow:0 0 12px var(--u2c-glow,rgba(231,76,60,.4));overflow:hidden}
+#u2c-thumb{width:100%;height:100%;object-fit:cover;display:none}
+#u2c-thumbicon{color:#444}
+#u2c-info{flex:1;min-width:0}
+#u2c-title{font-size:17px;font-weight:700;white-space:nowrap;overflow:hidden;text-overflow:ellipsis;color:var(--u2c-primary,#fff)}
+#u2c-meta{display:flex;align-items:baseline;gap:7px;margin-top:2px}
+#u2c-artist{font-size:13px;color:#999;white-space:nowrap;overflow:hidden;text-overflow:ellipsis;max-width:140px}
+#u2c-timelabel{font-size:12px;color:#555;flex-shrink:0}
+#u2c-controls{display:flex;align-items:center;gap:8px;flex-shrink:0}
+#u2c-controls button{background:none;border:none;color:#999;cursor:pointer;padding:5px;transition:color .15s}
+#u2c-controls button:hover{color:var(--u2c-primary,#fff)}
+#u2c-playbtn{color:#fff!important}
+#u2c-playbtn:hover{color:#ddd!important}
+#u2c-repeatbtn.active,#u2c-favbtn.active,#u2c-listbtn.active{color:var(--u2c-primary,#e74c3c)}
+#u2c-favbtn.active svg path{fill:currentColor}
+#u2c-progressbar{width:100%;height:4px;background:#1a1a1a;cursor:pointer}
+#u2c-progressfill{height:100%;width:0%;background:var(--u2c-primary,#e74c3c)}
+#u2c-urlwrap{display:flex;padding:10px 12px;border-top:1px solid rgba(255,255,255,.06)}
+#u2c-urlinput{flex:1;background:#161616;border:1px solid rgba(255,255,255,.07);color:#ccc;padding:8px 10px;font-size:12px;border-radius:6px 0 0 6px;outline:none}
+#u2c-loadbtn{background:var(--u2c-primary,#e74c3c);color:#000;border:none;padding:8px 12px;border-radius:0 6px 6px 0;cursor:pointer}
+#u2c-queue{max-height:0;overflow-y:auto;transition:max-height .2s ease;border-top:1px solid transparent}
+#u2c-queue.open{max-height:200px;border-top:1px solid rgba(255,255,255,.06)}
+#u2c-queue::-webkit-scrollbar{width:3px}
+#u2c-queue::-webkit-scrollbar-thumb{background:var(--u2c-primary,#e74c3c)}
+.u2c-row{display:flex;align-items:center;gap:10px;padding:8px 14px;cursor:pointer;border-bottom:1px solid #141414}
+.u2c-row:hover{background:#131313}
+.u2c-row img{width:30px;height:30px;border-radius:5px;object-fit:cover;background:#1a1a1a;flex-shrink:0}
+.u2c-row-text{flex:1;min-width:0}
+.u2c-row-name{font-size:12.5px;color:#ddd;white-space:nowrap;overflow:hidden;text-overflow:ellipsis}
+.u2c-row-fav{background:none;border:none;cursor:pointer;font-size:13px;color:#444;flex-shrink:0}
+.u2c-row-fav.active{color:#e74c3c}
+.u2c-row-rm{color:#444;flex-shrink:0;background:none;border:none;cursor:pointer;font-size:13px}
+.u2c-row-rm:hover{color:#e74c3c}
+#u2c-msg{padding:13px;text-align:center;font-size:11px;color:#444}`;
+  document.head.appendChild(st);
 
   const root = document.createElement('div');
-  root.id = 'uv2ytc-root';
-  root.innerHTML = `
-    <div id="uv2ytc-ytmount"></div>
-    <div id="uv2ytc-bar">
-      <div id="uv2ytc-thumbwrap">
-        <img id="uv2ytc-thumb" src="" alt="" fetchpriority="high" loading="eager" />
-        <div id="uv2ytc-thumbicon">${icons.musicNote}</div>
-      </div>
-      <div id="uv2ytc-info">
-        <div id="uv2ytc-title">nothing loaded</div>
-        <div id="uv2ytc-meta">
-          <span id="uv2ytc-artist">paste a link below</span>
-          <span id="uv2ytc-timelabel">0:00 / 0:00</span>
-        </div>
-      </div>
-      <div id="uv2ytc-controls">
-        <button id="uv2ytc-repeatbtn" title="repeat">${icons.repeatOff}</button>
-        <button id="uv2ytc-playbtn" title="play">${icons.play}</button>
-        <button id="uv2ytc-favbtn" title="favorite">${icons.heartOutline}</button>
-        <button id="uv2ytc-listbtn" title="favorites list">${icons.list}</button>
-      </div>
-    </div>
-    <div id="uv2ytc-progressbar">
-      <div id="uv2ytc-progressfill"></div>
-    </div>
-    <div id="uv2ytc-urlwrap">
-      <input id="uv2ytc-urlinput" type="text" placeholder="paste youtube link..." autocomplete="off" spellcheck="false" />
-      <button id="uv2ytc-loadbtn">${icons.load}</button>
-    </div>
-    <div id="uv2ytc-favlist"><div id="uv2ytc-msg">no favorites yet</div></div>
-  `;
+  root.id = 'u2c-root';
+  root.innerHTML = `<div id="u2c-mount"></div>
+<div id="u2c-bar">
+<div id="u2c-thumbwrap" class="u2c-fc"><img id="u2c-thumb" src="" alt="" fetchpriority="high" loading="eager"/><div id="u2c-thumbicon" class="u2c-fc">${ic.note}</div></div>
+<div id="u2c-info"><div id="u2c-title">nothing loaded</div><div id="u2c-meta"><span id="u2c-artist">paste a link below</span><span id="u2c-timelabel">0:00 / 0:00</span></div></div>
+<div id="u2c-controls"><button id="u2c-repeatbtn">${ic.repeat}</button><button id="u2c-playbtn">${ic.play}</button><button id="u2c-favbtn">${ic.heart}</button><button id="u2c-listbtn">${ic.list}</button></div>
+</div>
+<div id="u2c-progressbar"><div id="u2c-progressfill"></div></div>
+<div id="u2c-urlwrap"><input id="u2c-urlinput" type="text" placeholder="paste youtube link..." autocomplete="off" spellcheck="false"/><button id="u2c-loadbtn">${ic.load}</button></div>
+<div id="u2c-queue"><div id="u2c-msg">no songs yet</div></div>`;
   document.body.appendChild(root);
 
+  const q = s => root.querySelector(s);
   const els = {
-    mount: root.querySelector('#uv2ytc-ytmount'),
-    bar: root.querySelector('#uv2ytc-bar'),
-    thumb: root.querySelector('#uv2ytc-thumb'),
-    thumbIcon: root.querySelector('#uv2ytc-thumbicon'),
-    title: root.querySelector('#uv2ytc-title'),
-    artist: root.querySelector('#uv2ytc-artist'),
-    timeLabel: root.querySelector('#uv2ytc-timelabel'),
-    progressBar: root.querySelector('#uv2ytc-progressbar'),
-    progressFill: root.querySelector('#uv2ytc-progressfill'),
-    playBtn: root.querySelector('#uv2ytc-playbtn'),
-    repeatBtn: root.querySelector('#uv2ytc-repeatbtn'),
-    favBtn: root.querySelector('#uv2ytc-favbtn'),
-    listBtn: root.querySelector('#uv2ytc-listbtn'),
-    urlInput: root.querySelector('#uv2ytc-urlinput'),
-    loadBtn: root.querySelector('#uv2ytc-loadbtn'),
-    favList: root.querySelector('#uv2ytc-favlist')
+    mount: q('#u2c-mount'), bar: q('#u2c-bar'), thumb: q('#u2c-thumb'), thumbIcon: q('#u2c-thumbicon'),
+    title: q('#u2c-title'), artist: q('#u2c-artist'), timeLabel: q('#u2c-timelabel'),
+    progressBar: q('#u2c-progressbar'), progressFill: q('#u2c-progressfill'), playBtn: q('#u2c-playbtn'),
+    repeatBtn: q('#u2c-repeatbtn'), favBtn: q('#u2c-favbtn'), listBtn: q('#u2c-listbtn'),
+    urlInput: q('#u2c-urlinput'), loadBtn: q('#u2c-loadbtn'), queueEl: q('#u2c-queue')
   };
 
-  let player = null;
-  let playerReady = false;
-  let pendingVideoId = null;
-  let currentVideoId = null;
-  let currentTitle = '';
-  let currentArtist = '';
-  let isPlaying = false;
-  let repeatOn = false;
-  let favorites = loadFavorites();
-  let timeInterval = null;
-  let lastTimeText = '';
-  let lastProgressPct = -1;
-  let favListOpen = false;
+  let player = null, ready = false, pendingId = null, curId = null, curTitle = '', curArtist = '';
+  let playing = false, repeatOn = false, timeInt = null, lastTime = '', lastPct = -1, queueOpen = false;
 
-  function setAccentColor(id) {
-    const c = colorForVideo(id);
-    root.style.setProperty('--uv2ytc-primary', c.primary);
-    root.style.setProperty('--uv2ytc-glow', c.primary);
+  function accent(id) {
+    const c = `hsl(${hue(id)}, 78%, 58%)`;
+    root.style.setProperty('--u2c-primary', c);
+    root.style.setProperty('--u2c-glow', c);
   }
 
-  function updateFavButton() {
-    const isFav = favorites.some(f => f.id === currentVideoId);
-    els.favBtn.classList.toggle('active', isFav);
-    els.favBtn.innerHTML = isFav ? icons.heartFilled : icons.heartOutline;
+  function findQ(id) { return queue.find(x => x.id === id); }
+
+  function updateFav() {
+    const e = findQ(curId);
+    els.favBtn.classList.toggle('active', !!(e && e.fav));
   }
 
-  function renderFavorites() {
-    if (!favorites.length) {
-      els.favList.innerHTML = '<div id="uv2ytc-msg">no favorites yet</div>';
-      return;
-    }
-    els.favList.innerHTML = '';
-    const fragment = document.createDocumentFragment();
-    favorites.forEach(fav => {
+  function renderQueue() {
+    if (!queue.length) { els.queueEl.innerHTML = '<div id="u2c-msg">no songs yet</div>'; return; }
+    els.queueEl.innerHTML = '';
+    const frag = document.createDocumentFragment();
+    queue.forEach(item => {
       const row = document.createElement('div');
-      row.className = 'uv2ytc-favrow';
-      row.innerHTML = `
-        <img src="https://i.ytimg.com/vi/${fav.id}/default.jpg" alt="" loading="lazy" />
-        <div class="uv2ytc-favrow-text">
-          <div class="uv2ytc-favrow-name">${fav.title}</div>
-        </div>
-        <button class="uv2ytc-favrow-remove" title="remove">&#x2715;</button>
-      `;
+      row.className = 'u2c-row';
+      row.innerHTML = `<img src="https://i.ytimg.com/vi/${item.id}/default.jpg" alt="" loading="lazy"/>
+<div class="u2c-row-text"><div class="u2c-row-name">${item.title}</div></div>
+<button class="u2c-row-fav${item.fav ? ' active' : ''}">${ic.heart}</button>
+<button class="u2c-row-rm">&#x2715;</button>`;
       row.addEventListener('click', e => {
-        if (e.target.closest('.uv2ytc-favrow-remove')) return;
-        loadVideoById(fav.id, fav.title, fav.artist);
+        if (e.target.closest('.u2c-row-fav') || e.target.closest('.u2c-row-rm')) return;
+        loadById(item.id, item.title, item.artist);
       });
-      row.querySelector('.uv2ytc-favrow-remove').addEventListener('click', () => {
-        favorites = favorites.filter(f => f.id !== fav.id);
-        saveFavorites(favorites);
-        renderFavorites();
-        updateFavButton();
+      row.querySelector('.u2c-row-fav').addEventListener('click', () => {
+        item.fav = !item.fav;
+        saveQ(queue);
+        renderQueue();
+        updateFav();
       });
-      fragment.appendChild(row);
+      row.querySelector('.u2c-row-rm').addEventListener('click', () => {
+        queue = queue.filter(x => x.id !== item.id);
+        saveQ(queue);
+        renderQueue();
+      });
+      frag.appendChild(row);
     });
-    els.favList.appendChild(fragment);
+    els.queueEl.appendChild(frag);
   }
 
-  function toggleFavorite() {
-    if (!currentVideoId) return;
-    const exists = favorites.some(f => f.id === currentVideoId);
-    if (exists) {
-      favorites = favorites.filter(f => f.id !== currentVideoId);
-    } else {
-      favorites.push({ id: currentVideoId, title: currentTitle, artist: currentArtist });
-    }
-    saveFavorites(favorites);
-    updateFavButton();
-    if (favListOpen) renderFavorites();
+  function toggleFav() {
+    const e = findQ(curId);
+    if (!e) return;
+    e.fav = !e.fav;
+    saveQ(queue);
+    updateFav();
+    if (queueOpen) renderQueue();
   }
 
-  function toggleFavList() {
-    favListOpen = !favListOpen;
-    els.favList.classList.toggle('open', favListOpen);
-    els.listBtn.classList.toggle('active', favListOpen);
-    if (favListOpen) renderFavorites();
+  function toggleQueue() {
+    queueOpen = !queueOpen;
+    els.queueEl.classList.toggle('open', queueOpen);
+    els.listBtn.classList.toggle('active', queueOpen);
+    if (queueOpen) renderQueue();
   }
 
-  function tickTime() {
+  function addToQueue(id, title, artist) {
+    if (findQ(id)) return;
+    queue.push({ id, title, artist, fav: false });
+    saveQ(queue);
+    if (queueOpen) renderQueue();
+  }
+
+  function tick() {
     if (!player || !player.getCurrentTime) return;
-    const current = player.getCurrentTime();
-    const total = player.getDuration();
-    const timeText = `${formatTime(current)} / ${formatTime(total)}`;
-    if (timeText !== lastTimeText) {
-      els.timeLabel.textContent = timeText;
-      lastTimeText = timeText;
-    }
-    const pct = total > 0 ? (current / total) * 100 : 0;
-    const roundedPct = Math.round(pct * 10) / 10;
-    if (roundedPct !== lastProgressPct) {
-      els.progressFill.style.width = roundedPct + '%';
-      lastProgressPct = roundedPct;
-    }
+    const c = player.getCurrentTime(), t = player.getDuration();
+    const txt = `${fmt(c)} / ${fmt(t)}`;
+    if (txt !== lastTime) { els.timeLabel.textContent = txt; lastTime = txt; }
+    const pct = t > 0 ? Math.round((c / t) * 1000) / 10 : 0;
+    if (pct !== lastPct) { els.progressFill.style.width = pct + '%'; lastPct = pct; }
   }
 
-  function startTimeTracking() {
-    stopTimeTracking();
-    timeInterval = setInterval(tickTime, 1000);
-  }
-
-  function stopTimeTracking() {
-    if (timeInterval) {
-      clearInterval(timeInterval);
-      timeInterval = null;
-    }
-  }
+  function startTick() { stopTick(); timeInt = setInterval(tick, 1000); }
+  function stopTick() { if (timeInt) { clearInterval(timeInt); timeInt = null; } }
 
   document.addEventListener('visibilitychange', () => {
-    if (document.hidden) {
-      stopTimeTracking();
-    } else if (isPlaying) {
-      startTimeTracking();
-    }
+    if (document.hidden) stopTick(); else if (playing) startTick();
   });
 
-  function updateNowPlaying(id, title, artist) {
-    currentVideoId = id;
-    currentTitle = title;
-    currentArtist = artist || 'unknown artist';
+  function nowPlaying(id, title, artist) {
+    curId = id; curTitle = title; curArtist = artist || 'unknown artist';
     els.title.textContent = title;
-    els.artist.textContent = currentArtist;
+    els.artist.textContent = curArtist;
     els.thumb.src = `https://i.ytimg.com/vi/${id}/default.jpg`;
     els.thumb.style.display = 'block';
     els.thumbIcon.style.display = 'none';
     els.timeLabel.textContent = '0:00 / 0:00';
     els.progressFill.style.width = '0%';
-    lastTimeText = '0:00 / 0:00';
-    lastProgressPct = 0;
-    setAccentColor(id);
-    updateFavButton();
+    lastTime = '0:00 / 0:00'; lastPct = 0;
+    accent(id);
+    updateFav();
   }
 
-  function fetchOEmbed(id, callback) {
-    if (oEmbedCache[id]) {
-      callback(oEmbedCache[id].title, oEmbedCache[id].author);
-      return;
-    }
+  function fetchMeta(id, cb) {
+    if (cache[id]) { cb(cache[id].title, cache[id].author); return; }
     fetch(`https://www.youtube.com/oembed?url=https://www.youtube.com/watch?v=${id}&format=json`)
       .then(r => r.json())
-      .then(data => {
-        const title = data.title || id;
-        const author = data.author_name || 'unknown artist';
-        oEmbedCache[id] = { title, author };
-        saveOEmbedCache(oEmbedCache);
-        callback(title, author);
+      .then(d => {
+        const title = d.title || id, author = d.author_name || 'unknown artist';
+        cache[id] = { title, author };
+        saveC(cache);
+        cb(title, author);
       })
-      .catch(() => callback(id, 'unknown artist'));
+      .catch(() => cb(id, 'unknown artist'));
   }
 
-  function loadVideoById(id, knownTitle, knownArtist) {
-    pendingVideoId = id;
-    if (knownTitle) {
-      updateNowPlaying(id, knownTitle, knownArtist);
-    } else if (oEmbedCache[id]) {
-      updateNowPlaying(id, oEmbedCache[id].title, oEmbedCache[id].author);
+  function loadById(id, kt, ka) {
+    pendingId = id;
+    if (kt) {
+      nowPlaying(id, kt, ka);
+      addToQueue(id, kt, ka);
+    } else if (cache[id]) {
+      nowPlaying(id, cache[id].title, cache[id].author);
+      addToQueue(id, cache[id].title, cache[id].author);
     } else {
-      updateNowPlaying(id, 'loading...', '');
-      fetchOEmbed(id, (title, author) => {
-        if (pendingVideoId === id) {
-          updateNowPlaying(id, title, author);
-        }
+      nowPlaying(id, 'loading...', '');
+      fetchMeta(id, (title, author) => {
+        if (pendingId === id) { nowPlaying(id, title, author); addToQueue(id, title, author); }
       });
     }
-    if (playerReady && player) {
-      player.loadVideoById(id);
-    }
+    if (ready && player) player.loadVideoById(id);
   }
 
-  function onPlayerReady() {
-    playerReady = true;
-    if (pendingVideoId) {
-      player.loadVideoById(pendingVideoId);
-    }
-  }
+  function onReady() { ready = true; if (pendingId) player.loadVideoById(pendingId); }
 
-  function onPlayerStateChange(event) {
+  function onState(e) {
     const YT = window.YT;
-    if (event.data === YT.PlayerState.PLAYING) {
-      isPlaying = true;
-      els.playBtn.innerHTML = icons.pause;
-      startTimeTracking();
-    } else if (event.data === YT.PlayerState.PAUSED) {
-      isPlaying = false;
-      els.playBtn.innerHTML = icons.play;
-    } else if (event.data === YT.PlayerState.ENDED) {
-      isPlaying = false;
-      els.playBtn.innerHTML = icons.play;
-      stopTimeTracking();
-      if (repeatOn && currentVideoId) {
-        player.loadVideoById(currentVideoId);
-      }
+    if (e.data === YT.PlayerState.PLAYING) { playing = true; els.playBtn.innerHTML = ic.pause; startTick(); }
+    else if (e.data === YT.PlayerState.PAUSED) { playing = false; els.playBtn.innerHTML = ic.play; }
+    else if (e.data === YT.PlayerState.ENDED) {
+      playing = false; els.playBtn.innerHTML = ic.play; stopTick();
+      if (repeatOn && curId) player.loadVideoById(curId);
     }
   }
 
   function createPlayer() {
     player = new window.YT.Player(els.mount, {
-      height: '1',
-      width: '1',
-      playerVars: {
-        autoplay: 0,
-        controls: 0,
-        disablekb: 1,
-        modestbranding: 1,
-        rel: 0
-      },
-      events: {
-        onReady: onPlayerReady,
-        onStateChange: onPlayerStateChange
-      }
+      height: '1', width: '1',
+      playerVars: { autoplay: 0, controls: 0, disablekb: 1, modestbranding: 1, rel: 0 },
+      events: { onReady, onStateChange: onState }
     });
   }
 
-  function loadYouTubeIframeApi() {
-    if (window.YT && window.YT.Player) {
-      createPlayer();
-      return;
-    }
-    const tag = document.createElement('script');
-    tag.src = 'https://www.youtube.com/iframe_api';
-    document.head.appendChild(tag);
+  function loadApi() {
+    if (window.YT && window.YT.Player) { createPlayer(); return; }
+    const s = document.createElement('script');
+    s.src = 'https://www.youtube.com/iframe_api';
+    document.head.appendChild(s);
     window.onYouTubeIframeAPIReady = createPlayer;
   }
-
-  loadYouTubeIframeApi();
+  loadApi();
 
   els.loadBtn.addEventListener('click', () => {
     const raw = els.urlInput.value.trim();
     if (!raw) return;
-    const id = extractVideoId(raw);
-    if (!id) {
-      els.title.textContent = 'invalid link';
-      els.artist.textContent = 'paste a valid youtube url';
-      return;
-    }
-    loadVideoById(id);
+    const id = extractId(raw);
+    if (!id) { els.title.textContent = 'invalid link'; els.artist.textContent = 'paste a valid youtube url'; return; }
+    loadById(id);
     els.urlInput.value = '';
   });
-
-  els.urlInput.addEventListener('keydown', e => {
-    e.stopPropagation();
-    if (e.key === 'Enter') els.loadBtn.click();
-  });
+  els.urlInput.addEventListener('keydown', e => { e.stopPropagation(); if (e.key === 'Enter') els.loadBtn.click(); });
   els.urlInput.addEventListener('keyup', e => e.stopPropagation());
   els.urlInput.addEventListener('keypress', e => e.stopPropagation());
 
   els.playBtn.addEventListener('click', () => {
-    if (!player || !currentVideoId) return;
-    if (isPlaying) {
-      player.pauseVideo();
-    } else {
-      player.playVideo();
-    }
+    if (!player || !curId) return;
+    if (playing) player.pauseVideo(); else player.playVideo();
   });
-
   els.repeatBtn.addEventListener('click', () => {
     repeatOn = !repeatOn;
     els.repeatBtn.classList.toggle('active', repeatOn);
-    els.repeatBtn.innerHTML = repeatOn ? icons.repeatOn : icons.repeatOff;
   });
-
-  els.favBtn.addEventListener('click', toggleFavorite);
-  els.listBtn.addEventListener('click', toggleFavList);
-
+  els.favBtn.addEventListener('click', toggleFav);
+  els.listBtn.addEventListener('click', toggleQueue);
   els.progressBar.addEventListener('click', e => {
-    if (!player || !currentVideoId) return;
-    const rect = els.progressBar.getBoundingClientRect();
-    const pct = (e.clientX - rect.left) / rect.width;
-    const total = player.getDuration();
-    if (total > 0) {
-      player.seekTo(total * pct, true);
-    }
+    if (!player || !curId) return;
+    const r = els.progressBar.getBoundingClientRect();
+    const t = player.getDuration();
+    if (t > 0) player.seekTo(t * ((e.clientX - r.left) / r.width), true);
   });
 
-  let isDragging = false;
-  let offsetX = 0;
-  let offsetY = 0;
-  let dragFrame = null;
-  let pendingLeft = 0;
-  let pendingTop = 0;
+  let dragging = false, offX = 0, offY = 0, frame = null, pL = 0, pT = 0;
 
-  function clampToViewport(left, top) {
-    const rect = root.getBoundingClientRect();
-    const maxLeft = window.innerWidth - rect.width;
-    const maxTop = window.innerHeight - rect.height;
-    let clampedLeft = left;
-    let clampedTop = top;
-    if (clampedLeft < 0) clampedLeft = 0;
-    if (clampedTop < 0) clampedTop = 0;
-    if (clampedLeft > maxLeft) clampedLeft = maxLeft;
-    if (clampedTop > maxTop) clampedTop = maxTop;
-    return { left: clampedLeft, top: clampedTop };
+  function clamp(l, t) {
+    const r = root.getBoundingClientRect();
+    return { l: Math.min(Math.max(l, 0), window.innerWidth - r.width), t: Math.min(Math.max(t, 0), window.innerHeight - r.height) };
   }
-
-  function applyDragPosition() {
-    const clamped = clampToViewport(pendingLeft, pendingTop);
-    root.style.left = clamped.left + 'px';
-    root.style.top = clamped.top + 'px';
-    root.style.right = 'auto';
-    root.style.bottom = 'auto';
-    root.style.position = 'fixed';
-    dragFrame = null;
+  function applyDrag() {
+    const c = clamp(pL, pT);
+    root.style.left = c.l + 'px'; root.style.top = c.t + 'px';
+    root.style.right = 'auto'; root.style.bottom = 'auto'; root.style.position = 'fixed';
+    frame = null;
   }
-
   els.bar.addEventListener('mousedown', e => {
-    if (e.target.closest('#uv2ytc-controls')) return;
-    isDragging = true;
-    offsetX = e.clientX - root.getBoundingClientRect().left;
-    offsetY = e.clientY - root.getBoundingClientRect().top;
+    if (e.target.closest('#u2c-controls')) return;
+    dragging = true;
+    offX = e.clientX - root.getBoundingClientRect().left;
+    offY = e.clientY - root.getBoundingClientRect().top;
     e.preventDefault();
   });
   document.addEventListener('mousemove', e => {
-    if (!isDragging) return;
-    pendingLeft = e.clientX - offsetX;
-    pendingTop = e.clientY - offsetY;
-    if (!dragFrame) {
-      dragFrame = requestAnimationFrame(applyDragPosition);
-    }
+    if (!dragging) return;
+    pL = e.clientX - offX; pT = e.clientY - offY;
+    if (!frame) frame = requestAnimationFrame(applyDrag);
   });
-  document.addEventListener('mouseup', () => {
-    isDragging = false;
-  });
-
+  document.addEventListener('mouseup', () => { dragging = false; });
   window.addEventListener('resize', () => {
-    const rect = root.getBoundingClientRect();
-    const clamped = clampToViewport(rect.left, rect.top);
-    if (clamped.left !== rect.left || clamped.top !== rect.top) {
-      root.style.left = clamped.left + 'px';
-      root.style.top = clamped.top + 'px';
-      root.style.right = 'auto';
-      root.style.bottom = 'auto';
-      root.style.position = 'fixed';
+    const r = root.getBoundingClientRect();
+    const c = clamp(r.left, r.top);
+    if (c.l !== r.left || c.t !== r.top) {
+      root.style.left = c.l + 'px'; root.style.top = c.t + 'px';
+      root.style.right = 'auto'; root.style.bottom = 'auto'; root.style.position = 'fixed';
     }
   });
 })();
