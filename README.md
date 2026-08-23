@@ -54,9 +54,9 @@ Current contributors: wytlines, DeadFish7, andreypidd, jet, joudaALT, TrustIsOve
 
 ## Changelog
 
-### 2.2.2 - Shine/Music Player Updates
+### 2.2.2 - Shine/Music Player update
 - Shine for Modules has been added!
-- Improved Music Player will be added shortly!
+- Music Player removed from `client.js` and added to `MusicPlayer.js`
 
 ### 2.2.1 - CSS/Intro Update
 - Most CSS buttons were removed (due to new title screen)
