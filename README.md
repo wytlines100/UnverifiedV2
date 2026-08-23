@@ -49,7 +49,7 @@ Contributions are welcome. If you would like to report a bug or suggest a featur
 
 By submitting a contribution, you agree it becomes part of the project under this license and grant the maintainers full rights to use, modify, and distribute it.
 
-Current contributors: wytlines, DeadFish7, andreypidd, jet, joudaALT, TrustIsOver, TheM1ddleM1n
+Current contributors: wytlines, joudaALT, TrustIsOver, TheM1ddleM1n, DeadFish7, andreypidd, jet
 
 ## Changelog
 
@@ -64,7 +64,6 @@ Current contributors: wytlines, DeadFish7, andreypidd, jet, joudaALT, TrustIsOve
 
 ### 2.2 - Big Update!
 - Armor HUD added!
-- Logic added for Armor HUD to show only ingame and NOT in menu.
 - 3 New languages! (French, Dutch, Russian)
 - 1 More new theme added!
 - Bumped version from `2.1.1 -> 2.2`
@@ -87,10 +86,6 @@ Current contributors: wytlines, DeadFish7, andreypidd, jet, joudaALT, TrustIsOve
 
 ## Credits
 - Miniblox for creating the base of the game.
-
-## Other Clients for Miniblox
-- Waddle (Discontinued.)
-- MiniFeather (Goated Client!)
 
 ## License
 This project is licensed under a proprietary "All Rights Reserved" license. You may not use, copy, modify, or distribute this code without prior written permission from the copyright holder.
