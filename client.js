@@ -101,7 +101,7 @@ class UnverifiedIntro {
     if (game && game.chat && typeof game.chat.addChat === "function") {
       clearInterval(waitForGame);
       game.chat.addChat({
-        text: "\\glow\\\\shiny\\\\#BF3011\\[Unverified Client]:\\reset\\ Hello, thanks for using Unverified Client! Join our discord for updates/support!"
+        text: "\\glow\\\\shiny\\\\#BF3011\\[Unverified Client]:\\reset\\ Hello, thanks for using Unverified Client! Please Join our discord for updates/community support!"
       });
     }
   }, 500);
@@ -907,69 +907,263 @@ class UnverifiedBackground {
   });
 
   const settingsOverlay = document.createElement("div");
-  settingsOverlay.id = "uv2-settings-overlay";
-  settingsOverlay.innerHTML = `
-    <div id="uv2-settings-panel">
-      <div id="uv2-settings-titlebar">
-        <span><svg width="16" height="16" viewBox="0 0 24 24"><path d="M19.14,12.94c0.04-0.3,0.06-0.61,0.06-0.94c0-0.32-0.02-0.64-0.07-0.94l2.03-1.58c0.18-0.14,0.23-0.41,0.12-0.61l-1.92-3.32c-0.12-0.22-0.37-0.29-0.59-0.22l-2.39,0.96c-0.5-0.38-1.03-0.7-1.62-0.94L14.4,2.81c-0.04-0.24-0.24-0.41-0.48-0.41h-3.84c-0.24,0-0.43,0.17-0.47,0.41L9.25,5.35C8.66,5.59,8.12,5.92,7.63,6.29L5.24,5.33c-0.22-0.08-0.47,0-0.59,0.22L2.74,8.87C2.62,9.08,2.66,9.34,2.86,9.48l2.03,1.58C4.84,11.36,4.8,11.69,4.8,12s0.02,0.64,0.07,0.94l-2.03,1.58c-0.18,0.14-0.23,0.41-0.12,0.61l1.92,3.32c0.12,0.22,0.37,0.29,0.59,0.22l2.39-0.96c0.5,0.38,1.03,0.7,1.62,0.94l0.36,2.54c0.05,0.24,0.24,0.41,0.48,0.41h3.84c0.24,0,0.44-0.17,0.47-0.41l0.36-2.54c0.59-0.24,1.13-0.56,1.62-0.94l2.39,0.96c0.22,0.08,0.47,0,0.59-0.22l1.92-3.32c0.12-0.22,0.07-0.47-0.12-0.61L19.14,12.94zM12,15.6c-1.98,0-3.6-1.62-3.6-3.6s1.62-3.6,3.6-3.6s3.6,1.62,3.6,3.6S13.98,15.6,12,15.6z"/></svg>Settings</span>
-        <button id="uv2-settings-close">✕</button>
-      </div>
-      <div id="uv2-settings-body">
-        <div id="uv2-settings-content">
-          <div class="uv2-settings-page" id="uv2-page-audio">
-            <div class="uv2-section-title">Sound</div>
-            <div class="uv2-setting-row">
-              <div><div class="uv2-setting-label">Module Click Sounds</div><div class="uv2-setting-desc">Play a sound when toggling modules on or off</div></div>
-              <label class="uv2-toggle"><input type="checkbox" id="uv2-toggle-sounds"><div class="uv2-toggle-track"></div></label>
+settingsOverlay.id = "uv2-settings-overlay";
+settingsOverlay.innerHTML = `
+  <div id="uv2-settings-panel">
+    <div id="uv2-settings-titlebar">
+      <span><svg width="16" height="16" viewBox="0 0 24 24"><path d="M19.14,12.94c0.04-0.3,0.06-0.61,0.06-0.94c0-0.32-0.02-0.64-0.07-0.94l2.03-1.58c0.18-0.14,0.23-0.41,0.12-0.61l-1.92-3.32c-0.12-0.22-0.37-0.29-0.59-0.22l-2.39,0.96c-0.5-0.38-1.03-0.7-1.62-0.94L14.4,2.81c-0.04-0.24-0.24-0.41-0.48-0.41h-3.84c-0.24,0-0.43,0.17-0.47,0.41L9.25,5.35C8.66,5.59,8.12,5.92,7.63,6.29L5.24,5.33c-0.22-0.08-0.47,0-0.59,0.22L2.74,8.87C2.62,9.08,2.66,9.34,2.86,9.48l2.03,1.58C4.84,11.36,4.8,11.69,4.8,12s0.02,0.64,0.07,0.94l-2.03,1.58c-0.18,0.14-0.23,0.41-0.12,0.61l1.92,3.32c0.12,0.22,0.37,0.29,0.59,0.22l2.39-0.96c0.5,0.38,1.03,0.7,1.62,0.94l0.36,2.54c0.05,0.24,0.24,0.41,0.48,0.41h3.84c0.24,0,0.44-0.17,0.47-0.41l0.36-2.54c0.59-0.24,1.13-0.56,1.62-0.94l2.39,0.96c0.22,0.08,0.47,0,0.59-0.22l1.92-3.32c0.12-0.22,0.07-0.47-0.12-0.61L19.14,12.94zM12,15.6c-1.98,0-3.6-1.62-3.6-3.6s1.62-3.6,3.6-3.6S13.98,15.6,12,15.6z"/></svg>Settings</span>
+      <button id="uv2-settings-close">✕</button>
+    </div>
+    <div id="uv2-settings-body">
+      <div id="uv2-settings-content">
+        <div class="uv2-settings-page" id="uv2-page-audio">
+          <div class="uv2-section-title">Sound</div>
+          <div class="uv2-setting-row">
+            <div><div class="uv2-setting-label">Module Click Sounds</div><div class="uv2-setting-desc">Play a sound when toggling modules on or off</div></div>
+            <label class="uv2-toggle"><input type="checkbox" id="uv2-toggle-sounds"><div class="uv2-toggle-track"></div></label>
+          </div>
+        </div>
+        <div class="uv2-settings-page" id="uv2-page-visuals">
+          <div class="uv2-section-title">Interface</div>
+          <div class="uv2-setting-row">
+            <div><div class="uv2-setting-label">Show Notifications</div><div class="uv2-setting-desc">Display toast notifications when modules toggle</div></div>
+            <label class="uv2-toggle"><input type="checkbox" id="uv2-toggle-notifs"><div class="uv2-toggle-track"></div></label>
+          </div>
+          <div class="uv2-setting-row">
+            <div><div class="uv2-setting-label">Animation</div><div class="uv2-setting-desc">Animate the menu when opening and closing</div></div>
+            <label class="uv2-toggle"><input type="checkbox" id="uv2-toggle-animation"><div class="uv2-toggle-track"></div></label>
+          </div>
+          <div class="uv2-setting-row">
+            <div><div class="uv2-setting-label">Save Modules</div><div class="uv2-setting-desc">Restore your active modules after a page reload</div></div>
+            <label class="uv2-toggle"><input type="checkbox" id="uv2-toggle-saving"><div class="uv2-toggle-track"></div></label>
+          </div>
+          <div class="uv2-section-title" style="margin-top:14px;">Security</div>
+          <div class="uv2-setting-row">
+            <div><div class="uv2-setting-label">Show VPN Warning</div><div class="uv2-setting-desc">Show the VPN detection popup when opening the menu</div></div>
+            <label class="uv2-toggle"><input type="checkbox" id="uv2-toggle-vpnwarning"><div class="uv2-toggle-track"></div></label>
+          </div>
+          <div class="uv2-section-title" style="margin-top:14px;">Auto AFK</div>
+          <div class="uv2-setting-row">
+            <div><div class="uv2-setting-label">Auto Enable</div><div class="uv2-setting-desc">Turns on Anti-AFK automatically after idling</div></div>
+            <label class="uv2-toggle"><input type="checkbox" id="uv2-toggle-autoafk"><div class="uv2-toggle-track"></div></label>
+          </div>
+          <div class="uv2-setting-row">
+            <div><div class="uv2-setting-label">Sends AFK Message In Chat</div><div class="uv2-setting-desc">Sends a chat message when you go AFK</div></div>
+            <label class="uv2-toggle"><input type="checkbox" id="uv2-toggle-afkchat"><div class="uv2-toggle-track"></div></label>
+          </div>
+          <div class="uv2-setting-row">
+            <div><div class="uv2-setting-label">Idle Delay</div><div class="uv2-setting-desc">Seconds before Anti-AFK auto-enables (5–120)</div></div>
+            <div style="display:flex;align-items:center;gap:6px;flex-shrink:0;">
+              <input type="number" id="uv2-afkdelay-input" min="5" max="120" value="10" style="width:60px;background:#2a2a2a;color:white;border:1px solid #444;border-radius:6px;padding:5px 8px;font-size:14px;font-family:'MinibloxFont',sans-serif;text-align:center;outline:none;">
+              <span style="color:#888;font-size:13px;">s</span>
             </div>
           </div>
-          <div class="uv2-settings-page" id="uv2-page-visuals">
-            <div class="uv2-section-title">Interface</div>
-            <div class="uv2-setting-row">
-              <div><div class="uv2-setting-label">Show Notifications</div><div class="uv2-setting-desc">Display toast notifications when modules toggle</div></div>
-              <label class="uv2-toggle"><input type="checkbox" id="uv2-toggle-notifs"><div class="uv2-toggle-track"></div></label>
-            </div>
-            <div class="uv2-setting-row">
-              <div><div class="uv2-setting-label">Animation</div><div class="uv2-setting-desc">Animate the menu when opening and closing</div></div>
-              <label class="uv2-toggle"><input type="checkbox" id="uv2-toggle-animation"><div class="uv2-toggle-track"></div></label>
-            </div>
-            <div class="uv2-setting-row">
-              <div><div class="uv2-setting-label">Save Modules</div><div class="uv2-setting-desc">Restore your active modules after a page reload</div></div>
-              <label class="uv2-toggle"><input type="checkbox" id="uv2-toggle-saving"><div class="uv2-toggle-track"></div></label>
-            </div>
-            <div class="uv2-section-title" style="margin-top:14px;">Security</div>
-            <div class="uv2-setting-row">
-              <div><div class="uv2-setting-label">Show VPN Warning</div><div class="uv2-setting-desc">Show the VPN detection popup when opening the menu</div></div>
-              <label class="uv2-toggle"><input type="checkbox" id="uv2-toggle-vpnwarning"><div class="uv2-toggle-track"></div></label>
-            </div>
-            <div class="uv2-section-title" style="margin-top:14px;">Auto AFK</div>
-            <div class="uv2-setting-row">
-              <div><div class="uv2-setting-label">Auto Enable</div><div class="uv2-setting-desc">Turns on Anti-AFK automatically after idling</div></div>
-              <label class="uv2-toggle"><input type="checkbox" id="uv2-toggle-autoafk"><div class="uv2-toggle-track"></div></label>
-            </div>
-            <div class="uv2-setting-row">
-              <div><div class="uv2-setting-label">Sends AFK Message In Chat</div><div class="uv2-setting-desc">Sends a chat message when you go AFK</div></div>
-              <label class="uv2-toggle"><input type="checkbox" id="uv2-toggle-afkchat"><div class="uv2-toggle-track"></div></label>
-            </div>
-            <div class="uv2-setting-row">
-              <div><div class="uv2-setting-label">Idle Delay</div><div class="uv2-setting-desc">Seconds before Anti-AFK auto-enables (5–120)</div></div>
-              <div style="display:flex;align-items:center;gap:6px;flex-shrink:0;">
-                <input type="number" id="uv2-afkdelay-input" min="5" max="120" value="10" style="width:60px;background:#2a2a2a;color:white;border:1px solid #444;border-radius:6px;padding:5px 8px;font-size:14px;font-family:'MinibloxFont',sans-serif;text-align:center;outline:none;">
-                <span style="color:#888;font-size:13px;">s</span>
-              </div>
-            </div>
-          </div>
-          <div class="uv2-settings-page" id="uv2-page-about">
-            <div class="uv2-section-title">Info</div>
-            <div class="uv2-setting-row"><div><div class="uv2-setting-label">Version</div><div class="uv2-setting-desc">2.2.2</div></div></div>
-            <div class="uv2-setting-row"><div><div class="uv2-setting-label">Authors</div><div class="uv2-setting-desc">wytlines, DeadFish7, andreypidd, jet, joudaALT, TrustIsOver, TheM1ddleM1n</div></div></div>
-            <div class="uv2-setting-row"><div><div class="uv2-setting-label">License</div><div class="uv2-setting-desc">Proprietary, do not redistribute</div></div></div>
-          </div>
+        </div>
+        <div class="uv2-settings-page" id="uv2-page-about">
+          <div class="uv2-section-title">Info</div>
+          <div class="uv2-setting-row"><div><div class="uv2-setting-label">Version</div><div class="uv2-setting-desc">2.2.2</div></div></div>
+          <div class="uv2-setting-row"><div><div class="uv2-setting-label">License</div><div class="uv2-setting-desc">Proprietary, do not redistribute</div></div></div>
+          <div class="uv2-section-title" style="margin-top:16px;">Contributors</div>
+          <div id="uv2-contributors-grid"></div>
         </div>
       </div>
     </div>
-  `;
-  document.body.appendChild(settingsOverlay);
+  </div>
+`;
+document.body.appendChild(settingsOverlay);
+
+(function buildContributorsGrid() {
+  const UV2_CONTRIBUTORS = [
+    {
+      name: "wytlines",
+      role: "Lead Developer",
+      badge: "Founder",
+      bio: "Created UnverifiedV2 from scratch and drives the project forward.",
+      avatar: "https://github.com/wytlines100.png",
+      color: { bg: "#3b1a00", text: "#fdba74", border: "#ea580c", strip: "#ea580c", icon: "★" },
+    },
+    {
+      name: "DeadFish7",
+      role: "Developer",
+      badge: "Veteran Dev",
+      bio: "Created Public Lurker Client",
+      avatar: "https://github.com/DeadFish7.png",
+      color: { bg: "#1e1b4b", text: "#a5b4fc", border: "#4f46e5", strip: "#4f46e5", icon: "◈" },
+    },
+    {
+      name: "andreypidd",
+      role: "Contributor",
+      badge: "Contributor",
+      bio: "Pitched in with contributions that helped shape the client.",
+      avatar: "https://github.com/andreypidd.png",
+      color: { bg: "#1a2e1a", text: "#86efac", border: "#16a34a", strip: "#16a34a", icon: "●" },
+    },
+    {
+      name: "jet",
+      role: "Ex-Developer",
+      badge: "Ex-Dev",
+      bio: "Former developer who helped build early versions of the client.",
+      avatar: "https://github.com/jet.png",
+      color: { bg: "#1c1c1c", text: "#a1a1aa", border: "#52525b", strip: "#52525b", icon: "◇" },
+    },
+    {
+      name: "joudaALT",
+      role: "Developer",
+      badge: "Mod & Dev",
+      bio: "Miniblox moderator and coder who keeps the community and code in check.",
+      avatar: "https://github.com/joudaALT.png",
+      color: { bg: "#1a1f3a", text: "#93c5fd", border: "#3b82f6", strip: "#3b82f6", icon: "⬡" },
+    },
+    {
+      name: "Trust",
+      role: "Developer",
+      badge: "Coder",
+      bio: "Coder for Miniblox with a knack for clean implementations.",
+      avatar: "https://github.com/lttlgrl.png",
+      color: { bg: "#2d1a3a", text: "#d8b4fe", border: "#9333ea", strip: "#9333ea", icon: "✦" },
+    },
+    {
+      name: "TheM1ddleM1n",
+      role: "Developer",
+      badge: "Bug Slayer",
+      bio: "Professional Coder for Miniblox, fixing bugs and adding features.",
+      avatar: "https://github.com/TheM1ddleM1n.png",
+      color: { bg: "#1a2a1a", text: "#6ee7b7", border: "#059669", strip: "#059669", icon: "⚔" },
+    },
+  ];
+
+  const grid = document.getElementById("uv2-contributors-grid");
+  if (!grid) return;
+  grid.style.cssText = "display:flex;flex-wrap:wrap;gap:12px;padding:4px 0 8px 0;";
+
+  const shimmerStyle = document.createElement("style");
+  shimmerStyle.textContent = `
+@keyframes uv2-card-shimmer {
+  0% { transform:translateX(-100%) skewX(-15deg); }
+  100% { transform:translateX(300%) skewX(-15deg); }
+}
+.uv2-contrib-card:hover .uv2-card-shimmer {
+  animation: uv2-card-shimmer 0.65s ease forwards;
+}
+`;
+  document.head.appendChild(shimmerStyle);
+
+  UV2_CONTRIBUTORS.forEach(contributor => {
+    const c = contributor.color;
+
+    const card = document.createElement("div");
+    card.className = "uv2-contrib-card";
+    card.style.cssText = [
+      "display:flex;flex-direction:column;",
+      "background:linear-gradient(160deg,#1c1c1c,#111111);",
+      `border:1px solid ${c.strip}30;border-radius:10px;`,
+      "flex:1;min-width:200px;max-width:calc(50% - 6px);",
+      "transition:border-color 0.2s ease,box-shadow 0.2s ease;",
+      "cursor:default;box-sizing:border-box;position:relative;overflow:hidden;",
+    ].join("");
+
+    card.addEventListener("mouseenter", () => {
+      card.style.borderColor = `${c.strip}80`;
+      card.style.boxShadow = `0 0 0 1px ${c.strip}25, 0 6px 24px rgba(0,0,0,0.6), inset 0 0 40px ${c.strip}08`;
+    });
+    card.addEventListener("mouseleave", () => {
+      card.style.borderColor = `${c.strip}30`;
+      card.style.boxShadow = "none";
+    });
+
+    const shimmer = document.createElement("div");
+    shimmer.className = "uv2-card-shimmer";
+    shimmer.style.cssText = [
+      "pointer-events:none;position:absolute;top:0;left:0;width:40%;height:100%;",
+      "background:linear-gradient(120deg,transparent,rgba(255,255,255,0.07),transparent);",
+      "transform:translateX(-100%) skewX(-15deg);z-index:1;",
+    ].join("");
+    card.appendChild(shimmer);
+
+    const strip = document.createElement("div");
+    strip.style.cssText = `height:3px;background:linear-gradient(90deg,${c.strip},${c.strip}44);border-radius:10px 10px 0 0;flex-shrink:0;`;
+    card.appendChild(strip);
+
+    const body = document.createElement("div");
+    body.style.cssText = "display:flex;flex-direction:column;gap:10px;padding:12px 14px 14px;position:relative;z-index:2;";
+
+    const topRow = document.createElement("div");
+    topRow.style.cssText = "display:flex;align-items:center;gap:10px;";
+
+    const avatarWrap = document.createElement("div");
+    avatarWrap.style.cssText = "position:relative;flex-shrink:0;";
+
+    const avatarGlow = document.createElement("div");
+    avatarGlow.style.cssText = [
+      "position:absolute;inset:-3px;border-radius:50%;",
+      `background:radial-gradient(circle,${c.strip}55,transparent 70%);`,
+      "z-index:0;",
+    ].join("");
+    avatarWrap.appendChild(avatarGlow);
+
+    const avatar = document.createElement("img");
+    avatar.src = contributor.avatar;
+    avatar.style.cssText = [
+      "width:44px;height:44px;border-radius:50%;display:block;position:relative;z-index:1;",
+      `border:2px solid ${c.strip}99;background:#111;`,
+    ].join("");
+    avatar.onerror = function() {
+      this.src = `https://github.com/identicons/${contributor.name}.png`;
+    };
+    avatarWrap.appendChild(avatar);
+
+    const topInfo = document.createElement("div");
+    topInfo.style.cssText = "display:flex;flex-direction:column;gap:4px;min-width:0;flex:1;";
+
+    const nameRow = document.createElement("div");
+    nameRow.style.cssText = "display:flex;align-items:center;gap:6px;flex-wrap:wrap;";
+
+    const nameEl = document.createElement("div");
+    nameEl.textContent = contributor.name;
+    nameEl.style.cssText = "font-size:13px;font-weight:600;color:#fff;font-family:MinibloxFont,sans-serif;white-space:nowrap;";
+
+    const badgeEl = document.createElement("div");
+    badgeEl.style.cssText = [
+      `background:${c.bg};color:${c.text};border:1px solid ${c.border};`,
+      "font-size:9px;font-family:MinibloxFont,sans-serif;letter-spacing:0.5px;",
+      "padding:2px 6px;border-radius:4px;white-space:nowrap;display:flex;align-items:center;gap:3px;",
+    ].join("");
+
+    const badgeIcon = document.createElement("span");
+    badgeIcon.textContent = c.icon;
+    badgeIcon.style.cssText = "font-size:8px;";
+    const badgeText = document.createElement("span");
+    badgeText.textContent = contributor.badge;
+    badgeEl.appendChild(badgeIcon);
+    badgeEl.appendChild(badgeText);
+
+    nameRow.appendChild(nameEl);
+    nameRow.appendChild(badgeEl);
+
+    const roleEl = document.createElement("div");
+    roleEl.textContent = contributor.role;
+    roleEl.style.cssText = `font-size:11px;color:${c.strip};font-family:MinibloxFont,sans-serif;opacity:0.9;`;
+
+    topInfo.appendChild(nameRow);
+    topInfo.appendChild(roleEl);
+
+    topRow.appendChild(avatarWrap);
+    topRow.appendChild(topInfo);
+
+    const divider = document.createElement("div");
+    divider.style.cssText = `height:1px;background:linear-gradient(90deg,${c.strip}30,transparent);`;
+
+    const bioEl = document.createElement("div");
+    bioEl.textContent = contributor.bio;
+    bioEl.style.cssText = "font-size:11.5px;color:#666;font-family:MinibloxFont,sans-serif;line-height:1.55;";
+
+    body.appendChild(topRow);
+    body.appendChild(divider);
+    body.appendChild(bioEl);
+    card.appendChild(body);
+    grid.appendChild(card);
+  });
+})();
 
   const uv2InlineSettings = settingsOverlay.querySelector('#uv2-settings-panel');
   if (uv2InlineSettings) {
