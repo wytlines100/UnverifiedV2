@@ -267,8 +267,6 @@ class UnverifiedBackground {
     attributeFilter: ["src", "srcset"]
   });
 
-  setInterval(enforceTargetImage, 1000);
-
   const uv2Sidebar = document.createElement("div");
   uv2Sidebar.id = "uv2-sidebar";
   uv2Sidebar.style.cssText = [
@@ -1937,14 +1935,6 @@ function armorHudGetIconStyle(itemName) {
   return `width:${ARMOR_ICON_DISPLAY_SIZE}px;height:${ARMOR_ICON_DISPLAY_SIZE}px;background-image:url('${ARMOR_SPRITESHEET_URL}');background-position:${posX}px ${posY}px;background-size:${bgWidth}px ${bgHeight}px;image-rendering:pixelated;flex-shrink:0;`;
 }
 
-function armorHudIsInMatch() {
-  try {
-    return /\/join\//.test(window.location.pathname);
-  } catch (e) {
-    return false;
-  }
-}
-
 createModule(MODULE_NAMES.ARMOR_HUD, "Shows armor durability percentages, enchantments and icons.");
 const armorHudModule = [...gridContainer.children].find(c => c.dataset.moduleName === MODULE_NAMES.ARMOR_HUD);
 let isArmorHudActive = false;
@@ -1976,7 +1966,7 @@ function armorHudClampToViewport() {
 function armorHudRender() {
   if (!armorHudEl) return;
 
-  if (!armorHudIsInMatch()) {
+  if (!isInMatch()) {
     armorHudEl.style.display = 'none';
     return;
   }
