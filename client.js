@@ -399,7 +399,7 @@ class UnverifiedBackground {
   }
   const uv2NavDefs = [
     { page: 'main',       label: 'Modules',    icon: 'fa-th-large' },
-    { page: 'gui',        label: 'Themes',     icon: 'fa-paint-brush' },
+    { page: 'gui',        label: 'Color',      icon: 'fa-paint-brush' },
     { page: 'config',     label: 'Config',     icon: 'fa-cog' },
     { page: 'settings',   label: 'Settings',   icon: 'fa-sliders' },
   ];
@@ -465,82 +465,9 @@ class UnverifiedBackground {
   uv2SettingsPage.style.cssText = "flex:1;display:none;overflow:hidden;";
   uv2ContentArea.appendChild(uv2SettingsPage);
 
-  const UV2_THEMES = [
-    {
-      id:         'frost',
-      name:       'Frost',
-      primary:    '#4fc3f7',
-      background: '#000000',
-      text:       '#e0f7ff',
-      gradient:   'linear-gradient(135deg, #1565c0, #0d47a1, #4fc3f7)',
-    },
-    {
-      id:         'crimson',
-      name:       'Default',
-      primary:    '#e74c3c',
-      background: '#000000',
-      text:       '#ffffff',
-      gradient:   'linear-gradient(135deg, #e74c3c, #c0392b)',
-    },
-    {
-      id:         'emerald',
-      name:       'Emerald',
-      primary:    '#2ecc71',
-      background: '#000000',
-      text:       '#eaffef',
-      gradient:   'linear-gradient(135deg, #1a7a45, #2ecc71)',
-    },
-    {
-      id:         'violet',
-      name:       'Violet',
-      primary:    '#9b59b6',
-      background: '#000000',
-      text:       '#f5eeff',
-      gradient:   'linear-gradient(135deg, #6c3483, #9b59b6)',
-    },
-    {
-      id:         'gold',
-      name:       'Gold',
-      primary:    '#f39c12',
-      background: '#000000',
-      text:       '#fff8e7',
-      gradient:   'linear-gradient(135deg, #b7770d, #f39c12)',
-    },
-      {
-          id:         'rose',
-          name:       'Rose',
-          primary:    '#ff5c8a',
-          background: '#000000',
-          text:       '#fff0f4',
-          gradient:   'linear-gradient(135deg, #b3134f, #ff5c8a)',
-      },
-  ];
-
-  let activeThemeId = localStorage.getItem('uv2-theme-id') || 'default';
-
-  function getTheme(id) {
-    return UV2_THEMES.find(t => t.id === id) || UV2_THEMES[0];
-  }
-
-  function applyTheme(themeId) {
-    const theme = getTheme(themeId);
-    activeThemeId    = themeId;
-    guiPrimaryColor  = theme.primary;
-    guiBackgroundColor = theme.background;
-    guiTextColor     = theme.text;
-    localStorage.setItem('uv2-theme-id', themeId);
-    localStorage.setItem('uv2-gui-primary-color', guiPrimaryColor);
-    localStorage.setItem('uv2-gui-bg-color', guiBackgroundColor);
-    localStorage.setItem('uv2-gui-text-color', guiTextColor);
-    applyGUIStyles();
-    buildGUIPage();
-    try { closeButton.style.background = guiPrimaryColor; } catch(e) {}
-  }
-
-  const _loadedTheme  = getTheme(activeThemeId);
-  let guiPrimaryColor    = localStorage.getItem('uv2-gui-primary-color')    || _loadedTheme.primary;
-  let guiBackgroundColor = localStorage.getItem('uv2-gui-bg-color')         || _loadedTheme.background;
-  let guiTextColor       = localStorage.getItem('uv2-gui-text-color')       || _loadedTheme.text;
+  let guiPrimaryColor = localStorage.getItem('uv2-gui-primary-color') || '#e74c3c';
+let guiBackgroundColor = '#000000';
+let guiTextColor = '#ffffff';
 
   function applyGUIStyles() {
     ui.style.backgroundColor = guiBackgroundColor;
@@ -603,64 +530,97 @@ class UnverifiedBackground {
   }
 
   function buildGUIPage() {
-    uv2GUIPage.innerHTML = '';
+  uv2GUIPage.innerHTML = '';
 
-    const heading = document.createElement('h2');
-    heading.textContent = 'Themes';
-    heading.style.cssText = 'font-size:28px;font-family:MinibloxFont,sans-serif;margin:0 0 20px 0;text-align:center;color:#fff;';
-    uv2GUIPage.appendChild(heading);
+  const heading = document.createElement('h2');
+  heading.textContent = 'Color';
+  heading.style.cssText = 'font-size:28px;font-family:MinibloxFont,sans-serif;margin:0 0 20px 0;text-align:center;color:#fff;';
+  uv2GUIPage.appendChild(heading);
 
-    const sectionLabel = document.createElement('div');
-    sectionLabel.className = 'uv2-section-title';
-    sectionLabel.textContent = 'Select a theme';
-    sectionLabel.style.marginTop = '0';
-    uv2GUIPage.appendChild(sectionLabel);
+  const sectionLabel = document.createElement('div');
+  sectionLabel.className = 'uv2-section-title';
+  sectionLabel.textContent = 'Accent color';
+  sectionLabel.style.marginTop = '0';
+  uv2GUIPage.appendChild(sectionLabel);
 
-    const grid = document.createElement('div');
-    grid.style.cssText = 'display:flex;flex-wrap:wrap;gap:14px;padding:4px 0 20px 0;';
-    uv2GUIPage.appendChild(grid);
+  const row = document.createElement('div');
+  row.style.cssText = 'display:flex;align-items:center;gap:16px;padding:4px 0 20px 0;';
+  uv2GUIPage.appendChild(row);
 
-    UV2_THEMES.forEach(theme => {
-      const isActive = theme.id === activeThemeId;
+  const picker = document.createElement('input');
+  picker.type = 'color';
+  picker.value = guiPrimaryColor;
+  picker.style.cssText = 'width:48px;height:48px;border:none;border-radius:8px;cursor:pointer;background:none;padding:0;flex-shrink:0;';
+  row.appendChild(picker);
 
-      const card = document.createElement('div');
-      card.style.cssText = [
-        'display:flex;flex-direction:column;align-items:center;gap:10px;',
-        'padding:16px 20px;border-radius:10px;cursor:pointer;min-width:110px;',
-        'transition:all 0.2s ease;position:relative;',
-        isActive
-          ? `border:2px solid ${theme.primary};box-shadow:0 0 0 3px ${theme.primary}33,0 4px 18px rgba(0,0,0,0.5);background:#111;`
-          : 'border:2px solid rgba(255,255,255,0.09);background:#0d0d0d;',
-      ].join('');
+  const hexInput = document.createElement('input');
+  hexInput.type = 'text';
+  hexInput.value = guiPrimaryColor;
+  hexInput.maxLength = 7;
+  hexInput.style.cssText = 'background:#111;color:#fff;border:1px solid rgba(255,255,255,0.12);border-radius:6px;padding:10px 14px;font-size:14px;font-family:MinibloxFont,sans-serif;width:110px;outline:none;';
+  row.appendChild(hexInput);
 
+  const previewDot = document.createElement('div');
+  previewDot.style.cssText = `width:28px;height:28px;border-radius:50%;background:${guiPrimaryColor};box-shadow:0 0 12px ${guiPrimaryColor}88;transition:background 0.15s,box-shadow 0.15s;flex-shrink:0;`;
+  row.appendChild(previewDot);
+
+    const recentLabel = document.createElement('div');
+  recentLabel.className = 'uv2-section-title';
+  recentLabel.textContent = 'Recent colors';
+  uv2GUIPage.appendChild(recentLabel);
+
+  const recentRow = document.createElement('div');
+  recentRow.style.cssText = 'display:flex;flex-wrap:wrap;gap:10px;padding:4px 0 0 0;';
+  uv2GUIPage.appendChild(recentRow);
+
+  function loadRecent() {
+    try { return JSON.parse(localStorage.getItem('uv2-recent-colors') || '[]'); } catch(e) { return []; }
+  }
+
+  function saveRecent(hex) {
+    let list = loadRecent().filter(c => c !== hex);
+    list.unshift(hex);
+    if (list.length > 7) list = list.slice(0, 7);
+    localStorage.setItem('uv2-recent-colors', JSON.stringify(list));
+  }
+
+  function renderRecent() {
+    recentRow.innerHTML = '';
+    loadRecent().forEach(hex => {
       const swatch = document.createElement('div');
-      swatch.style.cssText = `width:64px;height:36px;border-radius:7px;background:${theme.gradient};box-shadow:0 2px 8px rgba(0,0,0,0.4);`;
-
-      const label = document.createElement('span');
-      label.textContent = theme.name;
-      label.style.cssText = `font-size:13px;font-family:MinibloxFont,sans-serif;color:${isActive ? theme.primary : '#aaa'};`;
-
-      if (isActive) {
-        const check = document.createElement('div');
-        check.textContent = '✓';
-        check.style.cssText = `position:absolute;top:6px;right:8px;font-size:11px;color:${theme.primary};font-weight:bold;`;
-        card.appendChild(check);
-      }
-
-      card.appendChild(swatch);
-      card.appendChild(label);
-
-      card.addEventListener('mouseenter', () => {
-        if (theme.id !== activeThemeId) card.style.borderColor = 'rgba(255,255,255,0.2)';
-      });
-      card.addEventListener('mouseleave', () => {
-        if (theme.id !== activeThemeId) card.style.borderColor = 'rgba(255,255,255,0.09)';
-      });
-      card.addEventListener('click', () => applyTheme(theme.id));
-
-      grid.appendChild(card);
+      swatch.style.cssText = `width:32px;height:32px;border-radius:6px;background:${hex};cursor:pointer;border:2px solid transparent;transition:border-color 0.15s,transform 0.15s;flex-shrink:0;`;
+      swatch.addEventListener('mouseenter', () => { swatch.style.transform = 'scale(1.15)'; });
+      swatch.addEventListener('mouseleave', () => { swatch.style.transform = 'scale(1)'; });
+      swatch.addEventListener('click', () => { applyColor(hex); });
+      if (hex === guiPrimaryColor) swatch.style.borderColor = '#fff';
+      recentRow.appendChild(swatch);
     });
   }
+
+  function applyColor(hex) {
+    guiPrimaryColor = hex;
+    localStorage.setItem('uv2-gui-primary-color', hex);
+    picker.value = hex;
+    hexInput.value = hex;
+    previewDot.style.background = hex;
+    previewDot.style.boxShadow = `0 0 12px ${hex}88`;
+    saveRecent(hex);
+    renderRecent();
+    applyGUIStyles();
+    try { closeButton.style.background = hex; closeButton.style.boxShadow = `0 2px 14px ${hex}73`; } catch(e) {}
+  }
+
+  renderRecent();
+
+  picker.addEventListener('change', () => { applyColor(picker.value); });
+
+  hexInput.addEventListener('input', () => {
+    const val = hexInput.value.trim();
+    if (/^#[0-9a-fA-F]{6}$/.test(val)) applyColor(val);
+  });
+
+  hexInput.addEventListener('keydown', e => { if (e.key === 'Enter') hexInput.blur(); });
+}
 
   function buildConfigPage() {
     uv2ConfigPage.innerHTML = `
