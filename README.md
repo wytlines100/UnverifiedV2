@@ -5,7 +5,7 @@ A custom client for Miniblox, in active development since October 2024.
 ## Requirements
 
 - A userscript manager, such as Tampermonkey
-- A supported browser (Chrome, Firefox, Edge, or any Chromium-based browser that supports userscript extensions)
+- A Chromium-based browser that supports userscript extensions
 - Miniblox.io (main domain almost everyone uses this or Crazygames)
 
 ## Features
@@ -17,24 +17,24 @@ A custom client for Miniblox, in active development since October 2024.
 - Keep Sprint: keeps you sprinting automatically while moving
 - Time Display: shows a draggable on-screen clock
 - Music Player: load audio from YT as a direct URL, with a draggable interface
-- Theme selection: choose from multiple color themes for the UI
+- Theme selection: Color Picker for the GUI theme
 - Config management: save your settings and module states to a JSON file and reload them later
 - Key binding: right-click any module to assign a custom keybind
 - VPN/proxy detection: optional warning shown on menu open if a VPN or proxy is detected, with a "don't show again" option
-- Multi-language support: English and Spanish interface translations
+- Multi-language support: English, Spanish, French, Dutch and Russian translations
 - Profile avatar: a sidebar profile picture that is auto-detected by country via IP lookup, uploadable from a local image, or randomizable
 - Settings panel: toggles for module click sounds, toast notifications, UI open/close animation, module-state persistence across reloads, and the idle delay used by Anti-AFK
 - Idle delay configuration: adjustable from 5 to 120 seconds, controlling how long you can be inactive before Anti-AFK auto-enables
-- Chat Filter: Blocks profanity/Spam from `game.chat`
+- Chat Filter: Blocks any profanity/Spam from `game.chat`
 - Armor HUD - Shows Enchantments/Icons/Armor as a standalone draggable box.
 - Shine on Modules - Makes the modules shiny!
 
 ## Client Installation 
 
-1. Install a Userscript manager such as Tampermonkey for your browser. (Make sure Allow UserScripts is on!)
+1. Install Tampermonkey for your chromium browser. (Make sure Allow UserScripts is on!)
 2. Add a new script in Tampermonkey and paste all of `client.js`.
-3. Save the script and make sure it is enabled. (Ctrl S)
-4. Visit miniblox.io the client will initialize automatically (Notification at top should appear)
+3. Save the script and make sure it is enabled.
+4. Visit miniblox.io the client will initialize automatically!
 5. Press the Right Shift key to open or close the client menu.
 
 ## Known Limitations
@@ -59,6 +59,7 @@ Current contributors: wytlines, DeadFish7, andreypidd, jet, joudaALT, TrustIsOve
 - Music Player removed from `client.js` and added to `MusicPlayer.js`
 - Build size decreased once again from 125KB to 116KB
 - Settings -> Contributors section improved with bios, icons, titles.
+- New color update. 
 
 ### 2.2.1 - CSS/Intro Update
 - Most CSS buttons were removed (due to new title screen)
