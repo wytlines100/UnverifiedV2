@@ -17,7 +17,7 @@ A custom userscript client for [Miniblox.io](https://miniblox.io), actively deve
 5. Navigate to `miniblox.io` — the client will initialize automatically.
 6. Press **Right Shift** to open or close the client menu.
 
-> The Music Player is a separate file (`MusicPlayer.js`) and must be installed independently.
+> Optional: The Music Player is a separate file (`MusicPlayer.js`) and must be installed independently.
 
 ## Features
 
