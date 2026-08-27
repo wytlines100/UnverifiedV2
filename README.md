@@ -28,6 +28,7 @@ A custom client for Miniblox, in active development since October 2024.
 - Chat Filter: Blocks any profanity/Spam from `game.chat`
 - Armor HUD - Shows Enchantments/Icons/Armor as a standalone draggable box.
 - Shine on Modules - Makes the modules shiny!
+- Search bar for modules - Search for any module. Simple.
 
 ## Client Installation 
 
