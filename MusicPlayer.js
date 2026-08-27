@@ -1,5 +1,5 @@
 // ==UserScript==
-// @name         UnverifiedV2 Music Player
+// @name         Music Player UV2
 // @namespace    http://tampermonkey.net/
 // @version      2.2.1
 // @description  Music Player for UnverifiedV2 in a new userscript
@@ -9,7 +9,6 @@
 
 (function() {
   'use strict';
-
   const QK = 'uv2ytlmp-queue';
   const CK = 'uv2ytlmp-oembed-cache';
   const CLIM = 200;
