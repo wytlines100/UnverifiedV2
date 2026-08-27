@@ -475,6 +475,10 @@ let guiTextColor = '#ffffff';
       btn.style.backgroundColor = guiPrimaryColor;
     });
 
+      if (document.activeElement === moduleSearchInput) {
+      moduleSearchInput.style.borderColor = guiPrimaryColor;
+}
+
     ui.querySelectorAll('.module-container').forEach(mc => {
       const span = mc.querySelector('span');
       if (span) {
@@ -802,6 +806,62 @@ let guiTextColor = '#ffffff';
   const headerRow = document.createElement("div");
   headerRow.style.cssText = "display:flex;align-items:center;justify-content:center;margin-bottom:18px;padding-bottom:16px;border-bottom:1px solid rgba(255,255,255,0.07);position:relative;";
   uv2MainPage.appendChild(headerRow);
+    const moduleSearchWrap = document.createElement("div");
+moduleSearchWrap.style.cssText = "display:flex;align-items:center;gap:10px;margin-bottom:4px;padding:0 2px;";
+
+const moduleSearchInput = document.createElement("input");
+moduleSearchInput.type = "text";
+moduleSearchInput.placeholder = "Search modules...";
+moduleSearchInput.style.cssText = [
+  "flex:1;background:#111;color:#fff;border:1px solid rgba(255,255,255,0.1);",
+  "border-radius:7px;padding:9px 14px;font-size:13px;",
+  "font-family:MinibloxFont,sans-serif;outline:none;",
+  "transition:border-color 0.18s ease;"
+].join("");
+
+moduleSearchInput.addEventListener("focus", () => {
+  moduleSearchInput.style.borderColor = guiPrimaryColor;
+});
+moduleSearchInput.addEventListener("blur", () => {
+  moduleSearchInput.style.borderColor = "rgba(255,255,255,0.1)";
+});
+moduleSearchInput.addEventListener("input", () => {
+  const query = moduleSearchInput.value.trim().toLowerCase();
+  [...gridContainer.children].forEach(mc => {
+    if (!mc.dataset.moduleName) return;
+    const nameMatch = mc.dataset.moduleName.toLowerCase().includes(query);
+    const descEl = mc.querySelector("p");
+    const descMatch = descEl ? descEl.textContent.toLowerCase().includes(query) : false;
+    mc.style.display = (nameMatch || descMatch || query === "") ? "flex" : "none";
+  });
+});
+
+const moduleSearchClear = document.createElement("button");
+moduleSearchClear.textContent = "✕";
+moduleSearchClear.style.cssText = [
+  "background:#1a1a1a;color:#666;border:1px solid rgba(255,255,255,0.08);",
+  "border-radius:7px;padding:9px 12px;font-size:13px;cursor:pointer;",
+  "font-family:MinibloxFont,sans-serif;transition:all 0.15s ease;flex-shrink:0;"
+].join("");
+moduleSearchClear.addEventListener("mouseenter", () => {
+  moduleSearchClear.style.background = "#2a2a2a";
+  moduleSearchClear.style.color = "#fff";
+});
+moduleSearchClear.addEventListener("mouseleave", () => {
+  moduleSearchClear.style.background = "#1a1a1a";
+  moduleSearchClear.style.color = "#666";
+});
+moduleSearchClear.addEventListener("click", () => {
+  moduleSearchInput.value = "";
+  [...gridContainer.children].forEach(mc => {
+    mc.style.display = "flex";
+  });
+  moduleSearchInput.focus();
+});
+
+moduleSearchWrap.appendChild(moduleSearchInput);
+moduleSearchWrap.appendChild(moduleSearchClear);
+uv2MainPage.appendChild(moduleSearchWrap);
 
   const title = document.createElement("h2");
   title.textContent = "UnverifiedV2";
@@ -1595,6 +1655,12 @@ function createModule(name, description) {
 function updateLanguage() {
   title.textContent = translations[currentLanguage]?.title || "UnverifiedV2";
   closeButton.textContent = translations[currentLanguage]?.closeUI || "Close UI";
+  moduleSearchInput.placeholder = currentLanguage === "en" ? "Search modules..." :
+    currentLanguage === "es" ? "Buscar módulos..." :
+    currentLanguage === "fr" ? "Rechercher des modules..." :
+    currentLanguage === "nl" ? "Modules zoeken..." :
+    currentLanguage === "ru" ? "Poisk moduley..." :
+    "Search modules...";
   const modules = gridContainer.children;
   const moduleKeys = ['autoFullscreen','keystrokes','muteChat','chatFilter','antiAfk','keepSprint','timeDisplay','armorHud'];
   for (let i = 0; i < modules.length; i++) {
