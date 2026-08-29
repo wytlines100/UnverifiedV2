@@ -1,6 +1,6 @@
 # UnverifiedV2
 
-A custom userscript client for [Miniblox.io](https://miniblox.io), actively developed since October 2024.
+A custom userscript client for [Miniblox](https://miniblox.io), actively developed since October 2024.
 
 ## Requirements
 
@@ -73,7 +73,7 @@ The menu is split into four sidebar pages:
 | Modules | All toggleable modules and the search bar |
 | Color | Accent color picker with hex input and recent colors |
 | Config | Save and load configuration as a JSON file |
-| Settings | Sounds, notifications, animation, persistence, VPN warning, Auto-AFK options |
+| Settings | Sounds, notifications, animation, persistence, VPN warning, Auto-AFK options, Version, Contributors |
 
 ## Known Limitations
 
@@ -141,4 +141,4 @@ Users are granted permission to use the client for personal or public use, subje
 
 ## Community
 
-Join the Discord server for updates and support: [dsc.gg/unverifiedv2](https://dsc.gg/unverifiedv2)
+Join the Discord server for updates and support: [UnverifiedV2 Discord](https://dsc.gg/unverifiedv2)
