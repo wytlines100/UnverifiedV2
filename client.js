@@ -9,7 +9,6 @@
 // @match        https://miniblox.io/
 // @grant        GM_xmlhttpRequest
 // @grant        unsafeWindow
-// @connect      cdnjs.cloudflare.com
 // @connect      ip-api.com
 // ==/UserScript==
 
