@@ -36,13 +36,13 @@ A custom userscript client for [Miniblox](https://miniblox.io), actively develop
 ### Interface
 - **Key Binding** — Right-click any module to assign or clear a custom keybind
 - **Search Bar** — Filter the module list by name or description in real time
-- **Theme / Color Picker** — Choose any accent color via a color picker or hex input, with a recent-color history
+- **Theme Color Picker** — Choose any accent color via a color picker or hex input, with a recent-color history
 - **Config Management** — Export all settings, module states, and keybinds to a JSON file and re-import them later
 - **UI Animation** — Optional open/close animation for the menu
 - **Module Persistence** — Optionally restore active module states after a page reload
 - **Toast Notifications** — Optional pop-up confirmations when modules toggle
 - **Module Click Sounds** — Optional audio feedback when toggling modules
-- **Multi-Language Support** — English, Spanish, French, Dutch, and Russian
+- **Multi-Language Support** — English, Spanish, French, Dutch, and Russian (with more soon)
 
 ### Profile
 - Sidebar avatar auto-detected by country via IP lookup
