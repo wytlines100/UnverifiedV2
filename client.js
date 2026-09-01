@@ -149,16 +149,6 @@ class UnverifiedBackground {
     #uv2-main-ui.uv2-animate-out {
       animation: uv2UIClose 0.18s cubic-bezier(0.22, 1, 0.36, 1) forwards;
     }
-    @keyframes uv2-title-spin {
-      0%   { transform: rotate(0deg) scale(1); }
-      40%  { transform: rotate(380deg) scale(1.18); }
-      70%  { transform: rotate(350deg) scale(1.12); }
-      100% { transform: rotate(360deg) scale(1); }
-    }
-    @keyframes uv2-title-sweep {
-      0%   { background-position: -200% center; }
-      100% { background-position: 200% center; }
-    }
     @keyframes uv2-title-shine-loop {
       0%   { background-position: 200% center; }
       100% { background-position: -200% center; }
@@ -1013,53 +1003,6 @@ uv2ArmorHudPage.appendChild(resetBtn);
   const languageDropdown = document.createElement("select");
   languageDropdown.style.cssText = `background:${guiBackgroundColor};color:${guiTextColor};border:1px solid ${guiPrimaryColor};border-radius:8px;padding:8px 14px;font-size:13px;cursor:pointer;font-family:'MinibloxFont',sans-serif;position:absolute;right:0;top:50%;transform:translateY(-50%);`;
   headerRow.appendChild(languageDropdown);
-
-  let titleClickCount = 0;
-  let titleEggCycle = 0;
-  let titleEggBusy = false;
-  const sweepPalettes = [
-    ['#e74c3c', '#ffffff', '#ffcccc', '#e74c3c'],
-    ['#e74c3c', '#ffd700', '#fff', '#e74c3c'],
-    ['#e74c3c', '#00ffff', '#fff', '#e74c3c'],
-    ['#e74c3c', '#ff69b4', '#ffe0f0', '#e74c3c'],
-    ['#e74c3c', '#7fff00', '#f0ffe0', '#e74c3c'],
-  ];
-  title.addEventListener('click', () => {
-    if (titleEggBusy) return;
-    titleClickCount++;
-    if (titleClickCount < 10) return;
-    titleClickCount = 0;
-    titleEggBusy = true;
-    const effect = titleEggCycle % 2;
-    titleEggCycle++;
-    if (effect === 0) {
-      title.style.transformOrigin = 'center center';
-      title.style.animation = 'uv2-title-spin 0.72s cubic-bezier(0.22,1,0.36,1) forwards';
-      setTimeout(() => {
-        title.style.animation = '';
-        titleEggBusy = false;
-      }, 750);
-    } else {
-      const paletteIndex = Math.floor(titleEggCycle / 2) % sweepPalettes.length;
-      const [c0, c1, c2, c3] = sweepPalettes[paletteIndex];
-      title.style.backgroundImage = `linear-gradient(90deg, ${c0} 15%, ${c1} 42%, ${c2} 55%, ${c3} 85%)`;
-      title.style.backgroundSize = '200% auto';
-      title.style.backgroundClip = 'text';
-      title.style.webkitBackgroundClip = 'text';
-      title.style.webkitTextFillColor = 'transparent';
-      title.style.color = 'transparent';
-      title.style.animation = 'uv2-title-sweep 0.9s ease forwards';
-      setTimeout(() => {
-        title.style.animation = '';
-        title.style.backgroundImage = '';
-        title.style.backgroundClip = '';
-        title.style.webkitBackgroundClip = '';
-        title.style.webkitTextFillColor = '';
-        title.style.color = guiPrimaryColor;
-        titleEggBusy = false;
-      }, 960);
-    }
-  });
 
   const settingsOverlay = document.createElement("div");
 settingsOverlay.id = "uv2-settings-overlay";
