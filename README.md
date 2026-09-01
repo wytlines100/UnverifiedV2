@@ -31,10 +31,11 @@ A custom userscript client for [Miniblox](https://miniblox.io), actively develop
 | Anti-AFK | Cycles WASD/Space key presses automatically to prevent an idle kick; includes a draggable status indicator |
 | Keep Sprint | Dispatches Shift alongside movement keys to maintain a sprint state |
 | Time Display | Shows a draggable live clock overlay so you don't have to exit fullscreen |
-| Armor HUD | Draggable overlay showing each armor slot's icon, durability percentage, and enchantments; only visible in a match |
+| Armor HUD | Draggable overlay showing each armor slot's icon, durability percentage, and enchantments; only visible in a match; supports docked and floating modes |
 
 ### Interface
 - **Key Binding** — Right-click any module to assign or clear a custom keybind
+- **Favorites** — Star any module to pin it to the top of the module list; persisted across reloads
 - **Search Bar** — Filter the module list by name or description in real time
 - **Theme Color Picker** — Choose any accent color via a color picker or hex input, with a recent-color history
 - **Config Management** — Export all settings, module states, and keybinds to a JSON file and re-import them later
@@ -53,8 +54,19 @@ A custom userscript client for [Miniblox](https://miniblox.io), actively develop
 ### Anti-AFK (Advanced)
 - **Auto Enable** — Automatically activates Anti-AFK after a configurable idle period (5–120 seconds)
 - **AFK Chat Message** — Optionally sends a chat message when you go idle
-- **Auto Disable** — Restores previous Anti-AFK state when activity is detected again
+- **Auto Disable** — Restores previous Anti-AFK state and shows a return toast when activity is detected again
 - Idle delay is configurable in the Settings panel
+- Auto-enable only triggers while inside an active match
+
+### Armor HUD (Advanced)
+- **Floating Mode** — Draggable overlay showing all four armor slots with icons, durability percentages, and enchantment abbreviations
+- **Docked Mode** — Snaps the HUD to a compact icon strip anchored to the bottom of the screen on either the left or right side
+- **Icon Opacity** — Adjustable overall opacity for the HUD
+- **Background Opacity** — Adjustable background fill opacity per slot in docked mode
+- **Icon Size** — Fixed or auto-sized slot icons
+- **Spacing** — Configurable gap between slots in docked mode
+- **Side** — Choose left or right screen edge for docked placement
+- All Armor HUD settings are accessible from the Settings panel
 
 ### Security
 - **VPN / Proxy Detection** — Optional warning shown on menu open if a VPN or proxy is detected, with a dismissible "don't show again" option
@@ -70,17 +82,18 @@ The menu is split into four sidebar pages:
 
 | Page | Contents |
 |---|---|
-| Modules | All toggleable modules and the search bar |
+| Modules | All toggleable modules, favorites, and the search bar |
 | Color | Accent color picker with hex input and recent colors |
 | Config | Save and load configuration as a JSON file |
-| Settings | Sounds, notifications, animation, persistence, VPN warning, Auto-AFK options, Version, Contributors |
+| Settings | Sounds, notifications, animation, persistence, VPN warning, Auto-AFK options, Armor HUD appearance and position, Version, Contributors |
 
 ## Known Limitations
 
 - This client modifies a third-party game's front end by injecting scripts and styles. It is not affiliated with or endorsed by Miniblox.
 - Modules depend on specific DOM selectors and class names used by Miniblox. Front-end updates to the game may break individual modules until the client is updated.
 - VPN and proxy detection relies on a third-party IP lookup service and may produce false positives or negatives.
-- The Armor HUD requires `unsafeWindow.spriteMap` and `unsafeWindow.Enchantment` to be present; it will not render outside of an active match.
+- The Armor HUD requires `unsafeWindow.spriteMap` and `unsafeWindow.Enchantment` to be present; it will not render outside of an active match. Match detection relies on the URL path containing `/join/`.
+- Auto-AFK auto-enable will not trigger while outside of an active match, even if the idle delay has elapsed.
 - **Use this client at your own risk. The maintainers are not responsible for any account actions resulting from its use.**
 
 ## Contributing
@@ -96,9 +109,9 @@ By submitting a contribution, you agree that it becomes part of the project unde
 ### 2.2.2 — Shine / Music Player Update
 - Added shine animation effect to module cards
 - Moved Music Player out of `client.js` into a separate `MusicPlayer.js`
-- Build size reduced from 125 KB to 116 KB
 - Settings → Contributors section improved with bios, icons, and titles
 - Color theme refresh
+- other stuff
 
 ### 2.2.1 — CSS / Intro Update
 - Removed most CSS button overrides following Miniblox title screen changes
@@ -108,7 +121,8 @@ By submitting a contribution, you agree that it becomes part of the project unde
 - Documentation updates
 
 ### 2.2 — Major Update
-- Added Armor HUD module
+- Added Armor HUD module with floating and docked modes
+- Added Armor HUD settings: icon opacity, background opacity, icon size, spacing, and side selection
 - Added French, Dutch, and Russian language support
 - Added a new theme preset
 - Version bumped from 2.1.1 → 2.2
