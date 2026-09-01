@@ -12,6 +12,8 @@
 // @connect      ip-api.com
 // ==/UserScript==
 
+document.title = 'UnverifiedV2';
+
 class UnverifiedIntro {
   constructor() {
     this.container = document.createElement("div");
@@ -100,20 +102,12 @@ class UnverifiedIntro {
     if (game && game.chat && typeof game.chat.addChat === "function") {
       clearInterval(waitForGame);
       game.chat.addChat({
-        text: "\\glow\\\\shiny\\\\#BF3011\\[Unverified Client]:\\reset\\ Hello, thanks for using Unverified Client! Please Join our discord for updates/community support!"
+        text: "\\glow\\\\shiny\\\\#BF3011\\[Unverified Client]:\\reset\\ Hello, thanks for using Unverified Client! Please join our discord for updates/community support!"
       });
     }
   }, 500);
 })();
 
-class UnverifiedStyler {
-  constructor() {
-    this.observer = null;
-  }
-  addStyleObserver() {
-    document.title = 'UnverifiedV2';
-  }
-}
 class UnverifiedBackground {
   constructor() {
     this.bg1 = "https://images3.alphacoders.com/133/1333794.jpeg";
@@ -127,8 +121,6 @@ class UnverifiedBackground {
   const intro = new UnverifiedIntro();
   intro.playIntro();
   intro.showInitializedNotif();
-  const styler = new UnverifiedStyler();
-  styler.addStyleObserver();
   const style = document.createElement('style');
   style.innerHTML = `
     @font-face {
@@ -399,12 +391,11 @@ class UnverifiedBackground {
     profileCircle.textContent = "";
   }
   const uv2NavDefs = [
-    { page: 'main',       label: 'Modules',    icon: 'fa-th-large' },
-    { page: 'gui',        label: 'Color',      icon: 'fa-paint-brush' },
-    { page: 'config',     label: 'Config',     icon: 'fa-cog' },
-    { page: 'armorhud',   label: 'Armor HUD',  icon: 'fa-shield' },
-    { page: 'settings',   label: 'Settings',   icon: 'fa-sliders' },
-  ];
+  { page: 'main',     label: 'Modules', icon: 'fa-th-large' },
+  { page: 'gui',      label: 'Color',   icon: 'fa-paint-brush' },
+  { page: 'config',   label: 'Config',  icon: 'fa-cog' },
+  { page: 'settings', label: 'Settings',icon: 'fa-sliders' },
+];
 
   const uv2NavEls = {};
   const uv2SidebarNav = document.createElement("div");
@@ -461,11 +452,6 @@ class UnverifiedBackground {
   uv2ConfigPage.id = "uv2-page-config-content";
   uv2ConfigPage.style.cssText = "flex:1;display:none;flex-direction:column;overflow-y:auto;overflow-x:hidden;padding:22px 24px;";
   uv2ContentArea.appendChild(uv2ConfigPage);
-
-  const uv2ArmorHudPage = document.createElement("div");
-  uv2ArmorHudPage.id = "uv2-page-armorhud-content";
-  uv2ArmorHudPage.style.cssText = "flex:1;display:none;flex-direction:column;overflow-y:auto;overflow-x:hidden;padding:22px 24px;";
-  uv2ContentArea.appendChild(uv2ArmorHudPage);
 
   const uv2SettingsPage = document.createElement("div");
   uv2SettingsPage.id = "uv2-page-settings-content";
@@ -805,153 +791,147 @@ let armorHudGap = parseInt(localStorage.getItem('uv2-armorhud-gap') || '4', 10);
   }
 
   function buildArmorHudSettingsPage() {
-    uv2ArmorHudPage.innerHTML = '';
+  const container = document.getElementById('uv2-armorhud-settings-section');
+  if (!container) return;
+  container.innerHTML = '';
 
-    const heading = document.createElement('h2');
-    heading.textContent = 'Armor HUD';
-    heading.style.cssText = 'font-size:28px;font-family:MinibloxFont,sans-serif;margin:0 0 20px 0;text-align:center;color:#fff;';
-    uv2ArmorHudPage.appendChild(heading);
+  const statusRow = document.createElement('div');
+  statusRow.style.cssText = 'display:flex;align-items:center;justify-content:space-between;padding:14px 16px;border-radius:8px;background:linear-gradient(135deg,#222,#191919);border:1px solid rgba(255,255,255,0.07);margin-bottom:12px;';
+  const statusText = document.createElement('div');
+  statusText.id = 'armor-hud-status-text';
+  statusText.style.cssText = 'font-size:13px;color:#ccc;font-family:MinibloxFont,sans-serif;';
+  statusText.textContent = armorHudDocked ? 'Status: Docked' : 'Status: Floating';
+  const statusBtn = document.createElement('button');
+  statusBtn.id = 'armor-hud-status-btn';
+  statusBtn.textContent = armorHudDocked ? 'Undock' : 'Dock Now';
+  statusBtn.style.cssText = `background:${guiPrimaryColor};color:white;border:none;border-radius:6px;padding:8px 16px;cursor:pointer;font-family:MinibloxFont,sans-serif;font-size:12px;`;
+  statusRow.appendChild(statusText);
+  statusRow.appendChild(statusBtn);
+  container.appendChild(statusRow);
 
-    const statusRow = document.createElement('div');
-    statusRow.style.cssText = 'display:flex;align-items:center;justify-content:space-between;padding:14px 16px;border-radius:8px;background:linear-gradient(135deg,#222,#191919);border:1px solid rgba(255,255,255,0.07);margin-bottom:20px;';
-    const statusText = document.createElement('div');
-    statusText.id = 'armor-hud-status-text';
-    statusText.style.cssText = 'font-size:13px;color:#ccc;font-family:MinibloxFont,sans-serif;';
-    statusText.textContent = armorHudDocked ? 'Status: Docked next to offhand slot' : 'Status: Floating';
-    const statusBtn = document.createElement('button');
-    statusBtn.id = 'armor-hud-status-btn';
-    statusBtn.textContent = armorHudDocked ? 'Undock' : 'Dock Now';
-    statusBtn.style.cssText = `background:${guiPrimaryColor};color:white;border:none;border-radius:6px;padding:8px 16px;cursor:pointer;font-family:MinibloxFont,sans-serif;font-size:12px;`;
-    statusRow.appendChild(statusText);
-    statusRow.appendChild(statusBtn);
-    uv2ArmorHudPage.appendChild(statusRow);
+  statusBtn.addEventListener('click', () => {
+    const btn = document.querySelector('#armor-hud-dock-btn');
+    if (btn) btn.click();
+    else showNotification('Turn on Armor HUD first', false);
+  });
 
-    statusBtn.addEventListener('click', () => {
-      const btn = document.querySelector('#armor-hud-dock-btn');
-      if (btn) btn.click();
-      else showNotification('Turn on Armor HUD first', false);
-    });
+  function buildSliderRow(labelText, id, min, max, value, formatFn) {
+    const row = document.createElement('div');
+    row.style.cssText = 'margin-bottom:14px;';
+    const labelRow = document.createElement('div');
+    labelRow.style.cssText = 'display:flex;justify-content:space-between;align-items:center;margin-bottom:5px;';
+    const label = document.createElement('span');
+    label.style.cssText = 'font-size:11px;color:#888;text-transform:uppercase;letter-spacing:0.05em;';
+    label.textContent = labelText;
+    const valueEl = document.createElement('span');
+    valueEl.id = id + '-value';
+    valueEl.style.cssText = `font-size:12px;color:${guiPrimaryColor};font-weight:600;`;
+    valueEl.textContent = formatFn(value);
+    labelRow.appendChild(label);
+    labelRow.appendChild(valueEl);
+    row.appendChild(labelRow);
+    const slider = document.createElement('input');
+    slider.type = 'range';
+    slider.id = id;
+    slider.min = min;
+    slider.max = max;
+    slider.value = value;
+    slider.style.cssText = `width:100%;accent-color:${guiPrimaryColor};`;
+    row.appendChild(slider);
+    container.appendChild(row);
+    return slider;
+  }
 
-    const sectionTitle1 = document.createElement('div');
-    sectionTitle1.className = 'uv2-section-title';
-    sectionTitle1.textContent = 'Appearance';
-    sectionTitle1.style.marginTop = '0';
-    uv2ArmorHudPage.appendChild(sectionTitle1);
+  const appearanceLabel = document.createElement('div');
+  appearanceLabel.className = 'uv2-section-title';
+  appearanceLabel.textContent = 'Appearance';
+  appearanceLabel.style.cssText = 'font-size:10px;text-transform:uppercase;letter-spacing:0.1em;color:#555;margin:4px 0 8px;padding-left:4px;';
+  container.appendChild(appearanceLabel);
 
-    function buildSliderRow(labelText, id, min, max, value, formatFn) {
-      const row = document.createElement('div');
-      row.style.cssText = 'margin-bottom:16px;';
-      const labelRow = document.createElement('div');
-      labelRow.style.cssText = 'display:flex;justify-content:space-between;align-items:center;margin-bottom:6px;';
-      const label = document.createElement('span');
-      label.style.cssText = 'font-size:11px;color:#888;text-transform:uppercase;letter-spacing:0.05em;';
-      label.textContent = labelText;
-      const valueEl = document.createElement('span');
-      valueEl.id = id + '-value';
-      valueEl.style.cssText = `font-size:12px;color:${guiPrimaryColor};font-weight:600;`;
-      valueEl.textContent = formatFn(value);
-      labelRow.appendChild(label);
-      labelRow.appendChild(valueEl);
-      row.appendChild(labelRow);
-      const slider = document.createElement('input');
-      slider.type = 'range';
-      slider.id = id;
-      slider.min = min;
-      slider.max = max;
-      slider.value = value;
-      slider.style.cssText = `width:100%;accent-color:${guiPrimaryColor};`;
-      row.appendChild(slider);
-      uv2ArmorHudPage.appendChild(row);
-      return slider;
-    }
+  const opacitySlider = buildSliderRow('Icon Opacity', 'armor-hud-opacity-slider', 20, 100, Math.round(armorHudOpacity * 100), v => v + '%');
+  opacitySlider.addEventListener('input', function() {
+    armorHudOpacity = this.value / 100;
+    localStorage.setItem('uv2-armorhud-opacity', armorHudOpacity);
+    const el = document.querySelector('#armor-hud-opacity-slider-value');
+    if (el) el.textContent = this.value + '%';
+    if (armorHudEl) armorHudEl.style.opacity = armorHudOpacity;
+  });
 
-    const opacitySlider = buildSliderRow('Icon Opacity', 'armor-hud-opacity-slider', 20, 100, Math.round(armorHudOpacity * 100), v => v + '%');
-    opacitySlider.addEventListener('input', function() {
-      armorHudOpacity = this.value / 100;
-      localStorage.setItem('uv2-armorhud-opacity', armorHudOpacity);
-      document.querySelector('#armor-hud-opacity-slider-value').textContent = this.value + '%';
-      if (armorHudEl) armorHudEl.style.opacity = armorHudOpacity;
-    });
+  const bgOpacitySlider = buildSliderRow('Background Opacity', 'armor-hud-bgopacity-slider', 0, 100, Math.round(armorHudBgOpacity * 100), v => v + '%');
+  bgOpacitySlider.addEventListener('input', function() {
+    armorHudBgOpacity = this.value / 100;
+    localStorage.setItem('uv2-armorhud-bgopacity', armorHudBgOpacity);
+    const el = document.querySelector('#armor-hud-bgopacity-slider-value');
+    if (el) el.textContent = this.value + '%';
+    if (armorHudDocked) armorHudRender();
+  });
 
-    const bgOpacitySlider = buildSliderRow('Background Opacity', 'armor-hud-bgopacity-slider', 0, 100, Math.round(armorHudBgOpacity * 100), v => v + '%');
-    bgOpacitySlider.addEventListener('input', function() {
-      armorHudBgOpacity = this.value / 100;
-      localStorage.setItem('uv2-armorhud-bgopacity', armorHudBgOpacity);
-      document.querySelector('#armor-hud-bgopacity-slider-value').textContent = this.value + '%';
-      if (armorHudDocked) armorHudRender();
-    });
+  const sizeSlider = buildSliderRow('Icon Size', 'armor-hud-size-slider', 0, 64, armorHudIconSize, v => v == 0 ? 'Auto' : v + 'px');
+  sizeSlider.addEventListener('input', function() {
+    armorHudIconSize = parseInt(this.value, 10);
+    localStorage.setItem('uv2-armorhud-iconsize', armorHudIconSize);
+    const el = document.querySelector('#armor-hud-size-slider-value');
+    if (el) el.textContent = armorHudIconSize == 0 ? 'Auto' : armorHudIconSize + 'px';
+    if (armorHudDocked) armorHudRender();
+  });
 
-    const sizeSlider = buildSliderRow('Icon Size', 'armor-hud-size-slider', 0, 64, armorHudIconSize, v => v == 0 ? 'Auto' : v + 'px');
-    sizeSlider.addEventListener('input', function() {
-      armorHudIconSize = parseInt(this.value, 10);
-      localStorage.setItem('uv2-armorhud-iconsize', armorHudIconSize);
-      document.querySelector('#armor-hud-size-slider-value').textContent = armorHudIconSize == 0 ? 'Auto' : armorHudIconSize + 'px';
-      if (armorHudDocked) armorHudRender();
-    });
+  const gapSlider = buildSliderRow('Spacing', 'armor-hud-gap-slider', 0, 16, armorHudGap, v => v + 'px');
+  gapSlider.addEventListener('input', function() {
+    armorHudGap = parseInt(this.value, 10);
+    localStorage.setItem('uv2-armorhud-gap', armorHudGap);
+    const el = document.querySelector('#armor-hud-gap-slider-value');
+    if (el) el.textContent = armorHudGap + 'px';
+    if (armorHudDocked) armorHudRender();
+  });
 
-    const gapSlider = buildSliderRow('Spacing', 'armor-hud-gap-slider', 0, 16, armorHudGap, v => v + 'px');
-    gapSlider.addEventListener('input', function() {
-      armorHudGap = parseInt(this.value, 10);
-      localStorage.setItem('uv2-armorhud-gap', armorHudGap);
-      document.querySelector('#armor-hud-gap-slider-value').textContent = armorHudGap + 'px';
-      if (armorHudDocked) armorHudRender();
-    });
+  const posLabel = document.createElement('div');
+  posLabel.className = 'uv2-section-title';
+  posLabel.textContent = 'Position';
+  posLabel.style.cssText = 'font-size:10px;text-transform:uppercase;letter-spacing:0.1em;color:#555;margin:10px 0 8px;padding-left:4px;';
+  container.appendChild(posLabel);
 
-    const sectionTitle2 = document.createElement('div');
-sectionTitle2.className = 'uv2-section-title';
-sectionTitle2.textContent = 'Position';
-uv2ArmorHudPage.appendChild(sectionTitle2);
+  const sideToggleRow = document.createElement('div');
+  sideToggleRow.style.cssText = 'display:flex;gap:8px;margin-bottom:12px;';
 
-const sideLabelRow = document.createElement('div');
-sideLabelRow.style.cssText = 'display:flex;justify-content:space-between;align-items:center;margin-bottom:6px;';
-const sideLabel = document.createElement('span');
-sideLabel.style.cssText = 'font-size:11px;color:#888;text-transform:uppercase;letter-spacing:0.05em;';
-sideLabel.textContent = 'Side';
-sideLabelRow.appendChild(sideLabel);
-uv2ArmorHudPage.appendChild(sideLabelRow);
+  const leftBtn = document.createElement('button');
+  leftBtn.textContent = 'Left';
+  const rightBtn = document.createElement('button');
+  rightBtn.textContent = 'Right';
 
-const sideToggleRow = document.createElement('div');
-sideToggleRow.style.cssText = 'display:flex;gap:8px;margin-bottom:16px;';
+  const currentSide = localStorage.getItem('uv2-armorhud-side') === 'left' ? 'left' : 'right';
 
-const leftBtn = document.createElement('button');
-leftBtn.textContent = 'Left';
-const rightBtn = document.createElement('button');
-rightBtn.textContent = 'Right';
-
-const currentSide = localStorage.getItem('uv2-armorhud-side') === 'left' ? 'left' : 'right';
-
-function sideButtonStyle(active) {
+  function sideButtonStyle(active) {
     return `flex:1;padding:10px;border-radius:6px;border:none;cursor:pointer;font-family:MinibloxFont,sans-serif;font-size:13px;transition:all 0.15s ease;background:${active ? guiPrimaryColor : '#2a2a2a'};color:${active ? '#fff' : '#888'};`;
-}
+  }
 
-leftBtn.style.cssText = sideButtonStyle(currentSide === 'left');
-rightBtn.style.cssText = sideButtonStyle(currentSide === 'right');
+  leftBtn.style.cssText = sideButtonStyle(currentSide === 'left');
+  rightBtn.style.cssText = sideButtonStyle(currentSide === 'right');
 
-function applySide(side) {
+  function applySide(side) {
     localStorage.setItem('uv2-armorhud-side', side);
     leftBtn.style.cssText = sideButtonStyle(side === 'left');
     rightBtn.style.cssText = sideButtonStyle(side === 'right');
     if (armorHudEl && !armorHudDocked) {
-        if (side === 'left') {
-            armorHudEl.style.right = 'auto';
-            armorHudEl.style.left = '20px';
-        } else {
-            armorHudEl.style.left = 'auto';
-            armorHudEl.style.right = '20px';
-        }
+      if (side === 'left') {
+        armorHudEl.style.right = 'auto';
+        armorHudEl.style.left = '20px';
+      } else {
+        armorHudEl.style.left = 'auto';
+        armorHudEl.style.right = '20px';
+      }
     }
-}
+  }
 
-leftBtn.addEventListener('click', () => applySide('left'));
-rightBtn.addEventListener('click', () => applySide('right'));
-sideToggleRow.appendChild(leftBtn);
-sideToggleRow.appendChild(rightBtn);
-uv2ArmorHudPage.appendChild(sideToggleRow);
+  leftBtn.addEventListener('click', () => applySide('left'));
+  rightBtn.addEventListener('click', () => applySide('right'));
+  sideToggleRow.appendChild(leftBtn);
+  sideToggleRow.appendChild(rightBtn);
+  container.appendChild(sideToggleRow);
 
-const resetBtn = document.createElement('button');
-resetBtn.textContent = 'Reset to Default';
-resetBtn.style.cssText = `width:100%;background:${guiPrimaryColor};color:white;border:none;border-radius:6px;padding:10px;cursor:pointer;font-family:MinibloxFont,sans-serif;font-size:13px;letter-spacing:0.3px;margin-top:8px;`;
-resetBtn.addEventListener('click', () => {
+  const resetBtn = document.createElement('button');
+  resetBtn.textContent = 'Reset to Default';
+  resetBtn.style.cssText = `width:100%;background:${guiPrimaryColor};color:white;border:none;border-radius:6px;padding:10px;cursor:pointer;font-family:MinibloxFont,sans-serif;font-size:13px;letter-spacing:0.3px;`;
+  resetBtn.addEventListener('click', () => {
     armorHudOpacity = 1;
     armorHudBgOpacity = 0.55;
     armorHudIconSize = 0;
@@ -964,26 +944,25 @@ resetBtn.addEventListener('click', () => {
     if (armorHudEl) armorHudEl.style.opacity = 1;
     if (armorHudDocked) armorHudRender();
     buildArmorHudSettingsPage();
-});
-uv2ArmorHudPage.appendChild(resetBtn);
-  }
+  });
+  container.appendChild(resetBtn);
+}
 
   function switchUv2Page(page) {
-    uv2MainPage.style.display        = page === 'main'         ? 'flex' : 'none';
-    uv2GUIPage.style.display         = page === 'gui'          ? 'flex' : 'none';
-    uv2ConfigPage.style.display      = page === 'config'       ? 'flex' : 'none';
-    uv2ArmorHudPage.style.display    = page === 'armorhud'     ? 'flex' : 'none';
-    uv2SettingsPage.style.display    = page === 'settings'     ? 'flex' : 'none';
-    Object.entries(uv2NavEls).forEach(([p, el]) => {
-      const active = p === page;
-      el.dataset.active       = active ? "1" : "0";
-      el.style.color          = active ? guiPrimaryColor : "#666";
-      el.style.backgroundColor = active ? `${guiPrimaryColor}14` : "";
-      el.style.borderLeft     = active ? `2px solid ${guiPrimaryColor}` : "2px solid transparent";
-      const icon = el.querySelector("i");
-      if (icon) icon.style.color = active ? guiPrimaryColor : "";
-    });
-  }
+  uv2MainPage.style.display   = page === 'main'     ? 'flex' : 'none';
+  uv2GUIPage.style.display    = page === 'gui'      ? 'flex' : 'none';
+  uv2ConfigPage.style.display = page === 'config'   ? 'flex' : 'none';
+  uv2SettingsPage.style.display = page === 'settings' ? 'flex' : 'none';
+  Object.entries(uv2NavEls).forEach(([p, el]) => {
+    const active = p === page;
+    el.dataset.active        = active ? "1" : "0";
+    el.style.color           = active ? guiPrimaryColor : "#666";
+    el.style.backgroundColor = active ? `${guiPrimaryColor}14` : "";
+    el.style.borderLeft      = active ? `2px solid ${guiPrimaryColor}` : "2px solid transparent";
+    const icon = el.querySelector("i");
+    if (icon) icon.style.color = active ? guiPrimaryColor : "";
+  });
+}
 
   const headerRow = document.createElement("div");
   headerRow.style.cssText = "display:flex;align-items:center;justify-content:center;margin-bottom:18px;padding-bottom:16px;border-bottom:1px solid rgba(255,255,255,0.07);position:relative;";
@@ -1056,6 +1035,10 @@ settingsOverlay.innerHTML = `
               <span style="color:#888;font-size:13px;">s</span>
             </div>
           </div>
+        </div>
+        <div class="uv2-settings-page" id="uv2-page-armorhud-settings">
+          <div class="uv2-section-title" style="margin-top:14px;">Armor HUD</div>
+          <div id="uv2-armorhud-settings-section"></div>
         </div>
         <div class="uv2-settings-page" id="uv2-page-about">
           <div class="uv2-section-title">Info</div>
@@ -1276,12 +1259,11 @@ document.body.appendChild(settingsOverlay);
   settingsOverlay.style.display        = "none";
   settingsOverlay.style.pointerEvents  = "none";
 
-  buildGUIPage();
-  buildConfigPage();
-  buildArmorHudSettingsPage();
-  applyGUIStyles();
-
-  switchUv2Page('main');
+buildGUIPage();
+buildConfigPage();
+buildArmorHudSettingsPage();
+applyGUIStyles();
+switchUv2Page('main');
 
   ['fullscreenchange','webkitfullscreenchange','mozfullscreenchange'].forEach(evt => {
     document.addEventListener(evt, () => {
