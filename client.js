@@ -6,7 +6,7 @@
 // @icon         https://raw.githubusercontent.com/wytlines100/UnverifiedV2/refs/heads/main/logo.jpg
 // @license      Proprietary License
 // @author       wytlines, DeadFish7, andreypidd, jet, joudaALT, TrustIsOver, TheM1ddleM1n
-// @match        https://miniblox.io/
+// @match        https://miniblox.io/*
 // @grant        GM_xmlhttpRequest
 // @grant        unsafeWindow
 // @connect      ip-api.com
@@ -158,6 +158,20 @@ class UnverifiedBackground {
     @keyframes uv2-title-sweep {
       0%   { background-position: -200% center; }
       100% { background-position: 200% center; }
+    }
+    @keyframes uv2-title-shine-loop {
+      0%   { background-position: 200% center; }
+      100% { background-position: -200% center; }
+    }
+    .uv2-title-shine {
+      background-image: linear-gradient(100deg, #e74c3c 0%, #e74c3c 40%, #ff8a80 50%, #e74c3c 60%, #e74c3c 100%);
+      background-size: 250% auto;
+      background-clip: text;
+      -webkit-background-clip: text;
+      -webkit-text-fill-color: transparent;
+      color: transparent;
+      animation: uv2-title-shine-loop 3.5s linear infinite;
+      text-shadow: 0 0 18px rgba(231,76,60,0.55);
     }
     @keyframes notificationProgress {
       0% { width: 100%; }
@@ -398,6 +412,7 @@ class UnverifiedBackground {
     { page: 'main',       label: 'Modules',    icon: 'fa-th-large' },
     { page: 'gui',        label: 'Color',      icon: 'fa-paint-brush' },
     { page: 'config',     label: 'Config',     icon: 'fa-cog' },
+    { page: 'armorhud',   label: 'Armor HUD',  icon: 'fa-shield' },
     { page: 'settings',   label: 'Settings',   icon: 'fa-sliders' },
   ];
 
@@ -457,6 +472,11 @@ class UnverifiedBackground {
   uv2ConfigPage.style.cssText = "flex:1;display:none;flex-direction:column;overflow-y:auto;overflow-x:hidden;padding:22px 24px;";
   uv2ContentArea.appendChild(uv2ConfigPage);
 
+  const uv2ArmorHudPage = document.createElement("div");
+  uv2ArmorHudPage.id = "uv2-page-armorhud-content";
+  uv2ArmorHudPage.style.cssText = "flex:1;display:none;flex-direction:column;overflow-y:auto;overflow-x:hidden;padding:22px 24px;";
+  uv2ContentArea.appendChild(uv2ArmorHudPage);
+
   const uv2SettingsPage = document.createElement("div");
   uv2SettingsPage.id = "uv2-page-settings-content";
   uv2SettingsPage.style.cssText = "flex:1;display:none;overflow:hidden;";
@@ -465,6 +485,11 @@ class UnverifiedBackground {
   let guiPrimaryColor = localStorage.getItem('uv2-gui-primary-color') || '#e74c3c';
 let guiBackgroundColor = '#000000';
 let guiTextColor = '#ffffff';
+let armorHudDocked = localStorage.getItem('uv2-armorhud-docked') === 'true';
+let armorHudOpacity = parseFloat(localStorage.getItem('uv2-armorhud-opacity') || '1');
+let armorHudBgOpacity = parseFloat(localStorage.getItem('uv2-armorhud-bgopacity') || '0.55');
+let armorHudIconSize = parseInt(localStorage.getItem('uv2-armorhud-iconsize') || '0', 10);
+let armorHudGap = parseInt(localStorage.getItem('uv2-armorhud-gap') || '4', 10);
 
   function applyGUIStyles() {
     ui.style.backgroundColor = guiBackgroundColor;
@@ -473,10 +498,6 @@ let guiTextColor = '#ffffff';
     ui.querySelectorAll('.mp-search-go').forEach(btn => {
       btn.style.backgroundColor = guiPrimaryColor;
     });
-
-      if (document.activeElement === moduleSearchInput) {
-      moduleSearchInput.style.borderColor = guiPrimaryColor;
-}
 
     ui.querySelectorAll('.module-container').forEach(mc => {
       const span = mc.querySelector('span');
@@ -515,6 +536,13 @@ let guiTextColor = '#ffffff';
     if (typeof title !== 'undefined' && title) {
       title.style.color = guiPrimaryColor;
     }
+
+    const armorHudPin = document.querySelector('#armor-hud-dock-btn');
+    if (armorHudPin && armorHudDocked) {
+      armorHudPin.style.color = guiPrimaryColor;
+      armorHudPin.style.textShadow = `0 0 8px ${guiPrimaryColor}80`;
+    }
+    try { if (typeof buildArmorHudSettingsPage === 'function') buildArmorHudSettingsPage(); } catch(e) {}
 
     try { closeButton.style.background = guiPrimaryColor; closeButton.style.boxShadow = `0 2px 14px ${guiPrimaryColor}73`; } catch(e) {}
 
@@ -786,10 +814,175 @@ let guiTextColor = '#ffffff';
     }
   }
 
+  function buildArmorHudSettingsPage() {
+    uv2ArmorHudPage.innerHTML = '';
+
+    const heading = document.createElement('h2');
+    heading.textContent = 'Armor HUD';
+    heading.style.cssText = 'font-size:28px;font-family:MinibloxFont,sans-serif;margin:0 0 20px 0;text-align:center;color:#fff;';
+    uv2ArmorHudPage.appendChild(heading);
+
+    const statusRow = document.createElement('div');
+    statusRow.style.cssText = 'display:flex;align-items:center;justify-content:space-between;padding:14px 16px;border-radius:8px;background:linear-gradient(135deg,#222,#191919);border:1px solid rgba(255,255,255,0.07);margin-bottom:20px;';
+    const statusText = document.createElement('div');
+    statusText.id = 'armor-hud-status-text';
+    statusText.style.cssText = 'font-size:13px;color:#ccc;font-family:MinibloxFont,sans-serif;';
+    statusText.textContent = armorHudDocked ? 'Status: Docked next to offhand slot' : 'Status: Floating';
+    const statusBtn = document.createElement('button');
+    statusBtn.id = 'armor-hud-status-btn';
+    statusBtn.textContent = armorHudDocked ? 'Undock' : 'Dock Now';
+    statusBtn.style.cssText = `background:${guiPrimaryColor};color:white;border:none;border-radius:6px;padding:8px 16px;cursor:pointer;font-family:MinibloxFont,sans-serif;font-size:12px;`;
+    statusRow.appendChild(statusText);
+    statusRow.appendChild(statusBtn);
+    uv2ArmorHudPage.appendChild(statusRow);
+
+    statusBtn.addEventListener('click', () => {
+      const btn = document.querySelector('#armor-hud-dock-btn');
+      if (btn) btn.click();
+      else showNotification('Turn on Armor HUD first', false);
+    });
+
+    const sectionTitle1 = document.createElement('div');
+    sectionTitle1.className = 'uv2-section-title';
+    sectionTitle1.textContent = 'Appearance';
+    sectionTitle1.style.marginTop = '0';
+    uv2ArmorHudPage.appendChild(sectionTitle1);
+
+    function buildSliderRow(labelText, id, min, max, value, formatFn) {
+      const row = document.createElement('div');
+      row.style.cssText = 'margin-bottom:16px;';
+      const labelRow = document.createElement('div');
+      labelRow.style.cssText = 'display:flex;justify-content:space-between;align-items:center;margin-bottom:6px;';
+      const label = document.createElement('span');
+      label.style.cssText = 'font-size:11px;color:#888;text-transform:uppercase;letter-spacing:0.05em;';
+      label.textContent = labelText;
+      const valueEl = document.createElement('span');
+      valueEl.id = id + '-value';
+      valueEl.style.cssText = `font-size:12px;color:${guiPrimaryColor};font-weight:600;`;
+      valueEl.textContent = formatFn(value);
+      labelRow.appendChild(label);
+      labelRow.appendChild(valueEl);
+      row.appendChild(labelRow);
+      const slider = document.createElement('input');
+      slider.type = 'range';
+      slider.id = id;
+      slider.min = min;
+      slider.max = max;
+      slider.value = value;
+      slider.style.cssText = `width:100%;accent-color:${guiPrimaryColor};`;
+      row.appendChild(slider);
+      uv2ArmorHudPage.appendChild(row);
+      return slider;
+    }
+
+    const opacitySlider = buildSliderRow('Icon Opacity', 'armor-hud-opacity-slider', 20, 100, Math.round(armorHudOpacity * 100), v => v + '%');
+    opacitySlider.addEventListener('input', function() {
+      armorHudOpacity = this.value / 100;
+      localStorage.setItem('uv2-armorhud-opacity', armorHudOpacity);
+      document.querySelector('#armor-hud-opacity-slider-value').textContent = this.value + '%';
+      if (armorHudEl) armorHudEl.style.opacity = armorHudOpacity;
+    });
+
+    const bgOpacitySlider = buildSliderRow('Background Opacity', 'armor-hud-bgopacity-slider', 0, 100, Math.round(armorHudBgOpacity * 100), v => v + '%');
+    bgOpacitySlider.addEventListener('input', function() {
+      armorHudBgOpacity = this.value / 100;
+      localStorage.setItem('uv2-armorhud-bgopacity', armorHudBgOpacity);
+      document.querySelector('#armor-hud-bgopacity-slider-value').textContent = this.value + '%';
+      if (armorHudDocked) armorHudRender();
+    });
+
+    const sizeSlider = buildSliderRow('Icon Size', 'armor-hud-size-slider', 0, 64, armorHudIconSize, v => v == 0 ? 'Auto' : v + 'px');
+    sizeSlider.addEventListener('input', function() {
+      armorHudIconSize = parseInt(this.value, 10);
+      localStorage.setItem('uv2-armorhud-iconsize', armorHudIconSize);
+      document.querySelector('#armor-hud-size-slider-value').textContent = armorHudIconSize == 0 ? 'Auto' : armorHudIconSize + 'px';
+      if (armorHudDocked) armorHudRender();
+    });
+
+    const gapSlider = buildSliderRow('Spacing', 'armor-hud-gap-slider', 0, 16, armorHudGap, v => v + 'px');
+    gapSlider.addEventListener('input', function() {
+      armorHudGap = parseInt(this.value, 10);
+      localStorage.setItem('uv2-armorhud-gap', armorHudGap);
+      document.querySelector('#armor-hud-gap-slider-value').textContent = armorHudGap + 'px';
+      if (armorHudDocked) armorHudRender();
+    });
+
+    const sectionTitle2 = document.createElement('div');
+sectionTitle2.className = 'uv2-section-title';
+sectionTitle2.textContent = 'Position';
+uv2ArmorHudPage.appendChild(sectionTitle2);
+
+const sideLabelRow = document.createElement('div');
+sideLabelRow.style.cssText = 'display:flex;justify-content:space-between;align-items:center;margin-bottom:6px;';
+const sideLabel = document.createElement('span');
+sideLabel.style.cssText = 'font-size:11px;color:#888;text-transform:uppercase;letter-spacing:0.05em;';
+sideLabel.textContent = 'Side';
+sideLabelRow.appendChild(sideLabel);
+uv2ArmorHudPage.appendChild(sideLabelRow);
+
+const sideToggleRow = document.createElement('div');
+sideToggleRow.style.cssText = 'display:flex;gap:8px;margin-bottom:16px;';
+
+const leftBtn = document.createElement('button');
+leftBtn.textContent = 'Left';
+const rightBtn = document.createElement('button');
+rightBtn.textContent = 'Right';
+
+const currentSide = localStorage.getItem('uv2-armorhud-side') === 'left' ? 'left' : 'right';
+
+function sideButtonStyle(active) {
+    return `flex:1;padding:10px;border-radius:6px;border:none;cursor:pointer;font-family:MinibloxFont,sans-serif;font-size:13px;transition:all 0.15s ease;background:${active ? guiPrimaryColor : '#2a2a2a'};color:${active ? '#fff' : '#888'};`;
+}
+
+leftBtn.style.cssText = sideButtonStyle(currentSide === 'left');
+rightBtn.style.cssText = sideButtonStyle(currentSide === 'right');
+
+function applySide(side) {
+    localStorage.setItem('uv2-armorhud-side', side);
+    leftBtn.style.cssText = sideButtonStyle(side === 'left');
+    rightBtn.style.cssText = sideButtonStyle(side === 'right');
+    if (armorHudEl && !armorHudDocked) {
+        if (side === 'left') {
+            armorHudEl.style.right = 'auto';
+            armorHudEl.style.left = '20px';
+        } else {
+            armorHudEl.style.left = 'auto';
+            armorHudEl.style.right = '20px';
+        }
+    }
+}
+
+leftBtn.addEventListener('click', () => applySide('left'));
+rightBtn.addEventListener('click', () => applySide('right'));
+sideToggleRow.appendChild(leftBtn);
+sideToggleRow.appendChild(rightBtn);
+uv2ArmorHudPage.appendChild(sideToggleRow);
+
+const resetBtn = document.createElement('button');
+resetBtn.textContent = 'Reset to Default';
+resetBtn.style.cssText = `width:100%;background:${guiPrimaryColor};color:white;border:none;border-radius:6px;padding:10px;cursor:pointer;font-family:MinibloxFont,sans-serif;font-size:13px;letter-spacing:0.3px;margin-top:8px;`;
+resetBtn.addEventListener('click', () => {
+    armorHudOpacity = 1;
+    armorHudBgOpacity = 0.55;
+    armorHudIconSize = 0;
+    armorHudGap = 4;
+    localStorage.setItem('uv2-armorhud-opacity', '1');
+    localStorage.setItem('uv2-armorhud-bgopacity', '0.55');
+    localStorage.setItem('uv2-armorhud-iconsize', '0');
+    localStorage.setItem('uv2-armorhud-gap', '4');
+    localStorage.removeItem('uv2-armorhud-side');
+    if (armorHudEl) armorHudEl.style.opacity = 1;
+    if (armorHudDocked) armorHudRender();
+    buildArmorHudSettingsPage();
+});
+uv2ArmorHudPage.appendChild(resetBtn);
+  }
+
   function switchUv2Page(page) {
     uv2MainPage.style.display        = page === 'main'         ? 'flex' : 'none';
     uv2GUIPage.style.display         = page === 'gui'          ? 'flex' : 'none';
     uv2ConfigPage.style.display      = page === 'config'       ? 'flex' : 'none';
+    uv2ArmorHudPage.style.display    = page === 'armorhud'     ? 'flex' : 'none';
     uv2SettingsPage.style.display    = page === 'settings'     ? 'flex' : 'none';
     Object.entries(uv2NavEls).forEach(([p, el]) => {
       const active = p === page;
@@ -805,66 +998,11 @@ let guiTextColor = '#ffffff';
   const headerRow = document.createElement("div");
   headerRow.style.cssText = "display:flex;align-items:center;justify-content:center;margin-bottom:18px;padding-bottom:16px;border-bottom:1px solid rgba(255,255,255,0.07);position:relative;";
   uv2MainPage.appendChild(headerRow);
-    const moduleSearchWrap = document.createElement("div");
-moduleSearchWrap.style.cssText = "display:flex;align-items:center;gap:10px;margin-bottom:4px;padding:0 2px;";
-
-const moduleSearchInput = document.createElement("input");
-moduleSearchInput.type = "text";
-moduleSearchInput.placeholder = "Search modules...";
-moduleSearchInput.style.cssText = [
-  "flex:1;background:#111;color:#fff;border:1px solid rgba(255,255,255,0.1);",
-  "border-radius:7px;padding:9px 14px;font-size:13px;",
-  "font-family:MinibloxFont,sans-serif;outline:none;",
-  "transition:border-color 0.18s ease;"
-].join("");
-
-moduleSearchInput.addEventListener("focus", () => {
-  moduleSearchInput.style.borderColor = guiPrimaryColor;
-});
-moduleSearchInput.addEventListener("blur", () => {
-  moduleSearchInput.style.borderColor = "rgba(255,255,255,0.1)";
-});
-moduleSearchInput.addEventListener("input", () => {
-  const query = moduleSearchInput.value.trim().toLowerCase();
-  [...gridContainer.children].forEach(mc => {
-    if (!mc.dataset.moduleName) return;
-    const nameMatch = mc.dataset.moduleName.toLowerCase().includes(query);
-    const descEl = mc.querySelector("p");
-    const descMatch = descEl ? descEl.textContent.toLowerCase().includes(query) : false;
-    mc.style.display = (nameMatch || descMatch || query === "") ? "flex" : "none";
-  });
-});
-
-const moduleSearchClear = document.createElement("button");
-moduleSearchClear.textContent = "✕";
-moduleSearchClear.style.cssText = [
-  "background:#1a1a1a;color:#666;border:1px solid rgba(255,255,255,0.08);",
-  "border-radius:7px;padding:9px 12px;font-size:13px;cursor:pointer;",
-  "font-family:MinibloxFont,sans-serif;transition:all 0.15s ease;flex-shrink:0;"
-].join("");
-moduleSearchClear.addEventListener("mouseenter", () => {
-  moduleSearchClear.style.background = "#2a2a2a";
-  moduleSearchClear.style.color = "#fff";
-});
-moduleSearchClear.addEventListener("mouseleave", () => {
-  moduleSearchClear.style.background = "#1a1a1a";
-  moduleSearchClear.style.color = "#666";
-});
-moduleSearchClear.addEventListener("click", () => {
-  moduleSearchInput.value = "";
-  [...gridContainer.children].forEach(mc => {
-    mc.style.display = "flex";
-  });
-  moduleSearchInput.focus();
-});
-
-moduleSearchWrap.appendChild(moduleSearchInput);
-moduleSearchWrap.appendChild(moduleSearchClear);
-uv2MainPage.appendChild(moduleSearchWrap);
 
   const title = document.createElement("h2");
   title.textContent = "UnverifiedV2";
-  title.style.fontSize = "30px"; title.style.color = guiPrimaryColor;
+  title.classList.add('uv2-title-shine');
+  title.style.fontSize = "30px";
   title.style.fontFamily = 'MinibloxFont, sans-serif'; title.style.margin = "0";
   title.style.letterSpacing = "1px";
   title.style.textAlign = "center";
@@ -1197,6 +1335,7 @@ document.body.appendChild(settingsOverlay);
 
   buildGUIPage();
   buildConfigPage();
+  buildArmorHudSettingsPage();
   applyGUIStyles();
 
   switchUv2Page('main');
@@ -1482,6 +1621,34 @@ const MODULE_NAMES = { AUTO_FULLSCREEN: "Auto Fullscreen", KEYSTROKES: "Keystrok
   CHAT_FILTER: "Chat Filter", ANTI_AFK: "Anti-Afk", KEEP_SPRINT: "Keep Sprint", TIME_DISPLAY: "Time Display",
   ARMOR_HUD: "Armor HUD" };
 
+const moduleSearchWrap = document.createElement("div");
+moduleSearchWrap.style.cssText = "position:relative;margin-top:4px;";
+const moduleSearchInput = document.createElement("input");
+moduleSearchInput.type = "text";
+moduleSearchInput.id = "uv2-module-search";
+moduleSearchInput.placeholder = "Search modules...";
+moduleSearchInput.style.cssText = "width:100%;background:#161616;color:#fff;border:1px solid rgba(255,255,255,0.1);border-radius:8px;padding:10px 14px 10px 34px;font-size:13px;font-family:MinibloxFont,sans-serif;outline:none;box-sizing:border-box;transition:border-color 0.15s ease;";
+const moduleSearchIcon = document.createElement("i");
+moduleSearchIcon.className = "fa fa-search";
+moduleSearchIcon.style.cssText = "position:absolute;left:12px;top:50%;transform:translateY(-50%);color:#555;font-size:12px;pointer-events:none;";
+moduleSearchWrap.appendChild(moduleSearchIcon);
+moduleSearchWrap.appendChild(moduleSearchInput);
+uv2MainPage.appendChild(moduleSearchWrap);
+moduleSearchInput.addEventListener("focus", () => { moduleSearchInput.style.borderColor = guiPrimaryColor; });
+moduleSearchInput.addEventListener("blur", () => { moduleSearchInput.style.borderColor = "rgba(255,255,255,0.1)"; });
+moduleSearchInput.addEventListener("input", () => {
+  const q = moduleSearchInput.value.trim().toLowerCase();
+  [...gridContainer.children].forEach(mc => {
+    if (mc.classList.contains('uv2-fav-label')) {
+      mc.style.display = q ? "none" : "block";
+      return;
+    }
+    const name = (mc.dataset.moduleName || "").toLowerCase();
+    const desc = (mc.querySelector("p")?.textContent || "").toLowerCase();
+    mc.style.display = (!q || name.includes(q) || desc.includes(q)) ? "flex" : "none";
+  });
+});
+
 const gridContainer = document.createElement("div");
 gridContainer.style.display = "flex";
 gridContainer.style.flexDirection = "column";
@@ -1533,6 +1700,34 @@ function showBindPopup(moduleElement, moduleName) {
   popup.style.display = "block"; isBinding = true;
 }
 
+function sortModulesByFavorite() {
+  const children = [...gridContainer.children].filter(c => !c.classList.contains('uv2-fav-label'));
+  children.sort((a, b) => {
+    const favA = a.dataset.favorited === '1' ? 1 : 0;
+    const favB = b.dataset.favorited === '1' ? 1 : 0;
+    return favB - favA;
+  });
+  const favCount = children.filter(c => c.dataset.favorited === '1').length;
+  gridContainer.innerHTML = '';
+  if (favCount > 0 && favCount < children.length) {
+    const favLabel = document.createElement('div');
+    favLabel.className = 'uv2-fav-label';
+    favLabel.style.cssText = 'font-size:10px;color:#ffd700;text-transform:uppercase;letter-spacing:0.08em;margin:2px 0 2px 4px;';
+    favLabel.textContent = '★ Favorites';
+    gridContainer.appendChild(favLabel);
+  }
+  children.forEach((c, i) => {
+    if (favCount > 0 && favCount < children.length && i === favCount) {
+      const allLabel = document.createElement('div');
+      allLabel.className = 'uv2-fav-label';
+      allLabel.style.cssText = 'font-size:10px;color:#666;text-transform:uppercase;letter-spacing:0.08em;margin:10px 0 2px 4px;';
+      allLabel.textContent = 'All Modules';
+      gridContainer.appendChild(allLabel);
+    }
+    gridContainer.appendChild(c);
+  });
+}
+
 function createModule(name, description) {
   const moduleContainer = document.createElement("div");
   moduleContainer.style.cssText = [
@@ -1566,9 +1761,9 @@ function createModule(name, description) {
   }
 
   moduleContainer.addEventListener("mouseenter", () => {
-    runShineLoop();
+    if (moduleContainer.dataset.favorited !== '1') runShineLoop();
     if (!moduleContainer._uv2Active) moduleContainer.style.background = "linear-gradient(135deg,#2c2c2c,#222222)";
-  });
+});
   moduleContainer.addEventListener("mouseleave", () => {
     clearTimeout(shineAnim);
     shineAnim = null;
@@ -1576,6 +1771,32 @@ function createModule(name, description) {
     shine.style.left = "-100%";
     if (!moduleContainer._uv2Active) moduleContainer.style.background = "linear-gradient(135deg,#242424,#1c1c1c)";
   });
+
+  const favoriteKey = 'uv2-favorite-' + name;
+  let isFavorited = localStorage.getItem(favoriteKey) === 'true';
+
+  const favStrip = document.createElement("div");
+  favStrip.style.cssText = `position:absolute;top:0;left:0;width:3px;height:100%;background:#ffd700;box-shadow:0 0 8px rgba(255,215,0,0.6);display:${isFavorited ? 'block' : 'none'};pointer-events:none;`;
+  moduleContainer.appendChild(favStrip);
+
+  const favoriteBtn = document.createElement("div");
+  favoriteBtn.innerHTML = '<i class="fa fa-star"></i>';
+  favoriteBtn.title = "Favorite";
+  favoriteBtn.style.cssText = `font-size:13px;cursor:pointer;flex-shrink:0;margin-right:12px;color:${isFavorited ? '#ffd700' : '#3a3a3a'};text-shadow:${isFavorited ? '0 0 8px rgba(255,215,0,0.6)' : 'none'};transition:color 0.15s ease,transform 0.15s ease;position:relative;z-index:1;`;
+  favoriteBtn.addEventListener("mouseenter", () => { favoriteBtn.style.transform = "scale(1.2)"; });
+  favoriteBtn.addEventListener("mouseleave", () => { favoriteBtn.style.transform = "scale(1)"; });
+  favoriteBtn.addEventListener("click", e => {
+    e.stopPropagation();
+    isFavorited = !isFavorited;
+    localStorage.setItem(favoriteKey, isFavorited ? 'true' : 'false');
+    favoriteBtn.style.color = isFavorited ? '#ffd700' : '#3a3a3a';
+    favoriteBtn.style.textShadow = isFavorited ? '0 0 8px rgba(255,215,0,0.6)' : 'none';
+    favStrip.style.display = isFavorited ? 'block' : 'none';
+    moduleContainer.dataset.favorited = isFavorited ? '1' : '0';
+    sortModulesByFavorite();
+  });
+  moduleContainer.dataset.favorited = isFavorited ? '1' : '0';
+  moduleContainer.appendChild(favoriteBtn);
 
   const nameSection = document.createElement("div");
   nameSection.style.cssText = "min-width:155px;flex-shrink:0;display:flex;align-items:center;gap:9px;";
@@ -1654,24 +1875,26 @@ function createModule(name, description) {
 function updateLanguage() {
   title.textContent = translations[currentLanguage]?.title || "UnverifiedV2";
   closeButton.textContent = translations[currentLanguage]?.closeUI || "Close UI";
-  moduleSearchInput.placeholder = currentLanguage === "en" ? "Search modules..." :
-    currentLanguage === "es" ? "Buscar módulos..." :
-    currentLanguage === "fr" ? "Rechercher des modules..." :
-    currentLanguage === "nl" ? "Modules zoeken..." :
-    currentLanguage === "ru" ? "Poisk moduley..." :
-    "Search modules...";
-  const modules = gridContainer.children;
-  const moduleKeys = ['autoFullscreen','keystrokes','muteChat','chatFilter','antiAfk','keepSprint','timeDisplay','armorHud'];
-  for (let i = 0; i < modules.length; i++) {
-    const moduleTitle = modules[i].querySelector("span");
-    const moduleDesc = modules[i].querySelector("p");
-    const tooltip = modules[i].querySelector(".module-tooltip");
-    if (moduleTitle && moduleKeys[i]) {
-      moduleTitle.textContent = translations[currentLanguage]?.[moduleKeys[i]] || moduleKeys[i];
-      moduleDesc.textContent = translations[currentLanguage]?.[moduleKeys[i] + 'Desc'] || "";
-      tooltip.textContent = translations[currentLanguage]?.tooltipBind || "right-click to bind";
-    }
-  }
+  const nameToKey = {
+    [MODULE_NAMES.AUTO_FULLSCREEN]: 'autoFullscreen',
+    [MODULE_NAMES.KEYSTROKES]: 'keystrokes',
+    [MODULE_NAMES.MUTE_CHAT]: 'muteChat',
+    [MODULE_NAMES.CHAT_FILTER]: 'chatFilter',
+    [MODULE_NAMES.ANTI_AFK]: 'antiAfk',
+    [MODULE_NAMES.KEEP_SPRINT]: 'keepSprint',
+    [MODULE_NAMES.TIME_DISPLAY]: 'timeDisplay',
+    [MODULE_NAMES.ARMOR_HUD]: 'armorHud',
+  };
+  [...gridContainer.children].forEach(mc => {
+    const key = nameToKey[mc.dataset.moduleName];
+    if (!key) return;
+    const moduleTitle = mc.querySelector("span");
+    const moduleDesc = mc.querySelector("p");
+    const tooltip = mc.querySelector(".module-tooltip");
+    if (moduleTitle) moduleTitle.textContent = translations[currentLanguage]?.[key] || key;
+    if (moduleDesc) moduleDesc.textContent = translations[currentLanguage]?.[key + 'Desc'] || "";
+    if (tooltip) tooltip.textContent = translations[currentLanguage]?.tooltipBind || "right-click to bind";
+  });
 }
 
 const autoFullscreenModule = createModule(MODULE_NAMES.AUTO_FULLSCREEN, "Automatically toggles Fullscreen");
@@ -2008,6 +2231,88 @@ let armorHudInterval = null;
 let armorHudDrag = false;
 let armorHudOffX = 0;
 let armorHudOffY = 0;
+let armorHudDockCandidate = false;
+let armorHudDockIndicatorEl = null;
+let armorHudLastKnownSlotRect = null;
+const ARMOR_HUD_DOCK_THRESHOLD = 70;
+const ARMOR_HUD_BASE_STYLE = 'position:fixed;top:100px;right:20px;padding:10px 14px;background:rgba(0,0,0,0.6);backdrop-filter:blur(8px);border:1px solid rgba(255,255,255,0.15);border-radius:8px;z-index:9999;cursor:move;user-select:none;font-family:Segoe UI,Roboto,sans-serif;font-size:14px;color:white;min-width:220px;';
+
+function getOffhandSlotRect() {
+  const el = document.querySelector('.css-11sblg5');
+  if (el) {
+    armorHudLastKnownSlotRect = el.getBoundingClientRect();
+    return armorHudLastKnownSlotRect;
+  }
+  return armorHudLastKnownSlotRect;
+}
+
+function showArmorHudDockIndicator(slotRect) {
+  if (!armorHudDockIndicatorEl) {
+    armorHudDockIndicatorEl = document.createElement('div');
+    armorHudDockIndicatorEl.id = 'armor-hud-dock-indicator';
+    armorHudDockIndicatorEl.style.cssText = 'position:fixed;pointer-events:none;z-index:9998;border:2px solid #7fff00;border-radius:6px;background:rgba(127,255,0,0.15);box-shadow:0 0 12px rgba(127,255,0,0.6);';
+    document.body.appendChild(armorHudDockIndicatorEl);
+  }
+  const size = armorHudIconSize > 0 ? armorHudIconSize : Math.round(slotRect.height);
+  const dockedWidth = size * 4 + armorHudGap * 3;
+  armorHudDockIndicatorEl.style.width = dockedWidth + 'px';
+  armorHudDockIndicatorEl.style.height = size + 'px';
+  armorHudDockIndicatorEl.style.display = 'block';
+}
+
+function hideArmorHudDockIndicator() {
+  if (armorHudDockIndicatorEl) armorHudDockIndicatorEl.style.display = 'none';
+}
+
+function armorHudRenderDocked() {
+    const side = localStorage.getItem('uv2-armorhud-side') === 'left' ? 'left' : 'right';
+    const size = armorHudIconSize > 0 ? armorHudIconSize : 32;
+    const gap = armorHudGap;
+    const totalWidth = size * 4 + gap * 3;
+
+    armorHudEl.style.bottom = '60px';
+    armorHudEl.style.top = 'auto';
+    armorHudEl.style.cursor = 'default';
+    if (side === 'left') {
+    armorHudEl.style.left = '20px';
+    armorHudEl.style.right = 'auto';
+} else {
+    armorHudEl.style.right = '20px';
+    armorHudEl.style.left = 'auto';
+}
+    armorHudEl.style.width = totalWidth + 'px';
+    armorHudEl.style.minWidth = 'auto';
+    armorHudEl.style.height = size + 'px';
+    armorHudEl.style.padding = '0';
+    armorHudEl.style.background = 'transparent';
+    armorHudEl.style.border = 'none';
+    armorHudEl.style.backdropFilter = 'none';
+    armorHudEl.style.display = 'flex';
+    armorHudEl.style.gap = gap + 'px';
+    armorHudEl.style.opacity = armorHudOpacity;
+
+    const reactRoot = document.querySelector("#react");
+    const fiber = reactRoot ? Object.values(reactRoot)[0] : null;
+    const game = fiber?.updateQueue?.baseState?.element?.props?.game;
+    const armor = game?.player?.inventory?.armor;
+
+    let html = '';
+    for (let i = 0; i < 4; i++) {
+        const slot = armor ? armor[i] : null;
+        html += `<div style="width:${size}px;height:${size}px;background:rgba(0,0,0,${armorHudBgOpacity});border:1px solid rgba(255,255,255,0.2);border-radius:4px;position:relative;display:flex;align-items:center;justify-content:center;flex-shrink:0;">`;
+        if (slot) {
+            const damage = slot.itemDamage || 0;
+            const max = slot.item?.maxDurability;
+            const percent = max ? Math.round((1 - damage / max) * 100) : 100;
+            const color = armorHudColorForPercent(percent);
+            const iconStyle = armorHudGetIconStyle(slot.item?.name);
+            html += `<div style="${iconStyle}"></div>`;
+            html += `<div style="position:absolute;bottom:1px;right:2px;font-size:9px;font-weight:700;color:${color};text-shadow:0 0 3px rgba(0,0,0,0.9);">${percent}%</div>`;
+        }
+        html += `</div>`;
+    }
+    armorHudEl.innerHTML = html;
+}
 
 function armorHudClampToViewport() {
   if (!armorHudEl) return;
@@ -2036,6 +2341,12 @@ function armorHudRender() {
     return;
   }
 
+  if (armorHudDocked && !armorHudDrag) {
+    armorHudEl.style.display = 'flex';
+    armorHudRenderDocked();
+    return;
+  }
+
   const reactRoot = document.querySelector("#react");
   const fiber = reactRoot ? Object.values(reactRoot)[0] : null;
   const game = fiber?.updateQueue?.baseState?.element?.props?.game;
@@ -2047,6 +2358,7 @@ function armorHudRender() {
   }
 
   armorHudEl.style.display = 'block';
+  armorHudEl.style.opacity = armorHudOpacity;
 
   let html = `<div style="font-weight:600;margin-bottom:8px;letter-spacing:0.5px;color:${guiPrimaryColor};">Armor HUD</div>`;
 
@@ -2086,21 +2398,66 @@ function armorHudRender() {
   armorHudClampToViewport();
 }
 
+if (armorHudModule && armorHudModule._toggleWrap) {
+  const armorHudDockBtn = document.createElement('div');
+  armorHudDockBtn.id = 'armor-hud-dock-btn';
+  armorHudDockBtn.innerHTML = '<i class="fa fa-thumb-tack"></i>';
+  armorHudDockBtn.title = 'Dock next to offhand slot';
+  armorHudDockBtn.style.cssText = `font-size:14px;cursor:pointer;flex-shrink:0;margin-left:10px;color:${armorHudDocked ? guiPrimaryColor : '#666'};text-shadow:${armorHudDocked ? `0 0 8px ${guiPrimaryColor}80` : 'none'};transition:color 0.15s ease,text-shadow 0.15s ease,transform 0.15s ease;`;
+  armorHudDockBtn.addEventListener('mouseenter', () => { if (!armorHudDocked) armorHudDockBtn.style.color = guiPrimaryColor; armorHudDockBtn.style.transform = 'scale(1.15)'; });
+  armorHudDockBtn.addEventListener('mouseleave', () => { if (!armorHudDocked) armorHudDockBtn.style.color = '#666'; armorHudDockBtn.style.transform = 'scale(1)'; });
+  armorHudDockBtn.addEventListener('click', e => {
+    e.stopPropagation();
+    if (!armorHudEl) {
+      showNotification('Turn on Armor HUD first in game', false);
+      return;
+    }
+    if (armorHudDocked) {
+      const rect = armorHudEl.getBoundingClientRect();
+      armorHudDocked = false;
+      localStorage.setItem('uv2-armorhud-docked', 'false');
+      armorHudEl.style.cssText = ARMOR_HUD_BASE_STYLE;
+      armorHudEl.style.left = rect.left + 'px';
+      armorHudEl.style.top = rect.top + 'px';
+      armorHudEl.style.display = 'block';
+      armorHudDockBtn.style.color = '#666';
+      armorHudDockBtn.style.textShadow = 'none';
+    } else {
+    if (!isInMatch()) {
+        showNotification('Turn on Armor HUD in game', false);
+        return;
+    }
+    armorHudDocked = true;
+    localStorage.setItem('uv2-armorhud-docked', 'true');
+    armorHudRender();
+    armorHudDockBtn.style.color = guiPrimaryColor;
+    armorHudDockBtn.style.textShadow = `0 0 8px ${guiPrimaryColor}80`;
+}
+    const statusText = document.querySelector('#armor-hud-status-text');
+    const statusBtn = document.querySelector('#armor-hud-status-btn');
+    if (statusText) statusText.textContent = armorHudDocked ? 'Status: Docked next to offhand slot' : 'Status: Floating';
+    if (statusBtn) statusBtn.textContent = armorHudDocked ? 'Undock' : 'Dock Now';
+  });
+  armorHudModule.insertBefore(armorHudDockBtn, armorHudModule._toggleWrap);
+}
+
 if (armorHudModule) {
   armorHudModule.addEventListener("click", () => {
     isArmorHudActive = !isArmorHudActive;
     if (isArmorHudActive) {
       armorHudEl = document.createElement('div');
       armorHudEl.id = 'armor-hud';
-      armorHudEl.style.cssText = 'position:fixed;top:100px;right:20px;padding:10px 14px;background:rgba(0,0,0,0.6);backdrop-filter:blur(8px);border:1px solid rgba(255,255,255,0.15);border-radius:8px;z-index:9999;cursor:move;user-select:none;font-family:Segoe UI,Roboto,sans-serif;font-size:14px;color:white;min-width:220px;display:none;';
+      const _armorSide = localStorage.getItem('uv2-armorhud-side') === 'left' ? 'left:20px;right:auto;' : 'right:20px;left:auto;';
+      armorHudEl.style.cssText = 'position:fixed;top:100px;' + _armorSide + 'padding:10px 14px;background:rgba(0,0,0,0.6);backdrop-filter:blur(8px);border:1px solid rgba(255,255,255,0.15);border-radius:8px;z-index:9999;cursor:move;user-select:none;font-family:Segoe UI,Roboto,sans-serif;font-size:14px;color:white;min-width:220px;display:none;';
       document.body.appendChild(armorHudEl);
 
       armorHudEl.addEventListener('mousedown', e => {
-        armorHudDrag = true;
-        armorHudOffX = e.clientX - armorHudEl.getBoundingClientRect().left;
-        armorHudOffY = e.clientY - armorHudEl.getBoundingClientRect().top;
-        e.preventDefault();
-      });
+    if (armorHudDocked) return;
+    armorHudDrag = true;
+    armorHudOffX = e.clientX - armorHudEl.getBoundingClientRect().left;
+    armorHudOffY = e.clientY - armorHudEl.getBoundingClientRect().top;
+    e.preventDefault();
+});
 
       document.addEventListener('mousemove', e => {
         if (!armorHudDrag || !armorHudEl) return;
@@ -2119,11 +2476,28 @@ if (armorHudModule) {
         armorHudEl.style.left = left + 'px';
         armorHudEl.style.top = top + 'px';
         armorHudEl.style.right = 'auto';
+
+        const slotRect = isInMatch() ? getOffhandSlotRect() : null;
+        if (slotRect) {
+          const dx = (left + rect.width) - slotRect.left;
+          const dy = top - slotRect.top;
+          const dist = Math.sqrt(dx * dx + dy * dy);
+          if (dist < ARMOR_HUD_DOCK_THRESHOLD) {
+            armorHudDockCandidate = true;
+            showArmorHudDockIndicator(slotRect);
+          } else {
+            armorHudDockCandidate = false;
+            hideArmorHudDockIndicator();
+          }
+        } else {
+          armorHudDockCandidate = false;
+          hideArmorHudDockIndicator();
+        }
       });
 
       document.addEventListener('mouseup', () => {
-        armorHudDrag = false;
-      });
+    armorHudDrag = false;
+});
 
       window.addEventListener('resize', armorHudClampToViewport);
 
@@ -2132,9 +2506,13 @@ if (armorHudModule) {
     } else {
       if (armorHudInterval) clearInterval(armorHudInterval);
       if (armorHudEl) { armorHudEl.remove(); armorHudEl = null; }
+      if (armorHudDockIndicatorEl) { armorHudDockIndicatorEl.remove(); armorHudDockIndicatorEl = null; }
+      armorHudDockCandidate = false;
     }
   });
 }
+
+sortModulesByFavorite();
 
   const bottomRow = document.createElement("div");
   bottomRow.style.cssText = "display:flex;align-items:center;justify-content:center;gap:8px;margin-top:18px;";
@@ -2336,7 +2714,17 @@ if (armorHudModule) {
       localStorage.setItem('uv2-module-' + savedName, mc._uv2Active ? 'true' : 'false');
     });
   }
-  setTimeout(restoreModuleStates, 3400);
+  function waitAndRestoreModuleStates() {
+    let attempts = 0;
+    const poll = setInterval(() => {
+      attempts++;
+      if (getGameChat() || attempts >= 40) {
+        clearInterval(poll);
+        restoreModuleStates();
+      }
+    }, 500);
+  }
+  waitAndRestoreModuleStates();
 
   let afkTriggered = false;
   let afkAntiAfkWasOff = false;
