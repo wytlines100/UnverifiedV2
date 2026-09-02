@@ -1,6 +1,6 @@
 # UnverifiedV2
 
-A custom userscript client for [Miniblox](https://miniblox.io), actively developed since October 2024.
+A custom utility client for [Miniblox](https://miniblox.io), actively developed since October 2024.
 
 ## Requirements
 
