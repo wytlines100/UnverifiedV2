@@ -1,7 +1,7 @@
 // ==UserScript==
 // @name         Unverified V2
 // @namespace    http://tampermonkey.net/
-// @version      2.2.2
+// @version      2.23
 // @description  Look at my license before you modify, I WILL DMCA you.
 // @icon         https://raw.githubusercontent.com/wytlines100/UnverifiedV2/refs/heads/main/logo.jpg
 // @license      Proprietary License
@@ -429,7 +429,7 @@ class UnverifiedBackground {
     "font-size:9px;color:#333;letter-spacing:1.5px;text-transform:uppercase;",
     "font-family:MinibloxFont,sans-serif;text-align:center;"
   ].join("");
-  uv2SidebarFooter.textContent = "v2.2.2";
+  uv2SidebarFooter.textContent = "v2.23";
   uv2Sidebar.appendChild(uv2SidebarFooter);
 
   ui.appendChild(uv2Sidebar);
@@ -1042,7 +1042,7 @@ settingsOverlay.innerHTML = `
         </div>
         <div class="uv2-settings-page" id="uv2-page-about">
           <div class="uv2-section-title">Info</div>
-          <div class="uv2-setting-row"><div><div class="uv2-setting-label">Version</div><div class="uv2-setting-desc">2.2.2</div></div></div>
+          <div class="uv2-setting-row"><div><div class="uv2-setting-label">Version</div><div class="uv2-setting-desc">2.23</div></div></div>
           <div class="uv2-setting-row"><div><div class="uv2-setting-label">License</div><div class="uv2-setting-desc">Proprietary, do not redistribute</div></div></div>
           <div class="uv2-section-title" style="margin-top:16px;">Contributors</div>
           <div id="uv2-contributors-grid"></div>
