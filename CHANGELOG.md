@@ -34,3 +34,8 @@
 - Added config save/load via JSON
 - Added multi-language support (English, Spanish)
 - Added profile avatar system
+
+## 1.0 
+- Base Client
+- Keystrokes, FPS, CPS added etc
+- Minimal UI with themes
