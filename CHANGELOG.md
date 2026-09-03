@@ -3,7 +3,7 @@
 ## 2.23 - Version Bump
 - Version bumped from 2.2.2 -> 2.23
 - Collab with Mini Feather Coming soon!
-- Github version/Changelog syncing added
+- Github version/Changelog syncing will be added!
 
 ## 2.2.2 — Shine / Music Player Update
 - Added shine animation effect to module cards
