@@ -1,5 +1,10 @@
 # Changelog
 
+## 2.23 - Version Bump
+- Version bumped from 2.2.2 -> 2.23
+- Collab with Mini Feather Coming soon!
+- Github version/Changelog syncing added
+
 ## 2.2.2 — Shine / Music Player Update
 - Added shine animation effect to module cards
 - Moved Music Player out of `client.js` into a separate `MusicPlayer.js`
