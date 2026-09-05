@@ -1,7 +1,7 @@
 // ==UserScript==
 // @name         Unverified V2
 // @namespace    http://tampermonkey.net/
-// @version      2.23
+// @version      2.3
 // @description  Look at my license before you modify, I WILL DMCA you.
 // @icon         https://raw.githubusercontent.com/wytlines100/UnverifiedV2/refs/heads/main/logo.jpg
 // @license      Proprietary License
@@ -429,7 +429,7 @@ class UnverifiedBackground {
     "font-size:9px;color:#333;letter-spacing:1.5px;text-transform:uppercase;",
     "font-family:MinibloxFont,sans-serif;text-align:center;"
   ].join("");
-  uv2SidebarFooter.textContent = "v2.23";
+  uv2SidebarFooter.textContent = "v2.3";
   uv2Sidebar.appendChild(uv2SidebarFooter);
 
   ui.appendChild(uv2Sidebar);
@@ -879,50 +879,6 @@ let armorHudGap = parseInt(localStorage.getItem('uv2-armorhud-gap') || '4', 10);
     if (armorHudDocked) armorHudRender();
   });
 
-  const posLabel = document.createElement('div');
-  posLabel.className = 'uv2-section-title';
-  posLabel.textContent = 'Position';
-  posLabel.style.cssText = 'font-size:10px;text-transform:uppercase;letter-spacing:0.1em;color:#555;margin:10px 0 8px;padding-left:4px;';
-  container.appendChild(posLabel);
-
-  const sideToggleRow = document.createElement('div');
-  sideToggleRow.style.cssText = 'display:flex;gap:8px;margin-bottom:12px;';
-
-  const leftBtn = document.createElement('button');
-  leftBtn.textContent = 'Left';
-  const rightBtn = document.createElement('button');
-  rightBtn.textContent = 'Right';
-
-  const currentSide = localStorage.getItem('uv2-armorhud-side') === 'left' ? 'left' : 'right';
-
-  function sideButtonStyle(active) {
-    return `flex:1;padding:10px;border-radius:6px;border:none;cursor:pointer;font-family:MinibloxFont,sans-serif;font-size:13px;transition:all 0.15s ease;background:${active ? guiPrimaryColor : '#2a2a2a'};color:${active ? '#fff' : '#888'};`;
-  }
-
-  leftBtn.style.cssText = sideButtonStyle(currentSide === 'left');
-  rightBtn.style.cssText = sideButtonStyle(currentSide === 'right');
-
-  function applySide(side) {
-    localStorage.setItem('uv2-armorhud-side', side);
-    leftBtn.style.cssText = sideButtonStyle(side === 'left');
-    rightBtn.style.cssText = sideButtonStyle(side === 'right');
-    if (armorHudEl && !armorHudDocked) {
-      if (side === 'left') {
-        armorHudEl.style.right = 'auto';
-        armorHudEl.style.left = '20px';
-      } else {
-        armorHudEl.style.left = 'auto';
-        armorHudEl.style.right = '20px';
-      }
-    }
-  }
-
-  leftBtn.addEventListener('click', () => applySide('left'));
-  rightBtn.addEventListener('click', () => applySide('right'));
-  sideToggleRow.appendChild(leftBtn);
-  sideToggleRow.appendChild(rightBtn);
-  container.appendChild(sideToggleRow);
-
   const resetBtn = document.createElement('button');
   resetBtn.textContent = 'Reset to Default';
   resetBtn.style.cssText = `width:100%;background:${guiPrimaryColor};color:white;border:none;border-radius:6px;padding:10px;cursor:pointer;font-family:MinibloxFont,sans-serif;font-size:13px;letter-spacing:0.3px;`;
@@ -1037,7 +993,7 @@ settingsOverlay.innerHTML = `
         </div>
         <div class="uv2-settings-page" id="uv2-page-about">
           <div class="uv2-section-title">Info</div>
-          <div class="uv2-setting-row"><div><div class="uv2-setting-label">Version</div><div class="uv2-setting-desc">2.23</div></div></div>
+          <div class="uv2-setting-row"><div><div class="uv2-setting-label">Version</div><div class="uv2-setting-desc">2.3</div></div></div>
           <div class="uv2-setting-row"><div><div class="uv2-setting-label">License</div><div class="uv2-setting-desc">Proprietary, do not redistribute</div></div></div>
           <div class="uv2-section-title" style="margin-top:16px;">Contributors</div>
           <div id="uv2-contributors-grid"></div>
@@ -2110,7 +2066,6 @@ function armorHudFormatEnchantName(rawName) {
 function armorHudGetEnchantLabels(slot) {
   const list = slot.data?.ench;
   if (!list || !list.length || !unsafeWindow.Enchantment) return [];
-
   return list.map(e => {
     const def = unsafeWindow.Enchantment.getEnchantmentById(e.id);
     const rawName = def?.name;
@@ -2127,19 +2082,15 @@ function armorHudGetEnchantLabels(slot) {
 function armorHudGetIconStyle(itemName) {
   const spriteMap = unsafeWindow.spriteMap;
   if (!spriteMap || !spriteMap.get) return '';
-
   const sprite = spriteMap.get(itemName);
   if (!sprite) return '';
-
   const pixelX = sprite.x * sprite.size;
   const pixelY = sprite.y * sprite.size;
-
   const scale = ARMOR_ICON_DISPLAY_SIZE / ARMOR_ICON_TILE_SIZE;
   const bgWidth = ARMOR_SPRITESHEET_SIZE * scale;
   const bgHeight = ARMOR_SPRITESHEET_SIZE * scale;
   const posX = -pixelX * scale;
   const posY = -pixelY * scale;
-
   return `width:${ARMOR_ICON_DISPLAY_SIZE}px;height:${ARMOR_ICON_DISPLAY_SIZE}px;background-image:url('${ARMOR_SPRITESHEET_URL}');background-position:${posX}px ${posY}px;background-size:${bgWidth}px ${bgHeight}px;image-rendering:pixelated;flex-shrink:0;`;
 }
 
@@ -2151,106 +2102,49 @@ let armorHudInterval = null;
 let armorHudDrag = false;
 let armorHudOffX = 0;
 let armorHudOffY = 0;
-let armorHudDockCandidate = false;
-let armorHudDockIndicatorEl = null;
-let armorHudLastKnownSlotRect = null;
-const ARMOR_HUD_DOCK_THRESHOLD = 70;
-const ARMOR_HUD_BASE_STYLE = 'position:fixed;top:100px;right:20px;padding:10px 14px;background:rgba(0,0,0,0.6);backdrop-filter:blur(8px);border:1px solid rgba(255,255,255,0.15);border-radius:8px;z-index:9999;cursor:move;user-select:none;font-family:Segoe UI,Roboto,sans-serif;font-size:14px;color:white;min-width:220px;';
-
-function getOffhandSlotRect() {
-  const el = document.querySelector('.css-11sblg5');
-  if (el) {
-    armorHudLastKnownSlotRect = el.getBoundingClientRect();
-    return armorHudLastKnownSlotRect;
-  }
-  return armorHudLastKnownSlotRect;
-}
-
-function showArmorHudDockIndicator(slotRect) {
-  if (!armorHudDockIndicatorEl) {
-    armorHudDockIndicatorEl = document.createElement('div');
-    armorHudDockIndicatorEl.id = 'armor-hud-dock-indicator';
-    armorHudDockIndicatorEl.style.cssText = 'position:fixed;pointer-events:none;z-index:9998;border:2px solid #7fff00;border-radius:6px;background:rgba(127,255,0,0.15);box-shadow:0 0 12px rgba(127,255,0,0.6);';
-    document.body.appendChild(armorHudDockIndicatorEl);
-  }
-  const size = armorHudIconSize > 0 ? armorHudIconSize : Math.round(slotRect.height);
-  const dockedWidth = size * 4 + armorHudGap * 3;
-  armorHudDockIndicatorEl.style.width = dockedWidth + 'px';
-  armorHudDockIndicatorEl.style.height = size + 'px';
-  armorHudDockIndicatorEl.style.display = 'block';
-}
-
-function hideArmorHudDockIndicator() {
-  if (armorHudDockIndicatorEl) armorHudDockIndicatorEl.style.display = 'none';
-}
 
 function armorHudRenderDocked() {
-    const side = localStorage.getItem('uv2-armorhud-side') === 'left' ? 'left' : 'right';
-    const size = armorHudIconSize > 0 ? armorHudIconSize : 32;
-    const gap = armorHudGap;
-    const totalWidth = size * 4 + gap * 3;
+  const size = armorHudIconSize > 0 ? armorHudIconSize : 32;
+  const gap = armorHudGap;
+  const totalWidth = size * 4 + gap * 3;
 
-    armorHudEl.style.bottom = '60px';
-    armorHudEl.style.top = 'auto';
-    armorHudEl.style.cursor = 'default';
-    if (side === 'left') {
-    armorHudEl.style.left = '20px';
-    armorHudEl.style.right = 'auto';
-} else {
-    armorHudEl.style.right = '20px';
-    armorHudEl.style.left = 'auto';
-}
-    armorHudEl.style.width = totalWidth + 'px';
-    armorHudEl.style.minWidth = 'auto';
-    armorHudEl.style.height = size + 'px';
-    armorHudEl.style.padding = '0';
-    armorHudEl.style.background = 'transparent';
-    armorHudEl.style.border = 'none';
-    armorHudEl.style.backdropFilter = 'none';
-    armorHudEl.style.display = 'flex';
-    armorHudEl.style.gap = gap + 'px';
-    armorHudEl.style.opacity = armorHudOpacity;
+  armorHudEl.style.bottom = '90px';
+  armorHudEl.style.top = 'auto';
+  armorHudEl.style.right = '20px';
+  armorHudEl.style.left = 'auto';
+  armorHudEl.style.cursor = 'default';
+  armorHudEl.style.width = totalWidth + 'px';
+  armorHudEl.style.minWidth = 'auto';
+  armorHudEl.style.height = size + 'px';
+  armorHudEl.style.padding = '0';
+  armorHudEl.style.background = 'transparent';
+  armorHudEl.style.border = 'none';
+  armorHudEl.style.backdropFilter = 'none';
+  armorHudEl.style.display = 'flex';
+  armorHudEl.style.gap = gap + 'px';
+  armorHudEl.style.opacity = armorHudOpacity;
 
-    const reactRoot = document.querySelector("#react");
-    const fiber = reactRoot ? Object.values(reactRoot)[0] : null;
-    const game = fiber?.updateQueue?.baseState?.element?.props?.game;
-    const armor = game?.player?.inventory?.armor;
+  const reactRoot = document.querySelector("#react");
+  const fiber = reactRoot ? Object.values(reactRoot)[0] : null;
+  const game = fiber?.updateQueue?.baseState?.element?.props?.game;
+  const armor = game?.player?.inventory?.armor;
 
-    let html = '';
-    for (let i = 0; i < 4; i++) {
-        const slot = armor ? armor[i] : null;
-        html += `<div style="width:${size}px;height:${size}px;background:rgba(0,0,0,${armorHudBgOpacity});border:1px solid rgba(255,255,255,0.2);border-radius:4px;position:relative;display:flex;align-items:center;justify-content:center;flex-shrink:0;">`;
-        if (slot) {
-            const damage = slot.itemDamage || 0;
-            const max = slot.item?.maxDurability;
-            const percent = max ? Math.round((1 - damage / max) * 100) : 100;
-            const color = armorHudColorForPercent(percent);
-            const iconStyle = armorHudGetIconStyle(slot.item?.name);
-            html += `<div style="${iconStyle}"></div>`;
-            html += `<div style="position:absolute;bottom:1px;right:2px;font-size:9px;font-weight:700;color:${color};text-shadow:0 0 3px rgba(0,0,0,0.9);">${percent}%</div>`;
-        }
-        html += `</div>`;
+  let html = '';
+  for (let i = 0; i < 4; i++) {
+    const slot = armor ? armor[i] : null;
+    html += `<div style="width:${size}px;height:${size}px;background:rgba(0,0,0,${armorHudBgOpacity});border:1px solid rgba(255,255,255,0.2);border-radius:4px;position:relative;display:flex;align-items:center;justify-content:center;flex-shrink:0;">`;
+    if (slot) {
+      const damage = slot.itemDamage || 0;
+      const max = slot.item?.maxDurability;
+      const percent = max ? Math.round((1 - damage / max) * 100) : 100;
+      const color = armorHudColorForPercent(percent);
+      const iconStyle = armorHudGetIconStyle(slot.item?.name);
+      html += `<div style="${iconStyle}"></div>`;
+      html += `<div style="position:absolute;bottom:1px;right:2px;font-size:9px;font-weight:700;color:${color};text-shadow:0 0 3px rgba(0,0,0,0.9);">${percent}%</div>`;
     }
-    armorHudEl.innerHTML = html;
-}
-
-function armorHudClampToViewport() {
-  if (!armorHudEl) return;
-  const rect = armorHudEl.getBoundingClientRect();
-  let left = rect.left;
-  let top = rect.top;
-
-  const maxLeft = window.innerWidth - rect.width;
-  const maxTop = window.innerHeight - rect.height;
-
-  if (left < 0) left = 0;
-  if (top < 0) top = 0;
-  if (left > maxLeft) left = maxLeft;
-  if (top > maxTop) top = maxTop;
-
-  armorHudEl.style.left = left + 'px';
-  armorHudEl.style.top = top + 'px';
-  armorHudEl.style.right = 'auto';
+    html += `</div>`;
+  }
+  armorHudEl.innerHTML = html;
 }
 
 function armorHudRender() {
@@ -2315,14 +2209,13 @@ function armorHudRender() {
   }
 
   armorHudEl.innerHTML = html;
-  armorHudClampToViewport();
 }
 
 if (armorHudModule && armorHudModule._toggleWrap) {
   const armorHudDockBtn = document.createElement('div');
   armorHudDockBtn.id = 'armor-hud-dock-btn';
   armorHudDockBtn.innerHTML = '<i class="fa fa-thumb-tack"></i>';
-  armorHudDockBtn.title = 'Dock next to offhand slot';
+  armorHudDockBtn.title = 'Dock to bottom-right';
   armorHudDockBtn.style.cssText = `font-size:14px;cursor:pointer;flex-shrink:0;margin-left:10px;color:${armorHudDocked ? guiPrimaryColor : '#666'};text-shadow:${armorHudDocked ? `0 0 8px ${guiPrimaryColor}80` : 'none'};transition:color 0.15s ease,text-shadow 0.15s ease,transform 0.15s ease;`;
   armorHudDockBtn.addEventListener('mouseenter', () => { if (!armorHudDocked) armorHudDockBtn.style.color = guiPrimaryColor; armorHudDockBtn.style.transform = 'scale(1.15)'; });
   armorHudDockBtn.addEventListener('mouseleave', () => { if (!armorHudDocked) armorHudDockBtn.style.color = '#666'; armorHudDockBtn.style.transform = 'scale(1)'; });
@@ -2333,29 +2226,26 @@ if (armorHudModule && armorHudModule._toggleWrap) {
       return;
     }
     if (armorHudDocked) {
-      const rect = armorHudEl.getBoundingClientRect();
       armorHudDocked = false;
       localStorage.setItem('uv2-armorhud-docked', 'false');
-      armorHudEl.style.cssText = ARMOR_HUD_BASE_STYLE;
-      armorHudEl.style.left = rect.left + 'px';
-      armorHudEl.style.top = rect.top + 'px';
+      armorHudEl.style.cssText = 'position:fixed;top:100px;right:20px;left:auto;padding:10px 14px;background:rgba(0,0,0,0.6);backdrop-filter:blur(8px);border:1px solid rgba(255,255,255,0.15);border-radius:8px;z-index:9999;cursor:move;user-select:none;font-family:Segoe UI,Roboto,sans-serif;font-size:14px;color:white;min-width:220px;';
       armorHudEl.style.display = 'block';
       armorHudDockBtn.style.color = '#666';
       armorHudDockBtn.style.textShadow = 'none';
     } else {
-    if (!isInMatch()) {
+      if (!isInMatch()) {
         showNotification('Turn on Armor HUD in game', false);
         return;
+      }
+      armorHudDocked = true;
+      localStorage.setItem('uv2-armorhud-docked', 'true');
+      armorHudRender();
+      armorHudDockBtn.style.color = guiPrimaryColor;
+      armorHudDockBtn.style.textShadow = `0 0 8px ${guiPrimaryColor}80`;
     }
-    armorHudDocked = true;
-    localStorage.setItem('uv2-armorhud-docked', 'true');
-    armorHudRender();
-    armorHudDockBtn.style.color = guiPrimaryColor;
-    armorHudDockBtn.style.textShadow = `0 0 8px ${guiPrimaryColor}80`;
-}
     const statusText = document.querySelector('#armor-hud-status-text');
     const statusBtn = document.querySelector('#armor-hud-status-btn');
-    if (statusText) statusText.textContent = armorHudDocked ? 'Status: Docked next to offhand slot' : 'Status: Floating';
+    if (statusText) statusText.textContent = armorHudDocked ? 'Status: Docked' : 'Status: Floating';
     if (statusBtn) statusBtn.textContent = armorHudDocked ? 'Undock' : 'Dock Now';
   });
   armorHudModule.insertBefore(armorHudDockBtn, armorHudModule._toggleWrap);
@@ -2367,71 +2257,45 @@ if (armorHudModule) {
     if (isArmorHudActive) {
       armorHudEl = document.createElement('div');
       armorHudEl.id = 'armor-hud';
-      const _armorSide = localStorage.getItem('uv2-armorhud-side') === 'left' ? 'left:20px;right:auto;' : 'right:20px;left:auto;';
-      armorHudEl.style.cssText = 'position:fixed;top:100px;' + _armorSide + 'padding:10px 14px;background:rgba(0,0,0,0.6);backdrop-filter:blur(8px);border:1px solid rgba(255,255,255,0.15);border-radius:8px;z-index:9999;cursor:move;user-select:none;font-family:Segoe UI,Roboto,sans-serif;font-size:14px;color:white;min-width:220px;display:none;';
+      armorHudEl.style.cssText = 'position:fixed;top:100px;right:20px;left:auto;padding:10px 14px;background:rgba(0,0,0,0.6);backdrop-filter:blur(8px);border:1px solid rgba(255,255,255,0.15);border-radius:8px;z-index:9999;cursor:move;user-select:none;font-family:Segoe UI,Roboto,sans-serif;font-size:14px;color:white;min-width:220px;display:none;';
       document.body.appendChild(armorHudEl);
 
       armorHudEl.addEventListener('mousedown', e => {
-    if (armorHudDocked) return;
-    armorHudDrag = true;
-    armorHudOffX = e.clientX - armorHudEl.getBoundingClientRect().left;
-    armorHudOffY = e.clientY - armorHudEl.getBoundingClientRect().top;
-    e.preventDefault();
-});
+        if (armorHudDocked) return;
+        armorHudDrag = true;
+        armorHudOffX = e.clientX - armorHudEl.getBoundingClientRect().left;
+        armorHudOffY = e.clientY - armorHudEl.getBoundingClientRect().top;
+        e.preventDefault();
+      });
 
       document.addEventListener('mousemove', e => {
         if (!armorHudDrag || !armorHudEl) return;
+        const rect = armorHudEl.getBoundingClientRect();
         let left = e.clientX - armorHudOffX;
         let top = e.clientY - armorHudOffY;
-
-        const rect = armorHudEl.getBoundingClientRect();
         const maxLeft = window.innerWidth - rect.width;
         const maxTop = window.innerHeight - rect.height;
-
         if (left < 0) left = 0;
         if (top < 0) top = 0;
         if (left > maxLeft) left = maxLeft;
         if (top > maxTop) top = maxTop;
-
         armorHudEl.style.left = left + 'px';
         armorHudEl.style.top = top + 'px';
         armorHudEl.style.right = 'auto';
-
-        const slotRect = isInMatch() ? getOffhandSlotRect() : null;
-        if (slotRect) {
-          const dx = (left + rect.width) - slotRect.left;
-          const dy = top - slotRect.top;
-          const dist = Math.sqrt(dx * dx + dy * dy);
-          if (dist < ARMOR_HUD_DOCK_THRESHOLD) {
-            armorHudDockCandidate = true;
-            showArmorHudDockIndicator(slotRect);
-          } else {
-            armorHudDockCandidate = false;
-            hideArmorHudDockIndicator();
-          }
-        } else {
-          armorHudDockCandidate = false;
-          hideArmorHudDockIndicator();
-        }
       });
 
       document.addEventListener('mouseup', () => {
-    armorHudDrag = false;
-});
-
-      window.addEventListener('resize', armorHudClampToViewport);
+        armorHudDrag = false;
+      });
 
       armorHudInterval = setInterval(armorHudRender, 500);
       armorHudRender();
     } else {
       if (armorHudInterval) clearInterval(armorHudInterval);
       if (armorHudEl) { armorHudEl.remove(); armorHudEl = null; }
-      if (armorHudDockIndicatorEl) { armorHudDockIndicatorEl.remove(); armorHudDockIndicatorEl = null; }
-      armorHudDockCandidate = false;
     }
   });
 }
-
 sortModulesByFavorite();
 
   const bottomRow = document.createElement("div");
