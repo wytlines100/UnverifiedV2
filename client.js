@@ -647,11 +647,10 @@ let armorHudGap = parseInt(localStorage.getItem('uv2-armorhud-gap') || '4', 10);
         const config = {
           version: '2.39',
           gui: {
-            themeId: activeThemeId,
-            primaryColor: guiPrimaryColor,
-            backgroundColor: guiBackgroundColor,
-            textColor: guiTextColor,
-          },
+  primaryColor: guiPrimaryColor,
+  backgroundColor: guiBackgroundColor,
+  textColor: guiTextColor,
+},
           settings: {
             moduleSounds: settings.moduleSounds,
             showNotifications: settings.showNotifications,
@@ -696,25 +695,21 @@ let armorHudGap = parseInt(localStorage.getItem('uv2-armorhud-gap') || '4', 10);
             const config = JSON.parse(event.target.result);
 
             if (config.gui) {
-              if (config.gui.themeId) {
-                applyTheme(config.gui.themeId);
-              } else {
-                if (config.gui.primaryColor) {
-                  guiPrimaryColor = config.gui.primaryColor;
-                  localStorage.setItem('uv2-gui-primary-color', guiPrimaryColor);
-                }
-                if (config.gui.backgroundColor) {
-                  guiBackgroundColor = config.gui.backgroundColor;
-                  localStorage.setItem('uv2-gui-bg-color', guiBackgroundColor);
-                }
-                if (config.gui.textColor) {
-                  guiTextColor = config.gui.textColor;
-                  localStorage.setItem('uv2-gui-text-color', guiTextColor);
-                }
-                applyGUIStyles();
-                buildGUIPage();
-              }
-            }
+  if (config.gui.primaryColor) {
+    guiPrimaryColor = config.gui.primaryColor;
+    localStorage.setItem('uv2-gui-primary-color', guiPrimaryColor);
+  }
+  if (config.gui.backgroundColor) {
+    guiBackgroundColor = config.gui.backgroundColor;
+    localStorage.setItem('uv2-gui-bg-color', guiBackgroundColor);
+  }
+  if (config.gui.textColor) {
+    guiTextColor = config.gui.textColor;
+    localStorage.setItem('uv2-gui-text-color', guiTextColor);
+  }
+  applyGUIStyles();
+  buildGUIPage();
+}
 
             if (config.settings) {
               if (typeof config.settings.moduleSounds === 'boolean') {
