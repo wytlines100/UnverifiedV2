@@ -60,12 +60,11 @@ A custom utility client for [Miniblox](https://miniblox.io), actively developed 
 
 ### Armor HUD (Advanced)
 - **Floating Mode** — Draggable overlay showing all four armor slots with icons, durability percentages, and enchantment abbreviations
-- **Docked Mode** — Snaps the HUD to a compact icon strip anchored to the bottom of the screen on either the left or right side
+- **Docked Mode** — Snaps the HUD to a compact icon strip anchored to the bottom-right of the screen
 - **Icon Opacity** — Adjustable overall opacity for the HUD
 - **Background Opacity** — Adjustable background fill opacity per slot in docked mode
 - **Icon Size** — Fixed or auto-sized slot icons
 - **Spacing** — Configurable gap between slots in docked mode
-- **Side** — Choose left or right screen edge for docked placement
 - All Armor HUD settings are accessible from the Settings panel
 
 ### Security
