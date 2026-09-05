@@ -1,5 +1,11 @@
 # Changelog
 
+## 2.3 — Armor HUD Rework
+- Armor HUD dock is now fixed to the right side only
+- Removed `ARMOR_HUD_DOCK_THRESHOLD`, `ARMOR_HUD_BASE_STYLE`, `armorHudDockCandidate`, `armorHudDockIndicatorEl`, `armorHudLastKnownSlotRect`, `getOffhandSlotRect`, `showArmorHudDockIndicator`, `hideArmorHudDockIndicator`, `armorHudClampToViewport`
+- Removed `_armorSide` variables and associated side-selection logic
+- Removed `window.addEventListener('resize', ...)` handler tied to HUD repositioning
+
 ## 2.23 - Version Bump
 - Version bumped from 2.2.2 -> 2.23
 - Collab with Mini Feather Coming soon!
@@ -40,7 +46,7 @@
 - Added multi-language support (English, Spanish)
 - Added profile avatar system
 
-## 1.0 
+## 1.0
 - Base Client
 - Keystrokes, FPS, CPS added etc
 - Minimal UI with themes
