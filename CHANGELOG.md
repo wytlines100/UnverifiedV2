@@ -2,9 +2,10 @@
 
 ## 2.3 — Armor HUD Rework
 - Armor HUD dock is now fixed to the right side only
-- Removed `ARMOR_HUD_DOCK_THRESHOLD`, `ARMOR_HUD_BASE_STYLE`, `armorHudDockCandidate`, `armorHudDockIndicatorEl`, `armorHudLastKnownSlotRect`, `getOffhandSlotRect`, `showArmorHudDockIndicator`, `hideArmorHudDockIndicator`, `armorHudClampToViewport`
+- Removed 9 unused variables
 - Removed `_armorSide` variables and associated side-selection logic
 - Removed `window.addEventListener('resize', ...)` handler tied to HUD repositioning
+- Dropped language support for Russian and Dutch.
 
 ## 2.23 - Version Bump
 - Version bumped from 2.2.2 -> 2.23
