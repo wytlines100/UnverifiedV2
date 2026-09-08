@@ -12,7 +12,7 @@
 // @connect      ip-api.com
 // ==/UserScript==
 
-document.title = 'UnverifiedV2';
+document.title = 'Unverified V2';
 
 class UnverifiedIntro {
   constructor() {
@@ -42,7 +42,7 @@ class UnverifiedIntro {
     this.circle.appendChild(this.check);
     this.container.appendChild(this.circle);
     this.unverifiedText = document.createElement("div");
-    this.unverifiedText.textContent = "UnverifiedV2";
+    this.unverifiedText.textContent = "Unverified V2";
     Object.assign(this.unverifiedText.style, {
       color: "red", fontSize: "60px", opacity: 0, marginTop: "50px",
       transition: "opacity 1.1s ease",
@@ -73,7 +73,7 @@ class UnverifiedIntro {
   showInitializedNotif() {
     const n = document.createElement("div");
     n.classList.add('initialized-notification');
-    n.textContent = "UnverifiedV2 Initialized!";
+    n.textContent = "Unverified V2 Initialized!";
     document.body.appendChild(n);
     setTimeout(() => { n.style.top = "10px"; n.style.opacity = "1"; }, 10);
     setTimeout(() => { n.style.top = "-50px"; n.style.opacity = "0"; }, 3200);
@@ -94,7 +94,7 @@ class UnverifiedIntro {
         const game = fiber?.updateQueue?.baseState?.element?.props?.game;
         if (game) this._game = game;
         return game;
-      } catch (e) { console.warn("[UnverifiedV2] Failed to get game object:", e); return null; }
+      } catch (e) { console.warn("[Unverified V2] Failed to get game object:", e); return null; }
     }
   };
   const waitForGame = setInterval(() => {
@@ -102,7 +102,7 @@ class UnverifiedIntro {
     if (game && game.chat && typeof game.chat.addChat === "function") {
       clearInterval(waitForGame);
       game.chat.addChat({
-        text: "\\glow\\\\shiny\\\\#BF3011\\[Unverified Client]:\\reset\\ Hello, thanks for using Unverified Client! Please join our discord for updates/community support!"
+        text: "\\glow\\\\shiny\\\\#BF3011\\[Unverified V2]:\\reset\\ Hello, thanks for using Unverified V2! Please join our discord for updates/community support!"
       });
     }
   }, 500);
@@ -400,7 +400,6 @@ class UnverifiedBackground {
   const uv2NavEls = {};
   const uv2SidebarNav = document.createElement("div");
   uv2SidebarNav.style.cssText = "display:flex;flex-direction:column;padding:8px 0;flex:1;";
-
   uv2NavDefs.forEach(def => {
     const el = document.createElement("div");
     el.dataset.page = def.page;
@@ -422,7 +421,6 @@ class UnverifiedBackground {
   });
   uv2Sidebar.appendChild(uv2SidebarNav);
 
-
   const uv2SidebarFooter = document.createElement("div");
   uv2SidebarFooter.style.cssText = [
     "padding:12px 14px;border-top:1px solid rgba(255,255,255,0.05);",
@@ -431,7 +429,6 @@ class UnverifiedBackground {
   ].join("");
   uv2SidebarFooter.textContent = "v2.3";
   uv2Sidebar.appendChild(uv2SidebarFooter);
-
   ui.appendChild(uv2Sidebar);
 
   const uv2ContentArea = document.createElement("div");
@@ -920,7 +917,7 @@ let armorHudGap = parseInt(localStorage.getItem('uv2-armorhud-gap') || '4', 10);
   uv2MainPage.appendChild(headerRow);
 
   const title = document.createElement("h2");
-  title.textContent = "UnverifiedV2";
+  title.textContent = "Unverified V2";
   title.classList.add('uv2-title-shine');
   title.style.fontSize = "30px";
   title.style.fontFamily = 'MinibloxFont, sans-serif'; title.style.margin = "0";
@@ -1010,7 +1007,7 @@ document.body.appendChild(settingsOverlay);
       name: "wytlines",
       role: "Lead Developer",
       badge: "Founder",
-      bio: "Created UnverifiedV2 from scratch and drives the project forward.",
+      bio: "Created Unverified V2 from scratch and drives the project forward.",
       avatar: "https://github.com/wytlines100.png",
       color: { bg: "#3b1a00", text: "#fdba74", border: "#ea580c", strip: "#ea580c", icon: "★" },
     },
@@ -1342,7 +1339,7 @@ switchUv2Page('main');
 
   const translations = {
   en: {
-    languageName:"English", title:"UnverifiedV2",
+    languageName:"English", title:"Unverified V2",
     autoFullscreen:"Auto Fullscreen", autoFullscreenDesc:"Automatically toggles Fullscreen",
     keystrokes:"Keystrokes", keystrokesDesc:"Displays the keys you press in real-time.",
     muteChat:"Mute Chat", muteChatDesc:"Prevents other players messages from appearing in chat.",
@@ -1351,10 +1348,11 @@ switchUv2Page('main');
     keepSprint:"Keep Sprint", keepSprintDesc:"Keeps you sprinting automatically.",
     timeDisplay:"Time Display", timeDisplayDesc:"Shows you the time so you dont have to exit full screen.",
     armorHud: "Armor HUD", armorHudDesc: "Shows armor durability percentages, enchantments and icons.",
+    fpsBoost: "FPS Booster", fpsBoostDesc: "Optimizes rendering for improved frame rates",
     closeUI:"Close UI", turnedOn:"was turned on", turnedOff:"was turned off", tooltipBind:"right-click to bind"
   },
   es: {
-    languageName:"Spanish", title:"UnverifiedV2",
+    languageName:"Spanish", title:"Unverified V2",
     autoFullscreen:"Pantalla Completa Automática", autoFullscreenDesc:"Activa/desactiva automáticamente la pantalla completa",
     keystrokes:"Teclas", keystrokesDesc:"Muestra las teclas que presionas en tiempo real.",
     muteChat:"Silenciar Chat", muteChatDesc:"Evita que aparezcan mensajes de otros jugadores en el chat.",
@@ -1363,10 +1361,11 @@ switchUv2Page('main');
     keepSprint:"Mantener Sprint", keepSprintDesc:"Te mantiene corriendo automáticamente.",
     timeDisplay:"Mostrar Hora", timeDisplayDesc:"Te muestra la hora para que no tengas que salir de pantalla completa.",
     armorHud: "HUD de armadura", armorHudDesc: "Muestra los porcentajes de durabilidad de la armadura, los encantamientos y los iconos.",
+    fpsBoost: "Acelerador de FPS", fpsBoostDesc: "Optimiza el renderizado para mejorar la tasa de fotogramas.",
     closeUI:"Cerrar UI", turnedOn:"fue activado", turnedOff:"fue desactivado", tooltipBind:"clic derecho para vincular"
   },
       fr: {
-  languageName:"French", title:"UnverifiedV2",
+  languageName:"French", title:"Unverified V2",
   autoFullscreen:"Plein Ecran Auto", autoFullscreenDesc:"Active/desactive automatiquement le plein ecran",
   keystrokes:"Touches", keystrokesDesc:"Affiche les touches que vous appuyez en temps reel.",
   muteChat:"Muet Chat", muteChatDesc:"Empeche les messages des autres joueurs d'apparaitre dans le chat.",
@@ -1375,31 +1374,8 @@ switchUv2Page('main');
   keepSprint:"Garder Sprint", keepSprintDesc:"Vous fait sprinter automatiquement.",
   timeDisplay:"Affichage Heure", timeDisplayDesc:"Affiche l'heure pour ne pas avoir a quitter le plein ecran.",
   armorHud:"HUD Armure", armorHudDesc:"Affiche les pourcentages de durabilite et les enchantements de l'armure.",
+  fpsBoost: "Optimiseur de FPS", fpsBoostDesc: "Optimise le rendu pour améliorer la fréquence d'images.",
   closeUI:"Fermer UI", turnedOn:"a ete active", turnedOff:"a ete desactive", tooltipBind:"clic droit pour lier"
-},
-  nl: {
-  languageName:"Dutch", title:"UnverifiedV2",
-  autoFullscreen:"Auto Volledig Scherm", autoFullscreenDesc:"Schakelt automatisch volledig scherm in/uit",
-  keystrokes:"Toetsen", keystrokesDesc:"Toont de toetsen die je in realtime indrukt.",
-  muteChat:"Chat Dempen", muteChatDesc:"Voorkomt dat berichten van andere spelers in de chat verschijnen.",
-  chatFilter:"Chatfilter", chatFilterDesc:"Blokkeert scheldwoorden en spam uit de chat.",
-  antiAfk:"Anti-Afk", antiAfkDesc:"Drukt automatisch op WASD om te voorkomen dat je wordt gekickt wegens afwezigheid",
-  keepSprint:"Blijf Sprinten", keepSprintDesc:"Laat je automatisch blijven sprinten.",
-  timeDisplay:"Tijdweergave", timeDisplayDesc:"Toont de tijd zodat je niet uit volledig scherm hoeft te gaan.",
-  armorHud:"Wapenrusting HUD", armorHudDesc:"Toont duurzaamheidspercentages en betoveringen van je wapenrusting.",
-  closeUI:"UI Sluiten", turnedOn:"werd ingeschakeld", turnedOff:"werd uitgeschakeld", tooltipBind:"rechtsklik om te binden"
-},
-  ru: {
-  languageName:"Russian", title:"UnverifiedV2",
-  autoFullscreen:"Avto Polnyy Ekran", autoFullscreenDesc:"Avtomaticheski pereklyuchaet polnyy ekran",
-  keystrokes:"Klavishi", keystrokesDesc:"Pokazyvaet klavishi, kotorye vy nazhimayete v realnom vremeni.",
-  muteChat:"Otklyuchit Chat", muteChatDesc:"Skryvaet soobshcheniya drugikh igrokov v chate.",
-  chatFilter:"Filtr Chata", chatFilterDesc:"Blokiruyet mat i spam v chate.",
-  antiAfk:"Anti-Afk", antiAfkDesc:"Avtomaticheski nazhimayet WASD, chtoby izbezhat kika za bezdeystviye",
-  keepSprint:"Postoyannyy Sprint", keepSprintDesc:"Avtomaticheski podderzhivayet beg.",
-  timeDisplay:"Otobrazheniye Vremeni", timeDisplayDesc:"Pokazyvayet vremya, chtoby ne vykhodit iz polnogo ekrana.",
-  armorHud:"HUD Broni", armorHudDesc:"Pokazyvayet prochnost i charakteristiki brony v protsentakh.",
-  closeUI:"Zakryt UI", turnedOn:"bylo vklyucheno", turnedOff:"bylo vyklyucheno", tooltipBind:"pravaya knopka mishi dlya privyazki"
 },
 };
 
@@ -1749,7 +1725,7 @@ function createModule(name, description) {
 }
 
 function updateLanguage() {
-  title.textContent = translations[currentLanguage]?.title || "UnverifiedV2";
+  title.textContent = translations[currentLanguage]?.title || "Unverified V2";
   closeButton.textContent = translations[currentLanguage]?.closeUI || "Close UI";
   const nameToKey = {
     [MODULE_NAMES.AUTO_FULLSCREEN]: 'autoFullscreen',
