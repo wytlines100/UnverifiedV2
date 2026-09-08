@@ -1334,7 +1334,6 @@ switchUv2Page('main');
     keepSprint:"Keep Sprint", keepSprintDesc:"Keeps you sprinting automatically.",
     timeDisplay:"Time Display", timeDisplayDesc:"Shows you the time so you dont have to exit full screen.",
     armorHud: "Armor HUD", armorHudDesc: "Shows armor durability percentages, enchantments and icons.",
-    fpsBoost: "FPS Booster", fpsBoostDesc: "Optimizes rendering for improved frame rates",
     closeUI:"Close UI", turnedOn:"was turned on", turnedOff:"was turned off", tooltipBind:"right-click to bind"
   },
   es: {
@@ -1347,7 +1346,6 @@ switchUv2Page('main');
     keepSprint:"Mantener Sprint", keepSprintDesc:"Te mantiene corriendo automáticamente.",
     timeDisplay:"Mostrar Hora", timeDisplayDesc:"Te muestra la hora para que no tengas que salir de pantalla completa.",
     armorHud: "HUD de armadura", armorHudDesc: "Muestra los porcentajes de durabilidad de la armadura, los encantamientos y los iconos.",
-    fpsBoost: "Acelerador de FPS", fpsBoostDesc: "Optimiza el renderizado para mejorar la tasa de fotogramas.",
     closeUI:"Cerrar UI", turnedOn:"fue activado", turnedOff:"fue desactivado", tooltipBind:"clic derecho para vincular"
   },
       fr: {
@@ -1360,7 +1358,6 @@ switchUv2Page('main');
   keepSprint:"Garder Sprint", keepSprintDesc:"Vous fait sprinter automatiquement.",
   timeDisplay:"Affichage Heure", timeDisplayDesc:"Affiche l'heure pour ne pas avoir a quitter le plein ecran.",
   armorHud:"HUD Armure", armorHudDesc:"Affiche les pourcentages de durabilite et les enchantements de l'armure.",
-  fpsBoost: "Optimiseur de FPS", fpsBoostDesc: "Optimise le rendu pour améliorer la fréquence d'images.",
   closeUI:"Fermer UI", turnedOn:"a ete active", turnedOff:"a ete desactive", tooltipBind:"clic droit pour lier"
 },
 };
