@@ -43,7 +43,7 @@ A custom utility client for [Miniblox](https://miniblox.io), actively developed 
 - **Module Persistence** — Optionally restore active module states after a page reload
 - **Toast Notifications** — Optional pop-up confirmations when modules toggle
 - **Module Click Sounds** — Optional audio feedback when toggling modules
-- **Multi-Language Support** — English, Spanish, French, Dutch, and Russian
+- **Multi-Language Support** — English, Spanish, French
 
 ### Profile
 - Sidebar avatar auto-detected by country via IP lookup
