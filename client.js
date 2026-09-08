@@ -108,14 +108,6 @@ class UnverifiedIntro {
   }, 500);
 })();
 
-class UnverifiedBackground {
-  constructor() {
-    this.bg1 = "https://images3.alphacoders.com/133/1333794.jpeg";
-    this.currentBG = this.bg1;
-  }
-  setBG(e) { e.src = this.currentBG; }
-}
-
 (function() {
   'use strict';
   const intro = new UnverifiedIntro();
@@ -385,11 +377,6 @@ class UnverifiedBackground {
     }
   }).catch(() => {});
 
-  const savedImage = localStorage.getItem("uv2-profile-image");
-  if (savedImage) {
-    profileCircle.style.backgroundImage = `url('${savedImage}')`;
-    profileCircle.textContent = "";
-  }
   const uv2NavDefs = [
   { page: 'main',     label: 'Modules', icon: 'fa-th-large' },
   { page: 'gui',      label: 'Color',   icon: 'fa-paint-brush' },
@@ -879,7 +866,7 @@ let armorHudGap = parseInt(localStorage.getItem('uv2-armorhud-gap') || '4', 10);
   const resetBtn = document.createElement('button');
   resetBtn.textContent = 'Reset to Default';
   resetBtn.style.cssText = `width:100%;background:${guiPrimaryColor};color:white;border:none;border-radius:6px;padding:10px;cursor:pointer;font-family:MinibloxFont,sans-serif;font-size:13px;letter-spacing:0.3px;`;
-  resetBtn.addEventListener('click', () => {
+   resetBtn.addEventListener('click', () => {
     armorHudOpacity = 1;
     armorHudBgOpacity = 0.55;
     armorHudIconSize = 0;
@@ -888,7 +875,6 @@ let armorHudGap = parseInt(localStorage.getItem('uv2-armorhud-gap') || '4', 10);
     localStorage.setItem('uv2-armorhud-bgopacity', '0.55');
     localStorage.setItem('uv2-armorhud-iconsize', '0');
     localStorage.setItem('uv2-armorhud-gap', '4');
-    localStorage.removeItem('uv2-armorhud-side');
     if (armorHudEl) armorHudEl.style.opacity = 1;
     if (armorHudDocked) armorHudRender();
     buildArmorHudSettingsPage();
