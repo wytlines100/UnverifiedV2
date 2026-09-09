@@ -1,4 +1,4 @@
-## `RoadMap.md`
+## `Roadmap`
 
 In short, the main developers can update this so everyone stays informed about planned features on discord and github!
 
