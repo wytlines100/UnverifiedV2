@@ -109,7 +109,7 @@ See [CHANGELOG.md](./CHANGELOG.md) for the full version history.
 
 ## RoadMap
 
-See [RoadMap.md](./RoadMap.md) for up to date planning that developers will carry out.
+See [Roadmap.md](./Roadmap.md) for up to date planning that developers will carry out.
 
 ## Credits
 
