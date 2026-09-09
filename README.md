@@ -107,6 +107,10 @@ By submitting a contribution, you agree that it becomes part of the project unde
 
 See [CHANGELOG.md](./CHANGELOG.md) for the full version history.
 
+## RoadMap
+
+See [CHANGELOG.md](./RoadMap.md) for up to date planning that developers will carry out.
+
 ## Credits
 
 - [Miniblox](https://miniblox.io) for creating the base game
