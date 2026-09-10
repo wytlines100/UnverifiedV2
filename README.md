@@ -68,6 +68,18 @@ The menu is split into four sidebar pages:
 - Auto-AFK auto-enable will not trigger while outside of an active match, even if the idle delay has elapsed.
 - **Use this client at your own risk. The maintainers are not responsible for any account actions resulting from its use.**
 
+## Changelog
+
+See [CHANGELOG.md](./CHANGELOG.md) for the full version history.
+
+## RoadMap
+
+See [Roadmap.md](./Roadmap.md) for up to date planning that developers will carry out.
+
+## Credits
+
+- [Miniblox](https://miniblox.io) for creating the base game
+
 ## Project Information
 
 - **Current Contributors:** wytlines, DeadFish7, andreypidd, jet, joudaALT, TrustIsOver, TheM1ddleM1n
