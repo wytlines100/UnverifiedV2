@@ -13,7 +13,6 @@
 // ==/UserScript==
 
 document.title = 'Unverified V2';
-
 class UnverifiedIntro {
   constructor() {
     this.container = document.createElement("div");
@@ -102,7 +101,7 @@ class UnverifiedIntro {
     if (game && game.chat && typeof game.chat.addChat === "function") {
       clearInterval(waitForGame);
       game.chat.addChat({
-        text: "\\glow\\\\shiny\\\\#BF3011\\[Unverified V2]:\\reset\\ Hello, thanks for using Unverified V2! Please join our discord for updates/community support!"
+        text: "\\glow\\\\shiny\\\\#BF3011\\[Unverified V2]:\\reset\\ Hello there! Thanks for using Unverified V2! Please join our discord for updates/community support!"
       });
     }
   }, 500);
@@ -355,14 +354,12 @@ class UnverifiedIntro {
     uploadBtn.style.opacity = "0";
     resetBtn.style.opacity = "0";
   });
-
   uv2ProfileCard.appendChild(profileWrapper);
 
   const userDiv = document.createElement("div");
   userDiv.textContent = "User" + Math.floor(Math.random()*100000);
   userDiv.style.cssText = "font-size:11px;color:#888;";
   uv2ProfileCard.appendChild(userDiv);
-
   uv2Sidebar.appendChild(uv2ProfileCard);
 
   fetch('https://ipapi.co/json/').then(r => r.json()).then(d => {
@@ -378,9 +375,9 @@ class UnverifiedIntro {
   }).catch(() => {});
 
   const uv2NavDefs = [
-  { page: 'main',     label: 'Modules', icon: 'fa-th-large' },
-  { page: 'gui',      label: 'Color',   icon: 'fa-paint-brush' },
-  { page: 'config',   label: 'Config',  icon: 'fa-cog' },
+  { page: 'main', label: 'Modules', icon: 'fa-th-large' },
+  { page: 'gui', label: 'Color', icon: 'fa-paint-brush' },
+  { page: 'config', label: 'Config', icon: 'fa-cog' },
   { page: 'settings', label: 'Settings',icon: 'fa-sliders' },
 ];
 
@@ -414,8 +411,6 @@ class UnverifiedIntro {
     "font-size:9px;color:#333;letter-spacing:1.5px;text-transform:uppercase;",
     "font-family:MinibloxFont,sans-serif;text-align:center;"
   ].join("");
-  uv2SidebarFooter.textContent = "v2.3";
-  uv2Sidebar.appendChild(uv2SidebarFooter);
   ui.appendChild(uv2Sidebar);
 
   const uv2ContentArea = document.createElement("div");
@@ -442,7 +437,7 @@ class UnverifiedIntro {
   uv2SettingsPage.style.cssText = "flex:1;display:none;overflow:hidden;";
   uv2ContentArea.appendChild(uv2SettingsPage);
 
-  let guiPrimaryColor = localStorage.getItem('uv2-gui-primary-color') || '#e74c3c';
+let guiPrimaryColor = localStorage.getItem('uv2-gui-primary-color') || '#e74c3c';
 let guiBackgroundColor = '#000000';
 let guiTextColor = '#ffffff';
 let armorHudDocked = localStorage.getItem('uv2-armorhud-docked') === 'true';
@@ -598,16 +593,12 @@ let armorHudGap = parseInt(localStorage.getItem('uv2-armorhud-gap') || '4', 10);
     applyGUIStyles();
     try { closeButton.style.background = hex; closeButton.style.boxShadow = `0 2px 14px ${hex}73`; } catch(e) {}
   }
-
   renderRecent();
-
   picker.addEventListener('change', () => { applyColor(picker.value); });
-
   hexInput.addEventListener('input', () => {
     const val = hexInput.value.trim();
     if (/^#[0-9a-fA-F]{6}$/.test(val)) applyColor(val);
   });
-
   hexInput.addEventListener('keydown', e => { if (e.key === 'Enter') hexInput.blur(); });
 }
 
@@ -624,11 +615,10 @@ let armorHudGap = parseInt(localStorage.getItem('uv2-armorhud-gap') || '4', 10);
         </div>
       </div>
     `;
-
     const saveBtn = uv2ConfigPage.querySelector('#save-config-btn');
     if (saveBtn) {
       saveBtn.addEventListener('click', () => {
-        const config = {
+  const config = {
   version: '2.3',
   gui: {
     primaryColor: guiPrimaryColor,
@@ -647,7 +637,6 @@ let armorHudGap = parseInt(localStorage.getItem('uv2-armorhud-gap') || '4', 10);
   moduleBindings: moduleBindings,
   moduleStates: {},
 };
-
         [...gridContainer.children].forEach(mc => {
           const name = mc.dataset.moduleName;
           if (name) config.moduleStates[name] = mc._uv2Active;
@@ -694,7 +683,6 @@ let armorHudGap = parseInt(localStorage.getItem('uv2-armorhud-gap') || '4', 10);
   applyGUIStyles();
   buildGUIPage();
 }
-
             if (config.settings) {
               if (typeof config.settings.moduleSounds === 'boolean') {
                 settings.moduleSounds = config.settings.moduleSounds;
@@ -743,7 +731,6 @@ let armorHudGap = parseInt(localStorage.getItem('uv2-armorhud-gap') || '4', 10);
             if (config.moduleBindings) {
               moduleBindings = config.moduleBindings;
             }
-
             setTimeout(() => {
               if (config.moduleStates) {
                 isRestoring = true;
@@ -760,7 +747,7 @@ let armorHudGap = parseInt(localStorage.getItem('uv2-armorhud-gap') || '4', 10);
             showNotification('Configuration loaded successfully!', true);
           } catch (err) {
             console.error(err);
-            showNotification('Failed to load config: invalid JSON', false);
+            showNotification('Failed!: Invalid JSON config', false);
           }
         };
         reader.readAsText(file);
@@ -883,16 +870,16 @@ let armorHudGap = parseInt(localStorage.getItem('uv2-armorhud-gap') || '4', 10);
 }
 
   function switchUv2Page(page) {
-  uv2MainPage.style.display   = page === 'main'     ? 'flex' : 'none';
-  uv2GUIPage.style.display    = page === 'gui'      ? 'flex' : 'none';
-  uv2ConfigPage.style.display = page === 'config'   ? 'flex' : 'none';
+  uv2MainPage.style.display = page === 'main' ? 'flex' : 'none';
+  uv2GUIPage.style.display = page === 'gui' ? 'flex' : 'none';
+  uv2ConfigPage.style.display = page === 'config' ? 'flex' : 'none';
   uv2SettingsPage.style.display = page === 'settings' ? 'flex' : 'none';
   Object.entries(uv2NavEls).forEach(([p, el]) => {
     const active = p === page;
-    el.dataset.active        = active ? "1" : "0";
-    el.style.color           = active ? guiPrimaryColor : "#666";
+    el.dataset.active = active ? "1" : "0";
+    el.style.color = active ? guiPrimaryColor : "#666";
     el.style.backgroundColor = active ? `${guiPrimaryColor}14` : "";
-    el.style.borderLeft      = active ? `2px solid ${guiPrimaryColor}` : "2px solid transparent";
+    el.style.borderLeft = active ? `2px solid ${guiPrimaryColor}` : "2px solid transparent";
     const icon = el.querySelector("i");
     if (icon) icon.style.color = active ? guiPrimaryColor : "";
   });
@@ -993,7 +980,7 @@ document.body.appendChild(settingsOverlay);
       name: "wytlines",
       role: "Lead Developer",
       badge: "Founder",
-      bio: "Created Unverified V2 from scratch and drives the project forward.",
+      bio: "Created Unverified V2 and drives the project forward for future development.",
       avatar: "https://github.com/wytlines100.png",
       color: { bg: "#3b1a00", text: "#fdba74", border: "#ea580c", strip: "#ea580c", icon: "★" },
     },
@@ -1001,7 +988,7 @@ document.body.appendChild(settingsOverlay);
       name: "DeadFish7",
       role: "Developer",
       badge: "Veteran Dev",
-      bio: "Created Public Lurker Client",
+      bio: "Created Public-Lurker Client",
       avatar: "https://github.com/DeadFish7.png",
       color: { bg: "#1e1b4b", text: "#a5b4fc", border: "#4f46e5", strip: "#4f46e5", icon: "◈" },
     },
@@ -1041,7 +1028,7 @@ document.body.appendChild(settingsOverlay);
       name: "TheM1ddleM1n",
       role: "Developer",
       badge: "Bug Slayer",
-      bio: "Professional Coder for Miniblox, fixing bugs and adding features.",
+      bio: "Professional Coder for Miniblox.",
       avatar: "https://github.com/TheM1ddleM1n.png",
       color: { bg: "#1a2a1a", text: "#6ee7b7", border: "#059669", strip: "#059669", icon: "⚔" },
     },
@@ -1062,7 +1049,6 @@ document.body.appendChild(settingsOverlay);
 }
 `;
   document.head.appendChild(shimmerStyle);
-
   UV2_CONTRIBUTORS.forEach(contributor => {
     const c = contributor.color;
 
@@ -1182,16 +1168,16 @@ document.body.appendChild(settingsOverlay);
 
   const uv2InlineSettings = settingsOverlay.querySelector('#uv2-settings-panel');
   if (uv2InlineSettings) {
-    uv2InlineSettings.style.width      = "100%";
-    uv2InlineSettings.style.height     = "100%";
-    uv2InlineSettings.style.maxHeight  = "none";
+    uv2InlineSettings.style.width = "100%";
+    uv2InlineSettings.style.height = "100%";
+    uv2InlineSettings.style.maxHeight = "none";
     uv2InlineSettings.style.borderRadius = "0";
-    uv2InlineSettings.style.border     = "none";
-    uv2InlineSettings.style.boxShadow  = "none";
+    uv2InlineSettings.style.border = "none";
+    uv2InlineSettings.style.boxShadow = "none";
     uv2SettingsPage.appendChild(uv2InlineSettings);
   }
-  settingsOverlay.style.display        = "none";
-  settingsOverlay.style.pointerEvents  = "none";
+  settingsOverlay.style.display = "none";
+  settingsOverlay.style.pointerEvents = "none";
 
 buildGUIPage();
 buildConfigPage();
@@ -1253,13 +1239,13 @@ switchUv2Page('main');
   let isRestoring = false;
 
   const settings = {
-    moduleSounds:      localStorage.getItem('uv2-setting-sounds')    !== 'false',
-    showNotifications: localStorage.getItem('uv2-setting-notifs')    !== 'false',
-    animateUI:         localStorage.getItem('uv2-setting-animation') !== 'false',
-    saving:            localStorage.getItem('uv2-setting-saving')    === 'true',
-    autoAfk:           localStorage.getItem('uv2-setting-autoafk')  === 'true',
-    afkChat:           localStorage.getItem('uv2-setting-afkchat')  !== 'false',
-    vpnWarning:        localStorage.getItem('uv2-setting-vpnwarning') !== 'false',
+    moduleSounds: localStorage.getItem('uv2-setting-sounds') !== 'false',
+    showNotifications: localStorage.getItem('uv2-setting-notifs') !== 'false',
+    animateUI: localStorage.getItem('uv2-setting-animation') !== 'false',
+    saving: localStorage.getItem('uv2-setting-saving') === 'true',
+    autoAfk: localStorage.getItem('uv2-setting-autoafk') === 'true',
+    afkChat: localStorage.getItem('uv2-setting-afkchat') !== 'false',
+    vpnWarning: localStorage.getItem('uv2-setting-vpnwarning') !== 'false',
   };
 
   const soundsToggle = document.querySelector("#uv2-toggle-sounds");
@@ -1371,12 +1357,13 @@ switchUv2Page('main');
   });
   languageDropdown.addEventListener("change", e => { currentLanguage = e.target.value; localStorage.setItem('unverified-language', currentLanguage); updateLanguage(); });
 
+  // TODO: Make a Regex for any swear words that have multiple ways to be spelt.
   const BAD_WORDS = [
   'fuck', 'fucking', 'fucker', 'fucked', 'fucks', 'motherfucker', 'motherfuckers',
   'shit', 'shitty', 'shitter', 'bullshit', 'shithead', 'shitfaced',
   'bitch', 'bitches', 'bitching', 'bitchy',
   'asshole', 'assholes', 'arse', 'arsehole', 'asses', 'ass',
-  'damn', 'dammit', 'goddamn', 'goddamnit', 'damned',
+  'goddamn', 'goddamnit', 'damned',
   'crap', 'crappy', 'crapping', 'crapped',
   'bastard', 'bastards',
   'dick', 'dicks', 'dickhead', 'dickheads',
@@ -1452,9 +1439,7 @@ function chatFilterContainsBadWords(text) {
   return false;
 }
 
-const MODULE_NAMES = { AUTO_FULLSCREEN: "Auto Fullscreen", KEYSTROKES: "Keystrokes", MUTE_CHAT: "Mute Chat",
-  CHAT_FILTER: "Chat Filter", ANTI_AFK: "Anti-Afk", KEEP_SPRINT: "Keep Sprint", TIME_DISPLAY: "Time Display",
-  ARMOR_HUD: "Armor HUD" };
+const MODULE_NAMES = { AUTO_FULLSCREEN: "Auto Fullscreen", KEYSTROKES: "Keystrokes", MUTE_CHAT: "Mute Chat", CHAT_FILTER: "Chat Filter", ANTI_AFK: "Anti-Afk", KEEP_SPRINT: "Keep Sprint", TIME_DISPLAY: "Time Display", ARMOR_HUD: "Armor HUD" };
 
 const moduleSearchWrap = document.createElement("div");
 moduleSearchWrap.style.cssText = "position:relative;margin-top:4px;";
