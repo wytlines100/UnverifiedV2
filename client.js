@@ -1,7 +1,7 @@
 // ==UserScript==
 // @name         Unverified V2
 // @namespace    http://tampermonkey.net/
-// @version      2.3
+// @version      2.7
 // @description  Look at my license before you modify, I WILL DMCA you.
 // @icon         https://raw.githubusercontent.com/wytlines100/UnverifiedV2/refs/heads/main/logo.jpg
 // @license      Proprietary License
@@ -619,7 +619,7 @@ let armorHudGap = parseInt(localStorage.getItem('uv2-armorhud-gap') || '4', 10);
     if (saveBtn) {
       saveBtn.addEventListener('click', () => {
   const config = {
-  version: '2.3',
+  version: '2.7',
   gui: {
     primaryColor: guiPrimaryColor,
     backgroundColor: guiBackgroundColor,
@@ -963,7 +963,7 @@ settingsOverlay.innerHTML = `
         </div>
         <div class="uv2-settings-page" id="uv2-page-about">
           <div class="uv2-section-title">Info</div>
-          <div class="uv2-setting-row"><div><div class="uv2-setting-label">Version</div><div class="uv2-setting-desc">2.3</div></div></div>
+          <div class="uv2-setting-row"><div><div class="uv2-setting-label">Version</div><div class="uv2-setting-desc">2.7</div></div></div>
           <div class="uv2-setting-row"><div><div class="uv2-setting-label">License</div><div class="uv2-setting-desc">Proprietary, do not redistribute</div></div></div>
           <div class="uv2-section-title" style="margin-top:16px;">Contributors</div>
           <div id="uv2-contributors-grid"></div>
