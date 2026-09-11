@@ -267,7 +267,7 @@ class UnverifiedIntro {
     "display:flex;align-items:center;gap:9px;"
   ].join("");
   uv2SidebarLogo.innerHTML = [
-    '<img src="https://i.postimg.cc/Mpm1dY6X/logo.jpg" style="width:28px;height:28px;border-radius:6px;object-fit:cover;flex-shrink:0;border:1px solid rgba(231,76,60,0.4);">',
+    '<img src="https://raw.githubusercontent.com/wytlines100/UnverifiedV2/refs/heads/main/logo.jpg" style="width:28px;height:28px;border-radius:6px;object-fit:cover;flex-shrink:0;border:1px solid rgba(231,76,60,0.4);">',
     '<span style="color:#e74c3c;font-size:10px;letter-spacing:2px;text-transform:uppercase;',
     'font-family:MinibloxFont,sans-serif;line-height:1.2;">UV2</span>'
   ].join("");
