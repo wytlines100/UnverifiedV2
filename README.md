@@ -66,7 +66,7 @@ The menu is split into four sidebar pages:
 - VPN and proxy detection relies on a third-party IP lookup service and may produce false positives or negatives.
 - The Armor HUD requires `unsafeWindow.spriteMap` and `unsafeWindow.Enchantment` to be present; it will not render outside of an active match. Match detection relies on the URL path containing `/join/`.
 - Auto-AFK auto-enable will not trigger while outside of an active match, even if the idle delay has elapsed.
-- **Use this client at your own risk. The maintainers are not responsible for any account actions resulting from its use.**
+- **Use the client at your own risk. The maintainers will not be responsible for any account actions resulting from its use.**
 
 ## Changelog
 
