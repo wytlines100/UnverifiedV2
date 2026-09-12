@@ -8,9 +8,8 @@ In short, the main developers can update this so everyone stays informed about p
 - [ ] What's New Changelog
 - [ ] Making an extension?
 
-
 # TO-DO:
-- [ ]  
+- [ ]
 
 # Done:
-- [ ] 
+- [x] Changeable UI keybind (Right Shift / `)
