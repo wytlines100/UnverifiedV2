@@ -15,7 +15,7 @@ A custom utility client for [Miniblox](https://miniblox.io), actively developed 
 3. Paste the full contents of `client.js` into the editor.
 4. Save the script and confirm it is enabled.
 5. Navigate to `miniblox.io` — the client will initialize automatically.
-6. Press **Right Shift** to open or close the client menu.
+6. Press **Right Shift** (default) or your configured keybind to open or close the client menu.
 
 > **Note:** The Music Player is a separate file (`MusicPlayer.js`) to be installed separately.
 
@@ -35,6 +35,7 @@ A custom utility client for [Miniblox](https://miniblox.io), actively developed 
 
 ### Interface & Customization
 - **Key Binding** — Right-click any module to assign or clear a custom keybind
+- **UI Keybind** — Choose whether the menu opens with Right Shift or the backtick (`) key, set from the Settings page
 - **Favorites** — Star any module to pin it to the top of the module list; persisted across reloads
 - **Search Bar** — Filter the module list by name or description in real time
 - **Theme Color Picker** — Choose any accent color via a color picker or hex input, with a recent-color history
@@ -57,7 +58,7 @@ The menu is split into four sidebar pages:
 | **Modules** | All toggleable modules, favorites, and the search bar |
 | **Color** | Accent color picker with hex input and recent colors |
 | **Config** | Save and load configuration as a JSON file |
-| **Settings** | Sounds, notifications, animation, persistence, VPN warning, Anti-AFK options, Armor HUD appearance and position, Version, Contributors |
+| **Settings** | Sounds, notifications, animation, persistence, UI keybind, VPN warning, Anti-AFK options, Armor HUD appearance and position, Version, Contributors |
 
 ## Limitations & Disclaimers
 
@@ -84,6 +85,6 @@ See [Roadmap.md](./Roadmap.md) for up to date planning that developers will carr
 
 - **Current Contributors:** wytlines, DeadFish7, andreypidd, jet, joudaALT, TrustIsOver, TheM1ddleM1n
 - **License:** Proprietary **All Rights Reserved** license. You may not use, copy, modify, or distribute this code without prior written permission from the copyright holder. Users are granted permission to use the client for personal or public use, subject to redistribution and modification restrictions.
-- **Contact & Support:** 
+- **Contact & Support:**
   - Email: wytlines100 — `rfd6108@gmail.com`
   - Discord: [UnverifiedV2 Discord](https://dsc.gg/unverifiedv2)
