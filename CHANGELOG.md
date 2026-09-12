@@ -1,5 +1,9 @@
 # Changelog
 
+## 2.7 — Keybind Update
+- Added UI keybind setting to switch the menu toggle between Right Shift and `
+- Version bumped from 2.3 -> 2.7
+
 ## 2.3 — Armor HUD Rework
 - Armor HUD dock is now fixed to the right side only
 - Removed 9 unused variables
