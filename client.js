@@ -58,16 +58,20 @@ class UnverifiedIntro {
     this.container.appendChild(this.creditsText);
   }
   playIntro() {
-    document.body.appendChild(this.container);
-    this.circle.style.opacity = 1;
-    this.check.style.opacity = 1;
-    setTimeout(() => { this.check.style.transform = "rotate(180deg)"; }, 800);
-    setTimeout(() => {
-      this.unverifiedText.style.opacity = 1;
-    }, 1600);
-    setTimeout(() => { this.creditsText.style.opacity = 1; }, 2400);
-    setTimeout(() => { this.container.style.transition = "opacity 1.4s ease"; this.container.style.opacity = 0; }, 5600);
-    setTimeout(() => { this.container.remove(); }, 6400);
+  document.body.appendChild(this.container);
+  this.circle.style.opacity = 1;
+  this.check.style.opacity = 1;
+  setTimeout(() => { this.check.style.transform = "rotate(180deg)"; }, 800);
+  setTimeout(() => {
+    this.unverifiedText.style.opacity = 1;
+  }, 1600);
+  setTimeout(() => { this.creditsText.style.opacity = 1; }, 2400);
+  setTimeout(() => {
+    this.container.style.transition = "opacity 1.8s cubic-bezier(0.4, 0, 0.2, 1), transform 1.8s cubic-bezier(0.4, 0, 0.2, 1)";
+    this.container.style.opacity = 0;
+    this.container.style.transform = "scale(1.04)";
+  }, 5600);
+  setTimeout(() => { this.container.remove(); }, 7400);
   }
 }
 
