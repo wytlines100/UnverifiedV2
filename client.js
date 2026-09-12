@@ -499,8 +499,6 @@ let armorHudGap = parseInt(localStorage.getItem('uv2-armorhud-gap') || '4', 10);
     }
     try { if (typeof buildArmorHudSettingsPage === 'function') buildArmorHudSettingsPage(); } catch(e) {}
 
-    try { closeButton.style.background = guiPrimaryColor; closeButton.style.boxShadow = `0 2px 14px ${guiPrimaryColor}73`; } catch(e) {}
-
     ['#save-config-btn', '#load-config-btn'].forEach(sel => {
       const btn = document.querySelector(sel);
       if (btn) { btn.style.background = guiPrimaryColor; btn.style.backgroundColor = guiPrimaryColor; }
@@ -591,7 +589,6 @@ let armorHudGap = parseInt(localStorage.getItem('uv2-armorhud-gap') || '4', 10);
     saveRecent(hex);
     renderRecent();
     applyGUIStyles();
-    try { closeButton.style.background = hex; closeButton.style.boxShadow = `0 2px 14px ${hex}73`; } catch(e) {}
   }
   renderRecent();
   picker.addEventListener('change', () => { applyColor(picker.value); });
@@ -633,6 +630,7 @@ let armorHudGap = parseInt(localStorage.getItem('uv2-armorhud-gap') || '4', 10);
     autoAfk: settings.autoAfk,
     afkChat: settings.afkChat,
     afkDelay: afkDelay,
+    uiKeybind: uiKeybind,
   },
   moduleBindings: moduleBindings,
   moduleStates: {},
@@ -727,6 +725,12 @@ let armorHudGap = parseInt(localStorage.getItem('uv2-armorhud-gap') || '4', 10);
                 if (afkDelayInput) afkDelayInput.value = afkDelay;
               }
             }
+             if (typeof config.settings.uiKeybind === 'string') {
+                uiKeybind = config.settings.uiKeybind;
+                localStorage.setItem('uv2-setting-uikeybind', uiKeybind);
+                const uiKeybindSelect = document.querySelector("#uv2-uikeybind-select");
+                if (uiKeybindSelect) uiKeybindSelect.value = uiKeybind;
+              }
 
             if (config.moduleBindings) {
               moduleBindings = config.moduleBindings;
@@ -934,6 +938,13 @@ settingsOverlay.innerHTML = `
           <div class="uv2-setting-row">
             <div><div class="uv2-setting-label">Save Modules</div><div class="uv2-setting-desc">Restore your active modules after a page reload</div></div>
             <label class="uv2-toggle"><input type="checkbox" id="uv2-toggle-saving"><div class="uv2-toggle-track"></div></label>
+          </div>
+           <div class="uv2-setting-row">
+            <div><div class="uv2-setting-label">UI Keybind</div><div class="uv2-setting-desc">Choose the key that opens and closes the menu</div></div>
+            <select id="uv2-uikeybind-select" style="background:#2a2a2a;color:white;border:1px solid #444;border-radius:6px;padding:6px 10px;font-size:13px;font-family:MinibloxFont,sans-serif;outline:none;cursor:pointer;">
+              <option value="rshift">Right Shift</option>
+              <option value="backtick">&#96;</option>
+            </select>
           </div>
           <div class="uv2-section-title" style="margin-top:14px;">Security</div>
           <div class="uv2-setting-row">
@@ -1237,6 +1248,7 @@ switchUv2Page('main');
   let uiAnimating = false;
   let closeUITimeout = null;
   let isRestoring = false;
+  let uiKeybind = localStorage.getItem('uv2-setting-uikeybind') || 'rshift';
 
   const settings = {
     moduleSounds: localStorage.getItem('uv2-setting-sounds') !== 'false',
@@ -1262,6 +1274,13 @@ switchUv2Page('main');
   if (afkChatToggle) afkChatToggle.checked = settings.afkChat;
   const vpnWarningToggle = document.querySelector("#uv2-toggle-vpnwarning");
   if (vpnWarningToggle) vpnWarningToggle.checked = settings.vpnWarning;
+
+    const uiKeybindSelect = document.querySelector("#uv2-uikeybind-select");
+  if (uiKeybindSelect) uiKeybindSelect.value = uiKeybind;
+  uiKeybindSelect?.addEventListener("change", function() {
+    uiKeybind = this.value;
+    localStorage.setItem('uv2-setting-uikeybind', uiKeybind);
+  });
 
   let afkDelay = parseInt(localStorage.getItem('uv2-setting-afkdelay') || '10', 10);
   if (isNaN(afkDelay) || afkDelay < 5) afkDelay = 5;
@@ -1694,7 +1713,6 @@ function createModule(name, description) {
 
 function updateLanguage() {
   title.textContent = translations[currentLanguage]?.title || "Unverified V2";
-  closeButton.textContent = translations[currentLanguage]?.closeUI || "Close UI";
   const nameToKey = {
     [MODULE_NAMES.AUTO_FULLSCREEN]: 'autoFullscreen',
     [MODULE_NAMES.KEYSTROKES]: 'keystrokes',
@@ -2242,14 +2260,6 @@ if (armorHudModule) {
 }
 sortModulesByFavorite();
 
-  const bottomRow = document.createElement("div");
-  bottomRow.style.cssText = "display:flex;align-items:center;justify-content:center;gap:8px;margin-top:18px;";
-  uv2MainPage.appendChild(bottomRow);
-  const closeButton = document.createElement("button");
-  closeButton.textContent = "Close UI";
-  closeButton.style.cssText = `background:${guiPrimaryColor};color:white;border:none;border-radius:6px;padding:10px 30px;font-size:15px;cursor:pointer;font-family:'MinibloxFont',sans-serif;letter-spacing:0.5px;box-shadow:0 2px 14px ${guiPrimaryColor}73;transition:all 0.2s ease;`;
-  bottomRow.appendChild(closeButton);
-
   function checkIsVpn(callback) {
     try {
       GM_xmlhttpRequest({
@@ -2408,8 +2418,9 @@ sortModulesByFavorite();
       });
     }
   }
-  document.addEventListener("keydown", event => {
-    if (event.key === "Shift" && event.location === 2) toggleUI();
+    document.addEventListener("keydown", event => {
+    const isUiKey = uiKeybind === 'backtick' ? event.key === '`' : (event.key === "Shift" && event.location === 2);
+    if (isUiKey) toggleUI();
     for (let moduleName in moduleBindings) {
       if (moduleBindings[moduleName] === event.key) {
         const now = Date.now();
@@ -2421,7 +2432,6 @@ sortModulesByFavorite();
       }
     }
   });
-  closeButton.addEventListener("click", () => { closeUI(); uiVisible = false; });
 
   function restoreModuleStates() {
     if (!settings.saving) return;
