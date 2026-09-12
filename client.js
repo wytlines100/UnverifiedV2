@@ -1229,6 +1229,35 @@ switchUv2Page('main');
     if (this.checked) vpnGateDismissed = false;
   });
 
+    let uiKeybind = localStorage.getItem('uv2-ui-keybind') || 'ShiftRight';
+if (uiKeybind !== 'ShiftRight' && uiKeybind !== 'Backquote') uiKeybind = 'ShiftRight';
+
+function formatKeybindLabel(code) {
+  if (code === 'ShiftRight') return 'Right Shift';
+  if (code === 'Backquote') return '`';
+  return code;
+}
+
+const uiKeybindRow = document.createElement('div');
+uiKeybindRow.className = 'uv2-setting-row';
+uiKeybindRow.innerHTML = `
+  <div><div class="uv2-setting-label">Menu Keybind</div><div class="uv2-setting-desc">Choose the key that opens or closes the client menu</div></div>
+  <select id="uv2-uikeybind-select" style="background:#2a2a2a;color:white;border:1px solid #444;border-radius:6px;padding:6px 10px;cursor:pointer;font-family:MinibloxFont,sans-serif;font-size:12px;">
+    <option value="ShiftRight">Right Shift (WASD)</option>
+    <option value="Backquote">\` (Arrow Keys)</option>
+  </select>
+`;
+
+const uv2PageVisuals = document.getElementById('uv2-page-visuals');
+if (uv2PageVisuals) uv2PageVisuals.appendChild(uiKeybindRow);
+
+const uiKeybindSelect = uiKeybindRow.querySelector('#uv2-uikeybind-select');
+uiKeybindSelect.value = uiKeybind;
+uiKeybindSelect.addEventListener('change', () => {
+  uiKeybind = uiKeybindSelect.value;
+  localStorage.setItem('uv2-ui-keybind', uiKeybind);
+});
+
   let moduleBindings = {};
   let isBinding = false;
   let lastKeyPressTime = {};
@@ -2409,19 +2438,18 @@ sortModulesByFavorite();
     }
   }
   document.addEventListener("keydown", event => {
-    if (event.key === "Shift" && event.location === 2) toggleUI();
-    for (let moduleName in moduleBindings) {
-      if (moduleBindings[moduleName] === event.key) {
-        const now = Date.now();
-        if (!lastKeyPressTime[moduleName] || now - lastKeyPressTime[moduleName] > 200) {
-          const mc = [...gridContainer.children].find(c => c.dataset.moduleName === moduleName);
-          if (mc) mc.click();
-          lastKeyPressTime[moduleName] = now;
-        }
+  if (event.code === uiKeybind) toggleUI();
+  for (let moduleName in moduleBindings) {
+    if (moduleBindings[moduleName] === event.key) {
+      const now = Date.now();
+      if (!lastKeyPressTime[moduleName] || now - lastKeyPressTime[moduleName] > 200) {
+        const mc = [...gridContainer.children].find(c => c.dataset.moduleName === moduleName);
+        if (mc) mc.click();
+        lastKeyPressTime[moduleName] = now;
       }
     }
-  });
-  closeButton.addEventListener("click", () => { closeUI(); uiVisible = false; });
+  }
+});
 
   function restoreModuleStates() {
     if (!settings.saving) return;
