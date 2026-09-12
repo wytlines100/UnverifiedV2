@@ -13,3 +13,4 @@ In short, the main developers can update this so everyone stays informed about p
 
 # Done:
 - [x] Changeable UI keybind (Right Shift / `)
+- [x] Make Bounding Boxes for Time Display, AntiAFK, Keystrokes
