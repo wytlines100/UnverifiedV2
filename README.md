@@ -15,7 +15,7 @@ A custom utility client for [Miniblox](https://miniblox.io), actively developed 
 3. Paste the full contents of `client.js` into the editor.
 4. Save the script and confirm it is enabled.
 5. Navigate to `miniblox.io` — the client will initialize automatically.
-6. Press **Right Shift** (default) or your configured keybind to open or close the client menu.
+6. Press **Right Shift** (default) or Backtick (`) to open or close the client menu.
 
 > **Note:** The Music Player is a separate file (`MusicPlayer.js`) to be installed separately.
 
