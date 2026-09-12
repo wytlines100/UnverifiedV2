@@ -1746,7 +1746,22 @@ keystrokesModule.addEventListener("click", () => {
     document.body.appendChild(kc);
     let isDragging = false;
     kc.addEventListener('mousedown', e => { if (e.target.nodeName !== 'INPUT') isDragging = true; });
-    document.addEventListener('mousemove', e => { if (isDragging) { kc.style.left = e.clientX + 'px'; kc.style.top = e.clientY + 'px'; localStorage.setItem('left', e.clientX); localStorage.setItem('top', e.clientY); } });
+    document.addEventListener('mousemove', e => {
+      if (isDragging) {
+        let left = e.clientX;
+        let top = e.clientY;
+        const halfWidth = kc.offsetWidth / 2;
+        const halfHeight = kc.offsetHeight / 2;
+        if (left < halfWidth) left = halfWidth;
+        if (top < halfHeight) top = halfHeight;
+        if (left > window.innerWidth - halfWidth) left = window.innerWidth - halfWidth;
+        if (top > window.innerHeight - halfHeight) top = window.innerHeight - halfHeight;
+        kc.style.left = left + 'px';
+        kc.style.top = top + 'px';
+        localStorage.setItem('left', left);
+        localStorage.setItem('top', top);
+      }
+    });
     document.addEventListener('mouseup', () => { isDragging = false; });
     const createKey = (text, style = {}) => {
       const key = document.createElement('div'); key.textContent = text;
@@ -1899,7 +1914,21 @@ if (antiAfkModule) {
       document.body.appendChild(antiAfkBox);
       let isDrag=false, offX=0, offY=0;
       antiAfkBox.addEventListener("mousedown", e => { isDrag=true; offX=e.clientX-antiAfkBox.getBoundingClientRect().left; offY=e.clientY-antiAfkBox.getBoundingClientRect().top; e.preventDefault(); });
-      document.addEventListener("mousemove", e => { if(isDrag){ antiAfkBox.style.left=`${e.clientX-offX}px`; antiAfkBox.style.top=`${e.clientY-offY}px`; } });
+      document.addEventListener("mousemove", e => {
+        if(isDrag){
+          const rect = antiAfkBox.getBoundingClientRect();
+          let left = e.clientX-offX;
+          let top = e.clientY-offY;
+          const maxLeft = window.innerWidth - rect.width;
+          const maxTop = window.innerHeight - rect.height;
+          if (left < 0) left = 0;
+          if (top < 0) top = 0;
+          if (left > maxLeft) left = maxLeft;
+          if (top > maxTop) top = maxTop;
+          antiAfkBox.style.left=`${left}px`;
+          antiAfkBox.style.top=`${top}px`;
+        }
+      });
       document.addEventListener("mouseup", () => { isDrag=false; });
       const keys=[['w','KeyW',87],['a','KeyA',65],['s','KeyS',83],['d','KeyD',68],[' ','Space',32]]; let idx=0;
       antiAfkInterval = setInterval(() => {
@@ -1938,24 +1967,41 @@ if (antiAfkModule) {
   }
 
   createModule(MODULE_NAMES.TIME_DISPLAY, "Shows you the time so you dont have to exit full screen.");
-  const timeModule = [...gridContainer.children].find(c => c.dataset.moduleName === MODULE_NAMES.TIME_DISPLAY);
-  let isTimeVisible=false, timeElement=null;
-  if (timeModule) {
-    timeModule.addEventListener("click", () => {
-      isTimeVisible = !isTimeVisible;
-      if (isTimeVisible) {
-        timeElement = document.createElement("div"); timeElement.id="fullscreen-clock";
-        timeElement.style.cssText = `position:fixed;bottom:20px;right:20px;background-color:${guiBackgroundColor}CC;color:${guiTextColor};padding:10px 15px;border-radius:8px;font-size:18px;font-family:monospace;z-index:99999;cursor:move;border:1px solid ${guiPrimaryColor};`;
-        let isDrag=false, offX=0, offY=0;
-        timeElement.addEventListener("mousedown", e => { isDrag=true; offX=e.clientX-timeElement.getBoundingClientRect().left; offY=e.clientY-timeElement.getBoundingClientRect().top; e.preventDefault(); });
-        document.addEventListener("mousemove", e => { if(isDrag){ timeElement.style.left=`${e.clientX-offX}px`; timeElement.style.top=`${e.clientY-offY}px`; timeElement.style.bottom="auto"; timeElement.style.right="auto"; } });
-        document.addEventListener("mouseup", () => { isDrag=false; });
-        document.body.appendChild(timeElement);
-        const updateClock = () => { timeElement.textContent = new Date().toLocaleTimeString(); };
-        updateClock(); timeElement._interval = setInterval(updateClock, 1000);
-      } else if (timeElement) { clearInterval(timeElement._interval); timeElement.remove(); timeElement=null; }
-    });
-  }
+const timeModule = [...gridContainer.children].find(c => c.dataset.moduleName === MODULE_NAMES.TIME_DISPLAY);
+let isTimeVisible=false, timeElement=null;
+if (timeModule) {
+  timeModule.addEventListener("click", () => {
+    isTimeVisible = !isTimeVisible;
+    if (isTimeVisible) {
+      timeElement = document.createElement("div"); timeElement.id="fullscreen-clock";
+      timeElement.style.cssText = `position:fixed;bottom:20px;right:20px;background-color:${guiBackgroundColor}CC;color:${guiTextColor};padding:10px 15px;border-radius:8px;font-size:18px;font-family:monospace;z-index:99999;cursor:move;border:1px solid ${guiPrimaryColor};`;
+      let isDrag=false, offX=0, offY=0;
+      timeElement.addEventListener("mousedown", e => { isDrag=true; offX=e.clientX-timeElement.getBoundingClientRect().left; offY=e.clientY-timeElement.getBoundingClientRect().top; e.preventDefault(); });
+      document.addEventListener("mousemove", e => {
+        if(isDrag){
+          const rect = timeElement.getBoundingClientRect();
+          let left = e.clientX-offX;
+          let top = e.clientY-offY;
+          const maxLeft = window.innerWidth - rect.width;
+          const maxTop = window.innerHeight - rect.height;
+          if (left < 0) left = 0;
+          if (top < 0) top = 0;
+          if (left > maxLeft) left = maxLeft;
+          if (top > maxTop) top = maxTop;
+          timeElement.style.left=`${left}px`;
+          timeElement.style.top=`${top}px`;
+          timeElement.style.bottom="auto";
+          timeElement.style.right="auto";
+        }
+      });
+      document.addEventListener("mouseup", () => { isDrag=false; });
+      document.body.appendChild(timeElement);
+      const updateClock = () => { timeElement.textContent = new Date().toLocaleTimeString(); };
+      updateClock(); timeElement._interval = setInterval(updateClock, 1000);
+    } else if (timeElement) { clearInterval(timeElement._interval); timeElement.remove(); timeElement=null; }
+  });
+}
+
 const ARMOR_SLOT_LABELS = ['Helmet', 'Chestplate', 'Leggings', 'Boots'];
 const ARMOR_ROMAN = ['', 'I', 'II', 'III', 'IV', 'V', 'VI', 'VII', 'VIII', 'IX', 'X'];
 const ARMOR_SPRITESHEET_URL = 'https://miniblox.io/textures/spritesheet.36511680aea3.png';
