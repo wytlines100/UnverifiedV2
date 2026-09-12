@@ -69,15 +69,6 @@ class UnverifiedIntro {
     setTimeout(() => { this.container.style.transition = "opacity 1.4s ease"; this.container.style.opacity = 0; }, 5600);
     setTimeout(() => { this.container.remove(); }, 6400);
   }
-  showInitializedNotif() {
-    const n = document.createElement("div");
-    n.classList.add('initialized-notification');
-    n.textContent = "Unverified V2 Initialized!";
-    document.body.appendChild(n);
-    setTimeout(() => { n.style.top = "10px"; n.style.opacity = "1"; }, 10);
-    setTimeout(() => { n.style.top = "-50px"; n.style.opacity = "0"; }, 3200);
-    setTimeout(() => { n.remove(); }, 4200);
-  }
 }
 
 (function() {
@@ -109,9 +100,8 @@ class UnverifiedIntro {
 
 (function() {
   'use strict';
-  const intro = new UnverifiedIntro();
-  intro.playIntro();
-  intro.showInitializedNotif();
+const intro = new UnverifiedIntro();
+intro.playIntro();
   const style = document.createElement('style');
   style.innerHTML = `
     @font-face {
@@ -155,7 +145,6 @@ class UnverifiedIntro {
     .bind-popup button { background-color:#e74c3c; color:white; border:none; border-radius:5px; padding:10px 20px; margin-top:10px; cursor:pointer; }
     .bind-popup button:hover { background-color:#c0392b; }
     .module-tooltip { visibility:hidden; position:absolute; background-color:#2c3e50; color:white; padding:5px 10px; border-radius:5px; font-size:14px; z-index:10000; opacity:0; transition:opacity 0.3s ease; bottom:6px; right:10px; white-space:nowrap; pointer-events:none; }
-    .initialized-notification { font-family:'MinibloxFont',sans-serif; font-size:20px; color:#e74c3c; position:absolute; top:-50px; left:50%; transform:translateX(-50%); padding:10px 20px; background-color:black; border:1px solid white; border-radius:10px; z-index:10000; opacity:0; transition:top 1s ease,opacity 1s ease; }
     .other-notification { font-family:'MinibloxFont',sans-serif; font-size:14px; color:white; background:linear-gradient(135deg, #e74c3c, #c0392b); padding:12px 24px; border-radius:8px; margin-bottom:12px; box-shadow:0 4px 15px rgba(0,0,0,0.3); transition:opacity 0.4s ease, transform 0.4s ease; opacity:0; transform:translateX(100%); border-left:4px solid #ffcc00; font-weight:500; letter-spacing:0.5px; position:relative; overflow:hidden; }
     .notification-progress { position:absolute; bottom:0; left:0; height:3px; background:#ffcc00; width:100%; animation: notificationProgress 3s linear forwards; }
     .settings-icon { width:30px; height:30px; fill:white; transition:transform 0.3s ease; }
