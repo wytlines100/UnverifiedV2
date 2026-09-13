@@ -2,7 +2,7 @@
 // @name         Unverified V2
 // @namespace    http://tampermonkey.net/
 // @version      2.7
-// @description  Look at my license before you modify, I WILL DMCA you.
+// @description  Please Look at my license before you modify, I WILL DMCA you.
 // @icon         https://raw.githubusercontent.com/wytlines100/UnverifiedV2/refs/heads/main/logo.jpg
 // @license      Proprietary License
 // @author       wytlines, DeadFish7, andreypidd, jet, joudaALT, TrustIsOver, TheM1ddleM1n
