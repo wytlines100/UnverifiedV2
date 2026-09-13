@@ -1,9 +1,10 @@
 # Changelog
 
-## 2.7 — Keybind / Bounding Box Update
+## 2.7 — Keybind / Bounding Box / What's New Update
 - Added UI keybind setting to switch the menu toggle between Right Shift and `
+- Added a What's New popup that fetches the latest changelog entry from GitHub and displays it once per version after the intro
 - Version bumped from 2.3 -> 2.7
-- Fixed Draggable modules (apart from ArmorHUD because that was good in the first place) with their new bounding boxes
+- Fixed Draggable modules (apart from ArmorHUD because that was good in the first place) with new bounding boxes
 
 ## 2.3 — Armor HUD Rework
 - Armor HUD dock is now fixed to the right side only
