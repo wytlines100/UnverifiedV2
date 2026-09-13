@@ -40,6 +40,7 @@ A custom utility client for [Miniblox](https://miniblox.io), actively developed 
 - **Search Bar** — Filter the module list by name or description in real time
 - **Theme Color Picker** — Choose any accent color via a color picker or hex input, with a recent-color history
 - **Config Management** — Export all settings, module states, and keybinds to a JSON file and re-import them later
+- **What's New** — Fetches the latest CHANGELOG.md entry from GitHub and displays it in a dismissible popup after the intro when the script version changes
 - **Visual Polish** — Optional UI open/close animation, toast notifications, module click audio feedback, and multi-language support (English, Spanish, French)
 
 ### Advanced Systems
@@ -67,6 +68,7 @@ The menu is split into four sidebar pages:
 - VPN and proxy detection relies on a third-party IP lookup service and may produce false positives or negatives.
 - The Armor HUD requires `unsafeWindow.spriteMap` and `unsafeWindow.Enchantment` to be present; it will not render outside of an active match. Match detection relies on the URL path containing `/join/`.
 - Auto-AFK auto-enable will not trigger while outside of an active match, even if the idle delay has elapsed.
+- The What's New popup requires a successful network request to GitHub; it will not appear if the request fails or is blocked.
 - **Use the client at your own risk. The maintainers will not be responsible for any account actions resulting from its use.**
 
 ## Changelog
