@@ -2,14 +2,16 @@
 // @name         Unverified V2
 // @namespace    http://tampermonkey.net/
 // @version      2.7
-// @description  Please Look at my license before you modify, I WILL DMCA you.
+// @description  Look at my license before you modify, I WILL DMCA you.
 // @icon         https://raw.githubusercontent.com/wytlines100/UnverifiedV2/refs/heads/main/logo.jpg
 // @license      Proprietary License
 // @author       wytlines, DeadFish7, andreypidd, jet, joudaALT, TrustIsOver, TheM1ddleM1n
 // @match        https://miniblox.io/
 // @grant        GM_xmlhttpRequest
+// @grant        GM_info
 // @grant        unsafeWindow
 // @connect      ip-api.com
+// @connect      raw.githubusercontent.com
 // ==/UserScript==
 
 document.title = 'Unverified V2';
@@ -106,6 +108,71 @@ class UnverifiedIntro {
   'use strict';
 const intro = new UnverifiedIntro();
 intro.playIntro();
+setTimeout(() => {
+  const version = GM_info.script.version;
+  if (localStorage.getItem('uv2-whatsnew-version') === version) return;
+  GM_xmlhttpRequest({
+    method: 'GET',
+    url: 'https://raw.githubusercontent.com/wytlines100/UnverifiedV2/refs/heads/main/CHANGELOG.md',
+    onload(r) {
+      const match = r.responseText.match(/\n## ([^\n]+)\n([\s\S]*?)(\n## |$)/);
+      if (!match) return;
+      const heading = match[1].trim();
+      const body = match[2].trim()
+        .split('\n')
+        .map(line => line.replace(/^-\s*/, ''))
+        .filter(line => line.length > 0);
+
+      const overlay = document.createElement('div');
+      overlay.id = 'uv2-whatsnew-overlay';
+      overlay.style.cssText = 'position:fixed;inset:0;z-index:100001;display:flex;align-items:center;justify-content:center;background:rgba(0,0,0,0.5);opacity:0;transition:opacity 0.2s ease;';
+
+      const box = document.createElement('div');
+      box.style.cssText = 'background:#141414;border:1px solid rgba(255,255,255,0.08);border-radius:10px;padding:26px 30px;max-width:400px;width:90%;font-family:MinibloxFont,sans-serif;color:#fff;box-shadow:0 24px 60px rgba(0,0,0,0.7);';
+
+      const title = document.createElement('div');
+      title.textContent = "What's New";
+      title.style.cssText = 'font-size:20px;color:#e74c3c;margin-bottom:4px;text-shadow:0 0 12px rgba(231,76,60,0.5);';
+      box.appendChild(title);
+
+      const versionLabel = document.createElement('div');
+      versionLabel.textContent = heading;
+      versionLabel.style.cssText = 'font-size:12px;color:#666;margin-bottom:18px;letter-spacing:0.5px;';
+      box.appendChild(versionLabel);
+
+      const list = document.createElement('div');
+      list.style.cssText = 'display:flex;flex-direction:column;gap:10px;margin-bottom:22px;max-height:280px;overflow-y:auto;';
+      body.forEach(line => {
+        const row = document.createElement('div');
+        row.style.cssText = 'display:flex;align-items:flex-start;gap:8px;font-size:13px;color:#ccc;line-height:1.5;';
+        const dot = document.createElement('div');
+        dot.style.cssText = 'width:5px;height:5px;border-radius:50%;background:#e74c3c;margin-top:6px;flex-shrink:0;';
+        const text = document.createElement('div');
+        text.textContent = line;
+        row.appendChild(dot);
+        row.appendChild(text);
+        list.appendChild(row);
+      });
+      box.appendChild(list);
+
+      const btn = document.createElement('button');
+      btn.textContent = 'Got it';
+      btn.style.cssText = 'background:#e74c3c;color:#fff;border:none;border-radius:6px;padding:11px 18px;cursor:pointer;font-family:MinibloxFont,sans-serif;font-size:14px;width:100%;transition:transform 0.15s ease;';
+      btn.addEventListener('mouseenter', () => { btn.style.transform = 'scale(1.02)'; });
+      btn.addEventListener('mouseleave', () => { btn.style.transform = 'scale(1)'; });
+      btn.addEventListener('click', () => {
+        overlay.style.opacity = '0';
+        setTimeout(() => overlay.remove(), 200);
+        localStorage.setItem('uv2-whatsnew-version', version);
+      });
+      box.appendChild(btn);
+
+      overlay.appendChild(box);
+      document.body.appendChild(overlay);
+      setTimeout(() => { overlay.style.opacity = '1'; }, 10);
+    }
+  });
+}, 7800);
   const style = document.createElement('style');
   style.innerHTML = `
     @font-face {
