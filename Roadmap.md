@@ -8,10 +8,12 @@ In short, the main developers can update this so everyone stays informed about p
 - [ ] Making an extension?
 
 # TO-DO:
-- [ ] What's New Changelog
+- [ ] Improve What's New heading parsing to always target the newest version entry, not the file's top-level title
 
 # Done:
+- [x] What's New Changelog Popup (fetches CHANGELOG.md from GitHub, syncs to @version)
 - [x] Changeable UI keybind (Right Shift / `)
 - [x] Make Bounding Boxes for Time Display, AntiAFK, Keystrokes
 - [x] Removal of unused CSS
-- [x] Simplification of the intro by removing a duplicate notification 
+- [x] Simplification of the intro by removing a duplicate notification
+- [x] Improve What's New heading parsing to always target the newest version entry, not the file's top-level title
