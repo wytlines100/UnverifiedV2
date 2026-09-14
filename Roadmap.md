@@ -8,7 +8,6 @@ In short, the main developers can update this so everyone stays informed about p
 - [ ] Making an extension?
 
 # TO-DO:
-- [ ] Improve What's New heading parsing to always target the newest version entry, not the file's top-level title
 
 # Done:
 - [x] What's New Changelog Popup (fetches CHANGELOG.md from GitHub, syncs to @version)
