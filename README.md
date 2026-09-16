@@ -42,6 +42,7 @@ A custom utility client for [Miniblox](https://miniblox.io), actively developed 
 - **Config Management** — Export all settings, module states, and keybinds to a JSON file and re-import them later
 - **What's New** — Fetches the latest CHANGELOG.md entry from GitHub and displays it in a dismissible popup after the intro when the script version changes
 - **Visual Polish** — Optional UI open/close animation, toast notifications, module click audio feedback, and multi-language support (English, Spanish, French)
+- **Collab Page** — Dedicated sidebar page showcasing collaborating clients, with dev credits and links
 
 ### Advanced Systems
 - **Profile Management** — Sidebar avatar auto-detected by country via IP lookup, custom local image uploads, random preset avatar pool, and instant reset back to country flags
@@ -60,6 +61,7 @@ The menu is split into four sidebar pages:
 | **Color** | Accent color picker with hex input and recent colors |
 | **Config** | Save and load configuration as a JSON file |
 | **Settings** | Sounds, notifications, animation, persistence, UI keybind, VPN warning, Anti-AFK options, Armor HUD appearance and position, Version, Contributors |
+| **Collab** | Featured collaboration client (MiniFeather) with Discord and GitHub links |
 
 ## Limitations & Disclaimers
 
