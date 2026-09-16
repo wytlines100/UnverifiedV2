@@ -4,7 +4,6 @@ In short, the main developers can update this so everyone stays informed about p
 
 # Planned:
 - [ ] An Update Checker from GitHub to Miniblox
-- [ ] Making an extension?
 
 # TO-DO:
 
