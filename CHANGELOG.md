@@ -1,5 +1,9 @@
 # Changelog
 
+## 2.8 — MiniFeather Collab Update
+- Added a Collab sidebar page featuring MiniFeather Client
+- Version bumped from 2.7 -> 2.8
+
 ## 2.7 — Keybind / Bounding Box / What's New Update
 - Added UI keybind setting to switch the menu toggle between Right Shift and `
 - Added a What's New popup that fetches the latest changelog entry from GitHub and displays it once per version after the intro
