@@ -15,3 +15,4 @@ In short, the main developers can update this so everyone stays informed about p
 - [x] Simplification of the intro by removing a duplicate notification
 - [x] Improve What's New heading parsing to always target the newest version entry, not the file's top-level title
 - [x] Collab with MiniFeather Client (sidebar page with Discord/GitHub links)
+- [x] Notification, Bind fixes 
