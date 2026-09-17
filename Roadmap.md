@@ -3,9 +3,9 @@
 In short, the main developers can update this so everyone stays informed about planned features on discord and github!
 
 # Planned:
-- [ ] An Update Checker from GitHub to Miniblox
 
 # TO-DO:
+- [ ] An Update Checker from GitHub to Miniblox
 
 # Done:
 - [x] What's New Changelog Popup (fetches CHANGELOG.md from GitHub, syncs to @version)
