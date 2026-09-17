@@ -6,6 +6,7 @@ In short, the main developers can update this so everyone stays informed about p
 
 # TO-DO:
 - [ ] An Update Checker from GitHub to Miniblox
+- [ ] Make a Regex for Profanity
 
 # Done:
 - [x] What's New Changelog Popup (fetches CHANGELOG.md from GitHub, syncs to @version)
