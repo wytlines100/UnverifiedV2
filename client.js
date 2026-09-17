@@ -1365,7 +1365,17 @@ switchUv2Page('main');
     const uiKeybindSelect = document.querySelector("#uv2-uikeybind-select");
   if (uiKeybindSelect) uiKeybindSelect.value = uiKeybind;
   uiKeybindSelect?.addEventListener("change", function() {
-    uiKeybind = this.value;
+    const newKey = this.value;
+    const conflictModule = Object.keys(moduleBindings).find(m => {
+      const bound = moduleBindings[m];
+      return newKey === 'backtick' ? bound === '`' : bound === 'Shift';
+    });
+    if (conflictModule) {
+      showNotification(`Cannot set UI Keybind, conflicts with ${conflictModule}`, false);
+      this.value = uiKeybind;
+      return;
+    }
+    uiKeybind = newKey;
     localStorage.setItem('uv2-setting-uikeybind', uiKeybind);
   });
 
@@ -1589,8 +1599,12 @@ document.body.appendChild(notificationContainer);
 function showNotification(message, isOn) {
   if (!settings.showNotifications) return;
   const notification = document.createElement("div");
-  const moduleName = message.split(' was ')[0];
-  notification.textContent = `${moduleName} ${isOn ? (translations[currentLanguage]?.turnedOn || "was turned on") : (translations[currentLanguage]?.turnedOff || "was turned off")}`;
+  if (message.includes(' was ')) {
+    const moduleName = message.split(' was ')[0];
+    notification.textContent = `${moduleName} ${isOn ? (translations[currentLanguage]?.turnedOn || "was turned on") : (translations[currentLanguage]?.turnedOff || "was turned off")}`;
+  } else {
+    notification.textContent = message;
+  }
   notification.classList.add('other-notification');
   const progressBar = document.createElement("div");
   progressBar.classList.add("notification-progress");
@@ -1618,8 +1632,32 @@ function showBindPopup(moduleElement, moduleName) {
   closeBtn.addEventListener("click", () => { popup.style.display = "none"; isBinding = false; });
   let keyBinding = null;
   inputBox.addEventListener("keydown", e => { e.preventDefault(); keyBinding = e.key; inputBox.value = e.key; });
-  bindButton.addEventListener("click", () => { if (keyBinding) { moduleBindings[moduleName] = keyBinding; showNotification(`Bound ${moduleName} to ${keyBinding}`, true); } popup.style.display = "none"; isBinding = false; });
-  resetButton.addEventListener("click", () => { delete moduleBindings[moduleName]; showNotification(`${moduleName} unbound`, false); popup.style.display = "none"; isBinding = false; });
+  bindButton.addEventListener("click", () => {
+    if (keyBinding) {
+      const conflictModule = Object.keys(moduleBindings).find(m => m !== moduleName && moduleBindings[m] === keyBinding);
+      const uiKeyMatches = uiKeybind === 'backtick' ? keyBinding === '`' : (keyBinding === "Shift");
+      if (conflictModule) {
+        showNotification(`${keyBinding} is already bound to ${conflictModule}`, false);
+      } else if (uiKeyMatches) {
+        showNotification(`${keyBinding} is already used by the UI Keybind`, false);
+      } else {
+        moduleBindings[moduleName] = keyBinding;
+        showNotification(`Bound ${moduleName} to ${keyBinding}`, true);
+      }
+    }
+    popup.style.display = "none";
+    isBinding = false;
+  });
+  resetButton.addEventListener("click", () => {
+    if (moduleBindings[moduleName]) {
+      delete moduleBindings[moduleName];
+      showNotification(`${moduleName} unbound`, false);
+    } else {
+      showNotification(`${moduleName} has no keybind to unbind`, false);
+    }
+    popup.style.display = "none";
+    isBinding = false;
+  });
   const rect = moduleElement.getBoundingClientRect();
   popup.style.top = `${rect.top + window.scrollY + rect.height + 10}px`;
   popup.style.left = `${rect.left + window.scrollX}px`;
