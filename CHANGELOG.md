@@ -1,5 +1,9 @@
 # Changelog
 
+## v3 - Bind Popups and Notification fixes
+- Notifies the user if duplicate keybind is being used with the clashing module
+- "was turned off" after some modules while enabling them fixed
+
 ## 2.8 — MiniFeather Collab Update
 - Added a Collab sidebar page featuring MiniFeather Client
 - Version bumped from 2.7 -> 2.8
