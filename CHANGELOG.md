@@ -1,7 +1,7 @@
 # Changelog
 
 ## v3 - Bind Popups and Notification fixes
-- Notifies the user if duplicate keybind is being used with the clashing module
+- Notifies the user if a duplicate keybind is being used with the clashing module
 - "was turned off" after some modules while enabling them fixed
 
 ## 2.8 — MiniFeather Collab Update
