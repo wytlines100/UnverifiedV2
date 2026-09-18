@@ -1,5 +1,8 @@
 # Changelog
 
+## v3.1 - Regex Update
+- Regex added for profanity saving roughly ~65 lines
+
 ## v3 - Bind Popups and Notification fixes
 - Notifies the user if a duplicate keybind is being used with the clashing module
 - "was turned off" after some modules while enabling them fixed
