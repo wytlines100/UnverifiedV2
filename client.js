@@ -1473,86 +1473,48 @@ switchUv2Page('main');
   });
   languageDropdown.addEventListener("change", e => { currentLanguage = e.target.value; localStorage.setItem('unverified-language', currentLanguage); updateLanguage(); });
 
-  // TODO: Make a Regex for any swear words that have multiple ways to be spelt.
-  const BAD_WORDS = [
-  'fuck', 'fucking', 'fucker', 'fucked', 'fucks', 'motherfucker', 'motherfuckers',
-  'shit', 'shitty', 'shitter', 'bullshit', 'shithead', 'shitfaced',
-  'bitch', 'bitches', 'bitching', 'bitchy',
-  'asshole', 'assholes', 'arse', 'arsehole', 'asses', 'ass',
-  'goddamn', 'goddamnit', 'damned',
-  'crap', 'crappy', 'crapping', 'crapped',
-  'bastard', 'bastards',
-  'dick', 'dicks', 'dickhead', 'dickheads',
-  'cock', 'cocks', 'cocksucker', 'cocksuckers',
-  'pussy', 'pussies', 'penis', 'pen1s',
-  'piss', 'pissed', 'pissing', 'pissoff',
-  'cunt', 'cunts',
-  'twat', 'twats',
-  'wanker', 'wankers', 'wank', 'wanked', 'wankoff',
-  'bollocks', 'bollock',
-  'prick', 'pricks',
-  'douche', 'douchebag', 'douchebags',
-  'slut', 'sluts', 'whore', 'whores',
-  'fag', 'faggot', 'fags', 'faggots',
-  'dyke', 'dykes',
-  'nigger', 'niggers', 'nigga', 'niggas', 'nigg', 'n1gga', 'n1gger',
-  'retard', 'retarded', 'retards',
-  'nazi', 'nazis',
-  'kike', 'kikes',
-  'chink', 'chinks',
-  'spic', 'spics',
-  'wetback', 'wetbacks',
-  'tranny', 'trannies',
-  'gook', 'gooks',
-  'beaner', 'beaners',
-  'paki', 'pakis',
-  'towelhead', 'towelheads',
-  'coon', 'coons', 'goon', 'gooner', 'goons', 'cum', 'cums',
-  'gypsy', 'gypsies', 'slapper',
-  'porn', 'porno', 'pornography', 'pornhub',
-  'rape', 'raping', 'raped', 'rapist', 'rapists',
-  'hentai',
-  'fuk', 'fck', 'fuc', 'fucc', 'phuck', 'fvck', 'fxck',
-  'sht', 'shyt', 'sh1t',
-  'btch', 'b1tch', 'biatch',
-  'azz', 'a$$', 'a55', 'crack',
-  'dck', 'd1ck',
-  'cnt', 'c*nt',
-  'kys', 'killyourself', 'kms'
-];
-
 const CHAT_FILTER_CONFIG = {
   blockBadWords: true,
   blockSpam: true,
 };
 
 function chatFilterStripSeparators(text) {
-  return text.replace(/[\s\.\-\_\*\|\~\+\=]/g, '');
+  return text.replace(/[\s\.\-\_\*\|\~\+\=\\\/]/g, '');
 }
 
+const CHAT_FILTER_PATTERN = new RegExp('(^|[^a-z])(' + [
+  'f+u+c*k+\\w*|ph?u+c?k+|f[vx]ck|fuk|fck|fuc+',
+  'motherf\\w+',
+  'sh[i1y]+t\\w*|bullshit|sht|shyt',
+  'b[i1]+a?tch\\w*|btch',
+  'a+s+holes?|arse(hole)?s?|asses|ass|azz|a\\$\\$|a55',
+  'goddamn\\w*|damned',
+  'crap\\w*',
+  'bastards?',
+  'd[i1]ck\\w*|dck',
+  'cocks?(suckers?)?',
+  'pussy|pussies|pen[i1]s',
+  'piss(ed|ing|off)?',
+  'c[u*]nts?|cnt',
+  'twats?',
+  'wank\\w*',
+  'bollocks?',
+  'pricks?',
+  'douche(bags?)?',
+  'sluts?|whores?',
+  'fag(got)?s?|dykes?',
+  'n[i1]gg(er|a|s)?s?|nigg',
+  'retard(ed|s)?',
+  'nazis?|kikes?|chinks?|spics?|wetbacks?|trann(y|ies)|gooks?|beaners?|pakis?|towelheads?',
+  'coons?|goons?|gooner|cums?|gypsy|gypsies|slapper|crack',
+  'porn\\w*|hentai',
+  'rap(e|ing|ed|ist)s?',
+  'kys|kms|killyourself'
+].join('|') + ')($|[^a-z])', 'i');
+
 function chatFilterContainsBadWords(text) {
-  const cleanText = text.replace(/\\#[0-9A-Fa-f]{6}\\/g, '')
-    .replace(/\\reset\\/g, '')
-    .replace(/\\glow\\/g, '')
-    .toLowerCase();
-
-  const strippedText = chatFilterStripSeparators(cleanText);
-
-  for (let word of BAD_WORDS) {
-    const wordLower = word.toLowerCase();
-    const escapedWord = wordLower.replace(/[.*+?^${}()|[\]\\]/g, '\\$&');
-    const regex = new RegExp('(^|[^a-z])' + escapedWord + '($|[^a-z])', 'i');
-
-    if (regex.test(cleanText)) {
-      return true;
-    }
-
-    if (regex.test(strippedText)) {
-      return true;
-    }
-  }
-
-  return false;
+  const cleanText = text.replace(/\\#[0-9A-Fa-f]{6}\\|\\reset\\|\\glow\\/g, '').toLowerCase();
+  return CHAT_FILTER_PATTERN.test(cleanText) || CHAT_FILTER_PATTERN.test(chatFilterStripSeparators(cleanText));
 }
 
 const MODULE_NAMES = { AUTO_FULLSCREEN: "Auto Fullscreen", KEYSTROKES: "Keystrokes", MUTE_CHAT: "Mute Chat", CHAT_FILTER: "Chat Filter", ANTI_AFK: "Anti-Afk", KEEP_SPRINT: "Keep Sprint", TIME_DISPLAY: "Time Display", ARMOR_HUD: "Armor HUD" };
