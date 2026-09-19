@@ -5,7 +5,6 @@ In short, the main developers can update this so everyone stays informed about p
 # Planned:
 
 # TO-DO:
-- [ ] An Update Checker from GitHub to Miniblox
 
 # Done:
 - [x] What's New Changelog Popup (fetches CHANGELOG.md from GitHub, syncs to @version)
@@ -17,3 +16,4 @@ In short, the main developers can update this so everyone stays informed about p
 - [x] Collab with MiniFeather Client (sidebar page with Discord/GitHub links)
 - [x] Notification, Bind fixes
 - [x] Make a Regex for Profanity
+- [x] An Update Checker from GitHub to Miniblox
