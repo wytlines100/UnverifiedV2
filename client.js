@@ -8,7 +8,7 @@
 // @updateURL    https://raw.githubusercontent.com/wytlines100/UnverifiedV2/refs/heads/main/client.js
 // @license      Proprietary License
 // @author       wytlines, DeadFish7, andreypidd, jet, joudaALT, TrustIsOver, TheM1ddleM1n
-// @match        https://miniblox.io/
+// @match        https://miniblox.io/*
 // @grant        GM_xmlhttpRequest
 // @grant        GM_info
 // @grant        unsafeWindow
