@@ -1,5 +1,15 @@
 # Changelog
 
+## v3.2 - Update Checker
+- Added an Update Checker that compares the installed version to client.js on GitHub every minute
+- Update popup shows the newest changelog entry with Update Now and Remind Me Later options
+- Update Now opens the raw script so Tampermonkey installs it straight away
+- Update and What's New popups now share a single top-center pill-style card
+- Popups no longer darken the screen and never block mouse movement
+- Update popup and What's New can no longer appear at the same time; updates take priority
+- Added @downloadURL and @updateURL to the userscript header
+- Version bumped from 3.1 -> 3.2
+
 ## v3.1 - Regex Update
 - Regex added for profanity saving roughly ~65 lines
 
