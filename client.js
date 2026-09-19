@@ -4,6 +4,8 @@
 // @version      3.2
 // @description  Look at my license before you modify, I WILL DMCA you.
 // @icon         https://raw.githubusercontent.com/wytlines100/UnverifiedV2/refs/heads/main/logo.jpg
+// @downloadURL  https://raw.githubusercontent.com/wytlines100/UnverifiedV2/refs/heads/main/client.js
+// @updateURL    https://raw.githubusercontent.com/wytlines100/UnverifiedV2/refs/heads/main/client.js
 // @license      Proprietary License
 // @author       wytlines, DeadFish7, andreypidd, jet, joudaALT, TrustIsOver, TheM1ddleM1n
 // @match        https://miniblox.io/
@@ -108,71 +110,175 @@ class UnverifiedIntro {
   'use strict';
 const intro = new UnverifiedIntro();
 intro.playIntro();
-setTimeout(() => {
-  const version = GM_info.script.version;
-  if (localStorage.getItem('uv2-whatsnew-version') === version) return;
+const UV2_RAW_BASE = 'https://raw.githubusercontent.com/wytlines100/UnverifiedV2/refs/heads/main/';
+const UV2_SCRIPT_URL = UV2_RAW_BASE + 'client.js';
+const UV2_CHANGELOG_URL = UV2_RAW_BASE + 'CHANGELOG.md';
+let uv2LastCheck = 0;
+
+function uv2CompareVersions(a, b) {
+  const pa = String(a).split('.').map(n => parseInt(n, 10) || 0);
+  const pb = String(b).split('.').map(n => parseInt(n, 10) || 0);
+  const len = Math.max(pa.length, pb.length);
+  for (let i = 0; i < len; i++) {
+    const x = pa[i] || 0;
+    const y = pb[i] || 0;
+    if (x > y) return 1;
+    if (x < y) return -1;
+  }
+  return 0;
+}
+
+function uv2ParseChangelog(text) {
+  const m = text.match(/\n## ([^\n]+)\n([\s\S]*?)(\n## |$)/);
+  if (!m) return null;
+  return {
+    heading: m[1].trim(),
+    notes: m[2].trim().split('\n').map(l => l.replace(/^-\s*/, '')).filter(l => l.length > 0)
+  };
+}
+
+function uv2ShowPopup(opts) {
+  const existing = document.getElementById('uv2-popup');
+  if (existing) existing.remove();
+
+  const wrap = document.createElement('div');
+  wrap.id = 'uv2-popup';
+  wrap.style.cssText = 'position:fixed;top:-300px;left:50%;transform:translateX(-50%);z-index:100002;pointer-events:none;transition:top 0.5s ease,opacity 0.5s ease;opacity:0;';
+
+  const box = document.createElement('div');
+  box.style.cssText = 'pointer-events:auto;background:#141414;border:1px solid rgba(231,76,60,0.5);border-radius:28px;padding:16px 24px;width:340px;max-width:90vw;font-family:MinibloxFont,sans-serif;color:#fff;box-shadow:0 12px 40px rgba(0,0,0,0.7);box-sizing:border-box;text-align:center;';
+
+  const title = document.createElement('div');
+  title.textContent = opts.title;
+  title.style.cssText = 'font-size:16px;color:#e74c3c;text-shadow:0 0 12px rgba(231,76,60,0.5);';
+  box.appendChild(title);
+
+  const subtitle = document.createElement('div');
+  subtitle.textContent = opts.subtitle;
+  subtitle.style.cssText = 'font-size:11px;color:#666;margin:2px 0 10px;letter-spacing:0.5px;';
+  box.appendChild(subtitle);
+
+  if (opts.notes.length) {
+    const list = document.createElement('div');
+    list.style.cssText = 'display:flex;flex-direction:column;gap:6px;margin-bottom:12px;max-height:120px;overflow-y:auto;text-align:left;';
+    opts.notes.forEach(line => {
+      const row = document.createElement('div');
+      row.style.cssText = 'display:flex;align-items:flex-start;gap:8px;font-size:12px;color:#ccc;line-height:1.4;';
+      const dot = document.createElement('div');
+      dot.style.cssText = 'width:4px;height:4px;border-radius:50%;background:#e74c3c;margin-top:6px;flex-shrink:0;';
+      const text = document.createElement('div');
+      text.textContent = line;
+      row.appendChild(dot);
+      row.appendChild(text);
+      list.appendChild(row);
+    });
+    box.appendChild(list);
+  }
+
+  function close() {
+    wrap.style.top = '-300px';
+    wrap.style.opacity = '0';
+    setTimeout(() => wrap.remove(), 500);
+  }
+
+  const btnRow = document.createElement('div');
+  btnRow.style.cssText = 'display:flex;gap:8px;';
+
+  const primaryBtn = document.createElement('button');
+  primaryBtn.textContent = opts.primaryLabel;
+  primaryBtn.style.cssText = 'flex:1;background:#e74c3c;color:#fff;border:none;border-radius:16px;padding:8px 14px;cursor:pointer;font-family:MinibloxFont,sans-serif;font-size:12px;';
+  primaryBtn.addEventListener('click', () => {
+    if (opts.onPrimary) opts.onPrimary();
+    close();
+  });
+  btnRow.appendChild(primaryBtn);
+
+  if (opts.secondaryLabel) {
+    const secondaryBtn = document.createElement('button');
+    secondaryBtn.textContent = opts.secondaryLabel;
+    secondaryBtn.style.cssText = 'flex:1;background:#2a2a2a;color:#fff;border:1px solid #444;border-radius:16px;padding:8px 14px;cursor:pointer;font-family:MinibloxFont,sans-serif;font-size:12px;';
+    secondaryBtn.addEventListener('click', () => {
+      if (opts.onSecondary) opts.onSecondary();
+      close();
+    });
+    btnRow.appendChild(secondaryBtn);
+  }
+
+  box.appendChild(btnRow);
+  wrap.appendChild(box);
+  document.body.appendChild(wrap);
+  setTimeout(() => { wrap.style.top = '18px'; wrap.style.opacity = '1'; }, 20);
+}
+
+function uv2Check() {
+  const installed = GM_info.script.version;
   GM_xmlhttpRequest({
     method: 'GET',
-    url: 'https://raw.githubusercontent.com/wytlines100/UnverifiedV2/refs/heads/main/CHANGELOG.md',
+    url: UV2_SCRIPT_URL + '?t=' + Date.now(),
     onload(r) {
-      const match = r.responseText.match(/\n## ([^\n]+)\n([\s\S]*?)(\n## |$)/);
-      if (!match) return;
-      const heading = match[1].trim();
-      const body = match[2].trim()
-        .split('\n')
-        .map(line => line.replace(/^-\s*/, ''))
-        .filter(line => line.length > 0);
+      const m = r.responseText.match(/@version\s+([\d.]+)/);
+      const latest = m ? m[1] : null;
+      const hasUpdate = latest && uv2CompareVersions(latest, installed) > 0 && sessionStorage.getItem('uv2-update-dismissed') !== latest;
+      const needsWhatsNew = localStorage.getItem('uv2-whatsnew-version') !== installed;
+      if (!hasUpdate && !needsWhatsNew) return;
+      if (document.getElementById('uv2-popup')) return;
 
-      const overlay = document.createElement('div');
-      overlay.id = 'uv2-whatsnew-overlay';
-      overlay.style.cssText = 'position:fixed;inset:0;z-index:100001;display:flex;align-items:center;justify-content:center;background:rgba(0,0,0,0.5);opacity:0;transition:opacity 0.2s ease;';
-
-      const box = document.createElement('div');
-      box.style.cssText = 'background:#141414;border:1px solid rgba(255,255,255,0.08);border-radius:10px;padding:26px 30px;max-width:400px;width:90%;font-family:MinibloxFont,sans-serif;color:#fff;box-shadow:0 24px 60px rgba(0,0,0,0.7);';
-
-      const title = document.createElement('div');
-      title.textContent = "What's New";
-      title.style.cssText = 'font-size:20px;color:#e74c3c;margin-bottom:4px;text-shadow:0 0 12px rgba(231,76,60,0.5);';
-      box.appendChild(title);
-
-      const versionLabel = document.createElement('div');
-      versionLabel.textContent = heading;
-      versionLabel.style.cssText = 'font-size:12px;color:#666;margin-bottom:18px;letter-spacing:0.5px;';
-      box.appendChild(versionLabel);
-
-      const list = document.createElement('div');
-      list.style.cssText = 'display:flex;flex-direction:column;gap:10px;margin-bottom:22px;max-height:280px;overflow-y:auto;';
-      body.forEach(line => {
-        const row = document.createElement('div');
-        row.style.cssText = 'display:flex;align-items:flex-start;gap:8px;font-size:13px;color:#ccc;line-height:1.5;';
-        const dot = document.createElement('div');
-        dot.style.cssText = 'width:5px;height:5px;border-radius:50%;background:#e74c3c;margin-top:6px;flex-shrink:0;';
-        const text = document.createElement('div');
-        text.textContent = line;
-        row.appendChild(dot);
-        row.appendChild(text);
-        list.appendChild(row);
+      GM_xmlhttpRequest({
+        method: 'GET',
+        url: UV2_CHANGELOG_URL + '?t=' + Date.now(),
+        onload(c) {
+          if (document.getElementById('uv2-popup')) return;
+          const log = uv2ParseChangelog(c.responseText);
+          if (hasUpdate) {
+            uv2ShowPopup({
+              title: 'Update Available',
+              subtitle: `v${installed} -> v${latest}`,
+              notes: log ? log.notes : [],
+              primaryLabel: 'Install Now',
+              secondaryLabel: 'Later',
+              onPrimary: () => window.open(UV2_SCRIPT_URL, '_blank'),
+              onSecondary: () => sessionStorage.setItem('uv2-update-dismissed', latest)
+            });
+          } else if (log) {
+            uv2ShowPopup({
+              title: "What's New",
+              subtitle: log.heading,
+              notes: log.notes,
+              primaryLabel: 'Got it',
+              onPrimary: () => localStorage.setItem('uv2-whatsnew-version', installed)
+            });
+          }
+        },
+        onerror() {
+          if (hasUpdate && !document.getElementById('uv2-popup')) {
+            uv2ShowPopup({
+              title: 'Update Available',
+              subtitle: `v${installed} -> v${latest}`,
+              notes: [],
+              primaryLabel: 'Install Now',
+              secondaryLabel: 'Later',
+              onPrimary: () => window.open(UV2_SCRIPT_URL, '_blank'),
+              onSecondary: () => sessionStorage.setItem('uv2-update-dismissed', latest)
+            });
+          }
+        }
       });
-      box.appendChild(list);
-
-      const btn = document.createElement('button');
-      btn.textContent = 'Got it';
-      btn.style.cssText = 'background:#e74c3c;color:#fff;border:none;border-radius:6px;padding:11px 18px;cursor:pointer;font-family:MinibloxFont,sans-serif;font-size:14px;width:100%;transition:transform 0.15s ease;';
-      btn.addEventListener('mouseenter', () => { btn.style.transform = 'scale(1.02)'; });
-      btn.addEventListener('mouseleave', () => { btn.style.transform = 'scale(1)'; });
-      btn.addEventListener('click', () => {
-        overlay.style.opacity = '0';
-        setTimeout(() => overlay.remove(), 200);
-        localStorage.setItem('uv2-whatsnew-version', version);
-      });
-      box.appendChild(btn);
-
-      overlay.appendChild(box);
-      document.body.appendChild(overlay);
-      setTimeout(() => { overlay.style.opacity = '1'; }, 10);
     }
   });
-}, 7800);
+}
+
+function uv2ThrottledCheck() {
+  const now = Date.now();
+  if (now - uv2LastCheck < 30000) return;
+  uv2LastCheck = now;
+  uv2Check();
+}
+
+setTimeout(uv2ThrottledCheck, 7800);
+setInterval(uv2ThrottledCheck, 60000);
+document.addEventListener('visibilitychange', () => {
+  if (!document.hidden) uv2ThrottledCheck();
+});
   const style = document.createElement('style');
   style.innerHTML = `
     @font-face {
