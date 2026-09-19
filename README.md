@@ -18,6 +18,7 @@ A custom utility client for [Miniblox](https://miniblox.io), actively developed 
 6. Press **Right Shift** (default) or Backtick (`) to open or close the client menu.
 
 > **Note:** The Music Player is a separate file (`MusicPlayer.js`) to be installed separately.
+> > **Note:** Installing from the raw `client.js` URL on GitHub enables Tampermonkey's built-in update tracking alongside the in-client Update Checker.
 
 ## Feature Matrix
 
@@ -40,7 +41,8 @@ A custom utility client for [Miniblox](https://miniblox.io), actively developed 
 - **Search Bar** — Filter the module list by name or description in real time
 - **Theme Color Picker** — Choose any accent color via a color picker or hex input, with a recent-color history
 - **Config Management** — Export all settings, module states, and keybinds to a JSON file and re-import them later
-- **What's New** — Fetches the latest CHANGELOG.md entry from GitHub and displays it in a dismissible popup after the intro when the script version changes
+- **What's New** — Fetches the latest CHANGELOG.md entry from GitHub and displays it in a dismissible popup at the top of the screen when the script version changes
+- **Update Checker** — Compares the installed version against `client.js` on GitHub every minute and shows an update popup with the latest changelog entry.
 - **Visual Polish** — Optional UI open/close animation, toast notifications, module click audio feedback, and multi-language support (English, Spanish, French)
 - **Collab Page** — Dedicated sidebar page showcasing collaborating clients, with dev credits and links
 
@@ -70,7 +72,9 @@ The menu is split into four sidebar pages:
 - VPN and proxy detection relies on a third-party IP lookup service and may produce false positives or negatives.
 - The Armor HUD requires `unsafeWindow.spriteMap` and `unsafeWindow.Enchantment` to be present; it will not render outside of an active match. Match detection relies on the URL path containing `/join/`.
 - Auto-AFK auto-enable will not trigger while outside of an active match, even if the idle delay has elapsed.
-- The What's New popup requires a successful network request to GitHub; it will not appear if the request fails or is blocked.
+- The What's New popup and Update Checker require a successful network request to GitHub; they will not appear if the request fails or is blocked.
+- GitHub's raw file CDN caches for a few minutes, so a newly pushed version may take up to several minutes to be detected.
+- The Update button opens the raw script URL, so Tampermonkey's install screen still needs a manual confirmation.
 - **Use the client at your own risk. The maintainers will not be responsible for any account actions resulting from its use.**
 
 ## Changelog
