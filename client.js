@@ -234,8 +234,8 @@ function uv2Check() {
               title: 'Update Available',
               subtitle: `v${installed} -> v${latest}`,
               notes: log ? log.notes : [],
-              primaryLabel: 'Install Now',
-              secondaryLabel: 'Later',
+              primaryLabel: 'Update Now',
+              secondaryLabel: 'Remind Me Later',
               onPrimary: () => window.open(UV2_SCRIPT_URL, '_blank'),
               onSecondary: () => sessionStorage.setItem('uv2-update-dismissed', latest)
             });
@@ -244,7 +244,7 @@ function uv2Check() {
               title: "What's New",
               subtitle: log.heading,
               notes: log.notes,
-              primaryLabel: 'Got it',
+              primaryLabel: 'Dismiss',
               onPrimary: () => localStorage.setItem('uv2-whatsnew-version', installed)
             });
           }
@@ -255,8 +255,8 @@ function uv2Check() {
               title: 'Update Available',
               subtitle: `v${installed} -> v${latest}`,
               notes: [],
-              primaryLabel: 'Install Now',
-              secondaryLabel: 'Later',
+              primaryLabel: 'Update Now',
+              secondaryLabel: 'Remind Me Later',
               onPrimary: () => window.open(UV2_SCRIPT_URL, '_blank'),
               onSecondary: () => sessionStorage.setItem('uv2-update-dismissed', latest)
             });
