@@ -1,7 +1,7 @@
 // ==UserScript==
 // @name         Unverified V2
 // @namespace    http://tampermonkey.net/
-// @version      3.2
+// @version      3.3
 // @description  Look at my license before you modify, I WILL DMCA you.
 // @icon         https://raw.githubusercontent.com/wytlines100/UnverifiedV2/refs/heads/main/logo.jpg
 // @downloadURL  https://raw.githubusercontent.com/wytlines100/UnverifiedV2/refs/heads/main/client.js
@@ -808,7 +808,7 @@ let armorHudGap = parseInt(localStorage.getItem('uv2-armorhud-gap') || '4', 10);
     if (saveBtn) {
       saveBtn.addEventListener('click', () => {
   const config = {
-  version: '3.2',
+  version: GM_info.script.version,
   gui: {
     primaryColor: guiPrimaryColor,
     backgroundColor: guiBackgroundColor,
@@ -1097,10 +1097,6 @@ let armorHudGap = parseInt(localStorage.getItem('uv2-armorhud-gap') || '4', 10);
   title.style.userSelect = "none";
   headerRow.appendChild(title);
 
-  const languageDropdown = document.createElement("select");
-  languageDropdown.style.cssText = `background:${guiBackgroundColor};color:${guiTextColor};border:1px solid ${guiPrimaryColor};border-radius:8px;padding:8px 14px;font-size:13px;cursor:pointer;font-family:'MinibloxFont',sans-serif;position:absolute;right:0;top:50%;transform:translateY(-50%);`;
-  headerRow.appendChild(languageDropdown);
-
   const settingsOverlay = document.createElement("div");
 settingsOverlay.id = "uv2-settings-overlay";
 settingsOverlay.innerHTML = `
@@ -1167,7 +1163,7 @@ settingsOverlay.innerHTML = `
         </div>
         <div class="uv2-settings-page" id="uv2-page-about">
           <div class="uv2-section-title">Info</div>
-          <div class="uv2-setting-row"><div><div class="uv2-setting-label">Version</div><div class="uv2-setting-desc">3.2</div></div></div>
+          <div class="uv2-setting-row"><div><div class="uv2-setting-label">Version</div><div class="uv2-setting-desc" id="uv2-version-value"></div></div></div>
           <div class="uv2-setting-row"><div><div class="uv2-setting-label">License</div><div class="uv2-setting-desc">Proprietary, do not redistribute</div></div></div>
           <div class="uv2-section-title" style="margin-top:16px;">Contributors</div>
           <div id="uv2-contributors-grid"></div>
@@ -1177,6 +1173,7 @@ settingsOverlay.innerHTML = `
   </div>
 `;
 document.body.appendChild(settingsOverlay);
+document.getElementById('uv2-version-value').textContent = GM_info.script.version;
 
 (function buildContributorsGrid() {
   const UV2_CONTRIBUTORS = [
@@ -1531,54 +1528,6 @@ switchUv2Page('main');
     } catch(e) {}
   }
 
-  const translations = {
-  en: {
-    languageName:"English", title:"Unverified V2",
-    autoFullscreen:"Auto Fullscreen", autoFullscreenDesc:"Automatically toggles Fullscreen",
-    keystrokes:"Keystrokes", keystrokesDesc:"Displays the keys you press in real-time.",
-    muteChat:"Mute Chat", muteChatDesc:"Prevents other players messages from appearing in chat.",
-    chatFilter:"Chat Filter", chatFilterDesc:"Blocks swear words and spam from appearing in chat.",
-    antiAfk:"Anti-Afk", antiAfkDesc:"Presses WASD on its own to avoid being kicked for being AFK",
-    keepSprint:"Keep Sprint", keepSprintDesc:"Keeps you sprinting automatically.",
-    timeDisplay:"Time Display", timeDisplayDesc:"Shows you the time so you dont have to exit full screen.",
-    armorHud: "Armor HUD", armorHudDesc: "Shows armor durability percentages, enchantments and icons.",
-    closeUI:"Close UI", turnedOn:"was turned on", turnedOff:"was turned off", tooltipBind:"right-click to bind"
-  },
-  es: {
-    languageName:"Spanish", title:"Unverified V2",
-    autoFullscreen:"Pantalla Completa Automática", autoFullscreenDesc:"Activa/desactiva automáticamente la pantalla completa",
-    keystrokes:"Teclas", keystrokesDesc:"Muestra las teclas que presionas en tiempo real.",
-    muteChat:"Silenciar Chat", muteChatDesc:"Evita que aparezcan mensajes de otros jugadores en el chat.",
-    chatFilter:"Filtro de Chat", chatFilterDesc:"Bloquea palabrotas y spam del chat.",
-    antiAfk:"Anti-Inactividad", antiAfkDesc:"Presiona WASD automáticamente para evitar ser expulsado por inactividad",
-    keepSprint:"Mantener Sprint", keepSprintDesc:"Te mantiene corriendo automáticamente.",
-    timeDisplay:"Mostrar Hora", timeDisplayDesc:"Te muestra la hora para que no tengas que salir de pantalla completa.",
-    armorHud: "HUD de armadura", armorHudDesc: "Muestra los porcentajes de durabilidad de la armadura, los encantamientos y los iconos.",
-    closeUI:"Cerrar UI", turnedOn:"fue activado", turnedOff:"fue desactivado", tooltipBind:"clic derecho para vincular"
-  },
-      fr: {
-  languageName:"French", title:"Unverified V2",
-  autoFullscreen:"Plein Ecran Auto", autoFullscreenDesc:"Active/desactive automatiquement le plein ecran",
-  keystrokes:"Touches", keystrokesDesc:"Affiche les touches que vous appuyez en temps reel.",
-  muteChat:"Muet Chat", muteChatDesc:"Empeche les messages des autres joueurs d'apparaitre dans le chat.",
-  chatFilter:"Filtre de Chat", chatFilterDesc:"Bloque les gros mots et le spam du chat.",
-  antiAfk:"Anti-Afk", antiAfkDesc:"Appuie sur WASD automatiquement pour eviter d'etre expulse pour inactivite",
-  keepSprint:"Garder Sprint", keepSprintDesc:"Vous fait sprinter automatiquement.",
-  timeDisplay:"Affichage Heure", timeDisplayDesc:"Affiche l'heure pour ne pas avoir a quitter le plein ecran.",
-  armorHud:"HUD Armure", armorHudDesc:"Affiche les pourcentages de durabilite et les enchantements de l'armure.",
-  closeUI:"Fermer UI", turnedOn:"a ete active", turnedOff:"a ete desactive", tooltipBind:"clic droit pour lier"
-},
-};
-
-  let currentLanguage = localStorage.getItem('unverified-language') || 'en';
-  Object.keys(translations).forEach(langCode => {
-    const option = document.createElement("option");
-    option.value = langCode; option.textContent = translations[langCode].languageName;
-    if (langCode === currentLanguage) option.selected = true;
-    languageDropdown.appendChild(option);
-  });
-  languageDropdown.addEventListener("change", e => { currentLanguage = e.target.value; localStorage.setItem('unverified-language', currentLanguage); updateLanguage(); });
-
 const CHAT_FILTER_CONFIG = {
   blockBadWords: true,
   blockSpam: true,
@@ -1669,7 +1618,7 @@ function showNotification(message, isOn) {
   const notification = document.createElement("div");
   if (message.includes(' was ')) {
     const moduleName = message.split(' was ')[0];
-    notification.textContent = `${moduleName} ${isOn ? (translations[currentLanguage]?.turnedOn || "was turned on") : (translations[currentLanguage]?.turnedOff || "was turned off")}`;
+    notification.textContent = `${moduleName} ${isOn ? "was turned on" : "was turned off"}`;
   } else {
     notification.textContent = message;
   }
@@ -1856,7 +1805,7 @@ function createModule(name, description) {
 
   const tooltip = document.createElement("div");
   tooltip.classList.add("module-tooltip");
-  tooltip.textContent = translations[currentLanguage]?.tooltipBind || "right-click to bind";
+  tooltip.textContent = "right-click to bind";
   moduleContainer.appendChild(tooltip);
 
   moduleContainer._toggleWrap = toggleWrap;
@@ -1902,30 +1851,6 @@ function createModule(name, description) {
   });
   moduleContainer.addEventListener("contextmenu", event => { event.preventDefault(); showBindPopup(moduleContainer, name); });
   return moduleContainer;
-}
-
-function updateLanguage() {
-  title.textContent = translations[currentLanguage]?.title || "Unverified V2";
-  const nameToKey = {
-    [MODULE_NAMES.AUTO_FULLSCREEN]: 'autoFullscreen',
-    [MODULE_NAMES.KEYSTROKES]: 'keystrokes',
-    [MODULE_NAMES.MUTE_CHAT]: 'muteChat',
-    [MODULE_NAMES.CHAT_FILTER]: 'chatFilter',
-    [MODULE_NAMES.ANTI_AFK]: 'antiAfk',
-    [MODULE_NAMES.KEEP_SPRINT]: 'keepSprint',
-    [MODULE_NAMES.TIME_DISPLAY]: 'timeDisplay',
-    [MODULE_NAMES.ARMOR_HUD]: 'armorHud',
-  };
-  [...gridContainer.children].forEach(mc => {
-    const key = nameToKey[mc.dataset.moduleName];
-    if (!key) return;
-    const moduleTitle = mc.querySelector("span");
-    const moduleDesc = mc.querySelector("p");
-    const tooltip = mc.querySelector(".module-tooltip");
-    if (moduleTitle) moduleTitle.textContent = translations[currentLanguage]?.[key] || key;
-    if (moduleDesc) moduleDesc.textContent = translations[currentLanguage]?.[key + 'Desc'] || "";
-    if (tooltip) tooltip.textContent = translations[currentLanguage]?.tooltipBind || "right-click to bind";
-  });
 }
 
 const autoFullscreenModule = createModule(MODULE_NAMES.AUTO_FULLSCREEN, "Automatically toggles Fullscreen");
