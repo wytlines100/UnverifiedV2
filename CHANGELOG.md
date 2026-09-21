@@ -1,5 +1,8 @@
 # Changelog
 
+## v3.3 - UI Cleanup
+- Removed the language dropdown and all translation support; the client is now English only
+
 ## v3.2 - Update Checker
 - Added an Update Checker that compares the installed version to client.js on GitHub every minute
 - Update popup shows the newest changelog entry with Update Now and Remind Me Later options
