@@ -92,7 +92,7 @@ See [Roadmap.md](./Roadmap.md) for up to date planning that developers will carr
 ## Project Information
 
 - **Current Contributors:** wytlines, DeadFish7, andreypidd, jet, joudaALT, TrustIsOver, TheM1ddleM1n
-- **License:** Proprietary **All Rights Reserved** license. You may not use, copy, modify, or distribute this code without prior written permission from the copyright holder. Users are granted permission to use the client for personal or public use, subject to redistribution and modification restrictions.
+- **Policy: Distributed under a proprietary All Rights Reserved license. Users utilize third-party utility clients at their own discretion.**
 - **Contact & Support:**
   - Email: wytlines100 — `rfd6108@gmail.com`
   - Discord: [UnverifiedV2 Discord](https://dsc.gg/unverifiedv2)
