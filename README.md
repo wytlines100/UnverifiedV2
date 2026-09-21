@@ -43,7 +43,7 @@ A custom utility client for [Miniblox](https://miniblox.io), actively developed 
 - **Config Management** — Export all settings, module states, and keybinds to a JSON file and re-import them later
 - **What's New** — Fetches the latest CHANGELOG.md entry from GitHub and displays it in a dismissible popup at the top of the screen when the script version changes
 - **Update Checker** — Compares the installed version against `client.js` on GitHub every minute and shows an update popup with the latest changelog entry.
-- **Visual Polish** — Optional UI open/close animation, toast notifications, module click audio feedback, and multi-language support (English, Spanish, French)
+- **Visual Polish** — Optional UI open/close animation, toast notifications, and module click audio feedback
 - **Collab Page** — Dedicated sidebar page showcasing collaborating clients, with dev credits and links
 
 ### Advanced Systems
