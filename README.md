@@ -55,7 +55,7 @@ A custom utility client for [Miniblox](https://miniblox.io), actively developed 
 
 ## Menu Navigation
 
-The menu is split into four sidebar pages:
+The menu is split into five sidebar pages:
 
 | Page | Contents |
 |---|---|
