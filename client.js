@@ -1,7 +1,7 @@
 // ==UserScript==
 // @name         Unverified V2
 // @namespace    http://tampermonkey.net/
-// @version      3.3
+// @version      3.3.1
 // @description  Look at my license before you modify, I WILL DMCA you.
 // @icon         https://raw.githubusercontent.com/wytlines100/UnverifiedV2/refs/heads/main/logo.jpg
 // @downloadURL  https://raw.githubusercontent.com/wytlines100/UnverifiedV2/refs/heads/main/client.js
