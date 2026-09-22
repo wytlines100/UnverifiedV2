@@ -565,13 +565,15 @@ document.addEventListener('visibilitychange', () => {
   });
   uv2Sidebar.appendChild(uv2SidebarNav);
 
-  const uv2SidebarFooter = document.createElement("div");
-  uv2SidebarFooter.style.cssText = [
-    "padding:12px 14px;border-top:1px solid rgba(255,255,255,0.05);",
-    "font-size:9px;color:#333;letter-spacing:1.5px;text-transform:uppercase;",
-    "font-family:MinibloxFont,sans-serif;text-align:center;"
-  ].join("");
-  ui.appendChild(uv2Sidebar);
+const uv2SidebarFooter = document.createElement("div");
+uv2SidebarFooter.style.cssText = [
+  "padding:12px 14px;border-top:1px solid rgba(255,255,255,0.05);",
+  "font-size:11px;color:#888;letter-spacing:1.5px;text-transform:uppercase;",
+  "font-family:MinibloxFont,sans-serif;text-align:center;"
+].join("");
+uv2SidebarFooter.textContent = "v" + GM_info.script.version;
+uv2Sidebar.appendChild(uv2SidebarFooter);
+ui.appendChild(uv2Sidebar);
 
   const uv2ContentArea = document.createElement("div");
   uv2ContentArea.style.cssText = "flex:1;display:flex;flex-direction:column;overflow:hidden;min-width:0;";
@@ -1097,7 +1099,7 @@ let armorHudGap = parseInt(localStorage.getItem('uv2-armorhud-gap') || '4', 10);
   title.style.userSelect = "none";
   headerRow.appendChild(title);
 
-  const settingsOverlay = document.createElement("div");
+   const settingsOverlay = document.createElement("div");
 settingsOverlay.id = "uv2-settings-overlay";
 settingsOverlay.innerHTML = `
   <div id="uv2-settings-panel">
@@ -1107,15 +1109,12 @@ settingsOverlay.innerHTML = `
     </div>
     <div id="uv2-settings-body">
       <div id="uv2-settings-content">
-        <div class="uv2-settings-page" id="uv2-page-audio">
-          <div class="uv2-section-title">Sound</div>
+        <div class="uv2-settings-page" id="uv2-page-visuals">
+          <div class="uv2-section-title">Interface</div>
           <div class="uv2-setting-row">
             <div><div class="uv2-setting-label">Module Click Sounds</div><div class="uv2-setting-desc">Play a sound when toggling modules on or off</div></div>
             <label class="uv2-toggle"><input type="checkbox" id="uv2-toggle-sounds"><div class="uv2-toggle-track"></div></label>
           </div>
-        </div>
-        <div class="uv2-settings-page" id="uv2-page-visuals">
-          <div class="uv2-section-title">Interface</div>
           <div class="uv2-setting-row">
             <div><div class="uv2-setting-label">Show Notifications</div><div class="uv2-setting-desc">Display toast notifications when modules toggle</div></div>
             <label class="uv2-toggle"><input type="checkbox" id="uv2-toggle-notifs"><div class="uv2-toggle-track"></div></label>
@@ -1128,14 +1127,13 @@ settingsOverlay.innerHTML = `
             <div><div class="uv2-setting-label">Save Modules</div><div class="uv2-setting-desc">Restore your active modules after a page reload</div></div>
             <label class="uv2-toggle"><input type="checkbox" id="uv2-toggle-saving"><div class="uv2-toggle-track"></div></label>
           </div>
-           <div class="uv2-setting-row">
+          <div class="uv2-setting-row">
             <div><div class="uv2-setting-label">UI Keybind</div><div class="uv2-setting-desc">Choose the key that opens and closes the menu</div></div>
             <select id="uv2-uikeybind-select" style="background:#2a2a2a;color:white;border:1px solid #444;border-radius:6px;padding:6px 10px;font-size:13px;font-family:MinibloxFont,sans-serif;outline:none;cursor:pointer;">
               <option value="rshift">Right Shift</option>
               <option value="backtick">&#96;</option>
             </select>
           </div>
-          <div class="uv2-section-title" style="margin-top:14px;">Security</div>
           <div class="uv2-setting-row">
             <div><div class="uv2-setting-label">Show VPN Warning</div><div class="uv2-setting-desc">Show the VPN detection popup when opening the menu</div></div>
             <label class="uv2-toggle"><input type="checkbox" id="uv2-toggle-vpnwarning"><div class="uv2-toggle-track"></div></label>
@@ -1162,9 +1160,6 @@ settingsOverlay.innerHTML = `
           <div id="uv2-armorhud-settings-section"></div>
         </div>
         <div class="uv2-settings-page" id="uv2-page-about">
-          <div class="uv2-section-title">Info</div>
-          <div class="uv2-setting-row"><div><div class="uv2-setting-label">Version</div><div class="uv2-setting-desc" id="uv2-version-value"></div></div></div>
-          <div class="uv2-setting-row"><div><div class="uv2-setting-label">License</div><div class="uv2-setting-desc">Proprietary, do not redistribute</div></div></div>
           <div class="uv2-section-title" style="margin-top:16px;">Contributors</div>
           <div id="uv2-contributors-grid"></div>
         </div>
@@ -1173,7 +1168,6 @@ settingsOverlay.innerHTML = `
   </div>
 `;
 document.body.appendChild(settingsOverlay);
-document.getElementById('uv2-version-value').textContent = GM_info.script.version;
 
 (function buildContributorsGrid() {
   const UV2_CONTRIBUTORS = [
