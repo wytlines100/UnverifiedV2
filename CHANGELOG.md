@@ -1,5 +1,10 @@
 # Changelog
 
+## v3.3.1 - UI 2nd Update
+- Add Version back to sidebar.
+- Removed version, licence on Settings
+- 3 main sections now for Settings
+
 ## v3.3 - UI Cleanup
 - Removed the language dropdown and all translation support; the client is now English only
 
