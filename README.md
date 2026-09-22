@@ -62,7 +62,7 @@ The menu is split into five sidebar pages:
 | **Modules** | All toggleable modules, favorites, and the search bar |
 | **Color** | Accent color picker with hex input and recent colors |
 | **Config** | Save and load configuration as a JSON file |
-| **Settings** | Sounds, notifications, animation, persistence, UI keybind, VPN warning, Anti-AFK options, Armor HUD appearance and position, Version, Contributors |
+| **Settings** | Sounds, notifications, animation, persistence, UI keybind, VPN warning, Anti-AFK options, Armor HUD appearance and position |
 | **Collab** | Featured collaboration client (MiniFeather) with Discord and GitHub links |
 
 ## Limitations & Disclaimers
