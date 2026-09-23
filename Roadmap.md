@@ -18,4 +18,5 @@ In short, the main developers can update this so everyone stays informed about p
 - [x] Make a Regex for Profanity
 - [x] An Update Checker from GitHub to Miniblox
 - [x] Removed the language dropdown and all translation support, only english is supported!
-- [x] Link blocking in Chat Filter 
+- [x] Link blocking in Chat Filter
+- [x] Full Changelog Viewer sidebar page
