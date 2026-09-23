@@ -838,8 +838,6 @@ let armorHudGap = parseInt(localStorage.getItem('uv2-armorhud-gap') || '4', 10);
   },
   settings: {
     moduleSounds: settings.moduleSounds,
-    showNotifications: settings.showNotifications,
-    animateUI: settings.animateUI,
     saving: settings.saving,
     autoAfk: settings.autoAfk,
     afkChat: settings.afkChat,
@@ -901,18 +899,6 @@ let armorHudGap = parseInt(localStorage.getItem('uv2-armorhud-gap') || '4', 10);
                 localStorage.setItem('uv2-setting-sounds', settings.moduleSounds);
                 const soundsToggle = document.querySelector("#uv2-toggle-sounds");
                 if (soundsToggle) soundsToggle.checked = settings.moduleSounds;
-              }
-              if (typeof config.settings.showNotifications === 'boolean') {
-                settings.showNotifications = config.settings.showNotifications;
-                localStorage.setItem('uv2-setting-notifs', settings.showNotifications);
-                const notifsToggle = document.querySelector("#uv2-toggle-notifs");
-                if (notifsToggle) notifsToggle.checked = settings.showNotifications;
-              }
-              if (typeof config.settings.animateUI === 'boolean') {
-                settings.animateUI = config.settings.animateUI;
-                localStorage.setItem('uv2-setting-animation', settings.animateUI);
-                const animToggle = document.querySelector("#uv2-toggle-animation");
-                if (animToggle) animToggle.checked = settings.animateUI;
               }
               if (typeof config.settings.saving === 'boolean') {
                 settings.saving = config.settings.saving;
@@ -1238,14 +1224,6 @@ settingsOverlay.innerHTML = `
             <label class="uv2-toggle"><input type="checkbox" id="uv2-toggle-sounds"><div class="uv2-toggle-track"></div></label>
           </div>
           <div class="uv2-setting-row">
-            <div><div class="uv2-setting-label">Show Notifications</div><div class="uv2-setting-desc">Display toast notifications when modules toggle</div></div>
-            <label class="uv2-toggle"><input type="checkbox" id="uv2-toggle-notifs"><div class="uv2-toggle-track"></div></label>
-          </div>
-          <div class="uv2-setting-row">
-            <div><div class="uv2-setting-label">Animation</div><div class="uv2-setting-desc">Animate the menu when opening and closing</div></div>
-            <label class="uv2-toggle"><input type="checkbox" id="uv2-toggle-animation"><div class="uv2-toggle-track"></div></label>
-          </div>
-          <div class="uv2-setting-row">
             <div><div class="uv2-setting-label">Save Modules</div><div class="uv2-setting-desc">Restore your active modules after a page reload</div></div>
             <label class="uv2-toggle"><input type="checkbox" id="uv2-toggle-saving"><div class="uv2-toggle-track"></div></label>
           </div>
@@ -1514,14 +1492,6 @@ switchUv2Page('main');
     settings.moduleSounds = this.checked;
     localStorage.setItem('uv2-setting-sounds', this.checked);
   });
-  document.querySelector("#uv2-toggle-notifs")?.addEventListener("change", function() {
-    settings.showNotifications = this.checked;
-    localStorage.setItem('uv2-setting-notifs', this.checked);
-  });
-  document.querySelector("#uv2-toggle-animation")?.addEventListener("change", function() {
-    settings.animateUI = this.checked;
-    localStorage.setItem('uv2-setting-animation', this.checked);
-  });
   document.querySelector("#uv2-toggle-saving")?.addEventListener("change", function() {
     settings.saving = this.checked;
     localStorage.setItem('uv2-setting-saving', this.checked ? 'true' : 'false');
@@ -1558,7 +1528,7 @@ switchUv2Page('main');
 
   const settings = {
     moduleSounds: localStorage.getItem('uv2-setting-sounds') !== 'false',
-    showNotifications: localStorage.getItem('uv2-setting-notifs') !== 'false',
+    showNotifications: localStorage.getItem('uv2-setting-notifs') !== 'true',
     animateUI: localStorage.getItem('uv2-setting-animation') !== 'false',
     saving: localStorage.getItem('uv2-setting-saving') === 'true',
     autoAfk: localStorage.getItem('uv2-setting-autoafk') === 'true',
@@ -1568,10 +1538,6 @@ switchUv2Page('main');
 
   const soundsToggle = document.querySelector("#uv2-toggle-sounds");
   if (soundsToggle) soundsToggle.checked = settings.moduleSounds;
-  const notifsToggle = document.querySelector("#uv2-toggle-notifs");
-  if (notifsToggle) notifsToggle.checked = settings.showNotifications;
-  const animToggle = document.querySelector("#uv2-toggle-animation");
-  if (animToggle) animToggle.checked = settings.animateUI;
   const savingToggle = document.querySelector("#uv2-toggle-saving");
   if (savingToggle) savingToggle.checked = settings.saving;
   const autoAfkToggle = document.querySelector("#uv2-toggle-autoafk");
@@ -2903,4 +2869,113 @@ sortModulesByFavorite();
     }
   }
   if (settings.autoAfk) startAfkDetector();
+})();
+(function() {
+  'use strict';
+  let rawTypedSlash = false;
+
+  const gameRef = {
+    _game: null,
+    get game() {
+      if (this._game) return this._game;
+      const reactRoot = document.querySelector("#react");
+      if (!reactRoot) return null;
+      try {
+        const fiber = Object.values(reactRoot)[0];
+        const game = fiber?.updateQueue?.baseState?.element?.props?.game;
+        if (game) this._game = game;
+        return game;
+      } catch (e) { return null; }
+    }
+  };
+
+  function pushLocalChat(textMsg) {
+    const game = gameRef.game;
+    if (game && game.chat && typeof game.chat.addChat === "function") {
+      game.chat.addChat({ text: textMsg });
+    }
+  }
+
+  async function handleInfoCommand(targetUser) {
+    if (!targetUser) {
+      pushLocalChat("\\#FF0000\\Error executing command: /info <username>");
+      return;
+    }
+    try {
+      const res = await fetch('https://miniblox.io/auth-api/accounts/stats/username', {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify({ username: targetUser })
+      });
+      if (!res.ok) {
+        pushLocalChat(`\\#FF0000\\Error executing command: User ${targetUser} not found`);
+        return;
+      }
+      const data = await res.json();
+      if (data && data.profile) {
+        const username = data.profile.username || targetUser;
+        const rawRank = data.profile.rank ? data.profile.rank.trim().toLowerCase() : "";
+        const rank = (!rawRank || rawRank === "player") ? "None" : rawRank;
+        const level = data.profile.level !== undefined ? data.profile.level : "0";
+        pushLocalChat(`Username: ${username}\nRank: ${rank}\nLevel: ${level}`);
+      } else {
+        pushLocalChat(`\\#FF0000\\Error executing command: User ${targetUser} not found`);
+      }
+    } catch (err) {
+      pushLocalChat(`\\#FF0000\\Error executing command: User ${targetUser} not found`);
+    }
+  }
+
+  function checkAndExecuteInfo(inputStr) {
+    if (typeof inputStr !== 'string') return false;
+    const trimmed = inputStr.trim();
+    const cleanStr = trimmed.replace(/^\//, '').trim();
+    if (cleanStr.toLowerCase() === 'info' || cleanStr.toLowerCase().startsWith('info ')) {
+      if (trimmed.startsWith('/') || rawTypedSlash) {
+        const parts = cleanStr.split(/\s+/);
+        handleInfoCommand(parts[1] || "");
+        rawTypedSlash = false;
+        return true;
+      }
+    }
+    rawTypedSlash = false;
+    return false;
+  }
+
+  function hookChatEngine() {
+    const game = gameRef.game;
+    if (!game || !game.chat) return false;
+    const chat = game.chat;
+
+    window.addEventListener('keydown', (e) => {
+      if (e.key === '/' || e.code === 'Slash') rawTypedSlash = true;
+    }, true);
+
+    if (typeof chat.runCommand === 'function' && !chat.runCommand._isHooked) {
+      const origRunCommand = chat.runCommand;
+      chat.runCommand = function(cmdText, ...args) {
+        if (checkAndExecuteInfo(cmdText)) return;
+        return origRunCommand.apply(this, [cmdText, ...args]);
+      };
+      chat.runCommand._isHooked = true;
+    }
+
+    if (typeof chat.submit === 'function' && !chat.submit._isHooked) {
+      const origSubmit = chat.submit;
+      chat.submit = function(...args) {
+        if (checkAndExecuteInfo(chat.inputValue)) {
+          chat.setInputValue ? chat.setInputValue("") : (chat.inputValue = "");
+          if (typeof chat.closeInput === 'function') chat.closeInput();
+          return;
+        }
+        return origSubmit.apply(this, args);
+      };
+      chat.submit._isHooked = true;
+    }
+    return true;
+  }
+
+  const initInterval = setInterval(() => {
+    if (hookChatEngine()) clearInterval(initInterval);
+  }, 500);
 })();
