@@ -28,7 +28,7 @@ A custom utility client for [Miniblox](https://miniblox.io), actively developed 
 | **Auto Fullscreen** | Automatically enters fullscreen when the game loads |
 | **Keystrokes** | Displays W/A/S/D, LMB, RMB, and Space inputs in real time; draggable overlay |
 | **Mute Chat** | Suppresses all incoming chat messages from other players |
-| **Chat Filter** | Blocks profanity and repeated spam from appearing in chat; also prevents sending filtered messages |
+| **Chat Filter** | Blocks profanity, links, and repeated spam from appearing in chat; also prevents sending filtered messages |
 | **Anti-AFK** | Cycles WASD/Space key presses automatically to prevent an idle kick; includes a draggable status indicator |
 | **Keep Sprint** | Dispatches Shift alongside movement keys to maintain a sprint state |
 | **Time Display** | Shows a draggable live clock overlay so you don't have to exit fullscreen |
@@ -76,6 +76,7 @@ The menu is split into five sidebar pages:
 - GitHub's raw file CDN caches for a few minutes, so a newly pushed version may take up to several minutes to be detected.
 - The Update button opens the raw script URL, so Tampermonkey's install screen still needs a manual confirmation.
 - **Use the client at your own risk. The maintainers will not be responsible for any account actions resulting from its use.**
+- The Chat Filter link detection is pattern based and blocks all links, including Discord invites. Unusual link formats may occasionally slip through.
 
 ## Changelog
 
