@@ -1,9 +1,12 @@
 # Changelog
 
-## v3.4 - Link Filter and Changelog Viewer
+## v3.4 - Link Filter, Changelog Viewer, /info added and Reorganised Settings
 - Chat Filter now blocks links in incoming and outgoing messages
 - Added a "Message included a link." notice when a message is blocked
 - Added a Changelog page to the sidebar showing the full version history from GitHub as a timeline
+- Reorganised settings interface panel
+- /info added (from the goat jouda)
+- localstorage stuff.
 
 ## v3.3.1 - UI 2nd Update
 - Add Version back to sidebar.
