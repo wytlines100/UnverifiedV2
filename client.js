@@ -1,7 +1,7 @@
 // ==UserScript==
 // @name         Unverified V2
 // @namespace    http://tampermonkey.net/
-// @version      3.3.1
+// @version      3.4
 // @description  Look at my license before you modify, I WILL DMCA you.
 // @icon         https://raw.githubusercontent.com/wytlines100/UnverifiedV2/refs/heads/main/logo.jpg
 // @downloadURL  https://raw.githubusercontent.com/wytlines100/UnverifiedV2/refs/heads/main/client.js
@@ -1525,7 +1525,15 @@ switchUv2Page('main');
 const CHAT_FILTER_CONFIG = {
   blockBadWords: true,
   blockSpam: true,
+  blockLinks: true,
 };
+
+const CHAT_FILTER_LINK_PATTERN = /(https?:\/\/|www\.|discord\.gg\/|discord(app)?\.com\/invite\/|dsc\.gg\/|[a-z0-9-]+\.(com|net|org|io|gg|xyz|co|me|tv|ru|de|uk|us|info|club|site|online|shop|ly|to|cc|app|dev)(\/|$|[^a-z0-9]))/i;
+
+function chatFilterContainsLink(text) {
+  const cleanText = text.replace(/\\#[0-9A-Fa-f]{6}\\|\\reset\\|\\glow\\/g, '');
+  return CHAT_FILTER_LINK_PATTERN.test(cleanText) || CHAT_FILTER_LINK_PATTERN.test(cleanText.replace(/\s*(\(dot\)|\[dot\]|\{dot\})\s*/gi, '.').replace(/\s*\.\s*/g, '.'));
+}
 
 function chatFilterStripSeparators(text) {
   return text.replace(/[\s\.\-\_\*\|\~\+\=\\\/]/g, '');
@@ -1930,6 +1938,9 @@ function chatFilterGetBlockReason(text) {
   if (CHAT_FILTER_CONFIG.blockBadWords && chatFilterContainsBadWords(text)) {
     return 'profanity';
   }
+  if (CHAT_FILTER_CONFIG.blockLinks && chatFilterContainsLink(text)) {
+    return 'link';
+  }
   if (CHAT_FILTER_CONFIG.blockSpam && chatFilterIsSpam(text)) {
     return 'spam';
   }
@@ -1943,8 +1954,12 @@ function chatFilterShowBlockedNotice(reason) {
     const fiber = Object.values(reactRoot)[0];
     const game = fiber?.updateQueue?.baseState?.element?.props?.game;
     if (game && game.chat && typeof game.chat.addChat === "function") {
-      const message = reason === 'spam' ? "Please do not spam." : "Message included Profanity.";
-      game.chat.addChat({ text: `\\#FF0000\\${message}\\reset\\` });
+      const messages = {
+        spam: "Please do not spam.",
+        link: "Message included a link.",
+        profanity: "Message included Profanity.",
+      };
+      game.chat.addChat({ text: `\\#FF0000\\${messages[reason]}\\reset\\` });
     }
   } catch(e) {}
 }
@@ -1968,7 +1983,7 @@ function ensureChatAddChatPatched() {
     if (!chatObj || typeof chatObj.text !== 'string') {
       return chatOriginalAddChat(chatObj);
     }
-    if (chatObj.text.includes('Please do not spam.') || chatObj.text.includes('Message included Profanity.')) {
+      if (chatObj.text.includes('Please do not spam.') || chatObj.text.includes('Message included Profanity.') || chatObj.text.includes('Message included a link.')) {
       return chatOriginalAddChat(chatObj);
     }
     if (isChatFilterActive) {
@@ -1998,7 +2013,7 @@ muteChatModule.addEventListener("click", () => {
   }
 });
 
-const chatFilterModule = createModule(MODULE_NAMES.CHAT_FILTER, "Blocks swear words and spam from appearing in chat.");
+const chatFilterModule = createModule(MODULE_NAMES.CHAT_FILTER, "Blocks swear words, links and spam from appearing in chat.");
 chatFilterModule.addEventListener("click", () => {
   isChatFilterActive = !isChatFilterActive;
   const chat = getGameChat();
