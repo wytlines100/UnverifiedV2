@@ -45,6 +45,7 @@ A custom utility client for [Miniblox](https://miniblox.io), actively developed 
 - **Update Checker** — Compares the installed version against `client.js` on GitHub every minute and shows an update popup with the latest changelog entry.
 - **Visual Polish** — Optional UI open/close animation, toast notifications, and module click audio feedback
 - **Collab Page** — Dedicated sidebar page showcasing collaborating clients, with dev credits and links
+- **Changelog Viewer** — Dedicated sidebar page that loads the full CHANGELOG.md from GitHub and displays every version as a timeline
 
 ### Advanced Systems
 - **Profile Management** — Sidebar avatar auto-detected by country via IP lookup, custom local image uploads, random preset avatar pool, and instant reset back to country flags
@@ -63,6 +64,7 @@ The menu is split into five sidebar pages:
 | **Color** | Accent color picker with hex input and recent colors |
 | **Config** | Save and load configuration as a JSON file |
 | **Settings** | Sounds, notifications, animation, persistence, UI keybind, VPN warning, Anti-AFK options, Armor HUD appearance and position |
+| **Changelog** | Full version history fetched from GitHub |
 | **Collab** | Featured collaboration client (MiniFeather) with Discord and GitHub links |
 
 ## Limitations & Disclaimers
@@ -77,6 +79,7 @@ The menu is split into five sidebar pages:
 - The Update button opens the raw script URL, so Tampermonkey's install screen still needs a manual confirmation.
 - **Use the client at your own risk. The maintainers will not be responsible for any account actions resulting from its use.**
 - The Chat Filter link detection is pattern based and blocks all links, including Discord invites. Unusual link formats may occasionally slip through.
+- The Changelog page requires a successful network request to GitHub and will show an error message if the request fails.
 
 ## Changelog
 
