@@ -537,7 +537,8 @@ document.addEventListener('visibilitychange', () => {
   { page: 'main', label: 'Modules', icon: 'fa-th-large' },
   { page: 'gui', label: 'Color', icon: 'fa-paint-brush' },
   { page: 'config', label: 'Config', icon: 'fa-cog' },
-  { page: 'settings', label: 'Settings',icon: 'fa-sliders' },
+  { page: 'settings', label: 'Settings', icon: 'fa-sliders' },
+  { page: 'changelog', label: 'Changelog', icon: 'fa-history' },
   { page: 'collab', label: 'Collab', icon: 'fa-handshake-o' },
 ];
 
@@ -598,6 +599,11 @@ ui.appendChild(uv2Sidebar);
   uv2SettingsPage.id = "uv2-page-settings-content";
   uv2SettingsPage.style.cssText = "flex:1;display:none;overflow:hidden;";
   uv2ContentArea.appendChild(uv2SettingsPage);
+
+  const uv2ChangelogPage = document.createElement("div");
+  uv2ChangelogPage.id = "uv2-page-changelog-content";
+  uv2ChangelogPage.style.cssText = "flex:1;display:none;flex-direction:column;overflow-y:auto;overflow-x:hidden;padding:22px 24px;";
+  uv2ContentArea.appendChild(uv2ChangelogPage);
 
 const uv2CollabPage = document.createElement("div");
 uv2CollabPage.id = "uv2-page-collab-content";
@@ -703,6 +709,20 @@ let armorHudGap = parseInt(localStorage.getItem('uv2-armorhud-gap') || '4', 10);
       select.style.color = guiTextColor;
       select.style.borderColor = guiPrimaryColor;
     });
+
+        const changelogPage = document.getElementById('uv2-page-changelog-content');
+    if (changelogPage) {
+      changelogPage.querySelectorAll('.uv2-changelog-title').forEach(el => { el.style.color = guiPrimaryColor; });
+      changelogPage.querySelectorAll('.uv2-changelog-dot').forEach(el => { el.style.background = guiPrimaryColor; });
+      changelogPage.querySelectorAll('.uv2-changelog-marker').forEach(el => {
+        el.style.background = guiPrimaryColor;
+        el.style.boxShadow = `0 0 10px ${guiPrimaryColor}80`;
+      });
+      changelogPage.querySelectorAll('.uv2-changelog-tag').forEach(el => {
+        el.style.color = guiPrimaryColor;
+        el.style.borderColor = `${guiPrimaryColor}80`;
+      });
+    }
   }
 
   function buildGUIPage() {
@@ -1066,13 +1086,115 @@ let armorHudGap = parseInt(localStorage.getItem('uv2-armorhud-gap') || '4', 10);
   });
   container.appendChild(resetBtn);
 }
+    let uv2ChangelogLoaded = false;
+
+function uv2ParseFullChangelog(text) {
+  const entries = [];
+  const parts = text.split(/\n(?=## )/);
+  parts.forEach(part => {
+    const m = part.match(/^## ([^\n]+)\n?([\s\S]*)$/);
+    if (!m) return;
+    const notes = m[2].trim().split('\n').map(l => l.replace(/^-\s*/, '').trim()).filter(l => l.length > 0);
+    entries.push({ heading: m[1].trim(), notes });
+  });
+  return entries;
+}
+
+function buildChangelogPage() {
+  uv2ChangelogPage.innerHTML = '';
+
+  const heading = document.createElement('h2');
+  heading.textContent = 'Changelog';
+  heading.style.cssText = 'font-size:28px;font-family:MinibloxFont,sans-serif;margin:0 0 20px 0;text-align:center;color:#fff;';
+  uv2ChangelogPage.appendChild(heading);
+
+  const status = document.createElement('div');
+  status.textContent = 'Loading...';
+  status.style.cssText = 'text-align:center;color:#666;font-size:13px;font-family:MinibloxFont,sans-serif;padding:20px 0;';
+  uv2ChangelogPage.appendChild(status);
+
+  GM_xmlhttpRequest({
+    method: 'GET',
+    url: UV2_CHANGELOG_URL + '?t=' + Date.now(),
+    timeout: 8000,
+    onload(r) {
+      const entries = uv2ParseFullChangelog(r.responseText);
+      if (!entries.length) {
+        status.textContent = 'No changelog entries found.';
+        return;
+      }
+      status.remove();
+      uv2ChangelogLoaded = true;
+
+      const timeline = document.createElement('div');
+      timeline.style.cssText = 'display:flex;flex-direction:column;padding-left:6px;';
+
+      entries.forEach((entry, index) => {
+        const isLast = index === entries.length - 1;
+
+        const item = document.createElement('div');
+        item.style.cssText = `position:relative;padding:0 0 ${isLast ? '0' : '26px'} 22px;border-left:2px solid ${isLast ? 'transparent' : 'rgba(255,255,255,0.08)'};margin-left:5px;`;
+
+        const marker = document.createElement('div');
+        marker.className = 'uv2-changelog-marker';
+        marker.style.cssText = `position:absolute;left:-7px;top:3px;width:12px;height:12px;border-radius:50%;background:${guiPrimaryColor};box-shadow:0 0 10px ${guiPrimaryColor}80;`;
+        item.appendChild(marker);
+
+        const head = document.createElement('div');
+        head.style.cssText = 'display:flex;align-items:center;gap:10px;margin-bottom:10px;flex-wrap:wrap;';
+
+        const headTitle = document.createElement('span');
+        headTitle.className = 'uv2-changelog-title';
+        headTitle.textContent = entry.heading;
+        headTitle.style.cssText = `font-size:15px;font-family:MinibloxFont,sans-serif;color:${guiPrimaryColor};`;
+        head.appendChild(headTitle);
+
+        if (index === 0) {
+          const tag = document.createElement('span');
+          tag.className = 'uv2-changelog-tag';
+          tag.textContent = 'Latest';
+          tag.style.cssText = `font-size:9px;font-family:MinibloxFont,sans-serif;letter-spacing:1px;text-transform:uppercase;color:${guiPrimaryColor};border:1px solid ${guiPrimaryColor}80;border-radius:4px;padding:2px 6px;`;
+          head.appendChild(tag);
+        }
+        item.appendChild(head);
+
+        const list = document.createElement('div');
+        list.style.cssText = 'display:flex;flex-direction:column;gap:6px;background:linear-gradient(135deg,#1c1c1c,#141414);border:1px solid rgba(255,255,255,0.06);border-radius:8px;padding:12px 14px;';
+        entry.notes.forEach(line => {
+          const row = document.createElement('div');
+          row.style.cssText = 'display:flex;align-items:flex-start;gap:9px;font-size:12px;color:#bbb;line-height:1.5;font-family:MinibloxFont,sans-serif;';
+          const dot = document.createElement('div');
+          dot.className = 'uv2-changelog-dot';
+          dot.style.cssText = `width:4px;height:4px;border-radius:50%;background:${guiPrimaryColor};margin-top:7px;flex-shrink:0;`;
+          const text = document.createElement('div');
+          text.textContent = line;
+          row.appendChild(dot);
+          row.appendChild(text);
+          list.appendChild(row);
+        });
+        item.appendChild(list);
+        timeline.appendChild(item);
+      });
+
+      uv2ChangelogPage.appendChild(timeline);
+    },
+    onerror() {
+      status.textContent = 'Failed to load changelog.';
+    },
+    ontimeout() {
+      status.textContent = 'Failed to load changelog.';
+    }
+  });
+}
 
   function switchUv2Page(page) {
   uv2MainPage.style.display = page === 'main' ? 'flex' : 'none';
   uv2GUIPage.style.display = page === 'gui' ? 'flex' : 'none';
   uv2ConfigPage.style.display = page === 'config' ? 'flex' : 'none';
   uv2SettingsPage.style.display = page === 'settings' ? 'flex' : 'none';
+  uv2ChangelogPage.style.display = page === 'changelog' ? 'flex' : 'none';
   uv2CollabPage.style.display = page === 'collab' ? 'flex' : 'none';
+  if (page === 'changelog' && !uv2ChangelogLoaded) buildChangelogPage();
   Object.entries(uv2NavEls).forEach(([p, el]) => {
     const active = p === page;
     el.dataset.active = active ? "1" : "0";
