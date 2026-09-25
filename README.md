@@ -44,7 +44,6 @@ A custom utility client for [Miniblox](https://miniblox.io), actively developed 
 - **What's New** — Fetches the latest CHANGELOG.md entry from GitHub and displays it in a dismissible popup at the top of the screen when the script version changes
 - **Update Checker** — Compares the installed version against `client.js` on GitHub every minute and shows an update popup with the latest changelog entry.
 - **Visual Polish** — Optional UI open/close animation, toast notifications, and module click audio feedback
-- **Collab Page** — Dedicated sidebar page showcasing collaborating clients, with dev credits and links
 - **Changelog Viewer** — Dedicated sidebar page that loads the full CHANGELOG.md from GitHub and displays every version as a timeline
 
 ### Advanced Systems
@@ -65,7 +64,6 @@ The menu is split into five sidebar pages:
 | **Config** | Save and load configuration as a JSON file |
 | **Settings** | Sounds, notifications, animation, persistence, UI keybind, VPN warning, Anti-AFK options, Armor HUD appearance and position |
 | **Changelog** | Full version history fetched from GitHub |
-| **Collab** | Featured collaboration client (MiniFeather) with Discord and GitHub links |
 
 ## Limitations & Disclaimers
 
