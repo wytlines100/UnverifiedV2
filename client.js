@@ -539,7 +539,6 @@ document.addEventListener('visibilitychange', () => {
   { page: 'config', label: 'Config', icon: 'fa-cog' },
   { page: 'settings', label: 'Settings', icon: 'fa-sliders' },
   { page: 'changelog', label: 'Changelog', icon: 'fa-history' },
-  { page: 'collab', label: 'Collab', icon: 'fa-handshake-o' },
 ];
 
   const uv2NavEls = {};
@@ -604,38 +603,6 @@ ui.appendChild(uv2Sidebar);
   uv2ChangelogPage.id = "uv2-page-changelog-content";
   uv2ChangelogPage.style.cssText = "flex:1;display:none;flex-direction:column;overflow-y:auto;overflow-x:hidden;padding:22px 24px;";
   uv2ContentArea.appendChild(uv2ChangelogPage);
-
-const uv2CollabPage = document.createElement("div");
-uv2CollabPage.id = "uv2-page-collab-content";
-uv2CollabPage.style.cssText = "flex:1;display:none;flex-direction:column;align-items:center;overflow-y:auto;overflow-x:hidden;padding:32px 24px;";
-const uv2CollabDevs = [
-  { name: "EstebanGrp", github: "EstebanGrp", color: "#ea580c" },
-  { name: "Not_Senpai", github: "notsenpai52013-bit", color: "#4f46e5" },
-  { name: "ItzNightrise", github: "DevOfficial-Client", color: "#16a34a" },
-  { name: "botless", github: "botleast", color: "#3b82f6" },
-  { name: "AngryWolfX", github: "Miniblox697", color: "#9333ea" },
-];
-
-uv2CollabPage.innerHTML = `
-  <img src="https://raw.githubusercontent.com/DevOfficial-Client/MiniFeather-Client/refs/heads/main/assets/icon.png" style="width:64px;height:64px;border-radius:12px;margin-bottom:14px;">
-  <div style="font-size:22px;font-family:MinibloxFont,sans-serif;color:#fff;">MiniFeather Client</div>
-  <div style="font-size:13px;color:#888;margin:6px 0 10px;text-align:center;">Custom Miniblox client for visuals, gameplay, and QoL.</div>
-  <div style="font-size:10px;color:#2ecc71;text-transform:uppercase;letter-spacing:0.5px;margin-bottom:16px;">Actively Developed</div>
-  <div style="display:flex;flex-wrap:wrap;gap:8px;justify-content:center;margin-bottom:18px;">
-    <span style="background:#1a2e1a;color:#86efac;border:1px solid #16a34a;font-size:11px;padding:5px 12px;border-radius:20px;">Baritone</span>
-    <span style="background:#1a1f3a;color:#93c5fd;border:1px solid #3b82f6;font-size:11px;padding:5px 12px;border-radius:20px;">Waypoints</span>
-    <span style="background:#2d1a3a;color:#d8b4fe;border:1px solid #9333ea;font-size:11px;padding:5px 12px;border-radius:20px;">World Map</span>
-    <span style="background:#3b1a00;color:#fdba74;border:1px solid #ea580c;font-size:11px;padding:5px 12px;border-radius:20px;">VerityAI</span>
-  </div>
-  <div style="display:flex;flex-wrap:wrap;gap:10px;justify-content:center;margin-bottom:20px;">
-    ${uv2CollabDevs.map(d => `<a href="https://github.com/${d.github}" target="_blank" style="display:flex;flex-direction:column;align-items:center;gap:6px;text-decoration:none;width:70px;"><img src="https://github.com/${d.github}.png" style="width:44px;height:44px;border-radius:50%;border:2px solid ${d.color}99;"><span style="font-size:10.5px;color:#ccc;font-family:MinibloxFont,sans-serif;text-align:center;">${d.name}</span></a>`).join('')}
-  </div>
-  <div style="display:flex;gap:10px;">
-    <a href="https://discord.gg/aXvZbsjRh" target="_blank" style="background:#e74c3c;color:#fff;text-decoration:none;border-radius:6px;padding:11px 24px;font-family:MinibloxFont,sans-serif;font-size:14px;">Discord</a>
-    <a href="https://github.com/DevOfficial-Client/MiniFeather-Client" target="_blank" style="background:#2a2a2a;color:#fff;text-decoration:none;border-radius:6px;padding:11px 24px;font-family:MinibloxFont,sans-serif;font-size:14px;border:1px solid #444;">GitHub</a>
-  </div>
-`;
-uv2ContentArea.appendChild(uv2CollabPage);
 
 let guiPrimaryColor = localStorage.getItem('uv2-gui-primary-color') || '#e74c3c';
 let guiBackgroundColor = '#000000';
@@ -1179,7 +1146,6 @@ function buildChangelogPage() {
   uv2ConfigPage.style.display = page === 'config' ? 'flex' : 'none';
   uv2SettingsPage.style.display = page === 'settings' ? 'flex' : 'none';
   uv2ChangelogPage.style.display = page === 'changelog' ? 'flex' : 'none';
-  uv2CollabPage.style.display = page === 'collab' ? 'flex' : 'none';
   if (page === 'changelog' && !uv2ChangelogLoaded) buildChangelogPage();
   Object.entries(uv2NavEls).forEach(([p, el]) => {
     const active = p === page;
