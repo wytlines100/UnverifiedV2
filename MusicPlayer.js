@@ -1,7 +1,7 @@
 // ==UserScript==
 // @name         Music Player UV2
 // @namespace    http://tampermonkey.net/
-// @version      3.4
+// @version      3.5
 // @description  Music Player for UnverifiedV2 in a new userscript
 // @match        https://miniblox.io/
 // @grant        none
