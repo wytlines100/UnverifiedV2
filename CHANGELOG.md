@@ -5,6 +5,7 @@
 - Slower, smoother intro fade-in and fade-out
 - Longer hold time before intro dismisses
 - Intro rotation timing shortened
+- Fixed timing for intro and update checker
 
 ## v3.5
 - Removed Profile/User (purely cosmetic)
