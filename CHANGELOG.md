@@ -1,5 +1,11 @@
 # Changelog
 
+## v3.6
+- Intro now shows the active UI keybind
+- Slower, smoother intro fade-in and fade-out
+- Longer hold time before intro dismisses
+- Intro rotation timing shortened
+
 ## v3.5
 - Removed Profile/User (purely cosmetic)
 
