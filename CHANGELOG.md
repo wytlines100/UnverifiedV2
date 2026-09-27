@@ -6,7 +6,7 @@
 - Added a Changelog page to the sidebar showing the full version history from GitHub as a timeline
 - Reorganised settings interface panel
 - /info added (from the goat jouda)
-- localstorage stuff.
+- Localstorage stuff
 
 ## v3.3.1 - UI 2nd Update
 - Add Version back to sidebar.
@@ -33,10 +33,6 @@
 - Notifies the user if a duplicate keybind is being used with the clashing module
 - "was turned off" after some modules while enabling them fixed
 
-## 2.8 — MiniFeather Collab Update
-- Added a Collab sidebar page featuring MiniFeather Client
-- Version bumped from 2.7 -> 2.8
-
 ## 2.7 — Keybind / Bounding Box / What's New Update
 - Added UI keybind setting to switch the menu toggle between Right Shift and `
 - Added a What's New popup that fetches the latest changelog entry from GitHub and displays it once per version after the intro
@@ -52,14 +48,12 @@
 
 ## 2.23 - Version Bump
 - Version bumped from 2.2.2 -> 2.23
-- Collab with Mini Feather Coming soon!
 
 ## 2.2.2 — Shine / Music Player Update
 - Added shine animation effect to module cards
 - Moved Music Player out of `client.js` into a separate `MusicPlayer.js`
 - Settings → Contributors section improved with bios, icons, and titles
 - Color theme refresh
-- other stuff
 
 ## 2.2.1 — CSS / Intro Update
 - Removed most CSS button overrides following Miniblox title screen changes
