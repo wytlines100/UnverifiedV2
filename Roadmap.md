@@ -5,6 +5,7 @@ In short, the main developers can update this so everyone stays informed about p
 # Planned:
 
 # TO-DO:
+- [ ] Add a notification on start up to say what keybind is used for the opening of the UI
 
 # Done:
 - [x] What's New Changelog Popup (fetches CHANGELOG.md from GitHub, syncs to @version)
@@ -19,4 +20,5 @@ In short, the main developers can update this so everyone stays informed about p
 - [x] Removed the language dropdown and all translation support, only english is supported!
 - [x] Link blocking in Chat Filter
 - [x] Full Changelog Viewer sidebar page
-- [x] /info command added (thanks jouda) 
+- [x] /info command added (thanks jouda)
+- [x] Profile/User removed as it was purely cosmetic 
