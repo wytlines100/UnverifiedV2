@@ -1,89 +1,116 @@
 # Changelog
 
-## v3.4 - Link Filter, Changelog Viewer, /info added and Reorganised Settings
-- Chat Filter now blocks links in incoming and outgoing messages
-- Added a "Message included a link." notice when a message is blocked
-- Added a Changelog page to the sidebar showing the full version history from GitHub as a timeline
-- Reorganised settings interface panel
-- /info added (from the goat jouda)
-- Localstorage stuff
+## v3.4
+### Added
+- Link blocking in Chat Filter for incoming and outgoing messages
+- Blocked-message notice for links
+- Changelog sidebar page showing full version history as a timeline
+- /info command
 
-## v3.3.1 - UI 2nd Update
-- Add Version back to sidebar.
-- Removed version, licence on Settings
-- 3 main sections now for Settings
+### Changed
+- Reorganised settings panel layout
+- Refactored localStorage usage
 
-## v3.3 - UI Cleanup
-- Removed the language dropdown and all translation support; the client is now English only
+## v3.3.1
+### Added
+- Version display in sidebar
 
-## v3.2 - Update Checker
-- Added an Update Checker that compares the installed version to client.js on GitHub every minute
-- Update popup shows the newest changelog entry with Update Now and Remind Me Later options
-- Update Now opens the raw script so Tampermonkey installs it straight away
-- Update and What's New popups now share a single top-center pill-style card
-- Popups no longer darken the screen and never block mouse movement
-- Update popup and What's New can no longer appear at the same time; updates take priority
-- Added @downloadURL and @updateURL to the userscript header
-- Version bumped from 3.1 -> 3.2
+### Removed
+- Version and license display from Settings
 
-## v3.1 - Regex Update
-- Regex added for profanity saving roughly ~65 lines
+### Changed
+- Settings split into three main sections
 
-## v3 - Bind Popups and Notification fixes
-- Notifies the user if a duplicate keybind is being used with the clashing module
-- "was turned off" after some modules while enabling them fixed
+## v3.3
+### Removed
+- Language dropdown and all translation support; client is now English only
 
-## 2.7 — Keybind / Bounding Box / What's New Update
-- Added UI keybind setting to switch the menu toggle between Right Shift and `
-- Added a What's New popup that fetches the latest changelog entry from GitHub and displays it once per version after the intro
-- Version bumped from 2.3 -> 2.7
-- Fixed Draggable modules (apart from ArmorHUD because that was good in the first place) with new bounding boxes
+## v3.2
+### Added
+- Update Checker comparing installed version to client.js on GitHub every minute
+- Update popup with newest changelog entry, Update Now and Remind Me Later options
+- @downloadURL and @updateURL in userscript header
 
-## 2.3 — Armor HUD Rework
-- Armor HUD dock is now fixed to the right side only
-- Removed 9 unused variables
-- Removed `_armorSide` variables and associated side-selection logic
-- Removed `window.addEventListener('resize', ...)` handler tied to HUD repositioning
-- Dropped language support for Russian and Dutch.
+### Changed
+- Update and What's New popups merged into a single top-center pill-style card
+- Popups no longer darken the screen or block mouse movement
+- Update popup takes priority over What's New when both would trigger
 
-## 2.23 - Version Bump
-- Version bumped from 2.2.2 -> 2.23
+## v3.1
+### Added
+- Profanity regex filter
 
-## 2.2.2 — Shine / Music Player Update
-- Added shine animation effect to module cards
-- Moved Music Player out of `client.js` into a separate `MusicPlayer.js`
-- Settings → Contributors section improved with bios, icons, and titles
+## v3
+### Added
+- Duplicate keybind notification naming the conflicting module
+
+### Fixed
+- Incorrect "was turned off" notification on module enable
+
+## v2.7
+### Added
+- UI keybind setting (Right Shift or `)
+- What's New popup fetching latest changelog entry from GitHub, shown once per version
+
+### Fixed
+- Draggable modules using bounding boxes (excludes Armor HUD)
+
+## v2.3
+### Changed
+- Armor HUD dock fixed to right side only
+
+### Removed
+- Unused variables and side-selection logic for Armor HUD
+- Resize listener tied to HUD repositioning
+- Russian and Dutch language support
+
+## v2.23
+### Changed
+- Version bump
+
+## v2.2.2
+### Added
+- Shine animation on module cards
+- Contributor bios, icons, and titles in Settings
+
+### Changed
 - Color theme refresh
 
-## 2.2.1 — CSS / Intro Update
-- Removed most CSS button overrides following Miniblox title screen changes
+### Removed
+- Music Player moved out of client.js into MusicPlayer.js
+
+## v2.2.1
+### Changed
 - New title screen background
-- Intro sequence extended by 3–4 seconds to allow reading the author credits
+- Intro sequence extended for readability
 - Build size reduced from 139 KB to 125 KB
-- Documentation updates
 
-## 2.2 — Major Update
-- Added Armor HUD module with floating and docked modes
-- Added Armor HUD settings: icon opacity, background opacity, icon size, spacing, and side selection
-- Added French, Dutch, and Russian language support
-- Added a new theme preset
-- Version bumped from 2.1.1 → 2.2
+### Removed
+- Most CSS button overrides following Miniblox title screen changes
 
-## 2.1.1
-- Added Chat Filter with profanity and spam detection
-- Updated author credits
-- Version bumped from 2.1.0 → 2.1.1
+## v2.2
+### Added
+- Armor HUD module with floating and docked modes
+- Armor HUD settings: icon opacity, background opacity, icon size, spacing, side selection
+- French, Dutch, and Russian language support
+- New theme preset
 
-## 2.1.0
-- Added Settings panel with sound, notification, animation, and module-persistence toggles
-- Added VPN/proxy detection with dismissible warning
-- Added Anti-AFK auto-enable with configurable idle delay and chat notification
-- Added theme system with color presets
-- Added config save/load via JSON
-- Added multi-language support (English, Spanish)
-- Added profile avatar system
+## v2.1.1
+### Added
+- Chat Filter with profanity and spam detection
 
-## 1.0
-- Base Client
-- Keystrokes, FPS, CPS added etc
+## v2.1.0
+### Added
+- Settings panel with sound, notification, animation, and persistence toggles
+- VPN/proxy detection with dismissible warning
+- Anti-AFK auto-enable with configurable idle delay and chat notification
+- Theme system with color presets
+- Config save/load via JSON
+- Multi-language support (English, Spanish)
+- Profile avatar system
+
+## v1.0
+### Added
+- Base client
+- Keystrokes, FPS, CPS display
 - Minimal UI with themes
