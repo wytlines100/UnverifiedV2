@@ -1,5 +1,5 @@
 // ==UserScript==
-// @name         Unverified V2-test
+// @name         Unverified V2
 // @namespace    http://tampermonkey.net/
 // @version      3.5
 // @description  Look at my license before you modify, I WILL DMCA you.
@@ -12,7 +12,6 @@
 // @grant        GM_xmlhttpRequest
 // @grant        GM_info
 // @grant        unsafeWindow
-// @connect      ip-api.com
 // @connect      raw.githubusercontent.com
 // ==/UserScript==
 
@@ -431,107 +430,6 @@ document.addEventListener('visibilitychange', () => {
     'font-family:MinibloxFont,sans-serif;line-height:1.2;">UV2</span>'
   ].join("");
   uv2Sidebar.appendChild(uv2SidebarLogo);
-
-  const uv2ProfileCard = document.createElement("div");
-  uv2ProfileCard.id = "uv2-profile-card";
-  uv2ProfileCard.style.cssText = "padding:10px;margin:10px;display:flex;flex-direction:column;align-items:center;gap:8px;";
-
-  const profileWrapper = document.createElement("div");
-  profileWrapper.style.cssText = "position:relative;width:50px;height:50px;";
-
-  const profileCircle = document.createElement("div");
-  profileCircle.id = "uv2-country-circle";
-  profileCircle.style.cssText = "width:50px;height:50px;border-radius:50%;border:2px solid #e74c3c;background-size:cover;background-position:center;display:flex;align-items:center;justify-content:center;font-size:20px;";
-  profileCircle.textContent = "🌍";
-  profileWrapper.appendChild(profileCircle);
-
-  const removeBtn = document.createElement("button");
-  removeBtn.textContent = "✕";
-  removeBtn.style.cssText = "position:absolute;top:-5px;right:-5px;background:#e74c3c;color:white;border:none;border-radius:50%;width:20px;height:20px;cursor:pointer;font-size:12px;opacity:0;transition:opacity 0.2s;";
-  removeBtn.addEventListener("click", () => {
-    const randomImages = [
-      "https://i.pravatar.cc/150?img=" + Math.floor(Math.random()*70),
-      "https://api.dicebear.com/7.x/avataaars/svg?seed=" + Math.random(),
-      "https://api.dicebear.com/7.x/pixel-art/svg?seed=" + Math.random()
-    ];
-    const randomImage = randomImages[Math.floor(Math.random()*randomImages.length)];
-    profileCircle.style.backgroundImage = `url('${randomImage}')`;
-    profileCircle.textContent = "";
-    localStorage.setItem("uv2-profile-image", randomImage);
-  });
-  profileWrapper.appendChild(removeBtn);
-
-  const uploadBtn = document.createElement("button");
-  uploadBtn.textContent = "⬆";
-  uploadBtn.style.cssText = "position:absolute;top:-5px;left:-5px;background:#4CAF50;color:white;border:none;border-radius:50%;width:20px;height:20px;cursor:pointer;font-size:12px;opacity:0;transition:opacity 0.2s;";
-
-  const fileInput = document.createElement("input");
-  fileInput.type = "file";
-  fileInput.accept = "image/*";
-  fileInput.style.cssText = "display:none;";
-  fileInput.addEventListener("change", (e) => {
-    const file = e.target.files[0];
-    if (file) {
-      const reader = new FileReader();
-      reader.onload = (event) => {
-        profileCircle.style.backgroundImage = `url('${event.target.result}')`;
-        profileCircle.textContent = "";
-        localStorage.setItem("uv2-profile-image", event.target.result);
-        console.log("Custom profile uploaded!");
-      };
-      reader.readAsDataURL(file);
-    }
-  });
-  document.body.appendChild(fileInput);
-
-  uploadBtn.addEventListener("click", () => {
-    fileInput.click();
-  });
-  profileWrapper.appendChild(uploadBtn);
-
-  const resetBtn = document.createElement("button");
-  resetBtn.textContent = "↻";
-  resetBtn.style.cssText = "position:absolute;bottom:-5px;right:-5px;background:#888;color:white;border:none;border-radius:50%;width:20px;height:20px;cursor:pointer;font-size:12px;opacity:0;transition:opacity 0.2s;";
-  resetBtn.addEventListener("click", () => {
-    fetch('https://ipapi.co/json/').then(r => r.json()).then(d => {
-      const countryCode = d.country_code;
-      profileCircle.style.backgroundImage = `url('https://flagcdn.com/256x192/${countryCode.toLowerCase()}.png')`;
-      profileCircle.textContent = "";
-      localStorage.removeItem("uv2-profile-image");
-    });
-  });
-  profileWrapper.appendChild(resetBtn);
-
-  profileWrapper.style.cursor = "pointer";
-  profileWrapper.addEventListener("mouseenter", () => {
-    removeBtn.style.opacity = "1";
-    uploadBtn.style.opacity = "1";
-    resetBtn.style.opacity = "1";
-  });
-  profileWrapper.addEventListener("mouseleave", () => {
-    removeBtn.style.opacity = "0";
-    uploadBtn.style.opacity = "0";
-    resetBtn.style.opacity = "0";
-  });
-  uv2ProfileCard.appendChild(profileWrapper);
-
-  const userDiv = document.createElement("div");
-  userDiv.textContent = "User" + Math.floor(Math.random()*100000);
-  userDiv.style.cssText = "font-size:11px;color:#888;";
-  uv2ProfileCard.appendChild(userDiv);
-  uv2Sidebar.appendChild(uv2ProfileCard);
-
-  fetch('https://ipapi.co/json/').then(r => r.json()).then(d => {
-    const savedImage = localStorage.getItem("uv2-profile-image");
-    if (savedImage) {
-      profileCircle.style.backgroundImage = `url('${savedImage}')`;
-      profileCircle.textContent = "";
-    } else {
-      const countryCode = d.country_code;
-      profileCircle.style.backgroundImage = `url('https://flagcdn.com/256x192/${countryCode.toLowerCase()}.png')`;
-      profileCircle.textContent = "";
-    }
-  }).catch(() => {});
 
   const uv2NavDefs = [
   { page: 'main', label: 'Modules', icon: 'fa-th-large' },
