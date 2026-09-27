@@ -90,8 +90,8 @@ class UnverifiedIntro {
     this.container.style.transition = "opacity 1.8s cubic-bezier(0.4, 0, 0.2, 1), transform 1.8s cubic-bezier(0.4, 0, 0.2, 1)";
     this.container.style.opacity = 0;
     this.container.style.transform = "scale(1.04)";
-  }, 8400);
-  setTimeout(() => { this.container.remove(); }, 10200);
+  }, 10800);
+  setTimeout(() => { this.container.remove(); }, 12600);
   }
 }
 
