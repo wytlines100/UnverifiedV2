@@ -25,6 +25,8 @@ class UnverifiedIntro {
       display: "flex", alignItems: "center", justifyContent: "center", flexDirection: "column",
       backgroundColor: "black",
       overflow: "hidden", zIndex: 9999,
+      opacity: 0,
+      transition: "opacity 0.6s ease",
     });
     this.check = document.createElement("div");
     this.check.textContent = "✓";
@@ -39,7 +41,8 @@ class UnverifiedIntro {
       border: "2px solid red", borderRadius: "50%",
       boxShadow: "0 0 10px red, 0 0 20px red, 0 0 30px red",
       display: "flex", alignItems: "center", justifyContent: "center",
-      opacity: 0, transition: "opacity 1.4s ease, transform 1.4s ease",
+      opacity: 0, transform: "scale(0.85)",
+      transition: "opacity 1.4s ease, transform 1.4s cubic-bezier(0.22, 1, 0.36, 1)",
     });
     this.circle.appendChild(this.check);
     this.container.appendChild(this.circle);
@@ -59,22 +62,36 @@ class UnverifiedIntro {
       textShadow: '0 0 5px red, 0 0 10px red, 0 0 20px red',
     });
     this.container.appendChild(this.creditsText);
+    this.keybindText = document.createElement("div");
+    const introKeybind = localStorage.getItem('uv2-setting-uikeybind') || 'rshift';
+    this.keybindText.textContent = `Press ${introKeybind === 'backtick' ? '`' : 'Right Shift'} to open the menu`;
+    Object.assign(this.keybindText.style, {
+      color: "red", fontSize: "30px", opacity: 0, marginTop: "30px",
+      transition: "opacity 1.1s ease",
+      textShadow: '0 0 5px red, 0 0 10px red, 0 0 20px red',
+    });
+    this.container.appendChild(this.keybindText);
   }
   playIntro() {
   document.body.appendChild(this.container);
-  this.circle.style.opacity = 1;
-  this.check.style.opacity = 1;
-  setTimeout(() => { this.check.style.transform = "rotate(180deg)"; }, 800);
+  requestAnimationFrame(() => { this.container.style.opacity = 1; });
+  setTimeout(() => {
+    this.circle.style.opacity = 1;
+    this.circle.style.transform = "scale(1)";
+    this.check.style.opacity = 1;
+  }, 200);
+  setTimeout(() => { this.check.style.transform = "rotate(180deg)"; }, 700);
   setTimeout(() => {
     this.unverifiedText.style.opacity = 1;
-  }, 1600);
-  setTimeout(() => { this.creditsText.style.opacity = 1; }, 2400);
+  }, 2400);
+  setTimeout(() => { this.creditsText.style.opacity = 1; }, 3600);
+  setTimeout(() => { this.keybindText.style.opacity = 1; }, 4800);
   setTimeout(() => {
     this.container.style.transition = "opacity 1.8s cubic-bezier(0.4, 0, 0.2, 1), transform 1.8s cubic-bezier(0.4, 0, 0.2, 1)";
     this.container.style.opacity = 0;
     this.container.style.transform = "scale(1.04)";
-  }, 5600);
-  setTimeout(() => { this.container.remove(); }, 7400);
+  }, 8400);
+  setTimeout(() => { this.container.remove(); }, 10200);
   }
 }
 
