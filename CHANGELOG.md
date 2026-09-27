@@ -1,5 +1,8 @@
 # Changelog
 
+## v3.5 
+- Profile/User removed as it was purely cosmetic
+
 ## v3.4
 - Link blocking in Chat Filter for incoming and outgoing messages
 - Blocked-message notice for links
