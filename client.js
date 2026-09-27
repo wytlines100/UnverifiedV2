@@ -290,7 +290,7 @@ function uv2ThrottledCheck() {
   uv2Check();
 }
 
-setTimeout(uv2ThrottledCheck, 7800);
+setTimeout(uv2ThrottledCheck, 12800);
 setInterval(uv2ThrottledCheck, 60000);
 document.addEventListener('visibilitychange', () => {
   if (!document.hidden) uv2ThrottledCheck();
