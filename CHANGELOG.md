@@ -1,47 +1,47 @@
 # Changelog
 
-## v3.5 
-- Profile/User removed as it was purely cosmetic
+## v3.5
+- Removed Profile/User (purely cosmetic)
 
 ## v3.4
-- Link blocking in Chat Filter for incoming and outgoing messages
+- Link blocking in Chat Filter (incoming and outgoing)
 - Blocked-message notice for links
-- Changelog sidebar page showing full version history as a timeline
+- Changelog sidebar page with full version timeline
 - /info command
 - Reorganised settings panel layout
 - Refactored localStorage usage
 
 ## v3.3.1
-- Version display added back to sidebar
+- Version display restored to sidebar
 - Version and license display removed from Settings
-- Settings split into three main sections
+- Settings split into three sections
 
 ## v3.3
-- Removed language dropdown and all translation support; client is now English only
+- Removed language dropdown and translation support (English only)
 
 ## v3.2
-- Added Update Checker comparing installed version to client.js on GitHub every minute
-- Update popup shows newest changelog entry with Update Now and Remind Me Later options
-- Update and What's New popups merged into a single top-center pill-style card
-- Popups no longer darken the screen or block mouse movement
-- Update popup takes priority over What's New when both would trigger
+- Added Update Checker (compares installed version to GitHub every minute)
+- Update popup with newest changelog entry, Update Now / Remind Me Later
+- Merged Update and What's New popups into one pill-style card
+- Popups no longer block mouse or darken screen
+- Update popup takes priority over What's New
 - Added @downloadURL and @updateURL to userscript header
 
 ## v3.1
 - Added profanity regex filter
 
 ## v3
-- Added duplicate keybind notification naming the conflicting module
-- Fixed incorrect "was turned off" notification on module enable
+- Added duplicate keybind conflict notification
+- Fixed incorrect "was turned off" notification on enable
 
 ## v2.7
 - Added UI keybind setting (Right Shift or `)
-- Added What's New popup fetching latest changelog entry from GitHub, shown once per version
-- Fixed draggable modules using bounding boxes (excludes Armor HUD)
+- Added What's New popup (fetches latest changelog entry, shown once per version)
+- Fixed draggable module bounding boxes (excludes Armor HUD)
 
 ## v2.3
-- Armor HUD dock fixed to right side only
-- Removed unused variables and side-selection logic for Armor HUD
+- Armor HUD docking fixed to right side only
+- Removed unused Armor HUD variables and side-selection logic
 - Removed resize listener tied to HUD repositioning
 - Removed Russian and Dutch language support
 
@@ -50,29 +50,29 @@
 
 ## v2.2.2
 - Added shine animation on module cards
-- Added contributor bios, icons, and titles in Settings
+- Added contributor bios, icons, titles in Settings
 - Color theme refresh
-- Music Player moved out of client.js into MusicPlayer.js
+- Moved Music Player to MusicPlayer.js
 
 ## v2.2.1
 - New title screen background
-- Intro sequence extended for readability
-- Build size reduced from 139 KB to 125 KB
-- Removed most CSS button overrides following Miniblox title screen changes
+- Extended intro sequence
+- Reduced build size (139 KB to 125 KB)
+- Removed most CSS button overrides
 
 ## v2.2
-- Added Armor HUD module with floating and docked modes
-- Added Armor HUD settings: icon opacity, background opacity, icon size, spacing, side selection
-- Added French, Dutch, and Russian language support
+- Added Armor HUD (floating and docked modes)
+- Added Armor HUD settings: opacity, icon size, spacing, side selection
+- Added French, Dutch, Russian language support
 - Added new theme preset
 
 ## v2.1.1
-- Added Chat Filter with profanity and spam detection
+- Added Chat Filter (profanity and spam detection)
 
 ## v2.1.0
-- Added Settings panel with sound, notification, animation, and persistence toggles
-- Added VPN/proxy detection with dismissible warning
-- Added Anti-AFK auto-enable with configurable idle delay and chat notification
+- Added Settings panel (sound, notification, animation, persistence)
+- Added VPN/proxy detection warning
+- Added Anti-AFK auto-enable with idle delay and chat notification
 - Added theme system with color presets
 - Added config save/load via JSON
 - Added multi-language support (English, Spanish)
