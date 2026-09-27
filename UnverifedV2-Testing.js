@@ -1,7 +1,7 @@
 // ==UserScript==
-// @name         UnverifiedV2-Testing
+// @name         Unverified V2
 // @namespace    http://tampermonkey.net/
-// @version      3.5
+// @version      3.6
 // @description  Look at my license before you modify, I WILL DMCA you.
 // @icon         https://raw.githubusercontent.com/wytlines100/UnverifiedV2/refs/heads/main/logo.jpg
 // @downloadURL  https://raw.githubusercontent.com/wytlines100/UnverifiedV2/refs/heads/main/client.js
@@ -290,7 +290,7 @@ function uv2ThrottledCheck() {
   uv2Check();
 }
 
-setTimeout(uv2ThrottledCheck, 7800);
+setTimeout(uv2ThrottledCheck, 12800);
 setInterval(uv2ThrottledCheck, 60000);
 document.addEventListener('visibilitychange', () => {
   if (!document.hidden) uv2ThrottledCheck();
