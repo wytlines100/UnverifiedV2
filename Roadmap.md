@@ -1,13 +1,13 @@
 ## `Roadmap`
 
-In short, the main developers can update this so everyone stays informed about planned features on discord and github!
+In short, the main developers can update this so everyone stays informed about planned features on discord and github.
 
 # Planned:
 
 # TO-DO:
-- [ ] Add a notification on start up to say what keybind is used for the opening of the UI
 
 # Done:
+- [x] Added text to the intro on start up to say what keybind is used for the opening of the UI
 - [x] What's New Changelog Popup (fetches CHANGELOG.md from GitHub, syncs to @version)
 - [x] Changeable UI keybind (Right Shift / `)
 - [x] Make Bounding Boxes for Time Display, AntiAFK, Keystrokes
@@ -21,4 +21,4 @@ In short, the main developers can update this so everyone stays informed about p
 - [x] Link blocking in Chat Filter
 - [x] Full Changelog Viewer sidebar page
 - [x] /info command added (thanks jouda)
-- [x] Profile/User removed as it was purely cosmetic 
+- [x] Profile/User removed as it was purely cosmetic
