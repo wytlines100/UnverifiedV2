@@ -47,7 +47,6 @@ A custom utility client for [Miniblox](https://miniblox.io), actively developed 
 - **Changelog Viewer** — Dedicated sidebar page that loads the full CHANGELOG.md from GitHub and displays every version as a timeline
 
 ### Advanced Systems
-- **Profile Management** — Sidebar avatar auto-detected by country via IP lookup, custom local image uploads, random preset avatar pool, and instant reset back to country flags
 - **Anti-AFK (Advanced)** — Auto-enables after a configurable idle period (5–120 seconds) while inside an active match; includes optional idle chat messages and auto-disable upon activity detection
 - **Armor HUD (Advanced)** — Floating and docked modes, adjustable icon/background opacity, fixed/auto-sized icons, and configurable spacing between slots
 - **Security** — Optional VPN/proxy detection warning upon menu open with a dismissible preference
