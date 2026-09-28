@@ -1,7 +1,7 @@
 // ==UserScript==
-// @name         UnverifiedV2-testing
+// @name         UnverifiedV2-Testing
 // @namespace    http://tampermonkey.net/
-// @version      3.6
+// @version      3.7
 // @description  Look at my license before you modify, I WILL DMCA you.
 // @icon         https://raw.githubusercontent.com/wytlines100/UnverifiedV2/refs/heads/main/logo.jpg
 // @downloadURL  https://raw.githubusercontent.com/wytlines100/UnverifiedV2/refs/heads/main/client.js
@@ -97,17 +97,17 @@ class UnverifiedIntro {
 
 (function() {
   'use strict';
-  let welcomed = false;
+  if (localStorage.getItem('uv2-welcomed') === 'true') return;
   const waitForGame = setInterval(() => {
-    if (welcomed || !/\/join\//.test(window.location.pathname)) return;
+    if (!/\/join\//.test(window.location.pathname)) return;
     const reactRoot = document.querySelector("#react");
     if (!reactRoot) return;
     const game = Object.values(reactRoot)[0]?.updateQueue?.baseState?.element?.props?.game;
     if (game && game.chat && typeof game.chat.addChat === "function") {
-      welcomed = true;
       clearInterval(waitForGame);
+      localStorage.setItem('uv2-welcomed', 'true');
       game.chat.addChat({
-        text: "\\glow\\\\shiny\\\\#BF3011\\[Unverified V2]:\\reset\\ Hello and Welcome to Unverified V2! Updates and support are available on our Discord."
+        text: "\\glow\\\\shiny\\\\#BF3011\\[Unverified V2]:\\reset\\ Client initialized. Updates and support are available on our Discord."
       });
     }
   }, 500);
