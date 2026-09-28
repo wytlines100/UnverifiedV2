@@ -97,26 +97,17 @@ class UnverifiedIntro {
 
 (function() {
   'use strict';
-  const gameRef = {
-    _game: null,
-    get game() {
-      if (this._game) return this._game;
-      const reactRoot = document.querySelector("#react");
-      if (!reactRoot) return null;
-      try {
-        const fiber = Object.values(reactRoot)[0];
-        const game = fiber?.updateQueue?.baseState?.element?.props?.game;
-        if (game) this._game = game;
-        return game;
-      } catch (e) { console.warn("[Unverified V2] Failed to get game object:", e); return null; }
-    }
-  };
+  let welcomed = false;
   const waitForGame = setInterval(() => {
-    const game = gameRef.game;
+    if (welcomed || !/\/join\//.test(window.location.pathname)) return;
+    const reactRoot = document.querySelector("#react");
+    if (!reactRoot) return;
+    const game = Object.values(reactRoot)[0]?.updateQueue?.baseState?.element?.props?.game;
     if (game && game.chat && typeof game.chat.addChat === "function") {
+      welcomed = true;
       clearInterval(waitForGame);
       game.chat.addChat({
-        text: "\\glow\\\\shiny\\\\#BF3011\\[Unverified V2]:\\reset\\ Hello there! Thanks for using Unverified V2! Please join our discord for updates/community support!"
+        text: "\\glow\\\\shiny\\\\#BF3011\\[Unverified V2]:\\reset\\ Hello and Welcome to Unverified V2! Updates and support are available on our Discord."
       });
     }
   }, 500);
