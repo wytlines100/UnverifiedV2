@@ -1824,6 +1824,15 @@ function createModule(name, description) {
   return moduleContainer;
 }
 
+function addTrackedListener(list, type, handler) {
+  document.addEventListener(type, handler);
+  list.push([type, handler]);
+}
+
+function clearTrackedListeners(list) {
+  list.splice(0).forEach(([type, handler]) => document.removeEventListener(type, handler));
+}
+
 const autoFullscreenModule = createModule(MODULE_NAMES.AUTO_FULLSCREEN, "Automatically toggles Fullscreen");
 let isAutoFullscreenActive = false;
 autoFullscreenModule.addEventListener("click", () => {
@@ -1837,8 +1846,10 @@ autoFullscreenModule.addEventListener("click", () => {
 
 const keystrokesModule = createModule(MODULE_NAMES.KEYSTROKES, "Displays the keys you press in real-time.");
 let isKeystrokesActive = false;
+const keystrokesListeners = [];
 keystrokesModule.addEventListener("click", () => {
   isKeystrokesActive = !isKeystrokesActive;
+  clearTrackedListeners(keystrokesListeners);
   if (isKeystrokesActive) {
     if (document.getElementById('keystrokes-container')) document.getElementById('keystrokes-container').remove();
     const kc = document.createElement('div'); kc.id = 'keystrokes-container';
@@ -1849,7 +1860,7 @@ keystrokesModule.addEventListener("click", () => {
     document.body.appendChild(kc);
     let isDragging = false;
     kc.addEventListener('mousedown', e => { if (e.target.nodeName !== 'INPUT') isDragging = true; });
-    document.addEventListener('mousemove', e => {
+    addTrackedListener(keystrokesListeners, 'mousemove', e => {
       if (isDragging) {
         let left = e.clientX;
         let top = e.clientY;
@@ -1865,7 +1876,7 @@ keystrokesModule.addEventListener("click", () => {
         localStorage.setItem('top', top);
       }
     });
-    document.addEventListener('mouseup', () => { isDragging = false; });
+    addTrackedListener(keystrokesListeners, 'mouseup', () => { isDragging = false; });
     const createKey = (text, style = {}) => {
       const key = document.createElement('div'); key.textContent = text;
       Object.assign(key.style, { position:'absolute', color:'#ffffff', fontWeight:'bold', borderRadius:'0', backgroundColor:'rgba(128,128,128,0.7)', border:'3px solid #333333', fontSize:'18px', height:'50px', width:'50px', textAlign:'center', lineHeight:'50px', fontFamily:'Roboto Mono, monospace', zIndex:'10000', ...style });
@@ -1875,10 +1886,10 @@ keystrokesModule.addEventListener("click", () => {
     const lmb = createKey('LMB', {top:'110px',left:'70px',width:'79px'}), rmb = createKey('RMB', {top:'110px',left:'150px',width:'79px'}), space = createKey('_____', {top:'170px',left:'70px',width:'160px'});
     kc.append(wkey, akey, skey, dkey, lmb, rmb, space);
     const downColor = '#8B0000', upColor = 'rgba(128,128,128,0.7)';
-    document.addEventListener('keydown', e => { if(e.code==='KeyW') wkey.style.backgroundColor=downColor; if(e.code==='KeyS') skey.style.backgroundColor=downColor; if(e.code==='KeyA') akey.style.backgroundColor=downColor; if(e.code==='KeyD') dkey.style.backgroundColor=downColor; if(e.code==='Space') space.style.backgroundColor=downColor; });
-    document.addEventListener('keyup', e => { if(e.code==='KeyW') wkey.style.backgroundColor=upColor; if(e.code==='KeyS') skey.style.backgroundColor=upColor; if(e.code==='KeyA') akey.style.backgroundColor=upColor; if(e.code==='KeyD') dkey.style.backgroundColor=upColor; if(e.code==='Space') space.style.backgroundColor=upColor; });
-    document.addEventListener('mousedown', e => { if(e.button===0) lmb.style.backgroundColor=downColor; if(e.button===2) rmb.style.backgroundColor=downColor; });
-    document.addEventListener('mouseup', e => { if(e.button===0) lmb.style.backgroundColor=upColor; if(e.button===2) rmb.style.backgroundColor=upColor; });
+    addTrackedListener(keystrokesListeners, 'keydown', e => { if(e.code==='KeyW') wkey.style.backgroundColor=downColor; if(e.code==='KeyS') skey.style.backgroundColor=downColor; if(e.code==='KeyA') akey.style.backgroundColor=downColor; if(e.code==='KeyD') dkey.style.backgroundColor=downColor; if(e.code==='Space') space.style.backgroundColor=downColor; });
+    addTrackedListener(keystrokesListeners, 'keyup', e => { if(e.code==='KeyW') wkey.style.backgroundColor=upColor; if(e.code==='KeyS') skey.style.backgroundColor=upColor; if(e.code==='KeyA') akey.style.backgroundColor=upColor; if(e.code==='KeyD') dkey.style.backgroundColor=upColor; if(e.code==='Space') space.style.backgroundColor=upColor; });
+    addTrackedListener(keystrokesListeners, 'mousedown', e => { if(e.button===0) lmb.style.backgroundColor=downColor; if(e.button===2) rmb.style.backgroundColor=downColor; });
+    addTrackedListener(keystrokesListeners, 'mouseup', e => { if(e.button===0) lmb.style.backgroundColor=upColor; if(e.button===2) rmb.style.backgroundColor=upColor; });
   } else {
     const kc = document.getElementById('keystrokes-container'); if (kc) kc.remove();
   }
@@ -2011,9 +2022,11 @@ chatFilterModule.addEventListener("click", () => {
 createModule(MODULE_NAMES.ANTI_AFK, "Presses WASD on its own to avoid being kicked for being AFK");
 const antiAfkModule = [...gridContainer.children].find(c => c.dataset.moduleName === MODULE_NAMES.ANTI_AFK);
 let isAntiAfkActive=false, antiAfkInterval=null, antiAfkBox=null;
+const antiAfkListeners = [];
 if (antiAfkModule) {
   antiAfkModule.addEventListener("click", () => {
     isAntiAfkActive = !isAntiAfkActive;
+    clearTrackedListeners(antiAfkListeners);
     if (isAntiAfkActive) {
       antiAfkBox = document.createElement("div"); antiAfkBox.id="anti-afk-counter";
       antiAfkBox.style.cssText = "position:fixed;top:100px;left:20px;padding:8px 14px;background:rgba(0,0,0,0.6);backdrop-filter:blur(8px);border:1px solid rgba(255,255,255,0.15);border-radius:8px;z-index:9999;cursor:move;user-select:none;font-family:'Segoe UI','Roboto',sans-serif;display:flex;align-items:center;gap:8px;box-shadow:0 4px 12px rgba(0,0,0,0.3);";
@@ -2023,7 +2036,7 @@ if (antiAfkModule) {
       document.body.appendChild(antiAfkBox);
       let isDrag=false, offX=0, offY=0;
       antiAfkBox.addEventListener("mousedown", e => { isDrag=true; offX=e.clientX-antiAfkBox.getBoundingClientRect().left; offY=e.clientY-antiAfkBox.getBoundingClientRect().top; e.preventDefault(); });
-      document.addEventListener("mousemove", e => {
+      addTrackedListener(antiAfkListeners, "mousemove", e => {
         if(isDrag){
           const rect = antiAfkBox.getBoundingClientRect();
           let left = e.clientX-offX;
@@ -2038,7 +2051,7 @@ if (antiAfkModule) {
           antiAfkBox.style.top=`${top}px`;
         }
       });
-      document.addEventListener("mouseup", () => { isDrag=false; });
+      addTrackedListener(antiAfkListeners, "mouseup", () => { isDrag=false; });
       const keys=[['w','KeyW',87],['a','KeyA',65],['s','KeyS',83],['d','KeyD',68],[' ','Space',32]]; let idx=0;
       antiAfkInterval = setInterval(() => {
         const [key,code,keyCode]=keys[idx]; idx=(idx+1)%keys.length;
@@ -2078,15 +2091,17 @@ if (antiAfkModule) {
   createModule(MODULE_NAMES.TIME_DISPLAY, "Shows you the time so you dont have to exit full screen.");
 const timeModule = [...gridContainer.children].find(c => c.dataset.moduleName === MODULE_NAMES.TIME_DISPLAY);
 let isTimeVisible=false, timeElement=null;
+const timeListeners = [];
 if (timeModule) {
   timeModule.addEventListener("click", () => {
     isTimeVisible = !isTimeVisible;
+    clearTrackedListeners(timeListeners);
     if (isTimeVisible) {
       timeElement = document.createElement("div"); timeElement.id="fullscreen-clock";
       timeElement.style.cssText = `position:fixed;bottom:20px;right:20px;background-color:${guiBackgroundColor}CC;color:${guiTextColor};padding:10px 15px;border-radius:8px;font-size:18px;font-family:monospace;z-index:99999;cursor:move;border:1px solid ${guiPrimaryColor};`;
       let isDrag=false, offX=0, offY=0;
       timeElement.addEventListener("mousedown", e => { isDrag=true; offX=e.clientX-timeElement.getBoundingClientRect().left; offY=e.clientY-timeElement.getBoundingClientRect().top; e.preventDefault(); });
-      document.addEventListener("mousemove", e => {
+      addTrackedListener(timeListeners, "mousemove", e => {
         if(isDrag){
           const rect = timeElement.getBoundingClientRect();
           let left = e.clientX-offX;
@@ -2103,7 +2118,7 @@ if (timeModule) {
           timeElement.style.right="auto";
         }
       });
-      document.addEventListener("mouseup", () => { isDrag=false; });
+      addTrackedListener(timeListeners, "mouseup", () => { isDrag=false; });
       document.body.appendChild(timeElement);
       const updateClock = () => { timeElement.textContent = new Date().toLocaleTimeString(); };
       updateClock(); timeElement._interval = setInterval(updateClock, 1000);
@@ -2205,6 +2220,7 @@ let armorHudInterval = null;
 let armorHudDrag = false;
 let armorHudOffX = 0;
 let armorHudOffY = 0;
+const armorHudListeners = [];
 
 function armorHudRenderDocked() {
   const size = armorHudIconSize > 0 ? armorHudIconSize : 32;
@@ -2357,6 +2373,7 @@ if (armorHudModule && armorHudModule._toggleWrap) {
 if (armorHudModule) {
   armorHudModule.addEventListener("click", () => {
     isArmorHudActive = !isArmorHudActive;
+    clearTrackedListeners(armorHudListeners);
     if (isArmorHudActive) {
       armorHudEl = document.createElement('div');
       armorHudEl.id = 'armor-hud';
@@ -2371,7 +2388,7 @@ if (armorHudModule) {
         e.preventDefault();
       });
 
-      document.addEventListener('mousemove', e => {
+      addTrackedListener(armorHudListeners, 'mousemove', e => {
         if (!armorHudDrag || !armorHudEl) return;
         const rect = armorHudEl.getBoundingClientRect();
         let left = e.clientX - armorHudOffX;
@@ -2387,7 +2404,7 @@ if (armorHudModule) {
         armorHudEl.style.right = 'auto';
       });
 
-      document.addEventListener('mouseup', () => {
+      addTrackedListener(armorHudListeners, 'mouseup', () => {
         armorHudDrag = false;
       });
 
