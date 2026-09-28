@@ -13,6 +13,7 @@
 // @grant        GM_info
 // @grant        unsafeWindow
 // @connect      raw.githubusercontent.com
+// @connect      ip-api.com
 // ==/UserScript==
 
 document.title = 'Unverified V2';
