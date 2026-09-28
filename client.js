@@ -333,12 +333,16 @@ document.addEventListener('visibilitychange', () => {
   0% { width: 100%; }
   100% { width: 0%; }
 }
+@keyframes afkPulse {
+  0%, 100% { opacity: 1; transform: scale(1); }
+  50% { opacity: 0.5; transform: scale(1.2); }
+}
 .bind-popup { position:absolute; background-color:#2c3e50; color:white; padding:20px; border-radius:10px; box-shadow:0 0 10px rgba(0,0,0,0.7); z-index:10001; font-family:'MinibloxFont',sans-serif; display:none; text-align:center; }
 .bind-popup input { background-color:#34495e; color:white; border:2px solid #e74c3c; border-radius:5px; padding:10px; font-size:18px; width:200px; }
 .bind-popup button { background-color:#e74c3c; color:white; border:none; border-radius:5px; padding:10px 20px; margin-top:10px; cursor:pointer; }
 .bind-popup button:hover { background-color:#c0392b; }
 .module-tooltip { visibility:hidden; position:absolute; background-color:#2c3e50; color:white; padding:5px 10px; border-radius:5px; font-size:14px; z-index:10000; opacity:0; transition:opacity 0.3s ease; bottom:6px; right:10px; white-space:nowrap; pointer-events:none; }
-.other-notification { font-family:'MinibloxFont',sans-serif; font-size:14px; color:white; background:linear-gradient(135deg, #e74c3c, #c0392b); padding:12px 24px; border-radius:8px; margin-bottom:12px; box-shadow:0 4px 15px rgba(0,0,0,0.3); transition:opacity 0.4s ease, transform 0.4s ease; opacity:0; transform:translateX(100%); border-left:4px solid #ffcc00; font-weight:500; letter-spacing:0.5px; position:relative; overflow:hidden; }
+.other-notification { font-family:'MinibloxFont',sans-serif; font-size:14px; color:white; background:linear-gradient(135deg, #e74c3c, #c0392b); padding:12px 24px; border-radius:8px; margin-bottom:12px; box-shadow:0 4px 15px rgba(0,0,0,0.3); transition:opacity 0.5s cubic-bezier(0.22, 1, 0.36, 1), transform 0.5s cubic-bezier(0.22, 1, 0.36, 1); opacity:0; transform:translateX(40px) scale(0.96); border-left:4px solid #ffcc00; font-weight:500; letter-spacing:0.5px; position:relative; overflow:hidden; will-change:transform, opacity; }
 .notification-progress { position:absolute; bottom:0; left:0; height:3px; background:#ffcc00; width:100%; animation: notificationProgress 3s linear forwards; }
 .settings-icon { width:30px; height:30px; fill:white; transition:transform 0.3s ease; }
 .settings-icon:hover { transform:rotate(90deg); }
@@ -1407,10 +1411,10 @@ switchUv2Page('main');
   let isRestoring = false;
   let uiKeybind = localStorage.getItem('uv2-setting-uikeybind') || 'rshift';
 
-  const settings = {
+    const settings = {
     moduleSounds: localStorage.getItem('uv2-setting-sounds') !== 'false',
-    showNotifications: localStorage.getItem('uv2-setting-notifs') !== 'true',
-    animateUI: localStorage.getItem('uv2-setting-animation') !== 'false',
+    showNotifications: true,
+    animateUI: true,
     saving: localStorage.getItem('uv2-setting-saving') === 'true',
     autoAfk: localStorage.getItem('uv2-setting-autoafk') === 'true',
     afkChat: localStorage.getItem('uv2-setting-afkchat') !== 'false',
@@ -1598,10 +1602,14 @@ function showNotification(message, isOn) {
   progressBar.classList.add("notification-progress");
   notification.appendChild(progressBar);
   notificationContainer.appendChild(notification);
-  setTimeout(() => { notification.style.transform = "translateX(0)"; notification.style.opacity = "1"; }, 10);
+  requestAnimationFrame(() => requestAnimationFrame(() => {
+    notification.style.transform = "translateX(0) scale(1)";
+    notification.style.opacity = "1";
+  }));
   setTimeout(() => {
-    notification.style.transform = "translateX(100%)"; notification.style.opacity = "0";
-    setTimeout(() => { notificationContainer.removeChild(notification); }, 500);
+    notification.style.transform = "translateX(40px) scale(0.96)";
+    notification.style.opacity = "0";
+    setTimeout(() => { notification.remove(); }, 500);
   }, 3000);
 }
 
@@ -2020,7 +2028,6 @@ if (antiAfkModule) {
       const afkDot = document.createElement("div"); afkDot.style.cssText = `width:10px;height:10px;border-radius:50%;background-color:${guiPrimaryColor};box-shadow:0 0 12px ${guiPrimaryColor}99;animation:afkPulse 1.5s infinite;`;
       const afkText = document.createElement("div"); afkText.textContent="Anti-AFK"; afkText.style.cssText = `font-size:16px;font-weight:700;color:${guiPrimaryColor};letter-spacing:0.5px;`;
       antiAfkBox.appendChild(afkDot); antiAfkBox.appendChild(afkText);
-      const afkStyle = document.createElement("style"); afkStyle.textContent="@keyframes afkPulse{0%,100%{opacity:1;transform:scale(1)}50%{opacity:0.5;transform:scale(1.2)}}"; document.head.appendChild(afkStyle);
       document.body.appendChild(antiAfkBox);
       let isDrag=false, offX=0, offY=0;
       antiAfkBox.addEventListener("mousedown", e => { isDrag=true; offX=e.clientX-antiAfkBox.getBoundingClientRect().left; offY=e.clientY-antiAfkBox.getBoundingClientRect().top; e.preventDefault(); });
