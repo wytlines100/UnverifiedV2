@@ -1,5 +1,12 @@
 # Changelog
 
+## v3.7
+- Smoother notification slide animation
+- Welcome message now appears only when joining a planet
+- Welcome message wording updated
+- Fixed Anti-AFK style element leaking on every enable
+- Removed unused settings toggles for notifications and animation
+
 ## v3.6
 - Intro now shows the active UI keybind
 - Slower, smoother intro fade-in and fade-out
