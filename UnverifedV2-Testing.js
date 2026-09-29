@@ -1,5 +1,5 @@
 // ==UserScript==
-// @name         UnverifiedV2-Testing
+// @name         Unverified V2
 // @namespace    http://tampermonkey.net/
 // @version      3.7
 // @description  Look at my license before you modify, I WILL DMCA you.
@@ -890,12 +890,6 @@ let armorHudGap = parseInt(localStorage.getItem('uv2-armorhud-gap') || '4', 10);
     return slider;
   }
 
-  const appearanceLabel = document.createElement('div');
-  appearanceLabel.className = 'uv2-section-title';
-  appearanceLabel.textContent = 'Appearance';
-  appearanceLabel.style.cssText = 'font-size:10px;text-transform:uppercase;letter-spacing:0.1em;color:#555;margin:4px 0 8px;padding-left:4px;';
-  container.appendChild(appearanceLabel);
-
   const opacitySlider = buildSliderRow('Icon Opacity', 'armor-hud-opacity-slider', 20, 100, Math.round(armorHudOpacity * 100), v => v + '%');
   opacitySlider.addEventListener('input', function() {
     armorHudOpacity = this.value / 100;
@@ -1115,7 +1109,7 @@ settingsOverlay.innerHTML = `
             <div><div class="uv2-setting-label">Show VPN Warning</div><div class="uv2-setting-desc">Show the VPN detection popup when opening the menu</div></div>
             <label class="uv2-toggle"><input type="checkbox" id="uv2-toggle-vpnwarning"><div class="uv2-toggle-track"></div></label>
           </div>
-          <div class="uv2-section-title" style="margin-top:14px;">Auto AFK</div>
+          <div class="uv2-section-title" style="margin-top:14px;">Anti-AFK</div>
           <div class="uv2-setting-row">
             <div><div class="uv2-setting-label">Auto Enable</div><div class="uv2-setting-desc">Turns on Anti-AFK automatically after idling</div></div>
             <label class="uv2-toggle"><input type="checkbox" id="uv2-toggle-autoafk"><div class="uv2-toggle-track"></div></label>
