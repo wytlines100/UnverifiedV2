@@ -10,11 +10,11 @@ A custom utility client for [Miniblox](https://miniblox.io), actively developed 
 
 ## Installation Guide
 
-1. Install Tampermonkey for your Chromium browser and ensure **Allow UserScripts** is enabled.
-2. Open the Tampermonkey dashboard and create a new script.
+1. Install Tampermonkey for your Chromium browser and ensure **Allow UserScripts** is enabled in Chromium Settings.
+2. Open the Tampermonkey dashboard and create a new script via the plus button.
 3. Paste the full contents of `client.js` into the editor.
 4. Save the script and confirm it is enabled.
-5. Navigate to `miniblox.io` — the client intro will appear.
+5. Navigate/Reload `miniblox.io` — the client intro will appear.
 6. Press **Right Shift** (default) or Backtick (`) to open or close the client menu.
 
 > **Note:** UV2 Music Player is a separate file (`MusicPlayer.js`) to be installed separately.
@@ -25,7 +25,7 @@ A custom utility client for [Miniblox](https://miniblox.io), actively developed 
 ### Core Modules
 | Module | Description |
 |---|---|
-| **Auto Fullscreen** | Automatically enters fullscreen when the game loads |
+| **Fullscreen** | Automatically enters fullscreen when the game loads |
 | **Keystrokes** | Displays W/A/S/D, LMB, RMB, and Space inputs in real time; draggable overlay |
 | **Mute Chat** | Suppresses all incoming chat messages from other players |
 | **Chat Filter** | Blocks profanity, links, and repeated spam from appearing in chat; also prevents sending filtered messages |
