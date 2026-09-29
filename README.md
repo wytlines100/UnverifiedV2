@@ -46,14 +46,13 @@ A custom utility client for [Miniblox](https://miniblox.io), actively developed 
 - **Visual Polish** — Optional UI open/close animation, toast notifications, and module click audio feedback
 - **Changelog Viewer** — Dedicated sidebar page that loads the full CHANGELOG.md from GitHub and displays every version as a timeline
 
-### Advanced Systems
-- **Anti-AFK (Advanced)** — Auto-enables after a configurable idle period (5–120 seconds) while inside an active match; includes optional idle chat messages and auto-disable upon activity detection
-- **Armor HUD (Advanced)** — Floating and docked modes, adjustable icon/background opacity, fixed/auto-sized icons, and configurable spacing between slots
+### Other
+- **Anti-AFK** — Auto-enables after a configurable idle period (5–120 seconds) while inside an active match; includes optional idle chat messages and auto-disable upon activity detection
+- **Armor HUD** — Floating and docked modes, adjustable icon/background opacity, fixed/auto-sized icons, and configurable spacing between slots
 - **Security** — Optional VPN/proxy detection warning upon menu open with a dismissible preference
 - **Cosmetics** — Animated shine sweep on module cards, custom title screen background, and custom browser tab title (`UnverifiedV2`)
 
 ## Menu Navigation
-
 The menu is split into five sidebar pages:
 
 | Page | Contents |
