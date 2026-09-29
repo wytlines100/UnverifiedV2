@@ -1539,7 +1539,7 @@ function chatFilterContainsBadWords(text) {
   return CHAT_FILTER_PATTERN.test(cleanText) || CHAT_FILTER_PATTERN.test(chatFilterStripSeparators(cleanText));
 }
 
-const MODULE_NAMES = { AUTO_FULLSCREEN: "Auto Fullscreen", KEYSTROKES: "Keystrokes", MUTE_CHAT: "Mute Chat", CHAT_FILTER: "Chat Filter", ANTI_AFK: "Anti-Afk", KEEP_SPRINT: "Keep Sprint", TIME_DISPLAY: "Time Display", ARMOR_HUD: "Armor HUD" };
+const MODULE_NAMES = { FULLSCREEN: "Fullscreen", KEYSTROKES: "Keystrokes", MUTE_CHAT: "Mute Chat", CHAT_FILTER: "Chat Filter", ANTI_AFK: "Anti-Afk", KEEP_SPRINT: "Keep Sprint", TIME_DISPLAY: "Time Display", ARMOR_HUD: "Armor HUD" };
 
 const moduleSearchWrap = document.createElement("div");
 moduleSearchWrap.style.cssText = "position:relative;margin-top:4px;";
@@ -1833,11 +1833,11 @@ function clearTrackedListeners(list) {
   list.splice(0).forEach(([type, handler]) => document.removeEventListener(type, handler));
 }
 
-const autoFullscreenModule = createModule(MODULE_NAMES.AUTO_FULLSCREEN, "Automatically toggles Fullscreen");
-let isAutoFullscreenActive = false;
-autoFullscreenModule.addEventListener("click", () => {
-  isAutoFullscreenActive = !isAutoFullscreenActive;
-  if (isAutoFullscreenActive) {
+const FullscreenModule = createModule(MODULE_NAMES.FULLSCREEN, "Automatically toggles Fullscreen");
+let isFullscreenActive = false;
+FullscreenModule.addEventListener("click", () => {
+  isFullscreenActive = !isFullscreenActive;
+  if (isFullscreenActive) {
     (document.documentElement.requestFullscreen || document.documentElement.mozRequestFullScreen || document.documentElement.webkitRequestFullscreen || document.documentElement.msRequestFullscreen || (() => {})).call(document.documentElement);
   } else {
     (document.exitFullscreen || document.mozCancelFullScreen || document.webkitExitFullscreen || document.msExitFullscreen || (() => {})).call(document);
