@@ -17,7 +17,7 @@ A custom utility client for [Miniblox](https://miniblox.io), actively developed 
 5. Navigate to `miniblox.io` — the client intro will appear.
 6. Press **Right Shift** (default) or Backtick (`) to open or close the client menu.
 
-> **Note:** The Music Player is a separate file (`MusicPlayer.js`) to be installed separately.
+> **Note:** UV2 Music Player is a separate file (`MusicPlayer.js`) to be installed separately.
 > > **Note:** Installing from the raw `client.js` URL on GitHub enables Tampermonkey's built-in update tracking alongside the in-client Update Checker.
 
 ## Feature Matrix
