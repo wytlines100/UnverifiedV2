@@ -14,7 +14,7 @@ A custom utility client for [Miniblox](https://miniblox.io), actively developed 
 2. Open the Tampermonkey dashboard and create a new script.
 3. Paste the full contents of `client.js` into the editor.
 4. Save the script and confirm it is enabled.
-5. Navigate to `miniblox.io` — the client will initialize automatically.
+5. Navigate to `miniblox.io` — the client intro will appear.
 6. Press **Right Shift** (default) or Backtick (`) to open or close the client menu.
 
 > **Note:** The Music Player is a separate file (`MusicPlayer.js`) to be installed separately.
@@ -94,6 +94,5 @@ See [Roadmap.md](./Roadmap.md) for up to date planning that developers will carr
 
 - **Current Contributors:** wytlines, DeadFish7, andreypidd, jet, joudaALT, TrustIsOver, TheM1ddleM1n
 - **Policy: Distributed under a proprietary All Rights Reserved license. Users utilize third-party utility clients at their own discretion.**
-- **Contact & Support:**
-  - Email: wytlines100 — `rfd6108@gmail.com`
+- **Our Discord Server!:**
   - Discord: [UnverifiedV2 Discord](https://dsc.gg/unverifiedv2)
