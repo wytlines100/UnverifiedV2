@@ -1,6 +1,6 @@
 # Skyboxes
 
-This folder contains skybox textures ported from resource packs to be ported for use in Miniblox
+This folder contains 1 folder of skyboxes ported from resource packs to be ported for use in Miniblox
 
 ## Contents
 
