@@ -1460,14 +1460,7 @@ switchUv2Page('main');
     } catch(e) {}
   }
 
-const CHAT_FILTER_CONFIG = {
-  blockBadWords: true,
-  blockSpam: true,
-  blockLinks: true,
-};
-
 const CHAT_FILTER_LINK_PATTERN = /(https?:\/\/|www\.|discord\.gg\/|discord(app)?\.com\/invite\/|dsc\.gg\/|[a-z0-9-]+\.(com|net|org|io|gg|xyz|co|me|tv|ru|de|uk|us|info|club|site|online|shop|ly|to|cc|app|dev)(\/|$|[^a-z0-9]))/i;
-
 function chatFilterContainsLink(text) {
   const cleanText = text.replace(/\\#[0-9A-Fa-f]{6}\\|\\reset\\|\\glow\\/g, '');
   return CHAT_FILTER_LINK_PATTERN.test(cleanText) || CHAT_FILTER_LINK_PATTERN.test(cleanText.replace(/\s*(\(dot\)|\[dot\]|\{dot\})\s*/gi, '.').replace(/\s*\.\s*/g, '.'));
@@ -1888,15 +1881,9 @@ function chatFilterIsSpam(text) {
 }
 
 function chatFilterGetBlockReason(text) {
-  if (CHAT_FILTER_CONFIG.blockBadWords && chatFilterContainsBadWords(text)) {
-    return 'profanity';
-  }
-  if (CHAT_FILTER_CONFIG.blockLinks && chatFilterContainsLink(text)) {
-    return 'link';
-  }
-  if (CHAT_FILTER_CONFIG.blockSpam && chatFilterIsSpam(text)) {
-    return 'spam';
-  }
+  if (chatFilterContainsBadWords(text)) return 'profanity';
+  if (chatFilterContainsLink(text)) return 'link';
+  if (chatFilterIsSpam(text)) return 'spam';
   return null;
 }
 
