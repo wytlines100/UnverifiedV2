@@ -7,6 +7,7 @@
 - Removed redundant Select JSON File button, load button now handles file picking
 - Save and Load Config buttons are now side by side
 - Removed unused select element style loop from applyGUIStyles
+- Removed Object Declarations for ChatFilter
 
 ## v3.7
 - Smoother notification slide animation
