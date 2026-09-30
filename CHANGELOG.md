@@ -1,5 +1,13 @@
 # Changelog
 
+## v3.8
+- Removed unused guiBackgroundColor and guiTextColor variables
+- Hardcoded background and text colors inline where needed
+- Removed dead backgroundColor and textColor keys from config save/load
+- Removed redundant Select JSON File button, load button now handles file picking
+- Save and Load Config buttons are now side by side
+- Removed unused select element style loop from applyGUIStyles
+
 ## v3.7
 - Smoother notification slide animation
 - Welcome message now appears only when joining a planet
