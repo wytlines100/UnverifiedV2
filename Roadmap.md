@@ -22,3 +22,5 @@ In short, the main developers can update this so everyone stays informed about p
 - [x] Smoother notification animation
 - [x] Welcome message shown in match only
 - [x] Fixed Anti-AFK style leak
+- [x] Removed dead guiBackgroundColor and guiTextColor variables
+- [x] Simplified config save/load UI to side by side buttons
