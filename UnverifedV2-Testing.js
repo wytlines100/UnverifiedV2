@@ -1,7 +1,7 @@
 // ==UserScript==
 // @name         UnverifiedV2-Testing
 // @namespace    http://tampermonkey.net/
-// @version      3.7
+// @version      3.8
 // @description  Look at my license before you modify, I WILL DMCA you.
 // @icon         https://raw.githubusercontent.com/wytlines100/UnverifiedV2/refs/heads/main/logo.jpg
 // @downloadURL  https://raw.githubusercontent.com/wytlines100/UnverifiedV2/refs/heads/main/client.js
@@ -516,8 +516,6 @@ ui.appendChild(uv2Sidebar);
   uv2ContentArea.appendChild(uv2ChangelogPage);
 
 let guiPrimaryColor = localStorage.getItem('uv2-gui-primary-color') || '#e74c3c';
-let guiBackgroundColor = '#000000';
-let guiTextColor = '#ffffff';
 let armorHudDocked = localStorage.getItem('uv2-armorhud-docked') === 'true';
 let armorHudOpacity = parseFloat(localStorage.getItem('uv2-armorhud-opacity') || '1');
 let armorHudBgOpacity = parseFloat(localStorage.getItem('uv2-armorhud-bgopacity') || '0.55');
@@ -525,8 +523,8 @@ let armorHudIconSize = parseInt(localStorage.getItem('uv2-armorhud-iconsize') ||
 let armorHudGap = parseInt(localStorage.getItem('uv2-armorhud-gap') || '4', 10);
 
   function applyGUIStyles() {
-    ui.style.backgroundColor = guiBackgroundColor;
-    ui.style.color = guiTextColor;
+    ui.style.backgroundColor = '#000000';
+    ui.style.color = '#ffffff';
 
     ui.querySelectorAll('.mp-search-go').forEach(btn => {
       btn.style.backgroundColor = guiPrimaryColor;
@@ -580,12 +578,6 @@ let armorHudGap = parseInt(localStorage.getItem('uv2-armorhud-gap') || '4', 10);
     ['#save-config-btn', '#load-config-btn'].forEach(sel => {
       const btn = document.querySelector(sel);
       if (btn) { btn.style.background = guiPrimaryColor; btn.style.backgroundColor = guiPrimaryColor; }
-    });
-
-    document.querySelectorAll('select').forEach(select => {
-      select.style.backgroundColor = guiBackgroundColor;
-      select.style.color = guiTextColor;
-      select.style.borderColor = guiPrimaryColor;
     });
 
         const changelogPage = document.getElementById('uv2-page-changelog-content');
@@ -693,17 +685,14 @@ let armorHudGap = parseInt(localStorage.getItem('uv2-armorhud-gap') || '4', 10);
 
   function buildConfigPage() {
     uv2ConfigPage.innerHTML = `
-      <h2 style="font-size:30px;font-family:MinibloxFont,sans-serif;margin:0 0 20px 0;text-align:center;">Config Management</h2>
-      <div class="uv2-section-title">Save / Load Configuration</div>
-      <div class="uv2-setting-row" style="display:flex;flex-direction:column;height:auto;padding:16px;gap:16px;">
-        <button id="save-config-btn" style="background:${guiPrimaryColor};color:white;border:none;border-radius:6px;padding:12px 20px;cursor:pointer;font-family:MinibloxFont,sans-serif;">Save Current Settings as JSON</button>
-        <div style="display:flex;align-items:center;gap:12px;flex-wrap:wrap;">
-          <label for="config-file-input" style="background:#444;color:white;border:none;border-radius:6px;padding:12px 20px;cursor:pointer;font-family:MinibloxFont,sans-serif;">Select JSON File</label>
-          <input type="file" id="config-file-input" accept=".json" style="display:none;">
-          <button id="load-config-btn" style="background:${guiPrimaryColor};color:white;border:none;border-radius:6px;padding:12px 20px;cursor:pointer;font-family:MinibloxFont,sans-serif;">Load Selected File</button>
-        </div>
-      </div>
-    `;
+  <h2 style="font-size:30px;font-family:MinibloxFont,sans-serif;margin:0 0 20px 0;text-align:center;">Config Management</h2>
+  <div class="uv2-section-title">Save / Load Configuration</div>
+  <div class="uv2-setting-row" style="display:flex;flex-direction:row;height:auto;padding:16px;gap:16px;">
+    <button id="save-config-btn" style="flex:1;background:${guiPrimaryColor};color:white;border:none;border-radius:6px;padding:12px 20px;cursor:pointer;font-family:MinibloxFont,sans-serif;">Save Config</button>
+    <input type="file" id="config-file-input" accept=".json" style="display:none;">
+    <button id="load-config-btn" style="flex:1;background:${guiPrimaryColor};color:white;border:none;border-radius:6px;padding:12px 20px;cursor:pointer;font-family:MinibloxFont,sans-serif;">Load Config</button>
+  </div>
+`;
     const saveBtn = uv2ConfigPage.querySelector('#save-config-btn');
     if (saveBtn) {
       saveBtn.addEventListener('click', () => {
@@ -711,8 +700,6 @@ let armorHudGap = parseInt(localStorage.getItem('uv2-armorhud-gap') || '4', 10);
   version: GM_info.script.version,
   gui: {
     primaryColor: guiPrimaryColor,
-    backgroundColor: guiBackgroundColor,
-    textColor: guiTextColor,
   },
   settings: {
     moduleSounds: settings.moduleSounds,
@@ -759,14 +746,6 @@ let armorHudGap = parseInt(localStorage.getItem('uv2-armorhud-gap') || '4', 10);
   if (config.gui.primaryColor) {
     guiPrimaryColor = config.gui.primaryColor;
     localStorage.setItem('uv2-gui-primary-color', guiPrimaryColor);
-  }
-  if (config.gui.backgroundColor) {
-    guiBackgroundColor = config.gui.backgroundColor;
-    localStorage.setItem('uv2-gui-bg-color', guiBackgroundColor);
-  }
-  if (config.gui.textColor) {
-    guiTextColor = config.gui.textColor;
-    localStorage.setItem('uv2-gui-text-color', guiTextColor);
   }
   applyGUIStyles();
   buildGUIPage();
@@ -2092,7 +2071,7 @@ if (timeModule) {
     clearTrackedListeners(timeListeners);
     if (isTimeVisible) {
       timeElement = document.createElement("div"); timeElement.id="fullscreen-clock";
-      timeElement.style.cssText = `position:fixed;bottom:20px;right:20px;background-color:${guiBackgroundColor}CC;color:${guiTextColor};padding:10px 15px;border-radius:8px;font-size:18px;font-family:monospace;z-index:99999;cursor:move;border:1px solid ${guiPrimaryColor};`;
+      timeElement.style.cssText = `position:fixed;bottom:20px;right:20px;background-color:#000000CC;color:#ffffff;padding:10px 15px;border-radius:8px;font-size:18px;font-family:monospace;z-index:99999;cursor:move;border:1px solid ${guiPrimaryColor};`;
       let isDrag=false, offX=0, offY=0;
       timeElement.addEventListener("mousedown", e => { isDrag=true; offX=e.clientX-timeElement.getBoundingClientRect().left; offY=e.clientY-timeElement.getBoundingClientRect().top; e.preventDefault(); });
       addTrackedListener(timeListeners, "mousemove", e => {
