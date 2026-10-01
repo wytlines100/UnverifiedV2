@@ -1,8 +1,4 @@
 # Skyboxes
-
-This folder contains 1 folder of skyboxes ported from resource packs to be ported for use in Miniblox
-
-## Contents
 * 6 images of the skybox (cubemap) which can't be converted to a 3d skybox used in game for now since vector did updates. 
 
 ## Credits
