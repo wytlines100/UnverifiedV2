@@ -1,5 +1,10 @@
 # Changelog
 
+## v4
+- AFK music that fades in when Anti-AFK auto-enables
+- Music fades out smoothly on user return
+- Bumped to v4
+
 ## v3.8
 - Removed unused guiBackgroundColor and guiTextColor variables
 - Hardcoded background and text colors inline where needed
