@@ -2591,7 +2591,7 @@ sortModulesByFavorite();
   if (existing) existing.remove();
   const toast = document.createElement('div');
   toast.id = 'uv2-afk-toast';
-  toast.textContent = msg;
+  toast.textContent = 'You are idle, Anti-AFK enabled.';
   Object.assign(toast.style, {
     position: 'fixed', top: '-60px', left: '50%', transform: 'translateX(-50%)',
     background: color, color: '#fff', padding: '10px 22px',
