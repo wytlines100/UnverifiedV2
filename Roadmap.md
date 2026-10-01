@@ -5,6 +5,7 @@ In short, the main developers can update this so everyone stays informed about p
 # Planned:
 
 # TO-DO:
+- Optional choice to have AFK music in settings.
 
 # Done:
 - [x] Intro shows the active UI keybind
