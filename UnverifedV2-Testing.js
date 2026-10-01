@@ -1,7 +1,7 @@
 // ==UserScript==
 // @name         UnverifiedV2-Testing
 // @namespace    http://tampermonkey.net/
-// @version      3.8
+// @version      4
 // @description  Look at my license before you modify, I WILL DMCA you.
 // @icon         https://raw.githubusercontent.com/wytlines100/UnverifiedV2/refs/heads/main/logo.jpg
 // @downloadURL  https://raw.githubusercontent.com/wytlines100/UnverifiedV2/refs/heads/main/client.js
@@ -2583,92 +2583,75 @@ sortModulesByFavorite();
   waitAndRestoreModuleStates();
 
   let afkTriggered = false;
+  let afkAudio = null;
   let afkAntiAfkWasOff = false;
   let afkGraceUntil = 0;
-  function showAfkToast() {
-    const existing = document.getElementById('uv2-afk-toast');
-    if (existing) existing.remove();
-    const toast = document.createElement('div');
-    toast.id = 'uv2-afk-toast';
-    toast.textContent = 'You are idle, Anti-AFK enabled.';
-    Object.assign(toast.style, {
-      position: 'fixed', top: '-60px', left: '50%', transform: 'translateX(-50%)',
-      background: '#e74c3c', color: '#fff', padding: '10px 22px',
-      borderRadius: '8px', fontSize: '15px', fontFamily: 'MinibloxFont, sans-serif',
-      zIndex: '99999', transition: 'top 0.5s ease, opacity 0.5s ease', opacity: '0',
-      whiteSpace: 'nowrap', boxShadow: '0 4px 16px rgba(0,0,0,0.5)',
+  function showAfkToast(msg, color) {
+  const existing = document.getElementById('uv2-afk-toast');
+  if (existing) existing.remove();
+  const toast = document.createElement('div');
+  toast.id = 'uv2-afk-toast';
+  toast.textContent = msg;
+  Object.assign(toast.style, {
+    position: 'fixed', top: '-60px', left: '50%', transform: 'translateX(-50%)',
+    background: color, color: '#fff', padding: '10px 22px',
+    borderRadius: '8px', fontSize: '15px', fontFamily: 'MinibloxFont, sans-serif',
+    zIndex: '99999', transition: 'top 0.5s ease, opacity 0.5s ease', opacity: '0',
+    whiteSpace: 'nowrap', boxShadow: '0 4px 16px rgba(0,0,0,0.5)',
+  });
+  document.body.appendChild(toast);
+  setTimeout(() => { toast.style.top = '18px'; toast.style.opacity = '1'; }, 20);
+  setTimeout(() => { toast.style.top = '-60px'; toast.style.opacity = '0'; }, 3500);
+  setTimeout(() => { if (toast.parentNode) toast.remove(); }, 4200);
+}
+function sendAfkChatMessage(msg) {
+  try {
+    const inputs = document.querySelectorAll("input");
+    let chatInput = null;
+    inputs.forEach(i => {
+      if (i.placeholder && i.placeholder.toLowerCase().includes('chat')) chatInput = i;
     });
-    document.body.appendChild(toast);
-    setTimeout(() => { toast.style.top = '18px'; toast.style.opacity = '1'; }, 20);
-    setTimeout(() => { toast.style.top = '-60px'; toast.style.opacity = '0'; }, 3500);
-    setTimeout(() => { if (toast.parentNode) toast.remove(); }, 4200);
-  }
-  function showReturnToast() {
-    const existing = document.getElementById('uv2-return-toast');
-    if (existing) existing.remove();
-    const toast = document.createElement('div');
-    toast.id = 'uv2-return-toast';
-    toast.textContent = 'Welcome back! Anti-AFK disabled.';
-    Object.assign(toast.style, {
-      position: 'fixed', top: '-60px', left: '50%', transform: 'translateX(-50%)',
-      background: '#2ecc71', color: '#fff', padding: '10px 22px',
-      borderRadius: '8px', fontSize: '15px', fontFamily: 'MinibloxFont, sans-serif',
-      zIndex: '99999', transition: 'top 0.5s ease, opacity 0.5s ease', opacity: '0',
-      whiteSpace: 'nowrap', boxShadow: '0 4px 16px rgba(0,0,0,0.5)',
-    });
-    document.body.appendChild(toast);
-    setTimeout(() => { toast.style.top = '18px'; toast.style.opacity = '1'; }, 20);
-    setTimeout(() => { toast.style.top = '-60px'; toast.style.opacity = '0'; }, 3500);
-    setTimeout(() => { if (toast.parentNode) toast.remove(); }, 4200);
-  }
-  function sendAfkChatMessage(msg) {
-    try {
-      const inputs = document.querySelectorAll("input");
-      let chatInput = null;
-      inputs.forEach(i => {
-        if (i.placeholder && i.placeholder.toLowerCase().includes('chat')) chatInput = i;
-      });
-      if (chatInput) {
-        const propsKey = Object.keys(chatInput).find(k => k.startsWith("__reactProps") || k.startsWith("__reactFiber"));
-        if (propsKey) {
-          const props = chatInput[propsKey];
-          const reactProps = props && props.memoizedProps ? props.memoizedProps : props;
-          if (reactProps && reactProps.onChange) {
-            reactProps.onChange({ target: { value: msg } });
-            setTimeout(() => {
-              if (reactProps.onKeyDown) {
-                reactProps.onKeyDown({
-                  key: 'Enter',
-                  keyCode: 13,
-                  which: 13,
-                  bubbles: true,
-                  target: { value: msg },
-                  nativeEvent: { isComposing: false },
-                  preventDefault: () => {}
-                });
-              }
-            }, 300);
-            return;
-          }
+    if (chatInput) {
+      const propsKey = Object.keys(chatInput).find(k => k.startsWith("__reactProps") || k.startsWith("__reactFiber"));
+      if (propsKey) {
+        const props = chatInput[propsKey];
+        const reactProps = props && props.memoizedProps ? props.memoizedProps : props;
+        if (reactProps && reactProps.onChange) {
+          reactProps.onChange({ target: { value: msg } });
+          setTimeout(() => {
+            if (reactProps.onKeyDown) {
+              reactProps.onKeyDown({
+                key: 'Enter',
+                keyCode: 13,
+                which: 13,
+                bubbles: true,
+                target: { value: msg },
+                nativeEvent: { isComposing: false },
+                preventDefault: () => {}
+              });
+            }
+          }, 300);
+          return;
         }
       }
-    } catch(e) {}
-    try {
-      const reactRoot = document.querySelector("#react");
-      if (!reactRoot) return;
-      const fiber = Object.values(reactRoot)[0];
-      const game = fiber && fiber.updateQueue && fiber.updateQueue.baseState && fiber.updateQueue.baseState.element && fiber.updateQueue.baseState.element.props && fiber.updateQueue.baseState.element.props.game;
-      if (game && game.chat && typeof game.chat.addChat === "function") {
-        game.chat.addChat({ text: msg });
-      }
-    } catch(e) {}
-  }
-  function isInMatch() {
-    try {
-      return /\/join\//.test(window.location.pathname);
-    } catch (e) { return false; }
-  }
-  function onAfkTriggered() {
+    }
+  } catch(e) {}
+  try {
+    const reactRoot = document.querySelector("#react");
+    if (!reactRoot) return;
+    const fiber = Object.values(reactRoot)[0];
+    const game = fiber && fiber.updateQueue && fiber.updateQueue.baseState && fiber.updateQueue.baseState.element && fiber.updateQueue.baseState.element.props && fiber.updateQueue.baseState.element.props.game;
+    if (game && game.chat && typeof game.chat.addChat === "function") {
+      game.chat.addChat({ text: msg });
+    }
+  } catch(e) {}
+}
+function isInMatch() {
+  try {
+    return /\/join\//.test(window.location.pathname);
+  } catch (e) { return false; }
+}
+function onAfkTriggered() {
   if (afkTriggered) return;
   if (!isInMatch()) {
     afkTimer = setTimeout(onAfkTriggered, afkDelay * 1000);
@@ -2685,47 +2668,86 @@ sortModulesByFavorite();
   } else {
     afkAntiAfkWasOff = false;
   }
+  afkAudio = new Audio('https://raw.githubusercontent.com/wytlines100/UnverifiedV2/refs/heads/main/AfkSong.mp3');
+  afkAudio.loop = true;
+  afkAudio.volume = 0;
+  afkAudio.play().catch(() => {});
+  let vol = 0;
+  const fadeIn = setInterval(() => {
+    vol = Math.min(1, vol + 0.05);
+    afkAudio.volume = vol;
+    if (vol >= 1) clearInterval(fadeIn);
+  }, 100);
 }
-  function onUserReturn() {
-    if (!afkTriggered) return;
+function onUserReturn() {
+  if (!afkTriggered) return;
+  afkTriggered = false;
+  if (afkAudio) {
+    const audio = afkAudio;
+    afkAudio = null;
+    let vol = audio.volume;
+    const fadeOut = setInterval(() => {
+      vol = Math.max(0, vol - 0.05);
+      audio.volume = vol;
+      if (vol <= 0) {
+        clearInterval(fadeOut);
+        audio.pause();
+        audio.src = '';
+      }
+    }, 100);
+  }
+  if (afkAntiAfkWasOff) {
+    const afkMod = [...gridContainer.children].find(c => c.dataset.moduleName === MODULE_NAMES.ANTI_AFK);
+    if (afkMod && afkMod._uv2Active) {
+      afkMod.click();
+      const existing = document.getElementById('uv2-return-toast');
+      if (existing) existing.remove();
+      const toast = document.createElement('div');
+      toast.id = 'uv2-return-toast';
+      toast.textContent = 'Welcome back! Anti-AFK disabled.';
+      Object.assign(toast.style, {
+        position: 'fixed', top: '-60px', left: '50%', transform: 'translateX(-50%)',
+        background: '#2ecc71', color: '#fff', padding: '10px 22px',
+        borderRadius: '8px', fontSize: '15px', fontFamily: 'MinibloxFont, sans-serif',
+        zIndex: '99999', transition: 'top 0.5s ease, opacity 0.5s ease', opacity: '0',
+        whiteSpace: 'nowrap', boxShadow: '0 4px 16px rgba(0,0,0,0.5)',
+      });
+      document.body.appendChild(toast);
+      setTimeout(() => { toast.style.top = '18px'; toast.style.opacity = '1'; }, 20);
+      setTimeout(() => { toast.style.top = '-60px'; toast.style.opacity = '0'; }, 3500);
+      setTimeout(() => { if (toast.parentNode) toast.remove(); }, 4200);
+    }
+    afkAntiAfkWasOff = false;
+  }
+}
+function _afkActivityHandler(e) {
+  if (!settings.autoAfk) return;
+  if (!e.isTrusted) return;
+  if (Date.now() < afkGraceUntil) return;
+  onUserReturn();
+  clearTimeout(afkTimer);
+  afkTimer = setTimeout(onAfkTriggered, afkDelay * 1000);
+}
+const _afkEvents = ['mousemove', 'keydown', 'mousedown', 'wheel'];
+function startAfkDetector() {
+  _afkEvents.forEach(evt => window.addEventListener(evt, _afkActivityHandler));
+  clearTimeout(afkTimer);
+  afkTimer = setTimeout(onAfkTriggered, afkDelay * 1000);
+}
+function stopAfkDetector() {
+  _afkEvents.forEach(evt => window.removeEventListener(evt, _afkActivityHandler));
+  clearTimeout(afkTimer);
+  afkTimer = null;
+  if (afkTriggered) {
     afkTriggered = false;
     if (afkAntiAfkWasOff) {
       const afkMod = [...gridContainer.children].find(c => c.dataset.moduleName === MODULE_NAMES.ANTI_AFK);
-      if (afkMod && afkMod._uv2Active) {
-        afkMod.click();
-        showReturnToast();
-      }
+      if (afkMod && afkMod._uv2Active) afkMod.click();
       afkAntiAfkWasOff = false;
     }
   }
-  function _afkActivityHandler(e) {
-    if (!settings.autoAfk) return;
-    if (!e.isTrusted) return;
-    if (Date.now() < afkGraceUntil) return;
-    onUserReturn();
-    clearTimeout(afkTimer);
-    afkTimer = setTimeout(onAfkTriggered, afkDelay * 1000);
-  }
-  const _afkEvents = ['mousemove', 'keydown', 'mousedown', 'wheel'];
-  function startAfkDetector() {
-    _afkEvents.forEach(evt => window.addEventListener(evt, _afkActivityHandler));
-    clearTimeout(afkTimer);
-    afkTimer = setTimeout(onAfkTriggered, afkDelay * 1000);
-  }
-  function stopAfkDetector() {
-    _afkEvents.forEach(evt => window.removeEventListener(evt, _afkActivityHandler));
-    clearTimeout(afkTimer);
-    afkTimer = null;
-    if (afkTriggered) {
-      afkTriggered = false;
-      if (afkAntiAfkWasOff) {
-        const afkMod = [...gridContainer.children].find(c => c.dataset.moduleName === MODULE_NAMES.ANTI_AFK);
-        if (afkMod && afkMod._uv2Active) afkMod.click();
-        afkAntiAfkWasOff = false;
-      }
-    }
-  }
-  if (settings.autoAfk) startAfkDetector();
+}
+if (settings.autoAfk) startAfkDetector();
 })();
 (function() {
   'use strict';
