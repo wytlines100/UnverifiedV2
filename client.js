@@ -2594,7 +2594,7 @@ sortModulesByFavorite();
   toast.textContent = 'You are idle, Anti-AFK enabled.';
   Object.assign(toast.style, {
     position: 'fixed', top: '-60px', left: '50%', transform: 'translateX(-50%)',
-    background: color, color: '#fff', padding: '10px 22px',
+    background: '#e74c3c', color: '#fff', padding: '10px 22px',
     borderRadius: '8px', fontSize: '15px', fontFamily: 'MinibloxFont, sans-serif',
     zIndex: '99999', transition: 'top 0.5s ease, opacity 0.5s ease', opacity: '0',
     whiteSpace: 'nowrap', boxShadow: '0 4px 16px rgba(0,0,0,0.5)',
