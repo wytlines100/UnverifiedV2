@@ -1089,22 +1089,25 @@ settingsOverlay.innerHTML = `
             <label class="uv2-toggle"><input type="checkbox" id="uv2-toggle-vpnwarning"><div class="uv2-toggle-track"></div></label>
           </div>
           <div class="uv2-section-title" style="margin-top:14px;">Anti-AFK</div>
-          <div class="uv2-setting-row">
-            <div><div class="uv2-setting-label">Auto Enable</div><div class="uv2-setting-desc">Turns on Anti-AFK automatically after idling</div></div>
-            <label class="uv2-toggle"><input type="checkbox" id="uv2-toggle-autoafk"><div class="uv2-toggle-track"></div></label>
-          </div>
-          <div class="uv2-setting-row">
-            <div><div class="uv2-setting-label">Sends AFK Message In Chat</div><div class="uv2-setting-desc">Sends a chat message when you go AFK</div></div>
-            <label class="uv2-toggle"><input type="checkbox" id="uv2-toggle-afkchat"><div class="uv2-toggle-track"></div></label>
-          </div>
-          <div class="uv2-setting-row">
-            <div><div class="uv2-setting-label">Idle Delay</div><div class="uv2-setting-desc">Seconds before Anti-AFK auto-enables (5–120)</div></div>
-            <div style="display:flex;align-items:center;gap:6px;flex-shrink:0;">
-              <input type="number" id="uv2-afkdelay-input" min="5" max="120" value="10" style="width:60px;background:#2a2a2a;color:white;border:1px solid #444;border-radius:6px;padding:5px 8px;font-size:14px;font-family:'MinibloxFont',sans-serif;text-align:center;outline:none;">
-              <span style="color:#888;font-size:13px;">s</span>
-            </div>
-          </div>
-        </div>
+<div class="uv2-setting-row">
+  <div><div class="uv2-setting-label">Auto Enable</div><div class="uv2-setting-desc">Turns on Anti-AFK automatically after idling</div></div>
+  <label class="uv2-toggle"><input type="checkbox" id="uv2-toggle-autoafk"><div class="uv2-toggle-track"></div></label>
+</div>
+<div class="uv2-setting-row">
+  <div><div class="uv2-setting-label">Sends AFK Message In Chat</div><div class="uv2-setting-desc">Sends a chat message when you go AFK</div></div>
+  <label class="uv2-toggle"><input type="checkbox" id="uv2-toggle-afkchat"><div class="uv2-toggle-track"></div></label>
+</div>
+<div class="uv2-setting-row">
+  <div><div class="uv2-setting-label">AFK Music</div><div class="uv2-setting-desc">Play music when Anti-AFK auto-enables</div></div>
+  <label class="uv2-toggle"><input type="checkbox" id="uv2-toggle-afkmusic"><div class="uv2-toggle-track"></div></label>
+</div>
+<div class="uv2-setting-row">
+  <div><div class="uv2-setting-label">Idle Delay</div><div class="uv2-setting-desc">Seconds before Anti-AFK auto-enables (10–120)</div></div>
+  <div style="display:flex;align-items:center;gap:6px;flex-shrink:0;">
+    <input type="number" id="uv2-afkdelay-input" min="10" max="120" value="10" style="width:60px;background:#2a2a2a;color:white;border:1px solid #444;border-radius:6px;padding:5px 8px;font-size:14px;font-family:'MinibloxFont',sans-serif;text-align:center;outline:none;">
+    <span style="color:#888;font-size:13px;">s</span>
+  </div>
+</div>
         <div class="uv2-settings-page" id="uv2-page-armorhud-settings">
           <div class="uv2-section-title" style="margin-top:14px;">Armor HUD</div>
           <div id="uv2-armorhud-settings-section"></div>
@@ -1338,33 +1341,37 @@ switchUv2Page('main');
   });
 
   document.querySelector("#uv2-settings-close")?.addEventListener("click", () => switchUv2Page('main'));
-  document.querySelector("#uv2-toggle-sounds")?.addEventListener("change", function() {
-    settings.moduleSounds = this.checked;
-    localStorage.setItem('uv2-setting-sounds', this.checked);
-  });
-  document.querySelector("#uv2-toggle-saving")?.addEventListener("change", function() {
-    settings.saving = this.checked;
-    localStorage.setItem('uv2-setting-saving', this.checked ? 'true' : 'false');
-    if (this.checked) {
-      saveAllModuleStates();
-    } else {
-      Object.keys(localStorage).filter(k => k.startsWith('uv2-module-')).forEach(k => localStorage.removeItem(k));
-    }
-  });
-  document.querySelector("#uv2-toggle-autoafk")?.addEventListener("change", function() {
-    settings.autoAfk = this.checked;
-    localStorage.setItem('uv2-setting-autoafk', this.checked ? 'true' : 'false');
-    if (this.checked) startAfkDetector(); else stopAfkDetector();
-  });
-  document.querySelector("#uv2-toggle-afkchat")?.addEventListener("change", function() {
-    settings.afkChat = this.checked;
-    localStorage.setItem('uv2-setting-afkchat', this.checked);
-  });
-  document.querySelector("#uv2-toggle-vpnwarning")?.addEventListener("change", function() {
-    settings.vpnWarning = this.checked;
-    localStorage.setItem('uv2-setting-vpnwarning', this.checked);
-    if (this.checked) vpnGateDismissed = false;
-  });
+document.querySelector("#uv2-toggle-sounds")?.addEventListener("change", function() {
+  settings.moduleSounds = this.checked;
+  localStorage.setItem('uv2-setting-sounds', this.checked);
+});
+document.querySelector("#uv2-toggle-saving")?.addEventListener("change", function() {
+  settings.saving = this.checked;
+  localStorage.setItem('uv2-setting-saving', this.checked ? 'true' : 'false');
+  if (this.checked) {
+    saveAllModuleStates();
+  } else {
+    Object.keys(localStorage).filter(k => k.startsWith('uv2-module-')).forEach(k => localStorage.removeItem(k));
+  }
+});
+document.querySelector("#uv2-toggle-autoafk")?.addEventListener("change", function() {
+  settings.autoAfk = this.checked;
+  localStorage.setItem('uv2-setting-autoafk', this.checked ? 'true' : 'false');
+  if (this.checked) startAfkDetector(); else stopAfkDetector();
+});
+document.querySelector("#uv2-toggle-afkchat")?.addEventListener("change", function() {
+  settings.afkChat = this.checked;
+  localStorage.setItem('uv2-setting-afkchat', this.checked);
+});
+document.querySelector("#uv2-toggle-afkmusic")?.addEventListener("change", function() {
+  settings.afkMusic = this.checked;
+  localStorage.setItem('uv2-setting-afkmusic', this.checked);
+});
+document.querySelector("#uv2-toggle-vpnwarning")?.addEventListener("change", function() {
+  settings.vpnWarning = this.checked;
+  localStorage.setItem('uv2-setting-vpnwarning', this.checked);
+  if (this.checked) vpnGateDismissed = false;
+});
 
   let moduleBindings = {};
   let isBinding = false;
@@ -1384,6 +1391,7 @@ switchUv2Page('main');
     autoAfk: localStorage.getItem('uv2-setting-autoafk') === 'true',
     afkChat: localStorage.getItem('uv2-setting-afkchat') !== 'false',
     vpnWarning: localStorage.getItem('uv2-setting-vpnwarning') !== 'false',
+    afkMusic: localStorage.getItem('uv2-setting-afkmusic') !== 'false',
   };
 
   const soundsToggle = document.querySelector("#uv2-toggle-sounds");
@@ -1414,24 +1422,24 @@ switchUv2Page('main');
     localStorage.setItem('uv2-setting-uikeybind', uiKeybind);
   });
 
-  let afkDelay = parseInt(localStorage.getItem('uv2-setting-afkdelay') || '10', 10);
-  if (isNaN(afkDelay) || afkDelay < 5) afkDelay = 5;
-  if (afkDelay > 120) afkDelay = 120;
-  let afkTimer = null;
-  const afkDelayInput = document.querySelector("#uv2-afkdelay-input");
-  if (afkDelayInput) afkDelayInput.value = afkDelay;
-  afkDelayInput?.addEventListener("change", function() {
-    let val = parseInt(this.value, 10);
-    if (isNaN(val) || val < 5) val = 5;
-    if (val > 120) val = 120;
-    this.value = val;
-    afkDelay = val;
-    localStorage.setItem('uv2-setting-afkdelay', afkDelay);
-    if (settings.autoAfk) {
-      clearTimeout(afkTimer);
-      afkTimer = setTimeout(onAfkTriggered, afkDelay * 1000);
-    }
-  });
+let afkDelay = parseInt(localStorage.getItem('uv2-setting-afkdelay') || '10', 10);
+if (isNaN(afkDelay) || afkDelay < 10) afkDelay = 10;
+if (afkDelay > 120) afkDelay = 120;
+let afkTimer = null;
+const afkDelayInput = document.querySelector("#uv2-afkdelay-input");
+if (afkDelayInput) afkDelayInput.value = afkDelay;
+afkDelayInput?.addEventListener("change", function() {
+  let val = parseInt(this.value, 10);
+  if (isNaN(val) || val < 10) val = 10;
+  if (val > 120) val = 120;
+  this.value = val;
+  afkDelay = val;
+  localStorage.setItem('uv2-setting-afkdelay', afkDelay);
+  if (settings.autoAfk) {
+    clearTimeout(afkTimer);
+    afkTimer = setTimeout(onAfkTriggered, afkDelay * 1000);
+  }
+});
 
   function playModuleClickSound(turningOn) {
     if (!settings.moduleSounds) return;
@@ -2668,16 +2676,18 @@ function onAfkTriggered() {
   } else {
     afkAntiAfkWasOff = false;
   }
-  afkAudio = new Audio('https://raw.githubusercontent.com/wytlines100/UnverifiedV2/refs/heads/main/AfkSong.mp3');
-  afkAudio.loop = true;
-  afkAudio.volume = 0;
-  afkAudio.play().catch(() => {});
-  let vol = 0;
-  const fadeIn = setInterval(() => {
-    vol = Math.min(1, vol + 0.05);
-    afkAudio.volume = vol;
-    if (vol >= 1) clearInterval(fadeIn);
-  }, 100);
+  if (settings.afkMusic) {
+    afkAudio = new Audio('https://raw.githubusercontent.com/wytlines100/UnverifiedV2/refs/heads/main/AfkSong.mp3');
+    afkAudio.loop = true;
+    afkAudio.volume = 0;
+    afkAudio.play().catch(() => {});
+    let vol = 0;
+    const fadeIn = setInterval(() => {
+      vol = Math.min(1, vol + 0.05);
+      afkAudio.volume = vol;
+      if (vol >= 1) clearInterval(fadeIn);
+    }, 100);
+  }
 }
 function onUserReturn() {
   if (!afkTriggered) return;
