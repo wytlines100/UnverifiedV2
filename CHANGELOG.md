@@ -3,6 +3,7 @@
 ## v4
 - AFK music that fades in when Anti-AFK auto-enables and fades out on user return
 - Optional AFK music toggle in Settings
+- Updated Idle Delay from 5 seconds to 10 seconds (min)
 
 ## v3.8
 - Removed unused color variables and dead config keys
