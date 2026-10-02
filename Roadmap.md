@@ -1,7 +1,6 @@
 # Roadmap
 
 ## Planned
-- [ ] Optional AFK music toggle in Settings
 
 ## Completed
 - [x] AFK music with fade in/out
@@ -19,3 +18,4 @@
 - [x] Simplified config save/load UI
 - [x] Removed language support (English only)
 - [x] Removed unused variables and dead code
+- [x] Optional AFK music toggle in Settings
