@@ -114,6 +114,116 @@ class UnverifiedIntro {
 
 (function() {
   'use strict';
+  let rawTypedSlash = false;
+
+  const gameRef = {
+    _game: null,
+    get game() {
+      if (this._game) return this._game;
+      const reactRoot = document.querySelector("#react");
+      if (!reactRoot) return null;
+      try {
+        const fiber = Object.values(reactRoot)[0];
+        const game = fiber?.updateQueue?.baseState?.element?.props?.game;
+        if (game) this._game = game;
+        return game;
+      } catch (e) { return null; }
+    }
+  };
+
+  function pushLocalChat(textMsg) {
+    const game = gameRef.game;
+    if (game && game.chat && typeof game.chat.addChat === "function") {
+      game.chat.addChat({ text: textMsg });
+    }
+  }
+
+  async function handleInfoCommand(targetUser) {
+    if (!targetUser) {
+      pushLocalChat("\\#FF0000\\Error executing command: /info <username>");
+      return;
+    }
+    try {
+      const res = await fetch('https://miniblox.io/auth-api/accounts/stats/username', {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify({ username: targetUser })
+      });
+      if (!res.ok) {
+        pushLocalChat(`\\#FF0000\\Error executing command: User ${targetUser} not found`);
+        return;
+      }
+      const data = await res.json();
+      if (data && data.profile) {
+        const username = data.profile.username || targetUser;
+        const rawRank = data.profile.rank ? data.profile.rank.trim().toLowerCase() : "";
+        const rank = (!rawRank || rawRank === "player") ? "None" : rawRank;
+        const level = data.profile.level !== undefined ? data.profile.level : "0";
+        pushLocalChat(`Username: ${username}\nRank: ${rank}\nLevel: ${level}`);
+      } else {
+        pushLocalChat(`\\#FF0000\\Error executing command: User ${targetUser} not found`);
+      }
+    } catch (err) {
+      pushLocalChat(`\\#FF0000\\Error executing command: User ${targetUser} not found`);
+    }
+  }
+
+  function checkAndExecuteInfo(inputStr) {
+    if (typeof inputStr !== 'string') return false;
+    const trimmed = inputStr.trim();
+    const cleanStr = trimmed.replace(/^\//, '').trim();
+    if (cleanStr.toLowerCase() === 'info' || cleanStr.toLowerCase().startsWith('info ')) {
+      if (trimmed.startsWith('/') || rawTypedSlash) {
+        const parts = cleanStr.split(/\s+/);
+        handleInfoCommand(parts[1] || "");
+        rawTypedSlash = false;
+        return true;
+      }
+    }
+    rawTypedSlash = false;
+    return false;
+  }
+
+  function hookChatEngine() {
+    const game = gameRef.game;
+    if (!game || !game.chat) return false;
+    const chat = game.chat;
+
+    window.addEventListener('keydown', (e) => {
+      if (e.key === '/' || e.code === 'Slash') rawTypedSlash = true;
+    }, true);
+
+    if (typeof chat.runCommand === 'function' && !chat.runCommand._isHooked) {
+      const origRunCommand = chat.runCommand;
+      chat.runCommand = function(cmdText, ...args) {
+        if (checkAndExecuteInfo(cmdText)) return;
+        return origRunCommand.apply(this, [cmdText, ...args]);
+      };
+      chat.runCommand._isHooked = true;
+    }
+
+    if (typeof chat.submit === 'function' && !chat.submit._isHooked) {
+      const origSubmit = chat.submit;
+      chat.submit = function(...args) {
+        if (checkAndExecuteInfo(chat.inputValue)) {
+          chat.setInputValue ? chat.setInputValue("") : (chat.inputValue = "");
+          if (typeof chat.closeInput === 'function') chat.closeInput();
+          return;
+        }
+        return origSubmit.apply(this, args);
+      };
+      chat.submit._isHooked = true;
+    }
+    return true;
+  }
+
+  const initInterval = setInterval(() => {
+    if (hookChatEngine()) clearInterval(initInterval);
+  }, 500);
+})();
+
+(function() {
+  'use strict';
 const intro = new UnverifiedIntro();
 intro.playIntro();
 const UV2_RAW_BASE = 'https://raw.githubusercontent.com/wytlines100/UnverifiedV2/refs/heads/main/';
@@ -2753,113 +2863,4 @@ function stopAfkDetector() {
   }
 }
 if (settings.autoAfk) startAfkDetector();
-})();
-(function() {
-  'use strict';
-  let rawTypedSlash = false;
-
-  const gameRef = {
-    _game: null,
-    get game() {
-      if (this._game) return this._game;
-      const reactRoot = document.querySelector("#react");
-      if (!reactRoot) return null;
-      try {
-        const fiber = Object.values(reactRoot)[0];
-        const game = fiber?.updateQueue?.baseState?.element?.props?.game;
-        if (game) this._game = game;
-        return game;
-      } catch (e) { return null; }
-    }
-  };
-
-  function pushLocalChat(textMsg) {
-    const game = gameRef.game;
-    if (game && game.chat && typeof game.chat.addChat === "function") {
-      game.chat.addChat({ text: textMsg });
-    }
-  }
-
-  async function handleInfoCommand(targetUser) {
-    if (!targetUser) {
-      pushLocalChat("\\#FF0000\\Error executing command: /info <username>");
-      return;
-    }
-    try {
-      const res = await fetch('https://miniblox.io/auth-api/accounts/stats/username', {
-        method: 'POST',
-        headers: { 'Content-Type': 'application/json' },
-        body: JSON.stringify({ username: targetUser })
-      });
-      if (!res.ok) {
-        pushLocalChat(`\\#FF0000\\Error executing command: User ${targetUser} not found`);
-        return;
-      }
-      const data = await res.json();
-      if (data && data.profile) {
-        const username = data.profile.username || targetUser;
-        const rawRank = data.profile.rank ? data.profile.rank.trim().toLowerCase() : "";
-        const rank = (!rawRank || rawRank === "player") ? "None" : rawRank;
-        const level = data.profile.level !== undefined ? data.profile.level : "0";
-        pushLocalChat(`Username: ${username}\nRank: ${rank}\nLevel: ${level}`);
-      } else {
-        pushLocalChat(`\\#FF0000\\Error executing command: User ${targetUser} not found`);
-      }
-    } catch (err) {
-      pushLocalChat(`\\#FF0000\\Error executing command: User ${targetUser} not found`);
-    }
-  }
-
-  function checkAndExecuteInfo(inputStr) {
-    if (typeof inputStr !== 'string') return false;
-    const trimmed = inputStr.trim();
-    const cleanStr = trimmed.replace(/^\//, '').trim();
-    if (cleanStr.toLowerCase() === 'info' || cleanStr.toLowerCase().startsWith('info ')) {
-      if (trimmed.startsWith('/') || rawTypedSlash) {
-        const parts = cleanStr.split(/\s+/);
-        handleInfoCommand(parts[1] || "");
-        rawTypedSlash = false;
-        return true;
-      }
-    }
-    rawTypedSlash = false;
-    return false;
-  }
-
-  function hookChatEngine() {
-    const game = gameRef.game;
-    if (!game || !game.chat) return false;
-    const chat = game.chat;
-
-    window.addEventListener('keydown', (e) => {
-      if (e.key === '/' || e.code === 'Slash') rawTypedSlash = true;
-    }, true);
-
-    if (typeof chat.runCommand === 'function' && !chat.runCommand._isHooked) {
-      const origRunCommand = chat.runCommand;
-      chat.runCommand = function(cmdText, ...args) {
-        if (checkAndExecuteInfo(cmdText)) return;
-        return origRunCommand.apply(this, [cmdText, ...args]);
-      };
-      chat.runCommand._isHooked = true;
-    }
-
-    if (typeof chat.submit === 'function' && !chat.submit._isHooked) {
-      const origSubmit = chat.submit;
-      chat.submit = function(...args) {
-        if (checkAndExecuteInfo(chat.inputValue)) {
-          chat.setInputValue ? chat.setInputValue("") : (chat.inputValue = "");
-          if (typeof chat.closeInput === 'function') chat.closeInput();
-          return;
-        }
-        return origSubmit.apply(this, args);
-      };
-      chat.submit._isHooked = true;
-    }
-    return true;
-  }
-
-  const initInterval = setInterval(() => {
-    if (hookChatEngine()) clearInterval(initInterval);
-  }, 500);
 })();
