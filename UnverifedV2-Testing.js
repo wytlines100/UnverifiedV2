@@ -16,7 +16,7 @@
 // @connect      ip-api.com
 // ==/UserScript==
 
-document.title = 'UnverifiedV2-Testing';
+document.title = 'Unverified V2';
 class UnverifiedIntro {
   constructor() {
     this.container = document.createElement("div");
@@ -98,7 +98,6 @@ class UnverifiedIntro {
 
 (function() {
   'use strict';
-  if (localStorage.getItem('uv2-welcomed') === 'true') return;
   const waitForGame = setInterval(() => {
     if (!/\/join\//.test(window.location.pathname)) return;
     const reactRoot = document.querySelector("#react");
@@ -106,7 +105,6 @@ class UnverifiedIntro {
     const game = Object.values(reactRoot)[0]?.updateQueue?.baseState?.element?.props?.game;
     if (game && game.chat && typeof game.chat.addChat === "function") {
       clearInterval(waitForGame);
-      localStorage.setItem('uv2-welcomed', 'true');
       game.chat.addChat({
         text: "\\glow\\\\shiny\\\\#BF3011\\[Unverified V2]:\\reset\\ Client initialized. Updates and support are available on our Discord."
       });
