@@ -78,9 +78,30 @@ The menu is split into five sidebar pages:
 - The Chat Filter link detection is pattern based and blocks all links, including Discord invites. Unusual link formats may occasionally slip through.
 - The Changelog page requires a successful network request to GitHub and will show an error message if the request fails.
 
-## Changelog
+## Roadmap
 
-See [CHANGELOG.md](./CHANGELOG.md) for the full version history.
+### Planned
+
+*(Nothing currently planned)*
+
+### Completed
+
+- AFK music with fade in/out
+- Intro displays active UI keybind
+- What's New popup synced to script version
+- Changeable UI keybind (Right Shift / `)
+- Bounding boxes for Time Display, Anti-AFK, and Keystrokes
+- Profanity regex filter
+- GitHub update checker
+- Link blocking in Chat Filter
+- Changelog viewer sidebar page
+- /info command
+- Smoother notification animation
+- Welcome message shown in match only
+- Simplified config save/load UI
+- Removed language support (English only)
+- Removed unused variables and dead code
+- Optional AFK music toggle in Settings
 
 ## RoadMap
 
