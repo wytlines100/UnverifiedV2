@@ -16,7 +16,7 @@
 // @connect      ip-api.com
 // ==/UserScript==
 
-document.title = 'Unverified V2';
+document.title = 'UnverifiedV2-Testing';
 class UnverifiedIntro {
   constructor() {
     this.container = document.createElement("div");
@@ -1874,14 +1874,11 @@ let isChatFilterActive = false;
 let chatFilterOriginalSubmit = null;
 let chatOriginalAddChat = null;
 let chatFilterMessageCache = [];
-const CHAT_FILTER_SPAM_THRESHOLD = 3;
-const CHAT_FILTER_SPAM_WINDOW = 10000;
-
 function chatFilterIsSpam(text) {
   const now = Date.now();
-  chatFilterMessageCache = chatFilterMessageCache.filter(m => now - m.time < CHAT_FILTER_SPAM_WINDOW);
+  chatFilterMessageCache = chatFilterMessageCache.filter(m => now - m.time < 10000);
   const similarMessages = chatFilterMessageCache.filter(m => m.text === text);
-  if (similarMessages.length >= CHAT_FILTER_SPAM_THRESHOLD - 1) {
+  if (similarMessages.length >= 2) {
     return true;
   }
   chatFilterMessageCache.push({ text, time: now });
