@@ -7,7 +7,7 @@
 // @downloadURL  https://raw.githubusercontent.com/wytlines100/UnverifiedV2/refs/heads/main/client.js
 // @updateURL    https://raw.githubusercontent.com/wytlines100/UnverifiedV2/refs/heads/main/client.js
 // @license      Proprietary License
-// @author       wytlines, DeadFish7, andreypidd, jet, joudaALT, TrustIsOver, TheM1ddleM1n
+// @author       wytlines, andreypidd, jet, joudaALT, Trust, TheM1ddleM1n
 // @match        https://miniblox.io/*
 // @grant        GM_xmlhttpRequest
 // @grant        GM_info
@@ -56,7 +56,7 @@ class UnverifiedIntro {
     });
     this.container.appendChild(this.unverifiedText);
     this.creditsText = document.createElement("div");
-    this.creditsText.textContent = "\nBy wytlines, DeadFish7\nandreypidd, jet, joudaALT, TrustIsOver, TheM1ddleM1n";
+    this.creditsText.textContent = "\nBy wytlines,\nandreypidd, jet, joudaALT, Trust, TheM1ddleM1n";
     Object.assign(this.creditsText.style, {
       color: "red", fontSize: "30px", opacity: 0, transition: "opacity 1.1s ease",
       whiteSpace: 'pre-line', textAlign: "center",
