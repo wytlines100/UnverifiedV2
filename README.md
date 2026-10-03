@@ -103,10 +103,6 @@ The menu is split into five sidebar pages:
 - Removed unused variables and dead code
 - Optional AFK music toggle in Settings
 
-## RoadMap
-
-See [Roadmap.md](./Roadmap.md) for up to date planning that developers will carry out.
-
 ## Credits
 
 - [Miniblox](https://miniblox.io) for creating the base game
