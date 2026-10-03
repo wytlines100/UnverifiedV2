@@ -78,6 +78,10 @@ The menu is split into five sidebar pages:
 - The Chat Filter link detection is pattern based and blocks all links, including Discord invites. Unusual link formats may occasionally slip through.
 - The Changelog page requires a successful network request to GitHub and will show an error message if the request fails.
 
+## Changelog
+
+See [CHANGELOG.md](./CHANGELOG.md) for the full version history.
+
 ## Roadmap
 
 ### Planned
