@@ -56,7 +56,7 @@ class UnverifiedIntro {
     });
     this.container.appendChild(this.unverifiedText);
     this.creditsText = document.createElement("div");
-    this.creditsText.textContent = "\nBy wytlines,\nandreypidd, jet, joudaALT, Trust, TheM1ddleM1n";
+    this.creditsText.textContent = "\nBy wytlines,\nTheM1ddleM1n, joudaALT, Trust,\nandreypidd, jet";
     Object.assign(this.creditsText.style, {
       color: "red", fontSize: "30px", opacity: 0, transition: "opacity 1.1s ease",
       whiteSpace: 'pre-line', textAlign: "center",
@@ -1918,8 +1918,7 @@ function clearTrackedListeners(list) {
 const FullscreenModule = createModule(MODULE_NAMES.FULLSCREEN, "Automatically toggles Fullscreen");
 let isFullscreenActive = false;
 FullscreenModule.addEventListener("click", () => {
-  isFullscreenActive = !isFullscreenActive;
-  if (isFullscreenActive) {
+  if (!document.fullscreenElement) {
     (document.documentElement.requestFullscreen || document.documentElement.mozRequestFullScreen || document.documentElement.webkitRequestFullscreen || document.documentElement.msRequestFullscreen || (() => {})).call(document.documentElement);
   } else {
     (document.exitFullscreen || document.mozCancelFullScreen || document.webkitExitFullscreen || document.msExitFullscreen || (() => {})).call(document);
