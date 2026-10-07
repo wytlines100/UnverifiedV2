@@ -88,7 +88,7 @@ See [CHANGELOG.md](./CHANGELOG.md) for the full version history.
 
 ## Project Information
 
-- **Current Contributors:** wytlines, DeadFish7, andreypidd, jet, joudaALT, TrustIsOver, TheM1ddleM1n
+- **Current Contributors:** wytlines, jet, joudaALT, Trust, TheM1ddleM1n
 - **Policy: Distributed under a proprietary All Rights Reserved license. Users utilize third-party utility clients at their own discretion.**
 - **Our Discord Server!:**
   - Discord: [UnverifiedV2 Discord](https://dsc.gg/unverifiedv2)
