@@ -7,7 +7,7 @@
 // @downloadURL  https://raw.githubusercontent.com/wytlines100/UnverifiedV2/refs/heads/main/client.js
 // @updateURL    https://raw.githubusercontent.com/wytlines100/UnverifiedV2/refs/heads/main/client.js
 // @license      Proprietary License
-// @author       wytlines, andreypidd, jet, joudaALT, Trust, TheM1ddleM1n
+// @author       wytlines, jet, joudaALT, Trust, TheM1ddleM1n
 // @match        https://miniblox.io/*
 // @grant        GM_xmlhttpRequest
 // @grant        GM_info
@@ -56,7 +56,7 @@ class UnverifiedIntro {
     });
     this.container.appendChild(this.unverifiedText);
     this.creditsText = document.createElement("div");
-    this.creditsText.textContent = "\nBy wytlines,\nTheM1ddleM1n, joudaALT, Trust,\nandreypidd, jet";
+    this.creditsText.textContent = "\nBy wytlines,\nTheM1ddleM1n, joudaALT, Trust, \njet";
     Object.assign(this.creditsText.style, {
       color: "red", fontSize: "30px", opacity: 0, transition: "opacity 1.1s ease",
       whiteSpace: 'pre-line', textAlign: "center",
@@ -1247,32 +1247,16 @@ document.body.appendChild(settingsOverlay);
       name: "wytlines",
       role: "Lead Developer",
       badge: "Founder",
-      bio: "Created Unverified V2 and drives the project forward for future development.",
+      bio: "Created UnverifiedV2 and drives the project forward for future development.",
       avatar: "https://github.com/wytlines100.png",
       color: { bg: "#3b1a00", text: "#fdba74", border: "#ea580c", strip: "#ea580c", icon: "★" },
-    },
-    {
-      name: "DeadFish7",
-      role: "Developer",
-      badge: "Veteran Dev",
-      bio: "Created Public-Lurker Client",
-      avatar: "https://github.com/DeadFish7.png",
-      color: { bg: "#1e1b4b", text: "#a5b4fc", border: "#4f46e5", strip: "#4f46e5", icon: "◈" },
-    },
-    {
-      name: "andreypidd",
-      role: "Contributor",
-      badge: "Contributor",
-      bio: "Pitched in with contributions that helped shape the client.",
-      avatar: "https://github.com/andreypidd.png",
-      color: { bg: "#1a2e1a", text: "#86efac", border: "#16a34a", strip: "#16a34a", icon: "●" },
     },
     {
       name: "jet",
       role: "Ex-Developer",
       badge: "Ex-Dev",
       bio: "Former developer who helped build early versions of the client.",
-      avatar: "https://github.com/jet.png",
+      avatar: "https://github.com/h9ndcuffs.png",
       color: { bg: "#1c1c1c", text: "#a1a1aa", border: "#52525b", strip: "#52525b", icon: "◇" },
     },
     {
@@ -1287,15 +1271,15 @@ document.body.appendChild(settingsOverlay);
       name: "Trust",
       role: "Developer",
       badge: "Coder",
-      bio: "Coder for Miniblox with a knack for clean implementations.",
+      bio: "Coder for UV2 with a knack for clean implementations.",
       avatar: "https://github.com/lttlgrl.png",
       color: { bg: "#2d1a3a", text: "#d8b4fe", border: "#9333ea", strip: "#9333ea", icon: "✦" },
     },
     {
       name: "TheM1ddleM1n",
       role: "Developer",
-      badge: "Bug Slayer",
-      bio: "Professional Coder for Miniblox.",
+      badge: "Coder",
+      bio: "Coder for UV2, helping shape the client's future. Professional in Python/JavaScript Coding!",
       avatar: "https://github.com/TheM1ddleM1n.png",
       color: { bg: "#1a2a1a", text: "#6ee7b7", border: "#059669", strip: "#059669", icon: "⚔" },
     },
