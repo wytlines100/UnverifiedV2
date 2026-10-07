@@ -6,6 +6,8 @@
 - Updated Idle Delay from 5 seconds (minimum) to 10 seconds
 - Fixed Fullscreen module desyncing when Escape is used to exit fullscreen
 - Updated intro credits order to reflect contribution ranking
+- Improved Notification Animations
+- Updated Settings -> Contributors 
 
 ## v3.8
 - Removed unused color variables and dead config keys
