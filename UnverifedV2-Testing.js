@@ -7,7 +7,7 @@
 // @downloadURL  https://raw.githubusercontent.com/wytlines100/UnverifiedV2/refs/heads/main/client.js
 // @updateURL    https://raw.githubusercontent.com/wytlines100/UnverifiedV2/refs/heads/main/client.js
 // @license      Proprietary License
-// @author       wytlines, andreypidd, jet, joudaALT, Trust, TheM1ddleM1n
+// @author       wytlines, jet, joudaALT, Trust, TheM1ddleM1n
 // @match        https://miniblox.io/*
 // @grant        GM_xmlhttpRequest
 // @grant        GM_info
@@ -56,7 +56,7 @@ class UnverifiedIntro {
     });
     this.container.appendChild(this.unverifiedText);
     this.creditsText = document.createElement("div");
-    this.creditsText.textContent = "\nBy wytlines,\nTheM1ddleM1n, joudaALT, Trust,\nandreypidd, jet";
+    this.creditsText.textContent = "\nBy wytlines,\nTheM1ddleM1n, joudaALT, Trust, \njet";
     Object.assign(this.creditsText.style, {
       color: "red", fontSize: "30px", opacity: 0, transition: "opacity 1.1s ease",
       whiteSpace: 'pre-line', textAlign: "center",
@@ -396,8 +396,8 @@ document.addEventListener('visibilitychange', () => {
   if (!document.hidden) uv2ThrottledCheck();
 });
   const style = document.createElement('style');
-  style.innerHTML = `
-    @font-face {
+style.innerHTML = `
+@font-face {
   font-family: 'MinibloxFont';
   src: url('https://cdn.glitch.global/adb12490-d563-43cb-9711-2a69a8bb1c06/Faithful.ttf?v=1735593093308') format('truetype');
 }
@@ -429,21 +429,32 @@ document.addEventListener('visibilitychange', () => {
   animation: uv2-title-shine-loop 3.5s linear infinite;
   text-shadow: 0 0 18px rgba(231,76,60,0.55);
 }
+@keyframes uv2NotifEnter {
+  0%   { transform: translateX(115%); opacity: 0; }
+  70%  { transform: translateX(-4px); opacity: 1; }
+  85%  { transform: translateX(2px); opacity: 1; }
+  100% { transform: translateX(0); opacity: 1; }
+}
+@keyframes uv2NotifExit {
+  0%   { transform: translateX(0); opacity: 1; }
+  100% { transform: translateX(115%); opacity: 0; }
+}
 @keyframes notificationProgress {
-  0% { width: 100%; }
+  0%   { width: 100%; }
   100% { width: 0%; }
 }
 @keyframes afkPulse {
   0%, 100% { opacity: 1; transform: scale(1); }
-  50% { opacity: 0.5; transform: scale(1.2); }
+  50%       { opacity: 0.5; transform: scale(1.2); }
 }
 .bind-popup { position:absolute; background-color:#2c3e50; color:white; padding:20px; border-radius:10px; box-shadow:0 0 10px rgba(0,0,0,0.7); z-index:10001; font-family:'MinibloxFont',sans-serif; display:none; text-align:center; }
 .bind-popup input { background-color:#34495e; color:white; border:2px solid #e74c3c; border-radius:5px; padding:10px; font-size:18px; width:200px; }
 .bind-popup button { background-color:#e74c3c; color:white; border:none; border-radius:5px; padding:10px 20px; margin-top:10px; cursor:pointer; }
 .bind-popup button:hover { background-color:#c0392b; }
 .module-tooltip { visibility:hidden; position:absolute; background-color:#2c3e50; color:white; padding:5px 10px; border-radius:5px; font-size:14px; z-index:10000; opacity:0; transition:opacity 0.3s ease; bottom:6px; right:10px; white-space:nowrap; pointer-events:none; }
-.other-notification { font-family:'MinibloxFont',sans-serif; font-size:14px; color:white; background:linear-gradient(135deg, #e74c3c, #c0392b); padding:12px 24px; border-radius:8px; margin-bottom:12px; box-shadow:0 4px 15px rgba(0,0,0,0.3); transition:opacity 0.5s cubic-bezier(0.22, 1, 0.36, 1), transform 0.5s cubic-bezier(0.22, 1, 0.36, 1); opacity:0; transform:translateX(40px) scale(0.96); border-left:4px solid #ffcc00; font-weight:500; letter-spacing:0.5px; position:relative; overflow:hidden; will-change:transform, opacity; }
-.notification-progress { position:absolute; bottom:0; left:0; height:3px; background:#ffcc00; width:100%; animation: notificationProgress 3s linear forwards; }
+.other-notification { font-family:'MinibloxFont',sans-serif; font-size:14px; color:white; background:linear-gradient(135deg,#e74c3c,#c0392b); padding:12px 24px; border-radius:8px; margin-bottom:12px; box-shadow:0 4px 15px rgba(0,0,0,0.3); border-left:4px solid #ffcc00; font-weight:500; letter-spacing:0.5px; position:relative; overflow:hidden; will-change:transform,opacity; animation:uv2NotifEnter 0.55s cubic-bezier(0.22,1,0.36,1) forwards; }
+.other-notification.uv2-notif-exit { animation:uv2NotifExit 0.42s cubic-bezier(0.4,0,0.6,1) forwards; }
+.notification-progress { position:absolute; bottom:0; left:0; height:3px; background:#ffcc00; width:100%; animation:notificationProgress 4s linear forwards; }
 .settings-icon { width:30px; height:30px; fill:white; transition:transform 0.3s ease; }
 .settings-icon:hover { transform:rotate(90deg); }
 #uv2-sidebar { box-sizing:border-box; }
@@ -475,7 +486,7 @@ document.addEventListener('visibilitychange', () => {
 .module-container {
   border-radius: 8px !important;
 }
-  `;
+`;
   document.head.appendChild(style);
   const ui = document.createElement("div");
   ui.id = "uv2-main-ui";
@@ -1236,32 +1247,16 @@ document.body.appendChild(settingsOverlay);
       name: "wytlines",
       role: "Lead Developer",
       badge: "Founder",
-      bio: "Created Unverified V2 and drives the project forward for future development.",
+      bio: "Created UnverifiedV2 and drives the project forward for future development.",
       avatar: "https://github.com/wytlines100.png",
       color: { bg: "#3b1a00", text: "#fdba74", border: "#ea580c", strip: "#ea580c", icon: "★" },
-    },
-    {
-      name: "DeadFish7",
-      role: "Developer",
-      badge: "Veteran Dev",
-      bio: "Created Public-Lurker Client",
-      avatar: "https://github.com/DeadFish7.png",
-      color: { bg: "#1e1b4b", text: "#a5b4fc", border: "#4f46e5", strip: "#4f46e5", icon: "◈" },
-    },
-    {
-      name: "andreypidd",
-      role: "Contributor",
-      badge: "Contributor",
-      bio: "Pitched in with contributions that helped shape the client.",
-      avatar: "https://github.com/andreypidd.png",
-      color: { bg: "#1a2e1a", text: "#86efac", border: "#16a34a", strip: "#16a34a", icon: "●" },
     },
     {
       name: "jet",
       role: "Ex-Developer",
       badge: "Ex-Dev",
       bio: "Former developer who helped build early versions of the client.",
-      avatar: "https://github.com/jet.png",
+      avatar: "https://github.com/h9ndcuffs.png",
       color: { bg: "#1c1c1c", text: "#a1a1aa", border: "#52525b", strip: "#52525b", icon: "◇" },
     },
     {
@@ -1276,15 +1271,15 @@ document.body.appendChild(settingsOverlay);
       name: "Trust",
       role: "Developer",
       badge: "Coder",
-      bio: "Coder for Miniblox with a knack for clean implementations.",
+      bio: "Coder for UV2 with a knack for clean implementations.",
       avatar: "https://github.com/lttlgrl.png",
       color: { bg: "#2d1a3a", text: "#d8b4fe", border: "#9333ea", strip: "#9333ea", icon: "✦" },
     },
     {
       name: "TheM1ddleM1n",
       role: "Developer",
-      badge: "Bug Slayer",
-      bio: "Professional Coder for Miniblox.",
+      badge: "Coder",
+      bio: "Coder for UV2, helping shape the client's future. Professional in Python/JavaScript Coding!",
       avatar: "https://github.com/TheM1ddleM1n.png",
       color: { bg: "#1a2a1a", text: "#6ee7b7", border: "#059669", strip: "#059669", icon: "⚔" },
     },
@@ -1676,15 +1671,10 @@ function showNotification(message, isOn) {
   progressBar.classList.add("notification-progress");
   notification.appendChild(progressBar);
   notificationContainer.appendChild(notification);
-  requestAnimationFrame(() => requestAnimationFrame(() => {
-    notification.style.transform = "translateX(0) scale(1)";
-    notification.style.opacity = "1";
-  }));
   setTimeout(() => {
-    notification.style.transform = "translateX(40px) scale(0.96)";
-    notification.style.opacity = "0";
-    setTimeout(() => { notification.remove(); }, 500);
-  }, 3000);
+    notification.classList.add('uv2-notif-exit');
+    setTimeout(() => notification.remove(), 420);
+  }, 4000);
 }
 
 function showBindPopup(moduleElement, moduleName) {
