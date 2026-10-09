@@ -1,6 +1,6 @@
 # UnverifiedV2
 
-A custom utility client for [Miniblox](https://miniblox.io), actively developed since October 2024.
+A custom utility client for [Miniblox](https://miniblox.io), being actively developed since the release in October 2024.
 
 ## System Requirements
 
@@ -81,10 +81,6 @@ The menu is split into five sidebar pages:
 ## Changelog
 
 See [CHANGELOG.md](./CHANGELOG.md) for the full version history.
-
-## Credits
-
-- [Miniblox](https://miniblox.io) for creating the base game
 
 ## Project Information
 
