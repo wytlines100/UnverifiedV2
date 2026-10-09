@@ -106,7 +106,7 @@ class UnverifiedIntro {
     if (game && game.chat && typeof game.chat.addChat === "function") {
       clearInterval(waitForGame);
       game.chat.addChat({
-        text: "\\glow\\\\shiny\\\\#BF3011\\[Unverified V2]:\\reset\\ Client initialized. Updates and support are available on our Discord."
+        text: "\\glow\\\\shiny\\\\#BF3011\\[Unverified V2]:\\reset\\ Hello UV2 User! We hope you enjoy our client."
       });
     }
   }, 500);
