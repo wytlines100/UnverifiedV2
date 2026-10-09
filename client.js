@@ -480,7 +480,7 @@ style.innerHTML = `
 .uv2-toggle { position:relative; width:42px; height:22px; flex-shrink:0; }
 .uv2-toggle input { display:none; }
 .uv2-toggle-track { position:absolute; inset:0; background:#444; border-radius:999px; cursor:pointer; transition:background 0.2s; }
-.uv2-toggle-track::after { content:''; position:absolute; top:3px; left:3px; width:16px; height:16px; background:#fff; border-radius:50%; transition:transform 0.2s; }
+.uv2-toggle-track::after { content:''; position:absolute; top:3px; left:3px; width:16px; height:16px; background:#fff; border-radius:50%; transition:transform 0.35s cubic-bezier(0.34, 1.56, 0.64, 1); }
 .uv2-toggle input:checked + .uv2-toggle-track { background:#e74c3c; }
 .uv2-toggle input:checked + .uv2-toggle-track::after { transform:translateX(20px); }
 .module-container {
@@ -896,7 +896,7 @@ let armorHudGap = parseInt(localStorage.getItem('uv2-armorhud-gap') || '4', 10);
                 if (afkChatToggle) afkChatToggle.checked = settings.afkChat;
               }
               if (typeof config.settings.afkDelay === 'number') {
-                afkDelay = Math.min(120, Math.max(5, config.settings.afkDelay));
+                afkDelay = Math.min(120, Math.max(10, config.settings.afkDelay));
                 localStorage.setItem('uv2-setting-afkdelay', afkDelay);
                 if (afkDelayInput) afkDelayInput.value = afkDelay;
               }
@@ -1842,7 +1842,7 @@ function createModule(name, description) {
   const toggleWrap = document.createElement("div");
   toggleWrap.style.cssText = "width:36px;height:20px;border-radius:10px;background:#252525;flex-shrink:0;margin-left:14px;position:relative;transition:background 0.2s ease;border:1px solid rgba(255,255,255,0.07);";
   const toggleKnob = document.createElement("div");
-  toggleKnob.style.cssText = "position:absolute;top:2px;left:2px;width:14px;height:14px;border-radius:50%;background:#4a4a4a;transition:all 0.2s ease;";
+ toggleKnob.style.cssText = "position:absolute;top:2px;left:2px;width:14px;height:14px;border-radius:50%;background:#4a4a4a;transition:transform 0.35s cubic-bezier(0.34, 1.56, 0.64, 1), background 0.2s ease;";
   toggleWrap.appendChild(toggleKnob);
   moduleContainer.appendChild(toggleWrap);
 
