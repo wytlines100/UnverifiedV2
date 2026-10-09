@@ -7,7 +7,9 @@
 - Fixed Fullscreen module desyncing when Escape is used to exit fullscreen
 - Updated intro credits order to reflect contribution ranking
 - Improved Notification Animations
-- Updated Settings -> Contributors 
+- Updated Settings -> Contributors
+- Smooth spring easing on module toggle knob using cubic-bezier
+- Fixed config load clamping afkDelay to a minimum of 5 instead of 10
 
 ## v3.8
 - Removed unused color variables and dead config keys
