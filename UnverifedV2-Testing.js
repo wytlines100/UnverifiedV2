@@ -105,9 +105,13 @@ class UnverifiedIntro {
     const game = Object.values(reactRoot)[0]?.updateQueue?.baseState?.element?.props?.game;
     if (game && game.chat && typeof game.chat.addChat === "function") {
       clearInterval(waitForGame);
-      game.chat.addChat({
-        text: "\\glow\\\\shiny\\\\#BF3011\\[Unverified V2]:\\reset\\ Hello UV2 User! We hope you enjoy our client."
-      });
+      const joinKey = 'uv2-welcomed-' + window.location.pathname;
+      if (!sessionStorage.getItem(joinKey)) {
+        sessionStorage.setItem(joinKey, '1');
+        game.chat.addChat({
+          text: "\\glow\\\\shiny\\\\#BF3011\\[Unverified V2]:\\reset\\ Hello UV2 User! We hope you enjoy our client."
+        });
+      }
     }
   }, 500);
 })();
@@ -2130,25 +2134,25 @@ if (antiAfkModule) {
   let keepSprintHandler = null;
   if (keepSprintModule) {
     keepSprintModule.addEventListener("click", () => {
-      const isActive = keepSprintModule._uv2Active;
-      if (isActive) {
-        keepSprintHandler = e => {
-          if (!['KeyW', 'KeyA', 'KeyS', 'KeyD'].includes(e.code)) return;
-          const t = document.activeElement || document.body;
-          t.dispatchEvent(new KeyboardEvent('keydown', {
-            key: 'Shift', code: 'ShiftLeft', keyCode: 16, which: 16,
-            location: 1, bubbles: true, cancelable: true,
-          }));
-        };
-        document.addEventListener('keydown', keepSprintHandler);
-      } else {
-        if (keepSprintHandler) {
-          document.removeEventListener('keydown', keepSprintHandler);
-          keepSprintHandler = null;
-        }
-      }
-    });
+  const isActive = keepSprintModule._uv2Active;
+  if (isActive) {
+    keepSprintHandler = e => {
+  if (!['KeyW', 'KeyA', 'KeyS', 'KeyD', 'ArrowUp', 'ArrowDown', 'ArrowLeft', 'ArrowRight'].includes(e.code)) return;
+  const t = document.activeElement || document.body;
+  t.dispatchEvent(new KeyboardEvent('keydown', {
+    key: 'Shift', code: 'ShiftRight', keyCode: 16, which: 16,
+    location: 2, bubbles: true, cancelable: true,
+  }));
+};
+    document.addEventListener('keydown', keepSprintHandler);
+  } else {
+    if (keepSprintHandler) {
+      document.removeEventListener('keydown', keepSprintHandler);
+      keepSprintHandler = null;
+    }
   }
+});
+}
 
   createModule(MODULE_NAMES.TIME_DISPLAY, "Shows you the time so you dont have to exit full screen.");
 const timeModule = [...gridContainer.children].find(c => c.dataset.moduleName === MODULE_NAMES.TIME_DISPLAY);
