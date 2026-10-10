@@ -10,6 +10,8 @@
 - Updated Settings -> Contributors
 - Smooth spring easing on module toggle knob using cubic-bezier
 - Fixed config load clamping afkDelay to a minimum of 5 instead of 10
+- Keep Sprint now also triggers on arrow keys
+- Keep Sprint now dispatches Right Shift instead of Left Shift
 
 ## v3.8
 - Removed unused color variables and dead config keys
