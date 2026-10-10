@@ -1629,7 +1629,7 @@ function chatFilterContainsBadWords(text) {
   return CHAT_FILTER_PATTERN.test(cleanText) || CHAT_FILTER_PATTERN.test(chatFilterStripSeparators(cleanText));
 }
 
-const MODULE_NAMES = { FULLSCREEN: "Fullscreen", KEYSTROKES: "Keystrokes", MUTE_CHAT: "Mute Chat", CHAT_FILTER: "Chat Filter", ANTI_AFK: "Anti-Afk", KEEP_SPRINT: "Keep Sprint", TIME_DISPLAY: "Time Display", ARMOR_HUD: "Armor HUD" };
+const MODULE_NAMES = { FULLSCREEN: "Fullscreen", KEYSTROKES: "Keystrokes", MUTE_CHAT: "Mute Chat", CHAT_FILTER: "Chat Filter", ANTI_AFK: "Anti-Afk", KEEP_SPRINT: "Keep Sprint", CLOCK: "Clock", ARMOR_HUD: "Armor HUD" };
 
 const moduleSearchWrap = document.createElement("div");
 moduleSearchWrap.style.cssText = "position:relative;margin-top:4px;";
@@ -2164,8 +2164,8 @@ if (antiAfkModule) {
 });
 }
 
-  createModule(MODULE_NAMES.TIME_DISPLAY, "Shows you the time so you dont have to exit full screen.");
-const timeModule = [...gridContainer.children].find(c => c.dataset.moduleName === MODULE_NAMES.TIME_DISPLAY);
+  createModule(MODULE_NAMES.CLOCK, "Shows you the time so you dont have to exit full screen.");
+const timeModule = [...gridContainer.children].find(c => c.dataset.moduleName === MODULE_NAMES.CLOCK);
 let isTimeVisible=false, timeElement=null;
 const timeListeners = [];
 if (timeModule) {
