@@ -435,12 +435,13 @@ style.innerHTML = `
 }
 @keyframes uv2NotifEnter {
   0%   { transform: translateX(115%); opacity: 0; }
-  70%  { transform: translateX(-4px); opacity: 1; }
-  85%  { transform: translateX(2px); opacity: 1; }
+  60%  { transform: translateX(-6px); opacity: 1; }
+  80%  { transform: translateX(2px); opacity: 1; }
   100% { transform: translateX(0); opacity: 1; }
 }
 @keyframes uv2NotifExit {
   0%   { transform: translateX(0); opacity: 1; }
+  30%  { transform: translateX(6px); opacity: 0.8; }
   100% { transform: translateX(115%); opacity: 0; }
 }
 @keyframes notificationProgress {
@@ -451,13 +452,21 @@ style.innerHTML = `
   0%, 100% { opacity: 1; transform: scale(1); }
   50%       { opacity: 0.5; transform: scale(1.2); }
 }
+@keyframes uv2ModuleToggle {
+  0%   { transform: scaleX(1); }
+  40%  { transform: scaleX(0.982); }
+  100% { transform: scaleX(1); }
+}
+.module-toggle-animation {
+  animation: uv2ModuleToggle 0.3s cubic-bezier(0.22, 1, 0.36, 1) forwards;
+}
 .bind-popup { position:absolute; background-color:#2c3e50; color:white; padding:20px; border-radius:10px; box-shadow:0 0 10px rgba(0,0,0,0.7); z-index:10001; font-family:'MinibloxFont',sans-serif; display:none; text-align:center; }
 .bind-popup input { background-color:#34495e; color:white; border:2px solid #e74c3c; border-radius:5px; padding:10px; font-size:18px; width:200px; }
 .bind-popup button { background-color:#e74c3c; color:white; border:none; border-radius:5px; padding:10px 20px; margin-top:10px; cursor:pointer; }
 .bind-popup button:hover { background-color:#c0392b; }
 .module-tooltip { visibility:hidden; position:absolute; background-color:#2c3e50; color:white; padding:5px 10px; border-radius:5px; font-size:14px; z-index:10000; opacity:0; transition:opacity 0.3s ease; bottom:6px; right:10px; white-space:nowrap; pointer-events:none; }
-.other-notification { font-family:'MinibloxFont',sans-serif; font-size:14px; color:white; background:linear-gradient(135deg,#e74c3c,#c0392b); padding:12px 24px; border-radius:8px; margin-bottom:12px; box-shadow:0 4px 15px rgba(0,0,0,0.3); border-left:4px solid #ffcc00; font-weight:500; letter-spacing:0.5px; position:relative; overflow:hidden; will-change:transform,opacity; animation:uv2NotifEnter 0.55s cubic-bezier(0.22,1,0.36,1) forwards; }
-.other-notification.uv2-notif-exit { animation:uv2NotifExit 0.42s cubic-bezier(0.4,0,0.6,1) forwards; }
+.other-notification { font-family:'MinibloxFont',sans-serif; font-size:14px; color:white; background:linear-gradient(135deg,#1a1a1a,#111111); padding:12px 24px; border-radius:8px; margin-bottom:12px; box-shadow:0 4px 15px rgba(0,0,0,0.3); font-weight:500; letter-spacing:0.5px; position:relative; overflow:hidden; will-change:transform,opacity; animation:uv2NotifEnter 0.45s cubic-bezier(0.22,1,0.36,1) forwards; }
+.other-notification.uv2-notif-exit { animation:uv2NotifExit 0.35s cubic-bezier(0.4,0,0.6,1) forwards; }
 .notification-progress { position:absolute; bottom:0; left:0; height:3px; background:#ffcc00; width:100%; animation:notificationProgress 4s linear forwards; }
 .settings-icon { width:30px; height:30px; fill:white; transition:transform 0.3s ease; }
 .settings-icon:hover { transform:rotate(90deg); }
@@ -962,7 +971,7 @@ let armorHudGap = parseInt(localStorage.getItem('uv2-armorhud-gap') || '4', 10);
   statusBtn.addEventListener('click', () => {
     const btn = document.querySelector('#armor-hud-dock-btn');
     if (btn) btn.click();
-    else showNotification('Turn on Armor HUD first', false);
+    else showNotification('Turn on Armor HUD in game', false);
   });
 
   function buildSliderRow(labelText, id, min, max, value, formatFn) {
@@ -1663,24 +1672,25 @@ document.body.appendChild(notificationContainer);
 
 function showNotification(message, isOn) {
   if (!settings.showNotifications) return;
-  const notification = document.createElement("div");
+  const notification = document.createElement('div');
   if (message.includes(' was ')) {
     const moduleName = message.split(' was ')[0];
-    notification.textContent = `${moduleName} ${isOn ? "was turned on" : "was turned off"}`;
+    notification.textContent = `${moduleName} ${isOn ? 'was turned on' : 'was turned off'}`;
   } else {
     notification.textContent = message;
   }
   notification.classList.add('other-notification');
-  const progressBar = document.createElement("div");
-  progressBar.classList.add("notification-progress");
+  notification.style.borderLeft = `4px solid ${guiPrimaryColor}`;
+  const progressBar = document.createElement('div');
+  progressBar.classList.add('notification-progress');
+  progressBar.style.background = guiPrimaryColor;
   notification.appendChild(progressBar);
   notificationContainer.appendChild(notification);
   setTimeout(() => {
     notification.classList.add('uv2-notif-exit');
-    setTimeout(() => notification.remove(), 420);
+    setTimeout(() => notification.remove(), 350);
   }, 4000);
 }
-
 function showBindPopup(moduleElement, moduleName) {
   const existingPopup = document.querySelector('.bind-popup');
   if (existingPopup) existingPopup.remove();
@@ -2407,7 +2417,7 @@ if (armorHudModule && armorHudModule._toggleWrap) {
   armorHudDockBtn.addEventListener('click', e => {
     e.stopPropagation();
     if (!armorHudEl) {
-      showNotification('Turn on Armor HUD first in game', false);
+      showNotification('Turn on Armor HUD in game', false);
       return;
     }
     if (armorHudDocked) {
