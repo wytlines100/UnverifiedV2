@@ -2692,24 +2692,25 @@ sortModulesByFavorite();
   let afkAudio = null;
   let afkAntiAfkWasOff = false;
   let afkGraceUntil = 0;
-  function showAfkToast(msg, color) {
-  const existing = document.getElementById('uv2-afk-toast');
+ function showToast(msg, color, duration = 3500) {
+  const existing = document.getElementById('uv2-toast');
   if (existing) existing.remove();
   const toast = document.createElement('div');
-  toast.id = 'uv2-afk-toast';
-  toast.textContent = 'You are idle, Anti-AFK enabled.';
+  toast.id = 'uv2-toast';
+  toast.textContent = msg;
   Object.assign(toast.style, {
     position: 'fixed', top: '-60px', left: '50%', transform: 'translateX(-50%)',
-    background: '#e74c3c', color: '#fff', padding: '10px 22px',
+    background: color, color: '#fff', padding: '10px 22px',
     borderRadius: '8px', fontSize: '15px', fontFamily: 'MinibloxFont, sans-serif',
     zIndex: '99999', transition: 'top 0.5s ease, opacity 0.5s ease', opacity: '0',
     whiteSpace: 'nowrap', boxShadow: '0 4px 16px rgba(0,0,0,0.5)',
   });
   document.body.appendChild(toast);
   setTimeout(() => { toast.style.top = '18px'; toast.style.opacity = '1'; }, 20);
-  setTimeout(() => { toast.style.top = '-60px'; toast.style.opacity = '0'; }, 3500);
-  setTimeout(() => { if (toast.parentNode) toast.remove(); }, 4200);
+  setTimeout(() => { toast.style.top = '-60px'; toast.style.opacity = '0'; }, duration);
+  setTimeout(() => { if (toast.parentNode) toast.remove(); }, duration + 700);
 }
+
 function sendAfkChatMessage(msg) {
   try {
     const inputs = document.querySelectorAll("input");
@@ -2752,11 +2753,13 @@ function sendAfkChatMessage(msg) {
     }
   } catch(e) {}
 }
+
 function isInMatch() {
   try {
     return /\/join\//.test(window.location.pathname);
   } catch (e) { return false; }
 }
+
 function onAfkTriggered() {
   if (afkTriggered) return;
   if (!isInMatch()) {
@@ -2765,7 +2768,7 @@ function onAfkTriggered() {
   }
   afkTriggered = true;
   afkGraceUntil = Date.now() + 2000;
-  showAfkToast();
+  showToast('You are idle, Anti-AFK enabled.', '#e74c3c');
   if (settings.afkChat) sendAfkChatMessage("I am Currently AFK, Be back shortly.");
   const afkMod = [...gridContainer.children].find(c => c.dataset.moduleName === MODULE_NAMES.ANTI_AFK);
   if (afkMod && !afkMod._uv2Active) {
@@ -2787,6 +2790,7 @@ function onAfkTriggered() {
     }, 100);
   }
 }
+
 function onUserReturn() {
   if (!afkTriggered) return;
   afkTriggered = false;
@@ -2808,26 +2812,12 @@ function onUserReturn() {
     const afkMod = [...gridContainer.children].find(c => c.dataset.moduleName === MODULE_NAMES.ANTI_AFK);
     if (afkMod && afkMod._uv2Active) {
       afkMod.click();
-      const existing = document.getElementById('uv2-return-toast');
-      if (existing) existing.remove();
-      const toast = document.createElement('div');
-      toast.id = 'uv2-return-toast';
-      toast.textContent = 'Welcome back! Anti-AFK disabled.';
-      Object.assign(toast.style, {
-        position: 'fixed', top: '-60px', left: '50%', transform: 'translateX(-50%)',
-        background: '#2ecc71', color: '#fff', padding: '10px 22px',
-        borderRadius: '8px', fontSize: '15px', fontFamily: 'MinibloxFont, sans-serif',
-        zIndex: '99999', transition: 'top 0.5s ease, opacity 0.5s ease', opacity: '0',
-        whiteSpace: 'nowrap', boxShadow: '0 4px 16px rgba(0,0,0,0.5)',
-      });
-      document.body.appendChild(toast);
-      setTimeout(() => { toast.style.top = '18px'; toast.style.opacity = '1'; }, 20);
-      setTimeout(() => { toast.style.top = '-60px'; toast.style.opacity = '0'; }, 3500);
-      setTimeout(() => { if (toast.parentNode) toast.remove(); }, 4200);
+      showToast('Welcome back! Anti-AFK disabled.', '#2ecc71');
     }
     afkAntiAfkWasOff = false;
   }
 }
+
 function _afkActivityHandler(e) {
   if (!settings.autoAfk) return;
   if (!e.isTrusted) return;
@@ -2836,12 +2826,15 @@ function _afkActivityHandler(e) {
   clearTimeout(afkTimer);
   afkTimer = setTimeout(onAfkTriggered, afkDelay * 1000);
 }
+
 const _afkEvents = ['mousemove', 'keydown', 'mousedown', 'wheel'];
+
 function startAfkDetector() {
   _afkEvents.forEach(evt => window.addEventListener(evt, _afkActivityHandler));
   clearTimeout(afkTimer);
   afkTimer = setTimeout(onAfkTriggered, afkDelay * 1000);
 }
+
 function stopAfkDetector() {
   _afkEvents.forEach(evt => window.removeEventListener(evt, _afkActivityHandler));
   clearTimeout(afkTimer);
@@ -2855,5 +2848,6 @@ function stopAfkDetector() {
     }
   }
 }
+
 if (settings.autoAfk) startAfkDetector();
 })();
