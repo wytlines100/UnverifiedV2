@@ -16,7 +16,7 @@
 // @connect      ip-api.com
 // ==/UserScript==
 
-document.title = 'UnverifiedV2-Testing';
+document.title = GM_info.script.name;
 class UnverifiedIntro {
   constructor() {
     this.container = document.createElement("div");
