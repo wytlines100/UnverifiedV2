@@ -1,5 +1,14 @@
 # Changelog
 
+## v4.1
+- Added module toggle press animation on click
+- Improved notification enter and exit animations
+- Notifications now inherit accent color for border and progress bar
+- Simplified and standardized all notification messages
+- Removed unused isOn parameter from showNotification
+- Removed dead showNotifications and animateUI config flags
+- Fixed UI open/close animation broken after animateUI removal
+
 ## v4
 - AFK music that fades in when Anti-AFK auto-enables and fades out on user return
 - Optional AFK music toggle in Settings
