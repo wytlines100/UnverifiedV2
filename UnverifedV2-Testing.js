@@ -856,7 +856,7 @@ let armorHudGap = parseInt(localStorage.getItem('uv2-armorhud-gap') || '4', 10);
         a.download = `unverified-config-${new Date().toISOString().slice(0,19)}.json`;
         a.click();
         URL.revokeObjectURL(url);
-        showNotification('Configuration saved successfully!', true);
+        showNotification('Config saved', true);
       });
     }
 
@@ -937,10 +937,10 @@ let armorHudGap = parseInt(localStorage.getItem('uv2-armorhud-gap') || '4', 10);
                 isRestoring = false;
               }
             }, 500);
-            showNotification('Configuration loaded successfully!', true);
+            showNotification('Config loaded', true);
           } catch (err) {
             console.error(err);
-            showNotification('Failed!: Invalid JSON config', false);
+            showNotification('Invalid config file', false);
           }
         };
         reader.readAsText(file);
@@ -971,7 +971,7 @@ let armorHudGap = parseInt(localStorage.getItem('uv2-armorhud-gap') || '4', 10);
   statusBtn.addEventListener('click', () => {
     const btn = document.querySelector('#armor-hud-dock-btn');
     if (btn) btn.click();
-    else showNotification('Turn on Armor HUD in game', false);
+    else showNotification('Enable Armor HUD in a match', false);
   });
 
   function buildSliderRow(labelText, id, min, max, value, formatFn) {
@@ -1501,8 +1501,6 @@ document.querySelector("#uv2-toggle-vpnwarning")?.addEventListener("change", fun
 
     const settings = {
     moduleSounds: localStorage.getItem('uv2-setting-sounds') !== 'false',
-    showNotifications: true,
-    animateUI: true,
     saving: localStorage.getItem('uv2-setting-saving') === 'true',
     autoAfk: localStorage.getItem('uv2-setting-autoafk') === 'true',
     afkChat: localStorage.getItem('uv2-setting-afkchat') !== 'false',
@@ -1670,15 +1668,9 @@ const notificationContainer = document.createElement("div");
 notificationContainer.style.cssText = "position:fixed;bottom:1in;right:20px;z-index:10000;display:flex;flex-direction:column-reverse;align-items:flex-end;";
 document.body.appendChild(notificationContainer);
 
-function showNotification(message, isOn) {
-  if (!settings.showNotifications) return;
+function showNotification(message) {
   const notification = document.createElement('div');
-  if (message.includes(' was ')) {
-    const moduleName = message.split(' was ')[0];
-    notification.textContent = `${moduleName} ${isOn ? 'was turned on' : 'was turned off'}`;
-  } else {
-    notification.textContent = message;
-  }
+  notification.textContent = message;
   notification.classList.add('other-notification');
   notification.style.borderLeft = `4px solid ${guiPrimaryColor}`;
   const progressBar = document.createElement('div');
@@ -1713,10 +1705,10 @@ function showBindPopup(moduleElement, moduleName) {
       if (conflictModule) {
         showNotification(`${keyBinding} is already bound to ${conflictModule}`, false);
       } else if (uiKeyMatches) {
-        showNotification(`${keyBinding} is already used by the UI Keybind`, false);
+        showNotification(`${keyBinding} conflicts with the UI keybind`, false);
       } else {
         moduleBindings[moduleName] = keyBinding;
-        showNotification(`Bound ${moduleName} to ${keyBinding}`, true);
+        showNotification(`${moduleName} bound to ${keyBinding}`, true);
       }
     }
     popup.style.display = "none";
@@ -1895,14 +1887,14 @@ function createModule(name, description) {
         moduleContainer.style.boxShadow = `0 0 0 3px ${guiPrimaryColor}14, 0 1px 4px rgba(0,0,0,0.4)`;
         toggleWrap.style.background = `${guiPrimaryColor}40`; toggleWrap.style.borderColor = `${guiPrimaryColor}60`;
         toggleKnob.style.background = guiPrimaryColor; toggleKnob.style.transform = "translateX(16px)";
-        if (!isRestoring) showNotification(`${name} was turned on`, true);
+        if (!isRestoring) showNotification(`${name} enabled`, true);
       } else {
         moduleContainer.style.border = "1px solid rgba(255,255,255,0.07)";
         moduleContainer.style.background = "linear-gradient(135deg,#242424,#1c1c1c)";
         moduleContainer.style.boxShadow = "0 1px 4px rgba(0,0,0,0.4)";
         toggleWrap.style.background = "#252525"; toggleWrap.style.borderColor = "rgba(255,255,255,0.07)";
         toggleKnob.style.background = "#4a4a4a"; toggleKnob.style.transform = "translateX(0)";
-        if (!isRestoring) showNotification(`${name} was turned off`, false);
+        if (!isRestoring) showNotification(`${name} disabled`, false);
       }
     }
   });
@@ -2610,33 +2602,25 @@ sortModulesByFavorite();
   }
 
   function openUI() {
-    ui.style.display = "flex";
-    if (settings.animateUI) {
-      ui.classList.remove("uv2-animate-in", "uv2-animate-out");
-      void ui.offsetWidth;
-      ui.classList.add("uv2-animate-in");
-    }
-  }
-  function closeUI() {
-    switchUv2Page('main');
-    if (closeUITimeout) { clearTimeout(closeUITimeout); closeUITimeout = null; }
-    if (settings.animateUI) {
-      uiAnimating = true;
-      ui.classList.remove("uv2-animate-in");
-      void ui.offsetWidth;
-      ui.classList.add("uv2-animate-out");
-      closeUITimeout = setTimeout(() => {
-        ui.style.display = "none";
-        ui.classList.remove("uv2-animate-out");
-        uiAnimating = false;
-        closeUITimeout = null;
-      }, 180);
-    } else {
-      ui.classList.remove("uv2-animate-in", "uv2-animate-out");
-      ui.style.display = "none";
-      uiAnimating = false;
-    }
-  }
+  ui.style.display = 'flex';
+  ui.classList.remove('uv2-animate-in', 'uv2-animate-out');
+  void ui.offsetWidth;
+  ui.classList.add('uv2-animate-in');
+}
+function closeUI() {
+  switchUv2Page('main');
+  if (closeUITimeout) { clearTimeout(closeUITimeout); closeUITimeout = null; }
+  uiAnimating = true;
+  ui.classList.remove('uv2-animate-in');
+  void ui.offsetWidth;
+  ui.classList.add('uv2-animate-out');
+  closeUITimeout = setTimeout(() => {
+    ui.style.display = 'none';
+    ui.classList.remove('uv2-animate-out');
+    uiAnimating = false;
+    closeUITimeout = null;
+  }, 180);
+}
   function toggleUI() {
     if (uiAnimating) return;
     if (uiVisible) { closeUI(); uiVisible = false; }
@@ -2778,7 +2762,7 @@ function onAfkTriggered() {
   }
   afkTriggered = true;
   afkGraceUntil = Date.now() + 2000;
-  showToast('You are idle, Anti-AFK enabled.', '#e74c3c');
+  showToast('Idle — Anti-AFK enabled', '#e74c3c');
   if (settings.afkChat) sendAfkChatMessage("I am Currently AFK, Be back shortly.");
   const afkMod = [...gridContainer.children].find(c => c.dataset.moduleName === MODULE_NAMES.ANTI_AFK);
   if (afkMod && !afkMod._uv2Active) {
@@ -2822,7 +2806,7 @@ function onUserReturn() {
     const afkMod = [...gridContainer.children].find(c => c.dataset.moduleName === MODULE_NAMES.ANTI_AFK);
     if (afkMod && afkMod._uv2Active) {
       afkMod.click();
-      showToast('Welcome back! Anti-AFK disabled.', '#2ecc71');
+      showToast('Welcome back — Anti-AFK disabled', '#2ecc71');
     }
     afkAntiAfkWasOff = false;
   }
