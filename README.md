@@ -1,6 +1,6 @@
 # UnverifiedV2
 
-A custom utility client for [Miniblox](https://miniblox.io), being actively developed since the release in October 2024.
+A custom utility client for [Miniblox](https://miniblox.io), being actively developed since the release in October 2024
 
 ## System Requirements
 
@@ -8,7 +8,7 @@ A custom utility client for [Miniblox](https://miniblox.io), being actively deve
 - [Tampermonkey](https://www.tampermonkey.net) (or equivalent userscript manager) with **Allow UserScripts** enabled
 - Access to [miniblox.io](https://miniblox.io)
 
-## Installation Guide
+## Installation
 
 1. Install Tampermonkey for your Chromium browser and ensure **Allow UserScripts** is enabled in Chromium Settings.
 2. Open the Tampermonkey dashboard and create a new script via the plus button.
@@ -19,8 +19,6 @@ A custom utility client for [Miniblox](https://miniblox.io), being actively deve
 
 > **Note:** UV2 Music Player is a separate file (`MusicPlayer.js`) to be installed separately.
 > > **Note2:** Installing from the raw `client.js` URL on GitHub enables Tampermonkey's built-in update tracking alongside the in-client Update Checker.
-
-## Feature Matrix
 
 ### Core Modules
 | Module | Description |
