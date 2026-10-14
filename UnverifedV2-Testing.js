@@ -20,57 +20,26 @@ document.title = GM_info.script.name;
 class UnverifiedIntro {
   constructor() {
     this.container = document.createElement("div");
-    Object.assign(this.container.style, {
-      position: "fixed",
-      top: 0, left: 0, width: "100vw", height: "100vh",
-      display: "flex", alignItems: "center", justifyContent: "center", flexDirection: "column",
-      backgroundColor: "black",
-      overflow: "hidden", zIndex: 9999,
-      opacity: 0,
-      transition: "opacity 0.6s ease",
-    });
+    this.container.style.cssText = "position:fixed;top:0;left:0;width:100vw;height:100vh;display:flex;align-items:center;justify-content:center;flex-direction:column;background-color:black;overflow:hidden;z-index:9999;opacity:0;transition:opacity 0.6s ease;";
     this.check = document.createElement("div");
     this.check.textContent = "✓";
-    Object.assign(this.check.style, {
-      color: "red", fontSize: "5rem", opacity: 0.05,
-      transition: "opacity 1.4s ease, transform 1.4s ease",
-      textShadow: '0 0 5px red, 0 0 10px red, 0 0 20px red',
-    });
+    this.check.style.cssText = "color:red;font-size:5rem;opacity:0.05;transition:opacity 1.4s ease,transform 1.4s ease;text-shadow:0 0 5px red,0 0 10px red,0 0 20px red;";
     this.circle = document.createElement("div");
-    Object.assign(this.circle.style, {
-      width: "100px", height: "100px", backgroundColor: "black",
-      border: "2px solid red", borderRadius: "50%",
-      boxShadow: "0 0 10px red, 0 0 20px red, 0 0 30px red",
-      display: "flex", alignItems: "center", justifyContent: "center",
-      opacity: 0, transform: "scale(0.85)",
-      transition: "opacity 1.4s ease, transform 1.4s cubic-bezier(0.22, 1, 0.36, 1)",
-    });
+    this.circle.style.cssText = "width:100px;height:100px;background-color:black;border:2px solid red;border-radius:50%;box-shadow:0 0 10px red,0 0 20px red,0 0 30px red;display:flex;align-items:center;justify-content:center;opacity:0;transform:scale(0.85);transition:opacity 1.4s ease,transform 1.4s cubic-bezier(0.22,1,0.36,1);";
     this.circle.appendChild(this.check);
     this.container.appendChild(this.circle);
     this.unverifiedText = document.createElement("div");
     this.unverifiedText.textContent = "Unverified V2";
-    Object.assign(this.unverifiedText.style, {
-      color: "red", fontSize: "60px", opacity: 0, marginTop: "50px",
-      transition: "opacity 1.1s ease",
-      textShadow: '0 0 5px red, 0 0 10px red, 0 0 20px red',
-    });
+    this.unverifiedText.style.cssText = "color:red;font-size:60px;opacity:0;margin-top:50px;transition:opacity 1.1s ease;text-shadow:0 0 5px red,0 0 10px red,0 0 20px red;";
     this.container.appendChild(this.unverifiedText);
     this.creditsText = document.createElement("div");
     this.creditsText.textContent = "\nBy wytlines,\nTheM1ddleM1n, joudaALT, Trust, \njet";
-    Object.assign(this.creditsText.style, {
-      color: "red", fontSize: "30px", opacity: 0, transition: "opacity 1.1s ease",
-      whiteSpace: 'pre-line', textAlign: "center",
-      textShadow: '0 0 5px red, 0 0 10px red, 0 0 20px red',
-    });
+    this.creditsText.style.cssText = "color:red;font-size:30px;opacity:0;transition:opacity 1.1s ease;white-space:pre-line;text-align:center;text-shadow:0 0 5px red,0 0 10px red,0 0 20px red;";
     this.container.appendChild(this.creditsText);
     this.keybindText = document.createElement("div");
     const introKeybind = localStorage.getItem('uv2-setting-uikeybind') || 'rshift';
     this.keybindText.textContent = `Press ${introKeybind === 'backtick' ? '`' : 'Right Shift'} to open the menu`;
-    Object.assign(this.keybindText.style, {
-      color: "red", fontSize: "30px", opacity: 0, marginTop: "30px",
-      transition: "opacity 1.1s ease",
-      textShadow: '0 0 5px red, 0 0 10px red, 0 0 20px red',
-    });
+    this.keybindText.style.cssText = "color:red;font-size:30px;opacity:0;margin-top:30px;transition:opacity 1.1s ease;text-shadow:0 0 5px red,0 0 10px red,0 0 20px red;";
     this.container.appendChild(this.keybindText);
   }
   playIntro() {
@@ -88,7 +57,7 @@ class UnverifiedIntro {
   setTimeout(() => { this.creditsText.style.opacity = 1; }, 3600);
   setTimeout(() => { this.keybindText.style.opacity = 1; }, 4800);
   setTimeout(() => {
-    this.container.style.transition = "opacity 1.8s cubic-bezier(0.4, 0, 0.2, 1), transform 1.8s cubic-bezier(0.4, 0, 0.2, 1)";
+    this.container.style.transition = "opacity 1.8s cubic-bezier(0.4,0,0.2,1),transform 1.8s cubic-bezier(0.4,0,0.2,1)";
     this.container.style.opacity = 0;
     this.container.style.transform = "scale(1.04)";
   }, 10800);
