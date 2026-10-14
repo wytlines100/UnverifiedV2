@@ -8,6 +8,7 @@
 - Removed unused isOn parameter from showNotification
 - Removed dead showNotifications and animateUI config flags
 - Fixed UI open/close animation broken after animateUI removal
+- Replaced Object.assign style blocks with cssText strings in UnverifiedIntro
 
 ## v4
 - AFK music that fades in when Anti-AFK auto-enables and fades out on user return
