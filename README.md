@@ -57,7 +57,7 @@ The menu is split into five sidebar pages:
 |---|---|
 | **Modules** | All toggleable modules, favorites, and the search bar |
 | **Color** | Accent color picker with hex input and recent colors |
-| **Config** | Save and load configuration as a JSON file |
+| **Config** | Save/Load configuration as a JSON file |
 | **Settings** | Sounds, notifications, animation, persistence, UI keybind, VPN warning, Anti-AFK options, Armor HUD appearance and position |
 | **Changelog** | Full version history fetched from GitHub |
 
