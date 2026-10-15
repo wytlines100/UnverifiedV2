@@ -34,7 +34,6 @@
 
   let cache = loadC();
   let queue = loadQ();
-
   function extractId(url) {
     const p = [
       /(?:youtube\.com\/watch\?v=)([\w-]{11})/,
@@ -143,7 +142,6 @@
 
   let player = null, ready = false, pendingId = null, curId = null, curTitle = '', curArtist = '';
   let playing = false, repeatOn = false, timeInt = null, lastTime = '', lastPct = -1, queueOpen = false;
-
   function accent(id) {
     const c = `hsl(${hue(id)}, 78%, 58%)`;
     root.style.setProperty('--u2c-primary', c);
@@ -151,7 +149,6 @@
   }
 
   function findQ(id) { return queue.find(x => x.id === id); }
-
   function updateFav() {
     const e = findQ(curId);
     els.favBtn.classList.toggle('active', !!(e && e.fav));
@@ -222,7 +219,6 @@
 
   function startTick() { stopTick(); timeInt = setInterval(tick, 1000); }
   function stopTick() { if (timeInt) { clearInterval(timeInt); timeInt = null; } }
-
   document.addEventListener('visibilitychange', () => {
     if (document.hidden) stopTick(); else if (playing) startTick();
   });
@@ -270,9 +266,7 @@
     }
     if (ready && player) player.loadVideoById(id);
   }
-
   function onReady() { ready = true; if (pendingId) player.loadVideoById(pendingId); }
-
   function onState(e) {
     const YT = window.YT;
     if (e.data === YT.PlayerState.PLAYING) { playing = true; els.playBtn.innerHTML = ic.pause; startTick(); }
