@@ -38,7 +38,7 @@ class UnverifiedIntro {
     this.container.appendChild(this.creditsText);
     this.keybindText = document.createElement("div");
     const introKeybind = localStorage.getItem('uv2-setting-uikeybind') || 'rshift';
-    this.keybindText.textContent = `Press ${introKeybind === 'backtick' ? '`' : 'Right Shift'} to open the menu`;
+    this.keybindText.textContent = `Press ${introKeybind === 'backtick' ? '`' : introKeybind === 'backslash' ? '\\' : 'Right Shift'} to open the menu`;
     this.keybindText.style.cssText = "color:red;font-size:30px;opacity:0;margin-top:30px;transition:opacity 1.1s ease;text-shadow:0 0 5px red,0 0 10px red,0 0 20px red;";
     this.container.appendChild(this.keybindText);
   }
@@ -1183,6 +1183,7 @@ settingsOverlay.innerHTML = `
             <select id="uv2-uikeybind-select" style="background:#2a2a2a;color:white;border:1px solid #444;border-radius:6px;padding:6px 10px;font-size:13px;font-family:MinibloxFont,sans-serif;outline:none;cursor:pointer;">
               <option value="rshift">Right Shift</option>
               <option value="backtick">&#96;</option>
+              <option value="backslash">\\</option>
             </select>
           </div>
           <div class="uv2-setting-row">
@@ -1222,6 +1223,50 @@ settingsOverlay.innerHTML = `
   </div>
 `;
 document.body.appendChild(settingsOverlay);
+
+    const resetSection = document.createElement('div');
+resetSection.className = 'uv2-section-title';
+resetSection.style.marginTop = '14px';
+resetSection.textContent = 'Danger Zone';
+document.getElementById('uv2-page-visuals')?.appendChild(resetSection);
+const resetRow = document.createElement('div');
+resetRow.className = 'uv2-setting-row';
+resetRow.style.cssText = 'height:auto;padding:16px;flex-direction:column;gap:0;';
+const resetBtn = document.createElement('button');
+resetBtn.textContent = 'Reset All Settings';
+resetBtn.style.cssText = 'width:100%;background:#e74c3c;color:white;border:none;border-radius:6px;padding:12px 20px;cursor:pointer;font-family:MinibloxFont,sans-serif;';
+resetBtn.addEventListener('click', () => {
+  const existing = document.getElementById('uv2-reset-confirm');
+  if (existing) return;
+  const confirm = document.createElement('div');
+  confirm.id = 'uv2-reset-confirm';
+  confirm.style.cssText = 'margin-top:10px;display:flex;flex-direction:column;gap:8px;';
+  const question = document.createElement('div');
+  question.textContent = 'Are you sure? This cannot be undone.';
+  question.style.cssText = 'font-size:13px;color:#ccc;font-family:MinibloxFont,sans-serif;text-align:center;';
+  const btnRow = document.createElement('div');
+  btnRow.style.cssText = 'display:flex;gap:8px;';
+  const yesBtn = document.createElement('button');
+  yesBtn.textContent = 'Yes';
+  yesBtn.style.cssText = 'flex:1;background:#e74c3c;color:white;border:none;border-radius:6px;padding:10px;cursor:pointer;font-family:MinibloxFont,sans-serif;';
+  yesBtn.addEventListener('click', () => {
+    Object.keys(localStorage).filter(k => k.startsWith('uv2-')).forEach(k => localStorage.removeItem(k));
+    sessionStorage.clear();
+    showNotification('Settings reset');
+    location.reload();
+  });
+  const noBtn = document.createElement('button');
+  noBtn.textContent = 'No';
+  noBtn.style.cssText = 'flex:1;background:#2a2a2a;color:#fff;border:1px solid #444;border-radius:6px;padding:10px;cursor:pointer;font-family:MinibloxFont,sans-serif;';
+  noBtn.addEventListener('click', () => confirm.remove());
+  btnRow.appendChild(yesBtn);
+  btnRow.appendChild(noBtn);
+  confirm.appendChild(question);
+  confirm.appendChild(btnRow);
+  resetRow.appendChild(confirm);
+});
+resetRow.appendChild(resetBtn);
+document.getElementById('uv2-page-visuals')?.appendChild(resetRow);
 
 (function buildContributorsGrid() {
   const UV2_CONTRIBUTORS = [
@@ -1495,7 +1540,7 @@ document.querySelector("#uv2-toggle-vpnwarning")?.addEventListener("change", fun
     const newKey = this.value;
     const conflictModule = Object.keys(moduleBindings).find(m => {
       const bound = moduleBindings[m];
-      return newKey === 'backtick' ? bound === '`' : bound === 'Shift';
+      return (newKey === 'backtick' && bound === '`') || (newKey === 'rshift' && bound === 'Shift') || (newKey === 'backslash' && bound === '\\');
     });
     if (conflictModule) {
       showNotification(`Cannot set UI Keybind, conflicts with ${conflictModule}`, false);
@@ -1671,7 +1716,7 @@ function showBindPopup(moduleElement, moduleName) {
   bindButton.addEventListener("click", () => {
     if (keyBinding) {
       const conflictModule = Object.keys(moduleBindings).find(m => m !== moduleName && moduleBindings[m] === keyBinding);
-      const uiKeyMatches = uiKeybind === 'backtick' ? keyBinding === '`' : (keyBinding === "Shift");
+      const uiKeyMatches = (uiKeybind === 'backtick' && keyBinding === '`') || (uiKeybind === 'rshift' && keyBinding === 'Shift') || (uiKeybind === 'backslash' && keyBinding === '\\');
       if (conflictModule) {
         showNotification(`${keyBinding} is already bound to ${conflictModule}`, false);
       } else if (uiKeyMatches) {
@@ -2606,7 +2651,7 @@ function closeUI() {
     }
   }
     document.addEventListener("keydown", event => {
-    const isUiKey = uiKeybind === 'backtick' ? event.key === '`' : (event.key === "Shift" && event.location === 2);
+    const isUiKey = (uiKeybind === 'backtick' && event.key === '`') || (uiKeybind === 'rshift' && event.key === 'Shift' && event.location === 2) || (uiKeybind === 'backslash' && event.key === '\\');
     if (isUiKey) toggleUI();
     for (let moduleName in moduleBindings) {
       if (moduleBindings[moduleName] === event.key) {
