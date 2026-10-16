@@ -38,7 +38,7 @@ class UnverifiedIntro {
     this.container.appendChild(this.creditsText);
     this.keybindText = document.createElement("div");
     const introKeybind = localStorage.getItem('uv2-setting-uikeybind') || 'rshift';
-    this.keybindText.textContent = `Press ${introKeybind === 'backtick' ? '`' : introKeybind === 'backslash' ? '\\' : 'Right Shift'} to open the menu`;
+    this.keybindText.textContent = `Press ${introKeybind === 'backtick' ? '`' : 'backslash' ? '\\' : 'Right Shift'} to open the menu`;
     this.keybindText.style.cssText = "color:red;font-size:30px;opacity:0;margin-top:30px;transition:opacity 1.1s ease;text-shadow:0 0 5px red,0 0 10px red,0 0 20px red;";
     this.container.appendChild(this.keybindText);
   }
