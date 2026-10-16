@@ -15,7 +15,7 @@ A custom utility client for [Miniblox](https://miniblox.io), being actively deve
 3. Paste the full contents of `client.js` into the editor.
 4. Save the script and confirm it is enabled.
 5. Navigate or Reload `miniblox.io` — the client intro will appear.
-6. Press **Right Shift** (default) or Backtick (`) to open or close the client menu.
+6. Press **Right Shift** (default), Backtick (`) or backslash (\\) to open or close the client menu.
 
 > **Note:** UV2 Music Player is a separate file (`MusicPlayer.js`) to be installed separately.
 > > **Note2:** Installing from the raw `client.js` URL on GitHub enables Tampermonkey's built-in update tracking alongside the in-client Update Checker.
@@ -34,7 +34,7 @@ A custom utility client for [Miniblox](https://miniblox.io), being actively deve
 
 ### Interface & Customization
 - **Key Binding** — Right-click any module to assign or clear a custom keybind
-- **UI Keybind** — Choose whether the menu opens with Right Shift or the backtick (`) key, set from the Settings page
+- **UI Keybind** — Choose whether the menu opens with Right Shift, backtick (`) key or backslash (\\), set from the Settings page
 - **Favorites** — Star any module to pin it to the top of the module list; persisted across reloads
 - **Search Bar** — Filter the module list by name or description in real time
 - **Theme Color Picker** — Choose any accent color via a color picker or hex input, with a recent-color history
