@@ -43,6 +43,7 @@ A custom utility client for [Miniblox](https://miniblox.io), being actively deve
 - **Update Checker** — Compares the installed version against `client.js` on GitHub every minute and shows an update popup with the latest changelog entry.
 - **Visual Polish** — Optional UI open/close animation, toast notifications, and module click audio feedback
 - **Changelog Viewer** — Dedicated sidebar page that loads the full CHANGELOG.md from GitHub and displays every version as a timeline
+- **Reset All Settings** - Resets all settings with a page reload
 
 ### Other
 - **Anti-AFK** — Auto-enables after a configurable idle period (10–120 seconds) while inside an active match; plays music that fades in when triggered and fades out when you return; includes optional idle chat messages, optional AFK music toggle, and auto-disable upon activity detection
