@@ -57,9 +57,8 @@ class UnverifiedIntro {
   setTimeout(() => { this.creditsText.style.opacity = 1; }, 3600);
   setTimeout(() => { this.keybindText.style.opacity = 1; }, 4800);
   setTimeout(() => {
-    this.container.style.transition = "opacity 1.8s cubic-bezier(0.4,0,0.2,1),transform 1.8s cubic-bezier(0.4,0,0.2,1)";
+    this.container.style.transition = "opacity 1.8s cubic-bezier(0.4,0,0.2,1)";
     this.container.style.opacity = 0;
-    this.container.style.transform = "scale(1.04)";
   }, 10800);
   setTimeout(() => { this.container.remove(); }, 12600);
   }
@@ -403,15 +402,12 @@ style.innerHTML = `
   text-shadow: 0 0 18px rgba(231,76,60,0.55);
 }
 @keyframes uv2NotifEnter {
-  0%   { transform: translateX(115%); opacity: 0; }
-  60%  { transform: translateX(-6px); opacity: 1; }
-  80%  { transform: translateX(2px); opacity: 1; }
-  100% { transform: translateX(0); opacity: 1; }
+  from { transform: translateX(115%); opacity: 0; }
+  to   { transform: translateX(0);    opacity: 1; }
 }
 @keyframes uv2NotifExit {
-  0%   { transform: translateX(0); opacity: 1; }
-  30%  { transform: translateX(6px); opacity: 0.8; }
-  100% { transform: translateX(115%); opacity: 0; }
+  from { transform: translateX(0);    opacity: 1; }
+  to   { transform: translateX(115%); opacity: 0; }
 }
 @keyframes notificationProgress {
   0%   { width: 100%; }
@@ -434,8 +430,8 @@ style.innerHTML = `
 .bind-popup button { background-color:#e74c3c; color:white; border:none; border-radius:5px; padding:10px 20px; margin-top:10px; cursor:pointer; }
 .bind-popup button:hover { background-color:#c0392b; }
 .module-tooltip { visibility:hidden; position:absolute; background-color:#2c3e50; color:white; padding:5px 10px; border-radius:5px; font-size:14px; z-index:10000; opacity:0; transition:opacity 0.3s ease; bottom:6px; right:10px; white-space:nowrap; pointer-events:none; }
-.other-notification { font-family:'MinibloxFont',sans-serif; font-size:14px; color:white; background:linear-gradient(135deg,#1a1a1a,#111111); padding:12px 24px; border-radius:8px; margin-bottom:12px; box-shadow:0 4px 15px rgba(0,0,0,0.3); font-weight:500; letter-spacing:0.5px; position:relative; overflow:hidden; will-change:transform,opacity; animation:uv2NotifEnter 0.45s cubic-bezier(0.22,1,0.36,1) forwards; }
-.other-notification.uv2-notif-exit { animation:uv2NotifExit 0.35s cubic-bezier(0.4,0,0.6,1) forwards; }
+.other-notification { font-family:'MinibloxFont',sans-serif; font-size:14px; color:white; background:linear-gradient(135deg,#1a1a1a,#111111); padding:12px 24px; border-radius:8px; margin-bottom:12px; box-shadow:0 4px 15px rgba(0,0,0,0.3); font-weight:500; letter-spacing:0.5px; position:relative; overflow:hidden; will-change:transform,opacity; animation:uv2NotifEnter 0.35s cubic-bezier(0.22,1,0.36,1) forwards; }
+.other-notification.uv2-notif-exit { animation:uv2NotifExit 0.3s cubic-bezier(0.4,0,1,1) forwards; }
 .notification-progress { position:absolute; bottom:0; left:0; height:3px; background:#ffcc00; width:100%; animation:notificationProgress 4s linear forwards; }
 .settings-icon { width:30px; height:30px; fill:white; transition:transform 0.3s ease; }
 .settings-icon:hover { transform:rotate(90deg); }
