@@ -511,9 +511,7 @@ style.innerHTML = `
       img.srcset = targetImageUrl;
     }
   }
-
   enforceTargetImage();
-
   const imageObserver = new MutationObserver(() => {
     enforceTargetImage();
   });
@@ -534,16 +532,16 @@ style.innerHTML = `
   ].join("");
 
   const uv2SidebarLogo = document.createElement("div");
-  uv2SidebarLogo.style.cssText = [
-    "padding:18px 14px 16px;border-bottom:1px solid rgba(255,255,255,0.06);",
-    "display:flex;align-items:center;gap:9px;"
-  ].join("");
-  uv2SidebarLogo.innerHTML = [
-    '<img src="https://raw.githubusercontent.com/wytlines100/UnverifiedV2/refs/heads/main/logo.jpg" style="width:28px;height:28px;border-radius:6px;object-fit:cover;flex-shrink:0;border:1px solid rgba(231,76,60,0.4);">',
-    '<span style="color:#e74c3c;font-size:10px;letter-spacing:2px;text-transform:uppercase;',
-    'font-family:MinibloxFont,sans-serif;line-height:1.2;">UV2</span>'
-  ].join("");
-  uv2Sidebar.appendChild(uv2SidebarLogo);
+uv2SidebarLogo.style.cssText = [
+  "padding:18px 14px 16px;border-bottom:1px solid rgba(255,255,255,0.06);",
+  "display:flex;align-items:center;gap:9px;"
+].join("");
+uv2SidebarLogo.innerHTML = [
+  '<img src="https://raw.githubusercontent.com/wytlines100/UnverifiedV2/refs/heads/main/logo.jpg" style="width:28px;height:28px;border-radius:6px;object-fit:cover;flex-shrink:0;">',
+  '<span style="color:#e74c3c;font-size:10px;letter-spacing:2px;text-transform:uppercase;',
+  'font-family:MinibloxFont,sans-serif;line-height:1.2;">UV2</span>'
+].join("");
+uv2Sidebar.appendChild(uv2SidebarLogo);
 
   const uv2NavDefs = [
   { page: 'main', label: 'Modules', icon: 'fa-th-large' },
@@ -1020,7 +1018,6 @@ let armorHudGap = parseInt(localStorage.getItem('uv2-armorhud-gap') || '4', 10);
     localStorage.setItem('uv2-armorhud-gap', '4');
     if (armorHudEl) armorHudEl.style.opacity = 1;
     if (armorHudDocked) armorHudRender();
-    buildArmorHudSettingsPage();
   });
   container.appendChild(resetBtn);
 }
@@ -1459,7 +1456,6 @@ document.getElementById('uv2-page-visuals')?.appendChild(resetRow);
 
 buildGUIPage();
 buildConfigPage();
-buildArmorHudSettingsPage();
 applyGUIStyles();
 switchUv2Page('main');
 
@@ -1571,31 +1567,53 @@ afkDelayInput?.addEventListener("change", function() {
 });
 
   function playModuleClickSound(turningOn) {
-    if (!settings.moduleSounds) return;
-    try {
-      const ctx = new (window.AudioContext || window.webkitAudioContext)();
-      const now = ctx.currentTime;
-      const master = ctx.createGain(); master.gain.value = 0.6; master.connect(ctx.destination);
-      if (turningOn) {
-        const click = ctx.createOscillator(); click.type = "sine";
-        click.frequency.setValueAtTime(80, now); click.frequency.exponentialRampToValueAtTime(40, now + 0.04);
-        const clickGain = ctx.createGain(); clickGain.gain.setValueAtTime(0.5, now); clickGain.gain.exponentialRampToValueAtTime(0.0001, now + 0.04);
-        click.connect(clickGain); clickGain.connect(master); click.start(now); click.stop(now + 0.05);
-        const tone1 = ctx.createOscillator(); tone1.type = "sine"; tone1.frequency.setValueAtTime(520, now + 0.02);
-        const gain1 = ctx.createGain(); gain1.gain.setValueAtTime(0.0, now + 0.02); gain1.gain.linearRampToValueAtTime(0.4, now + 0.045); gain1.gain.exponentialRampToValueAtTime(0.0001, now + 0.13);
-        tone1.connect(gain1); gain1.connect(master); tone1.start(now + 0.02); tone1.stop(now + 0.14);
-        const tone2 = ctx.createOscillator(); tone2.type = "sine"; tone2.frequency.setValueAtTime(880, now + 0.1); tone2.frequency.exponentialRampToValueAtTime(1100, now + 0.22);
-        const gain2 = ctx.createGain(); gain2.gain.setValueAtTime(0.0, now + 0.1); gain2.gain.linearRampToValueAtTime(0.45, now + 0.13); gain2.gain.exponentialRampToValueAtTime(0.0001, now + 0.28);
-        tone2.connect(gain2); gain2.connect(master); tone2.start(now + 0.1); tone2.stop(now + 0.3);
-      } else {
-        const tone = ctx.createOscillator(); tone.type = "sine";
-        tone.frequency.setValueAtTime(600, now); tone.frequency.exponentialRampToValueAtTime(280, now + 0.18);
-        const gainNode = ctx.createGain(); gainNode.gain.setValueAtTime(0.35, now); gainNode.gain.exponentialRampToValueAtTime(0.0001, now + 0.2);
-        tone.connect(gainNode); gainNode.connect(master); tone.start(now); tone.stop(now + 0.22);
-      }
-      setTimeout(() => ctx.close(), 600);
-    } catch(e) {}
-  }
+  if (!settings.moduleSounds) return;
+  try {
+    const ctx = new (window.AudioContext || window.webkitAudioContext)();
+    const now = ctx.currentTime;
+    const master = ctx.createGain();
+    master.gain.value = 0.6;
+    master.connect(ctx.destination);
+    if (turningOn) {
+      const tone1 = ctx.createOscillator();
+      tone1.type = "sine";
+      tone1.frequency.setValueAtTime(520, now);
+      const gain1 = ctx.createGain();
+      gain1.gain.setValueAtTime(0.0, now);
+      gain1.gain.linearRampToValueAtTime(0.4, now + 0.025);
+      gain1.gain.exponentialRampToValueAtTime(0.0001, now + 0.13);
+      tone1.connect(gain1);
+      gain1.connect(master);
+      tone1.start(now);
+      tone1.stop(now + 0.14);
+      const tone2 = ctx.createOscillator();
+      tone2.type = "sine";
+      tone2.frequency.setValueAtTime(880, now + 0.1);
+      tone2.frequency.exponentialRampToValueAtTime(1100, now + 0.22);
+      const gain2 = ctx.createGain();
+      gain2.gain.setValueAtTime(0.0, now + 0.1);
+      gain2.gain.linearRampToValueAtTime(0.45, now + 0.13);
+      gain2.gain.exponentialRampToValueAtTime(0.0001, now + 0.28);
+      tone2.connect(gain2);
+      gain2.connect(master);
+      tone2.start(now + 0.1);
+      tone2.stop(now + 0.3);
+    } else {
+      const tone = ctx.createOscillator();
+      tone.type = "sine";
+      tone.frequency.setValueAtTime(600, now);
+      tone.frequency.exponentialRampToValueAtTime(280, now + 0.18);
+      const gainNode = ctx.createGain();
+      gainNode.gain.setValueAtTime(0.35, now);
+      gainNode.gain.exponentialRampToValueAtTime(0.0001, now + 0.2);
+      tone.connect(gainNode);
+      gainNode.connect(master);
+      tone.start(now);
+      tone.stop(now + 0.22);
+    }
+    setTimeout(() => ctx.close(), 600);
+  } catch(e) {}
+}
 
 const CHAT_FILTER_LINK_PATTERN = /(https?:\/\/|www\.|discord\.gg\/|discord(app)?\.com\/invite\/|dsc\.gg\/|[a-z0-9-]+\.(com|net|org|io|gg|xyz|co|me|tv|ru|de|uk|us|info|club|site|online|shop|ly|to|cc|app|dev)(\/|$|[^a-z0-9]))/i;
 function chatFilterContainsLink(text) {
@@ -2568,16 +2586,16 @@ sortModulesByFavorite();
     btnRow.style.cssText = 'display:flex;gap:10px;justify-content:center;';
 
     const ignoreBtn = document.createElement('button');
-    ignoreBtn.textContent = 'Ignore';
-    ignoreBtn.style.cssText = 'background:#7fff00;color:#111;border:none;border-radius:6px;padding:10px 18px;font-size:14px;font-weight:600;cursor:pointer;font-family:MinibloxFont,sans-serif;transition:transform 0.15s ease;';
-    ignoreBtn.addEventListener('mouseenter', () => ignoreBtn.style.transform = 'scale(1.03)');
-    ignoreBtn.addEventListener('mouseleave', () => ignoreBtn.style.transform = 'scale(1)');
+ignoreBtn.textContent = 'Ignore';
+ignoreBtn.style.cssText = 'background:#7fff00;color:#111;border:none;border-radius:6px;padding:10px 18px;font-size:14px;font-weight:600;cursor:pointer;font-family:MinibloxFont,sans-serif;transition:transform 0.15s ease;';
+ignoreBtn.addEventListener('mouseenter', () => { ignoreBtn.style.transform = 'scale(1.03)'; });
+ignoreBtn.addEventListener('mouseleave', () => { ignoreBtn.style.transform = 'scale(1)'; });
 
-    const notVpnBtn = document.createElement('button');
-    notVpnBtn.textContent = "I'm not using a VPN";
-    notVpnBtn.style.cssText = 'background:#2a2a2a;color:#fff;border:1px solid #444;border-radius:6px;padding:10px 18px;font-size:14px;cursor:pointer;font-family:MinibloxFont,sans-serif;transition:background 0.15s ease;';
-    notVpnBtn.addEventListener('mouseenter', () => notVpnBtn.style.background = '#3a3a3a');
-    notVpnBtn.addEventListener('mouseleave', () => notVpnBtn.style.background = '#2a2a2a');
+const notVpnBtn = document.createElement('button');
+notVpnBtn.textContent = "I'm not using a VPN";
+notVpnBtn.style.cssText = 'background:#2a2a2a;color:#fff;border:1px solid #444;border-radius:6px;padding:10px 18px;font-size:14px;cursor:pointer;font-family:MinibloxFont,sans-serif;transition:background 0.15s ease;';
+notVpnBtn.addEventListener('mouseenter', () => { notVpnBtn.style.background = '#3a3a3a'; });
+notVpnBtn.addEventListener('mouseleave', () => { notVpnBtn.style.background = '#2a2a2a'; });
 
     function dismiss() {
       overlay.style.opacity = '0';
