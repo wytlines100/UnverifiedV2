@@ -8,7 +8,7 @@
 - Removed all true/false from showNotification
 - Fixed Keybind intro
 - Fixed ArmorHUD settings not resetting
-- Improved Shine Animation
+- Improved Animations/Performance
 
 ## v4.1
 - Added module toggle press animation on click
