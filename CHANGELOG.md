@@ -4,7 +4,9 @@
 - Removed click sound initial transient oscillator (3 oscillators to 2 on enable)
 - Removed redundant buildArmorHudSettingsPage calls on init and reset
 - Removed border from sidebar logo image
-- Fixed arrow functions in VPN gate buttons returning assignments
+- Fixed arrow functions in VPN gate buttons returning assignments#
+- Removed all true/false from showNotification
+- Fixed Keybind intro 
 
 ## v4.1
 - Added module toggle press animation on click
