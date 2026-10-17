@@ -50,7 +50,7 @@ class UnverifiedIntro {
     this.circle.style.transform = "scale(1)";
     this.check.style.opacity = 1;
   }, 200);
-  setTimeout(() => { this.check.style.transform = "rotate(180deg)"; }, 700);
+  setTimeout(() => { this.check.style.transform = "rotate(540deg)"; }, 700);
   setTimeout(() => {
     this.unverifiedText.style.opacity = 1;
   }, 2400);
