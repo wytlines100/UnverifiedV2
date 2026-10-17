@@ -38,7 +38,7 @@ class UnverifiedIntro {
     this.container.appendChild(this.creditsText);
     this.keybindText = document.createElement("div");
     const introKeybind = localStorage.getItem('uv2-setting-uikeybind') || 'rshift';
-    this.keybindText.textContent = `Press ${introKeybind === 'backtick' ? '`' : 'backslash' ? '\\' : 'Right Shift'} to open the menu`;
+    this.keybindText.textContent = `Press ${introKeybind === 'backtick' ? '`' : introKeybind === 'backslash' ? '\\' : 'Right Shift'} to open the menu`;
     this.keybindText.style.cssText = "color:red;font-size:30px;opacity:0;margin-top:30px;transition:opacity 1.1s ease;text-shadow:0 0 5px red,0 0 10px red,0 0 20px red;";
     this.container.appendChild(this.keybindText);
   }
@@ -823,7 +823,7 @@ let armorHudGap = parseInt(localStorage.getItem('uv2-armorhud-gap') || '4', 10);
         a.download = `unverified-config-${new Date().toISOString().slice(0,19)}.json`;
         a.click();
         URL.revokeObjectURL(url);
-        showNotification('Config saved', true);
+        showNotification('Config saved');
       });
     }
 
@@ -904,10 +904,10 @@ let armorHudGap = parseInt(localStorage.getItem('uv2-armorhud-gap') || '4', 10);
                 isRestoring = false;
               }
             }, 500);
-            showNotification('Config loaded', true);
+            showNotification('Config loaded');
           } catch (err) {
             console.error(err);
-            showNotification('Invalid config file', false);
+            showNotification('Invalid config file');
           }
         };
         reader.readAsText(file);
@@ -1539,7 +1539,7 @@ document.querySelector("#uv2-toggle-vpnwarning")?.addEventListener("change", fun
       return (newKey === 'backtick' && bound === '`') || (newKey === 'rshift' && bound === 'Shift') || (newKey === 'backslash' && bound === '\\');
     });
     if (conflictModule) {
-      showNotification(`Cannot set UI Keybind, conflicts with ${conflictModule}`, false);
+      showNotification(`Cannot set UI Keybind, conflicts with ${conflictModule}`);
       this.value = uiKeybind;
       return;
     }
@@ -1736,12 +1736,12 @@ function showBindPopup(moduleElement, moduleName) {
       const conflictModule = Object.keys(moduleBindings).find(m => m !== moduleName && moduleBindings[m] === keyBinding);
       const uiKeyMatches = (uiKeybind === 'backtick' && keyBinding === '`') || (uiKeybind === 'rshift' && keyBinding === 'Shift') || (uiKeybind === 'backslash' && keyBinding === '\\');
       if (conflictModule) {
-        showNotification(`${keyBinding} is already bound to ${conflictModule}`, false);
+        showNotification(`${keyBinding} is already bound to ${conflictModule}`);
       } else if (uiKeyMatches) {
-        showNotification(`${keyBinding} conflicts with the UI keybind`, false);
+        showNotification(`${keyBinding} conflicts with the UI keybind`);
       } else {
         moduleBindings[moduleName] = keyBinding;
-        showNotification(`${moduleName} bound to ${keyBinding}`, true);
+        showNotification(`${moduleName} bound to ${keyBinding}`);
       }
     }
     popup.style.display = "none";
@@ -1750,9 +1750,9 @@ function showBindPopup(moduleElement, moduleName) {
   resetButton.addEventListener("click", () => {
     if (moduleBindings[moduleName]) {
       delete moduleBindings[moduleName];
-      showNotification(`${moduleName} unbound`, false);
+      showNotification(`${moduleName} unbound`);
     } else {
-      showNotification(`${moduleName} has no keybind to unbind`, false);
+      showNotification(`${moduleName} has no keybind to unbind`);
     }
     popup.style.display = "none";
     isBinding = false;
@@ -1920,14 +1920,14 @@ function createModule(name, description) {
         moduleContainer.style.boxShadow = `0 0 0 3px ${guiPrimaryColor}14, 0 1px 4px rgba(0,0,0,0.4)`;
         toggleWrap.style.background = `${guiPrimaryColor}40`; toggleWrap.style.borderColor = `${guiPrimaryColor}60`;
         toggleKnob.style.background = guiPrimaryColor; toggleKnob.style.transform = "translateX(16px)";
-        if (!isRestoring) showNotification(`${name} enabled`, true);
+        if (!isRestoring) showNotification(`${name} enabled`);
       } else {
         moduleContainer.style.border = "1px solid rgba(255,255,255,0.07)";
         moduleContainer.style.background = "linear-gradient(135deg,#242424,#1c1c1c)";
         moduleContainer.style.boxShadow = "0 1px 4px rgba(0,0,0,0.4)";
         toggleWrap.style.background = "#252525"; toggleWrap.style.borderColor = "rgba(255,255,255,0.07)";
         toggleKnob.style.background = "#4a4a4a"; toggleKnob.style.transform = "translateX(0)";
-        if (!isRestoring) showNotification(`${name} disabled`, false);
+        if (!isRestoring) showNotification(`${name} disabled`);
       }
     }
   });
@@ -2441,21 +2441,21 @@ if (armorHudModule && armorHudModule._toggleWrap) {
   armorHudDockBtn.addEventListener('click', e => {
     e.stopPropagation();
     if (!armorHudEl) {
-      showNotification('Turn on Armor HUD in game', false);
-      return;
-    }
-    if (armorHudDocked) {
-      armorHudDocked = false;
-      localStorage.setItem('uv2-armorhud-docked', 'false');
-      armorHudEl.style.cssText = 'position:fixed;top:100px;right:20px;left:auto;padding:10px 14px;background:rgba(0,0,0,0.6);backdrop-filter:blur(8px);border:1px solid rgba(255,255,255,0.15);border-radius:8px;z-index:9999;cursor:move;user-select:none;font-family:Segoe UI,Roboto,sans-serif;font-size:14px;color:white;min-width:220px;';
-      armorHudEl.style.display = 'block';
-      armorHudDockBtn.style.color = '#666';
-      armorHudDockBtn.style.textShadow = 'none';
-    } else {
-      if (!isInMatch()) {
-        showNotification('Turn on Armor HUD in game', false);
-        return;
-      }
+  showNotification('Enable Armor HUD first');
+  return;
+}
+if (armorHudDocked) {
+  armorHudDocked = false;
+  localStorage.setItem('uv2-armorhud-docked', 'false');
+  armorHudEl.style.cssText = 'position:fixed;top:100px;right:20px;left:auto;padding:10px 14px;background:rgba(0,0,0,0.6);backdrop-filter:blur(8px);border:1px solid rgba(255,255,255,0.15);border-radius:8px;z-index:9999;cursor:move;user-select:none;font-family:Segoe UI,Roboto,sans-serif;font-size:14px;color:white;min-width:220px;';
+  armorHudEl.style.display = 'block';
+  armorHudDockBtn.style.color = '#666';
+  armorHudDockBtn.style.textShadow = 'none';
+} else {
+  if (!isInMatch()) {
+    showNotification('Must be in a match to dock');
+    return;
+  }
       armorHudDocked = true;
       localStorage.setItem('uv2-armorhud-docked', 'true');
       armorHudRender();
