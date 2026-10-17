@@ -41,7 +41,7 @@ A custom utility client for [Miniblox](https://miniblox.io), being actively deve
 - **Config Management** — Export all settings, module states, and keybinds to a JSON file and re-import them later
 - **What's New** — Fetches the latest CHANGELOG.md entry from GitHub and displays it in a dismissible popup at the top of the screen when the script version changes
 - **Update Checker** — Compares the installed version against `client.js` on GitHub every minute and shows an update popup with the latest changelog entry.
-- **Visual Polish** — Optional UI open/close animation, toast notifications, and module click audio feedback
+- **Visual Polish** — UI open/close animation, toast notifications, and module click audio feedback
 - **Changelog Viewer** — Dedicated sidebar page that loads the full CHANGELOG.md from GitHub and displays every version as a timeline
 - **Reset All Settings** - Resets all settings with a page reload
 
