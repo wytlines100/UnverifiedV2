@@ -418,8 +418,8 @@ style.innerHTML = `
   100% { width: 0%; }
 }
 @keyframes afkPulse {
-  0%, 100% { opacity: 1; transform: scale(1); }
-  50%       { opacity: 0.5; transform: scale(1.2); }
+  0%, 100% { opacity: 1; }
+  50% { opacity: 0.45; }
 }
 @keyframes uv2ModuleToggle {
   0%   { transform: scaleX(1); }
@@ -1808,33 +1808,33 @@ function createModule(name, description) {
 
     const shine = document.createElement("div");
   shine.style.cssText = [
-    "position:absolute;top:0;left:-100%;width:60%;height:100%;",
-    "background:linear-gradient(120deg,transparent 0%,rgba(255,255,255,0.13) 45%,rgba(255,255,255,0.22) 50%,rgba(255,255,255,0.13) 55%,transparent 100%);",
-    "transform:skewX(-15deg);pointer-events:none;"
-  ].join("");
+  "position:absolute;top:0;left:0;width:60%;height:100%;",
+  "background:linear-gradient(120deg,transparent 0%,rgba(255,255,255,0.13) 45%,rgba(255,255,255,0.22) 50%,rgba(255,255,255,0.13) 55%,transparent 100%);",
+  "transform:translateX(-170%);skewX(-15deg);pointer-events:none;will-change:transform;"
+].join("");
   moduleContainer.appendChild(shine);
 
     let shineAnim = null;
-  function runShineLoop() {
-    shine.style.transition = "none";
-    shine.style.left = "-100%";
-    void shine.offsetWidth;
-        shine.style.transition = "left 8s cubic-bezier(0.4,0,0.2,1)";
-    shine.style.left = "160%";
-    shineAnim = setTimeout(runShineLoop, 9800);
-  }
+function runShineLoop() {
+  shine.style.transition = "none";
+  shine.style.transform = "translateX(-170%) skewX(-15deg)";
+  void shine.offsetWidth;
+  shine.style.transition = "transform 8s cubic-bezier(0.4,0,0.2,1)";
+  shine.style.transform = "translateX(270%) skewX(-15deg)";
+  shineAnim = setTimeout(runShineLoop, 9800);
+}
 
-  moduleContainer.addEventListener("mouseenter", () => {
-    if (moduleContainer.dataset.favorited !== '1') runShineLoop();
-    if (!moduleContainer._uv2Active) moduleContainer.style.background = "linear-gradient(135deg,#2c2c2c,#222222)";
+moduleContainer.addEventListener("mouseenter", () => {
+  if (moduleContainer.dataset.favorited !== '1') runShineLoop();
+  if (!moduleContainer._uv2Active) moduleContainer.style.background = "linear-gradient(135deg,#2c2c2c,#222222)";
 });
-  moduleContainer.addEventListener("mouseleave", () => {
-    clearTimeout(shineAnim);
-    shineAnim = null;
-    shine.style.transition = "none";
-    shine.style.left = "-100%";
-    if (!moduleContainer._uv2Active) moduleContainer.style.background = "linear-gradient(135deg,#242424,#1c1c1c)";
-  });
+moduleContainer.addEventListener("mouseleave", () => {
+  clearTimeout(shineAnim);
+  shineAnim = null;
+  shine.style.transition = "none";
+  shine.style.transform = "translateX(-170%) skewX(-15deg)";
+  if (!moduleContainer._uv2Active) moduleContainer.style.background = "linear-gradient(135deg,#242424,#1c1c1c)";
+});
 
   const favoriteKey = 'uv2-favorite-' + name;
   let isFavorited = localStorage.getItem(favoriteKey) === 'true';
