@@ -6,7 +6,8 @@
 - Removed border from sidebar logo image
 - Fixed arrow functions in VPN gate buttons returning assignments#
 - Removed all true/false from showNotification
-- Fixed Keybind intro 
+- Fixed Keybind intro
+- Fixed ArmorHUD settings not resetting
 
 ## v4.1
 - Added module toggle press animation on click
