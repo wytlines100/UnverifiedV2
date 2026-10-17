@@ -1018,6 +1018,7 @@ let armorHudGap = parseInt(localStorage.getItem('uv2-armorhud-gap') || '4', 10);
     localStorage.setItem('uv2-armorhud-gap', '4');
     if (armorHudEl) armorHudEl.style.opacity = 1;
     if (armorHudDocked) armorHudRender();
+    buildArmorHudSettingsPage();
   });
   container.appendChild(resetBtn);
 }
