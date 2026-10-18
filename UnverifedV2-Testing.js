@@ -2136,7 +2136,7 @@ if (antiAfkModule) {
         }
       });
       addTrackedListener(antiAfkListeners, "mouseup", () => { isDrag=false; });
-      const keys=[['w','KeyW',87],['a','KeyA',65],['s','KeyS',83],['d','KeyD',68],[' ','Space',32]]; let idx=0;
+      const keys=[['w','KeyW',87],['a','KeyA',65],['s','KeyS',83],['d','KeyD',68],[' ','Space',32],['ArrowUp','ArrowUp',38],['ArrowDown','ArrowDown',40],['ArrowLeft','ArrowLeft',37],['ArrowRight','ArrowRight',39]]; let idx=0;
       antiAfkInterval = setInterval(() => {
         const [key,code,keyCode]=keys[idx]; idx=(idx+1)%keys.length;
         const t=document.activeElement||document.body;
@@ -2751,15 +2751,6 @@ function sendAfkChatMessage(msg) {
           return;
         }
       }
-    }
-  } catch(e) {}
-  try {
-    const reactRoot = document.querySelector("#react");
-    if (!reactRoot) return;
-    const fiber = Object.values(reactRoot)[0];
-    const game = fiber && fiber.updateQueue && fiber.updateQueue.baseState && fiber.updateQueue.baseState.element && fiber.updateQueue.baseState.element.props && fiber.updateQueue.baseState.element.props.game;
-    if (game && game.chat && typeof game.chat.addChat === "function") {
-      game.chat.addChat({ text: msg });
     }
   } catch(e) {}
 }
