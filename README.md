@@ -27,7 +27,7 @@ A custom utility client for [Miniblox](https://miniblox.io), being actively deve
 | **Keystrokes** | Displays W/A/S/D, LMB, RMB, and Space inputs in real time; draggable overlay |
 | **Mute Chat** | Suppresses all incoming chat messages from other players |
 | **Chat Filter** | Blocks profanity, links, and repeated spam from appearing in chat; also prevents sending filtered messages |
-| **Anti-AFK** | Cycles WASD/Space key presses automatically to prevent an idle kick; includes a draggable status indicator |
+| **Anti-AFK** | Cycles WASD/Arrow Keys and Space key presses automatically to prevent an idle kick; includes a draggable status indicator |
 | **Keep Sprint** | Dispatches Shift alongside movement keys (WASD and arrow keys) to maintain a sprint state |
 | **Clock** | Shows a draggable live clock overlay so you don't have to exit fullscreen |
 | **Armor HUD** | Draggable overlay showing each armor slot's icon, durability percentage, and enchantments; only visible in a match; supports docked and floating modes |
