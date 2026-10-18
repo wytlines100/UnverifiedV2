@@ -402,12 +402,12 @@ style.innerHTML = `
   text-shadow: 0 0 18px rgba(231,76,60,0.55);
 }
 @keyframes uv2NotifEnter {
-  from { transform: translateX(115%); opacity: 0; }
+  from { transform: translateX(105%); opacity: 0; }
   to   { transform: translateX(0);    opacity: 1; }
 }
 @keyframes uv2NotifExit {
   from { transform: translateX(0);    opacity: 1; }
-  to   { transform: translateX(115%); opacity: 0; }
+  to   { transform: translateX(105%); opacity: 0; }
 }
 @keyframes notificationProgress {
   0%   { width: 100%; }
@@ -417,13 +417,21 @@ style.innerHTML = `
   0%, 100% { opacity: 1; }
   50% { opacity: 0.45; }
 }
-@keyframes uv2ModuleToggle {
-  0%   { transform: scaleX(1); }
-  40%  { transform: scaleX(0.982); }
-  100% { transform: scaleX(1); }
+@keyframes uv2ModuleShine {
+  0%   { transform: translateX(-170%) skewX(-15deg); }
+  100% { transform: translateX(270%) skewX(-15deg); }
 }
-.module-toggle-animation {
-  animation: uv2ModuleToggle 0.3s cubic-bezier(0.22, 1, 0.36, 1) forwards;
+.module-container .uv2-shine {
+  position: absolute;
+  top: 0; left: 0;
+  width: 60%; height: 100%;
+  background: linear-gradient(120deg, transparent 0%, rgba(255,255,255,0.13) 45%, rgba(255,255,255,0.22) 50%, rgba(255,255,255,0.13) 55%, transparent 100%);
+  transform: translateX(-170%) skewX(-15deg);
+  pointer-events: none;
+  will-change: transform;
+}
+.module-container:hover .uv2-shine {
+  animation: uv2ModuleShine 2.9s cubic-bezier(0.4, 0, 0.2, 1) forwards;
 }
 .bind-popup { position:absolute; background-color:#2c3e50; color:white; padding:20px; border-radius:10px; box-shadow:0 0 10px rgba(0,0,0,0.7); z-index:10001; font-family:'MinibloxFont',sans-serif; display:none; text-align:center; }
 .bind-popup input { background-color:#34495e; color:white; border:2px solid #e74c3c; border-radius:5px; padding:10px; font-size:18px; width:200px; }
@@ -1803,32 +1811,13 @@ function createModule(name, description) {
   moduleContainer._uv2Active = false;
 
     const shine = document.createElement("div");
-  shine.style.cssText = [
-  "position:absolute;top:0;left:0;width:60%;height:100%;",
-  "background:linear-gradient(120deg,transparent 0%,rgba(255,255,255,0.13) 45%,rgba(255,255,255,0.22) 50%,rgba(255,255,255,0.13) 55%,transparent 100%);",
-  "transform:translateX(-170%);skewX(-15deg);pointer-events:none;will-change:transform;"
-].join("");
-  moduleContainer.appendChild(shine);
-
-    let shineAnim = null;
-function runShineLoop() {
-  shine.style.transition = "none";
-  shine.style.transform = "translateX(-170%) skewX(-15deg)";
-  void shine.offsetWidth;
-  shine.style.transition = "transform 8s cubic-bezier(0.4,0,0.2,1)";
-  shine.style.transform = "translateX(270%) skewX(-15deg)";
-  shineAnim = setTimeout(runShineLoop, 9800);
-}
+shine.className = "uv2-shine";
+moduleContainer.appendChild(shine);
 
 moduleContainer.addEventListener("mouseenter", () => {
-  if (moduleContainer.dataset.favorited !== '1') runShineLoop();
   if (!moduleContainer._uv2Active) moduleContainer.style.background = "linear-gradient(135deg,#2c2c2c,#222222)";
 });
 moduleContainer.addEventListener("mouseleave", () => {
-  clearTimeout(shineAnim);
-  shineAnim = null;
-  shine.style.transition = "none";
-  shine.style.transform = "translateX(-170%) skewX(-15deg)";
   if (!moduleContainer._uv2Active) moduleContainer.style.background = "linear-gradient(135deg,#242424,#1c1c1c)";
 });
 
@@ -1905,8 +1894,6 @@ moduleContainer.addEventListener("mouseleave", () => {
     if (!isBinding) {
       moduleContainer._uv2Active = !moduleContainer._uv2Active;
       const isActive = moduleContainer._uv2Active;
-      moduleContainer.classList.add('module-toggle-animation');
-      setTimeout(() => moduleContainer.classList.remove('module-toggle-animation'), 300);
       if (!isRestoring) {
         if (settings.saving) localStorage.setItem('uv2-module-' + name, isActive ? 'true' : 'false');
         playModuleClickSound(isActive);
