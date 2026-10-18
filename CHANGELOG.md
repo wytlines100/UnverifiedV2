@@ -1,5 +1,8 @@
 # Changelog
 
+## v4.3
+- Removed Fullscreen module (redundant with in-game fullscreen message)
+
 ## v4.2
 - Removed click sound initial transient oscillator (3 oscillators to 2 on enable)
 - Removed redundant buildArmorHudSettingsPage calls on init and reset
