@@ -1464,14 +1464,6 @@ buildConfigPage();
 applyGUIStyles();
 switchUv2Page('main');
 
-  ['fullscreenchange','webkitfullscreenchange','mozfullscreenchange'].forEach(evt => {
-  document.addEventListener(evt, () => {
-    const isFS = !!(document.fullscreenElement || document.webkitFullscreenElement || document.mozFullScreenElement);
-    ui.style.maxHeight = isFS ? "95vh" : "90vh";
-    if (FullscreenModule._uv2Active !== isFS) FullscreenModule.click();
-  });
-});
-
   document.querySelector("#uv2-settings-close")?.addEventListener("click", () => switchUv2Page('main'));
 document.querySelector("#uv2-toggle-sounds")?.addEventListener("change", function() {
   settings.moduleSounds = this.checked;
@@ -1665,7 +1657,7 @@ function chatFilterContainsBadWords(text) {
   return CHAT_FILTER_PATTERN.test(cleanText) || CHAT_FILTER_PATTERN.test(chatFilterStripSeparators(cleanText));
 }
 
-const MODULE_NAMES = { FULLSCREEN: "Fullscreen", KEYSTROKES: "Keystrokes", MUTE_CHAT: "Mute Chat", CHAT_FILTER: "Chat Filter", ANTI_AFK: "Anti-Afk", KEEP_SPRINT: "Keep Sprint", CLOCK: "Clock", ARMOR_HUD: "Armor HUD" };
+const MODULE_NAMES = { KEYSTROKES: "Keystrokes", MUTE_CHAT: "Mute Chat", CHAT_FILTER: "Chat Filter", ANTI_AFK: "Anti-Afk", KEEP_SPRINT: "Keep Sprint", CLOCK: "Clock", ARMOR_HUD: "Armor HUD" };
 
 const moduleSearchWrap = document.createElement("div");
 moduleSearchWrap.style.cssText = "position:relative;margin-top:4px;";
@@ -1927,15 +1919,6 @@ function addTrackedListener(list, type, handler) {
 function clearTrackedListeners(list) {
   list.splice(0).forEach(([type, handler]) => document.removeEventListener(type, handler));
 }
-
-const FullscreenModule = createModule(MODULE_NAMES.FULLSCREEN, "Automatically toggles Fullscreen");
-FullscreenModule.addEventListener("click", () => {
-  if (!document.fullscreenElement) {
-    (document.documentElement.requestFullscreen || document.documentElement.mozRequestFullScreen || document.documentElement.webkitRequestFullscreen || document.documentElement.msRequestFullscreen || (() => {})).call(document.documentElement);
-  } else {
-    (document.exitFullscreen || document.mozCancelFullScreen || document.webkitExitFullscreen || document.msExitFullscreen || (() => {})).call(document);
-  }
-});
 
 const keystrokesModule = createModule(MODULE_NAMES.KEYSTROKES, "Displays the keys you press in real-time.");
 let isKeystrokesActive = false;
