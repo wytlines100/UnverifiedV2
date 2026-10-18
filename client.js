@@ -2753,6 +2753,15 @@ function sendAfkChatMessage(msg) {
       }
     }
   } catch(e) {}
+  try {
+    const reactRoot = document.querySelector("#react");
+    if (!reactRoot) return;
+    const fiber = Object.values(reactRoot)[0];
+    const game = fiber && fiber.updateQueue && fiber.updateQueue.baseState && fiber.updateQueue.baseState.element && fiber.updateQueue.baseState.element.props && fiber.updateQueue.baseState.element.props.game;
+    if (game && game.chat && typeof game.chat.addChat === "function") {
+      game.chat.addChat({ text: msg });
+    }
+  } catch(e) {}
 }
 
 function isInMatch() {
