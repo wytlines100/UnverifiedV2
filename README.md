@@ -23,7 +23,6 @@ A custom utility client for [Miniblox](https://miniblox.io), being actively deve
 ### Core Modules
 | Module | Description |
 |---|---|
-| **Fullscreen** | Automatically enters fullscreen when the game loads |
 | **Keystrokes** | Displays W/A/S/D, LMB, RMB, and Space inputs in real time; draggable overlay |
 | **Mute Chat** | Suppresses all incoming chat messages from other players |
 | **Chat Filter** | Blocks profanity, links, and repeated spam from appearing in chat; also prevents sending filtered messages |
