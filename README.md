@@ -1,88 +1,67 @@
 # UnverifiedV2
 
-A custom utility client for [Miniblox](https://miniblox.io), being actively developed since the release in October 2024
+A custom utility client for [Miniblox](https://miniblox.io), actively developed since October 2024.
 
-## System Requirements
+## Requirements
 
-- A Chromium-based browser
-- [Tampermonkey](https://www.tampermonkey.net) (or equivalent userscript manager) with **Allow UserScripts** enabled
-- Access to [miniblox.io](https://miniblox.io)
+- Chromium-based browser
+- [Tampermonkey](https://www.tampermonkey.net) with **Allow UserScripts** enabled
 
 ## Installation
 
-1. Install Tampermonkey for your Chromium browser and ensure **Allow UserScripts** is enabled in Chromium Settings.
-2. Open the Tampermonkey dashboard and create a new script via the plus button.
-3. Paste the full contents of `client.js` into the editor.
-4. Save the script and confirm it is enabled.
-5. Navigate or Reload `miniblox.io` — the client intro will appear.
-6. Press **Right Shift** (default), Backtick (`) or backslash (\\) to open or close the client menu.
+1. Install Tampermonkey and enable **Allow UserScripts** in Chromium Settings.
+2. Open the Tampermonkey dashboard and create a new script.
+3. Paste the contents of `client.js` into the editor and save.
+4. Navigate to or reload `miniblox.io`.
+5. Press **Right Shift** (default), `` ` ``, or `\` to open the menu.
 
-> **Note:** UV2 Music Player is a separate file (`MusicPlayer.js`) to be installed separately.
-> > **Note2:** Installing from the raw `client.js` URL on GitHub enables Tampermonkey's built-in update tracking alongside the in-client Update Checker.
+> UV2 Music Player is a separate script (`MusicPlayer.js`) installed independently.
 
-### Core Modules
+## Modules
+
 | Module | Description |
 |---|---|
-| **Keystrokes** | Displays W/A/S/D, LMB, RMB, and Space inputs in real time; draggable overlay |
-| **Mute Chat** | Suppresses all incoming chat messages from other players |
-| **Chat Filter** | Blocks profanity, links, and repeated spam from appearing in chat; also prevents sending filtered messages |
-| **Anti-AFK** | Cycles WASD/Arrow Keys and Space key presses automatically to prevent an idle kick; includes a draggable status indicator |
-| **Keep Sprint** | Dispatches Shift alongside movement keys (WASD and arrow keys) to maintain a sprint state |
-| **Clock** | Shows a draggable live clock overlay so you don't have to exit fullscreen |
-| **Armor HUD** | Draggable overlay showing each armor slot's icon, durability percentage, and enchantments; only visible in a match; supports docked and floating modes |
+| **Keystrokes** | Draggable overlay showing W/A/S/D, LMB, RMB, and Space inputs in real time |
+| **Mute Chat** | Suppresses all incoming chat messages |
+| **Chat Filter** | Blocks profanity, links, and spam from chat; also filters outgoing messages |
+| **Anti-AFK** | Cycles key presses automatically to prevent idle kick; draggable status indicator |
+| **Keep Sprint** | Dispatches Shift alongside movement keys to maintain sprint |
+| **Clock** | Draggable live clock overlay |
+| **Armor HUD** | Draggable overlay showing armor durability, enchantments, and icons; floating or docked |
 
-### Interface & Customization
-- **Key Binding** — Right-click any module to assign or clear a custom keybind
-- **UI Keybind** — Choose whether the menu opens with Right Shift, backtick (`) key or backslash (\\), set from the Settings page
-- **Favorites** — Star any module to pin it to the top of the module list; persisted across reloads
-- **Search Bar** — Filter the module list by name or description in real time
-- **Theme Color Picker** — Choose any accent color via a color picker or hex input, with a recent-color history
-- **Config Management** — Export all settings, module states, and keybinds to a JSON file and re-import them later
-- **What's New** — Fetches the latest CHANGELOG.md entry from GitHub and displays it in a dismissible popup at the top of the screen when the script version changes
-- **Update Checker** — Compares the installed version against `client.js` on GitHub every minute and shows an update popup with the latest changelog entry.
-- **Visual Polish** — UI open/close animation, toast notifications, and module click audio feedback
-- **Changelog Viewer** — Dedicated sidebar page that loads the full CHANGELOG.md from GitHub and displays every version as a timeline
-- **Reset All Settings** - Resets all settings with a page reload
+## Features
 
-### Other
-- **Anti-AFK** — Auto-enables after a configurable idle period (10–120 seconds) while inside an active match; plays music that fades in when triggered and fades out when you return; includes optional idle chat messages, optional AFK music toggle, and auto-disable upon activity detection
-- **Armor HUD** — Floating and docked modes, adjustable icon/background opacity, fixed/auto-sized icons, and configurable spacing between slots
-- **Security** — Optional VPN/proxy detection warning upon menu open with a dismissible preference
-- **Cosmetics** — Animated shine sweep on module cards, custom title screen background, and custom browser tab title (`UnverifiedV2`)
+- Right-click any module to assign or clear a keybind; configurable UI open keybind (Right Shift, `` ` ``, or `\`)
+- Star modules to pin them to the top of the list; persisted across reloads
+- Real-time module search by name or description
+- Accent color picker with hex input and recent-color history
+- Export and import all settings, module states, and keybinds as a JSON file
+- Update checker comparing installed version against GitHub every minute with a changelog popup
+- Full changelog timeline fetched from GitHub on the Changelog sidebar page
+- Optional VPN/proxy detection warning on menu open
+- UI open/close animation, toast notifications, and module click audio feedback
 
-## Menu Navigation
-The menu is split into five sidebar pages:
+## Menu Pages
 
 | Page | Contents |
 |---|---|
-| **Modules** | All toggleable modules, favorites, and the search bar |
+| **Modules** | All toggleable modules, favorites, search bar |
 | **Color** | Accent color picker with hex input and recent colors |
-| **Config** | Save/Load configuration as a JSON file |
-| **Settings** | Sounds, notifications, animation, persistence, UI keybind, VPN warning, Anti-AFK options, Armor HUD appearance and position |
+| **Config** | Save and load configuration as a JSON file |
+| **Settings** | Sounds, persistence, UI keybind, VPN warning, Anti-AFK, Armor HUD options |
 | **Changelog** | Full version history fetched from GitHub |
 
-## Limitations & Disclaimers
+## Notes
 
-- This client modifies a third-party game's front end by injecting scripts and styles. It is not affiliated with or endorsed by Miniblox.
-- Modules depend on specific DOM selectors and class names used by Miniblox. Front-end updates to the game may break individual modules until the client is updated.
-- VPN and proxy detection relies on a third-party IP lookup service and may produce false positives or negatives.
-- The Armor HUD requires `unsafeWindow.spriteMap` and `unsafeWindow.Enchantment` to be present; it will not render outside of an active match. Match detection relies on the URL path containing `/join/`.
-- Auto-AFK auto-enable will not trigger while outside of an active match, even if the idle delay has elapsed.
-- AFK music requires a successful fetch of the audio file from GitHub; it will not play if the request fails or is blocked.
-- The What's New popup and Update Checker require a successful network request to GitHub; they will not appear if the request fails or is blocked.
-- GitHub's raw file CDN caches for a few minutes, so a newly pushed version may take up to several minutes to be detected.
-- The Update button opens the raw script URL, so Tampermonkey's install screen still needs a manual confirmation.
-- **Use the client at your own risk. The maintainers will not be responsible for any account actions resulting from its use.**
-- The Chat Filter link detection is pattern based and blocks all links, including Discord invites. Unusual link formats may occasionally slip through.
-- The Changelog page requires a successful network request to GitHub and will show an error message if the request fails.
+- Not affiliated with or endorsed by Miniblox.
+- Modules depend on Miniblox's front-end structure and may break after game updates.
+- Armor HUD requires `unsafeWindow.spriteMap` and `unsafeWindow.Enchantment`; only active in a match.
+- Auto-AFK will not trigger outside of an active match (`/join/` URL).
+- VPN detection uses a third-party IP lookup and may produce false positives.
+- **Use at your own risk. Maintainers are not responsible for any account actions resulting from use.**
 
-## Changelog
+## Contributors
 
-See [CHANGELOG.md](./CHANGELOG.md) for the full version history.
+wytlines, jet, joudaALT, Trust, TheM1ddleM1n
 
-## Project Information
-
-- **Current Contributors:** wytlines, jet, joudaALT, Trust, TheM1ddleM1n
-- **Policy: Distributed under a proprietary All Rights Reserved license. Users utilize third-party utility clients at their own discretion.**
-- **Our Discord Server!:**
-  - Discord: [UnverifiedV2 Discord](https://dsc.gg/unverifiedv2)
+Distributed under a proprietary All Rights Reserved license — [Discord](https://dsc.gg/unverifiedv2)
