@@ -1120,9 +1120,11 @@ function buildChangelogPage() {
     },
     onerror() {
       status.textContent = 'Failed to load changelog.';
+      uv2ChangelogLoaded = false;
     },
     ontimeout() {
       status.textContent = 'Failed to load changelog.';
+      uv2ChangelogLoaded = false;
     }
   });
 }
