@@ -942,7 +942,7 @@ let armorHudGap = parseInt(localStorage.getItem('uv2-armorhud-gap') || '4', 10);
   statusBtn.addEventListener('click', () => {
     const btn = document.querySelector('#armor-hud-dock-btn');
     if (btn) btn.click();
-    else showNotification('Enable Armor HUD in a match', false);
+    else showNotification('Enable Armor HUD in a match');
   });
 
   function buildSliderRow(labelText, id, min, max, value, formatFn) {
