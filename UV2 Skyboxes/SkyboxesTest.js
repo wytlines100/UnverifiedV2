@@ -1,7 +1,7 @@
 // ==UserScript==
 // @name         Mblx Skyboxes
 // @namespace    tampogmonkey
-// @version      2.1.0
+// @version      3
 // @description  Skyboxes :D
 // @author       TheMysteryMan
 // @match        https://miniblox.io/*
