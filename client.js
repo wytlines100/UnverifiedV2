@@ -1,7 +1,7 @@
 // ==UserScript==
 // @name         Unverified V2
 // @namespace    http://tampermonkey.net/
-// @version      4.3
+// @version      4.4
 // @description  Look at my license before you modify, I WILL DMCA you.
 // @icon         https://raw.githubusercontent.com/wytlines100/UnverifiedV2/refs/heads/main/logo.jpg
 // @downloadURL  https://raw.githubusercontent.com/wytlines100/UnverifiedV2/refs/heads/main/client.js
@@ -64,25 +64,42 @@ class UnverifiedIntro {
   }
 }
 
-(function() {
-  'use strict';
-  const waitForGame = setInterval(() => {
-    if (!/\/join\//.test(window.location.pathname)) return;
-    const reactRoot = document.querySelector("#react");
-    if (!reactRoot) return;
-    const game = Object.values(reactRoot)[0]?.updateQueue?.baseState?.element?.props?.game;
-    if (game && game.chat && typeof game.chat.addChat === "function") {
-      clearInterval(waitForGame);
-      const joinKey = 'uv2-welcomed-' + window.location.pathname;
-      if (!sessionStorage.getItem(joinKey)) {
-        sessionStorage.setItem(joinKey, '1');
-        game.chat.addChat({
-          text: "\\glow\\\\shiny\\\\#BF3011\\[Unverified V2]:\\reset\\ Hello UV2 User! We hope you enjoy our client."
-        });
-      }
+function getHoliday() {
+  const now = new Date();
+  const m = now.getMonth() + 1;
+  const d = now.getDate();
+  if (m === 10 && d >= 24 || m === 11 && d === 1) return 'halloween';
+  if (m === 12 && d >= 20 && d <= 26) return 'christmas';
+  if (m === 12 && d === 31 || m === 1 && d === 1) return 'newyear';
+  if (m === 4 && d === 1) return 'aprilfools';
+  return null;
+}
+const holiday = getHoliday();
+
+const waitForGame = setInterval(() => {
+  if (!/\/join\//.test(window.location.pathname)) return;
+  const reactRoot = document.querySelector("#react");
+  if (!reactRoot) return;
+  const game = Object.values(reactRoot)[0]?.updateQueue?.baseState?.element?.props?.game;
+  if (game && game.chat && typeof game.chat.addChat === "function") {
+    clearInterval(waitForGame);
+    const joinKey = 'uv2-welcomed-' + window.location.pathname;
+    if (!sessionStorage.getItem(joinKey)) {
+      sessionStorage.setItem(joinKey, '1');
+      const holidayMsg = {
+        halloween: "\\glow\\\\shiny\\\\#BF3011\\[Unverified V2]:\\reset\\ Happy Halloween from the UV2 Dev Team! 🎃",
+        christmas: "\\glow\\\\shiny\\\\#BF3011\\[Unverified V2]:\\reset\\ Merry Christmas from the UV2 Dev Team! ❄️",
+        newyear: new Date().getMonth() === 0
+          ? "\\glow\\\\shiny\\\\#BF3011\\[Unverified V2]:\\reset\\ Happy New Year from the UV2 Dev Team! 🎉"
+          : "\\glow\\\\shiny\\\\#BF3011\\[Unverified V2]:\\reset\\ Happy New Year's Eve from the UV2 Dev Team!",
+        aprilfools: "\\glow\\\\shiny\\\\#BF3011\\[Unverified V2]:\\reset\\ Happy April Fools Day from the UV2 Dev Team! 🤡",
+      };
+      game.chat.addChat({
+        text: holidayMsg[holiday] || "\\glow\\\\shiny\\\\#BF3011\\[Unverified V2]:\\reset\\ Hello UV2 User! We hope you enjoy our client."
+      });
     }
-  }, 500);
-})();
+  }
+}, 500);
 
 (function() {
   'use strict';
@@ -1688,6 +1705,93 @@ moduleSearchInput.addEventListener("input", () => {
     mc.style.display = (!q || name.includes(q) || desc.includes(q)) ? "flex" : "none";
   });
 });
+
+if (holiday === 'halloween' || holiday === 'christmas') {
+  if (!localStorage.getItem('uv2-gui-primary-color')) {
+    guiPrimaryColor = holiday === 'halloween' ? '#ff6600' : '#cc0000';
+  }
+  const banner = document.createElement('div');
+  const isHalloween = holiday === 'halloween';
+  banner.style.cssText = `width:100%;text-align:center;padding:6px 0;font-size:12px;font-family:MinibloxFont,sans-serif;letter-spacing:1px;background:${isHalloween ? '#ff660022' : '#cc000022'};border-bottom:1px solid ${isHalloween ? '#ff660055' : '#cc000055'};color:${isHalloween ? '#ff6600' : '#cc0000'};flex-shrink:0;`;
+  banner.textContent = isHalloween ? '🎃 Happy Halloween' : '❄️ Merry Christmas';
+  ui.insertBefore(banner, ui.firstChild);
+  ui.style.flexDirection = 'column';
+  const inner = document.createElement('div');
+  inner.style.cssText = 'display:flex;flex-direction:row;flex:1;min-height:0;';
+  [...ui.children].forEach(c => { if (c !== banner) inner.appendChild(c); });
+  ui.appendChild(inner);
+}
+
+if (holiday === 'newyear') {
+  const nyBanner = document.createElement('div');
+  nyBanner.style.cssText = 'width:100%;text-align:center;padding:6px 0;font-size:12px;font-family:MinibloxFont,sans-serif;letter-spacing:1px;background:#ffffff11;border-bottom:1px solid #ffffff33;color:#ffffff;flex-shrink:0;';
+  nyBanner.textContent = new Date().getMonth() === 0 ? '🎉 Happy New Year!' : '🎉 Happy New Year\'s Eve!';
+  ui.insertBefore(nyBanner, ui.firstChild);
+  ui.style.flexDirection = 'column';
+  const nyInner = document.createElement('div');
+  nyInner.style.cssText = 'display:flex;flex-direction:row;flex:1;min-height:0;';
+  [...ui.children].forEach(c => { if (c !== nyBanner) nyInner.appendChild(c); });
+  ui.appendChild(nyInner);
+  const targetYear = new Date().getMonth() === 0 ? new Date().getFullYear() : new Date().getFullYear() + 1;
+  const target = new Date(`January 1, ${targetYear} 00:00:00`).getTime();
+  function updateNewYearFooter() {
+    const now = Date.now();
+    const diff = target - now;
+    if (diff <= 0) {
+      uv2SidebarFooter.textContent = 'v' + GM_info.script.version;
+      if (!sessionStorage.getItem('uv2-newyear-toast')) {
+        sessionStorage.setItem('uv2-newyear-toast', '1');
+        showToast('Happy New Year!', '#e74c3c', 5000);
+        const confettiStyle = document.createElement('style');
+        confettiStyle.textContent = `@keyframes uv2Confetti{0%{transform:translateY(0) rotate(0deg);opacity:1;}100%{transform:translateY(-80vh) rotate(720deg);opacity:0;}}`;
+        document.head.appendChild(confettiStyle);
+        const colors = ['#e74c3c','#f39c12','#2ecc71','#3498db','#9b59b6','#fff'];
+        for (let i = 0; i < 20; i++) {
+          const c = document.createElement('div');
+          c.style.cssText = `position:fixed;bottom:0;left:${Math.random()*100}vw;width:8px;height:8px;border-radius:2px;background:${colors[Math.floor(Math.random()*colors.length)]};z-index:99999;pointer-events:none;animation:uv2Confetti ${1.5+Math.random()*2}s ease-out ${Math.random()*0.5}s forwards;`;
+          document.body.appendChild(c);
+          setTimeout(() => c.remove(), 4000);
+        }
+      }
+      return;
+    }
+    const h = Math.floor(diff / 3600000);
+    const min = Math.floor((diff % 3600000) / 60000);
+    const sec = Math.floor((diff % 60000) / 1000);
+    uv2SidebarFooter.textContent = `${h}h ${min}m ${sec}s`;
+  }
+  updateNewYearFooter();
+  setInterval(updateNewYearFooter, 1000);
+}
+
+if (holiday === 'aprilfools') {
+  const aprilBanner = document.createElement('div');
+  aprilBanner.style.cssText = 'width:100%;text-align:center;padding:6px 0;font-size:12px;font-family:MinibloxFont,sans-serif;letter-spacing:1px;background:#ffffff11;border-bottom:1px solid #ffffff33;color:#ffffff;flex-shrink:0;';
+  aprilBanner.textContent = '🤡 Happy April Fools Day from the UV2 Dev Team!';
+  ui.insertBefore(aprilBanner, ui.firstChild);
+  ui.style.flexDirection = 'column';
+  const aprilInner = document.createElement('div');
+  aprilInner.style.cssText = 'display:flex;flex-direction:row;flex:1;min-height:0;';
+  [...ui.children].forEach(c => { if (c !== aprilBanner) aprilInner.appendChild(c); });
+  ui.appendChild(aprilInner);
+  moduleSearchInput.placeholder = 'Sorry no modules are here lol';
+  const origOpenUI = openUI;
+  openUI = function() {
+    origOpenUI();
+    ui.style.transform = `translate(calc(-50% + ${(Math.random()-0.5)*60}px), calc(-50% + ${(Math.random()-0.5)*40}px))`;
+    ui.style.transition = 'transform 0.3s cubic-bezier(0.34,1.56,0.64,1)';
+    setTimeout(() => { ui.style.transform = 'translate(-50%,-50%)'; }, 600);
+  };
+  const origShow = showNotification;
+  showNotification = function(message) {
+    const flipped = message.includes('enabled')
+      ? message.replace('enabled', 'disabled')
+      : message.includes('disabled')
+      ? message.replace('disabled', 'enabled')
+      : message;
+    origShow(flipped);
+  };
+}
 
 const gridContainer = document.createElement("div");
 gridContainer.style.display = "flex";
