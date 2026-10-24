@@ -2,7 +2,7 @@
 
 ## v4.4
 - Added holiday system with themed banners, accent colors, and match join chat messages for each holiday
-- Halloween (Oct 25 – Nov 1): forced accent color #ff6600, banner, chat message
+- Halloween (Oct 24 – Nov 1): forced accent color #ff6600, banner, chat message
 - Christmas (Dec 20 – Dec 26): forced accent color #cc0000, banner, chat message
 - New Year's (Dec 31 – Jan 1): banner, live countdown in sidebar footer, confetti burst on midnight, toast, chat message
 - April Fools (Apr 1): banner, flipped enabled/disabled notifications, off-center UI wobble, search placeholder, chat message
