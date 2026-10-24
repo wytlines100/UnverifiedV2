@@ -40,6 +40,7 @@ A custom utility client for [Miniblox](https://miniblox.io), actively developed 
 - Full changelog timeline fetched from GitHub on the Changelog sidebar page
 - Optional VPN/proxy detection warning on menu open
 - UI open/close animation, toast notifications, and module click audio feedback
+- Holiday system: themed banners, accent colors, chat messages, and effects for Halloween, Christmas, New Year's Eve/Day, and April Fools
 
 ## Menu Pages
 
