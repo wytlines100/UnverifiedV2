@@ -234,12 +234,17 @@ function uv2CompareVersions(a, b) {
 }
 
 function uv2ParseChangelog(text) {
-  const m = text.match(/\n## ([^\n]+)\n([\s\S]*?)(\n## |$)/);
-  if (!m) return null;
-  return {
-    heading: m[1].trim(),
-    notes: m[2].trim().split('\n').map(l => l.replace(/^-\s*/, '')).filter(l => l.length > 0)
-  };
+  const entries = [];
+  const parts = text.split(/\n(?=## )/);
+  parts.forEach(part => {
+    const m = part.match(/^## ([^\n]+)\n?([\s\S]*)$/);
+    if (!m) return;
+    entries.push({
+      heading: m[1].trim(),
+      notes: m[2].trim().split('\n').map(l => l.replace(/^-\s*/, '').trim()).filter(l => l.length > 0)
+    });
+  });
+  return entries;
 }
 
 function uv2ShowPopup(opts) {
@@ -333,7 +338,7 @@ function uv2Check() {
         url: UV2_CHANGELOG_URL + '?t=' + Date.now(),
         onload(c) {
           if (document.getElementById('uv2-popup')) return;
-          const log = uv2ParseChangelog(c.responseText);
+          const log = uv2ParseChangelog(c.responseText)[0];
           if (hasUpdate) {
             uv2ShowPopup({
               title: 'Update Available',
@@ -1045,18 +1050,6 @@ let armorHudGap = parseInt(localStorage.getItem('uv2-armorhud-gap') || '4', 10);
 }
     let uv2ChangelogLoaded = false;
 
-function uv2ParseFullChangelog(text) {
-  const entries = [];
-  const parts = text.split(/\n(?=## )/);
-  parts.forEach(part => {
-    const m = part.match(/^## ([^\n]+)\n?([\s\S]*)$/);
-    if (!m) return;
-    const notes = m[2].trim().split('\n').map(l => l.replace(/^-\s*/, '').trim()).filter(l => l.length > 0);
-    entries.push({ heading: m[1].trim(), notes });
-  });
-  return entries;
-}
-
 function buildChangelogPage() {
   uv2ChangelogPage.innerHTML = '';
 
@@ -1075,7 +1068,7 @@ function buildChangelogPage() {
     url: UV2_CHANGELOG_URL + '?t=' + Date.now(),
     timeout: 8000,
     onload(r) {
-      const entries = uv2ParseFullChangelog(r.responseText);
+      const entries = uv2ParseChangelog(r.responseText);
       if (!entries.length) {
         status.textContent = 'No changelog entries found.';
         return;
@@ -1243,13 +1236,12 @@ settingsOverlay.innerHTML = `
     </div>
   </div>
 `;
-document.body.appendChild(settingsOverlay);
 
     const resetSection = document.createElement('div');
 resetSection.className = 'uv2-section-title';
 resetSection.style.marginTop = '14px';
 resetSection.textContent = 'Danger Zone';
-document.getElementById('uv2-page-visuals')?.appendChild(resetSection);
+settingsOverlay.querySelector('#uv2-page-visuals')?.appendChild(resetSection);
 const resetRow = document.createElement('div');
 resetRow.className = 'uv2-setting-row';
 resetRow.style.cssText = 'height:auto;padding:16px;flex-direction:column;gap:0;';
@@ -1287,7 +1279,7 @@ resetBtn.addEventListener('click', () => {
   resetRow.appendChild(confirm);
 });
 resetRow.appendChild(resetBtn);
-document.getElementById('uv2-page-visuals')?.appendChild(resetRow);
+settingsOverlay.querySelector('#uv2-page-visuals')?.appendChild(resetRow);
 
 (function buildContributorsGrid() {
   const UV2_CONTRIBUTORS = [
@@ -1333,7 +1325,7 @@ document.getElementById('uv2-page-visuals')?.appendChild(resetRow);
     },
   ];
 
-  const grid = document.getElementById("uv2-contributors-grid");
+  const grid = settingsOverlay.querySelector("#uv2-contributors-grid");
   if (!grid) return;
   grid.style.cssText = "display:flex;flex-wrap:wrap;gap:12px;padding:4px 0 8px 0;";
 
@@ -1475,8 +1467,6 @@ document.getElementById('uv2-page-visuals')?.appendChild(resetRow);
     uv2InlineSettings.style.boxShadow = "none";
     uv2SettingsPage.appendChild(uv2InlineSettings);
   }
-  settingsOverlay.style.display = "none";
-  settingsOverlay.style.pointerEvents = "none";
 
 buildGUIPage();
 buildConfigPage();
