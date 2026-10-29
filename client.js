@@ -2290,7 +2290,7 @@ if (timeModule) {
 }
 
 const ARMOR_SLOT_LABELS = ['Helmet', 'Chestplate', 'Leggings', 'Boots'];
-const ARMOR_ROMAN = ['', 'I', 'II', 'III', 'IV', 'V', 'VI', 'VII', 'VIII', 'IX', 'X'];
+const ARMOR_ROMAN = ['', 'I', 'II', 'III', 'IV', 'V'];
 const ARMOR_SPRITESHEET_URL = 'https://miniblox.io/textures/spritesheet.36511680aea3.png';
 const ARMOR_SPRITESHEET_SIZE = 1024;
 const ARMOR_ICON_TILE_SIZE = 16;
