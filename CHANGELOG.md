@@ -6,6 +6,7 @@
 - Christmas (Dec 20 – Dec 26): forced accent color #cc0000, banner, chat message
 - New Year's (Dec 31 – Jan 1): banner, live countdown in sidebar footer, confetti burst on midnight, toast, chat message
 - April Fools (Apr 1): banner, flipped enabled/disabled notifications, off-center UI wobble, search placeholder, chat message
+- Fix: Armor enchantments only go up to V instead of X
 
 ## v4.3
 - Removed Fullscreen module (redundant with in-game fullscreen message)
