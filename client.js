@@ -50,7 +50,7 @@ class UnverifiedIntro {
     this.circle.style.transform = "scale(1)";
     this.check.style.opacity = 1;
   }, 200);
-  setTimeout(() => { this.check.style.transform = "rotate(540deg)"; }, 700);
+  setTimeout(() => { this.check.style.transform = "rotate(540deg)"; }, 900);
   setTimeout(() => {
     this.unverifiedText.style.opacity = 1;
   }, 2400);
@@ -129,7 +129,7 @@ const waitForGame = setInterval(() => {
 
   async function handleInfoCommand(targetUser) {
     if (!targetUser) {
-      pushLocalChat("\\#FF0000\\Error executing command: /info <username>");
+      pushLocalChat("\\red\\Error executing command: /info <username>");
       return;
     }
     try {
@@ -139,7 +139,7 @@ const waitForGame = setInterval(() => {
         body: JSON.stringify({ username: targetUser })
       });
       if (!res.ok) {
-        pushLocalChat(`\\#FF0000\\Error executing command: User ${targetUser} not found`);
+        pushLocalChat(`\\red\\Error executing command: User ${targetUser} not found`);
         return;
       }
       const data = await res.json();
@@ -150,10 +150,10 @@ const waitForGame = setInterval(() => {
         const level = data.profile.level !== undefined ? data.profile.level : "0";
         pushLocalChat(`Username: ${username}\nRank: ${rank}\nLevel: ${level}`);
       } else {
-        pushLocalChat(`\\#FF0000\\Error executing command: User ${targetUser} not found`);
+        pushLocalChat(`\\red\\Error executing command: User ${targetUser} not found`);
       }
     } catch (err) {
-      pushLocalChat(`\\#FF0000\\Error executing command: User ${targetUser} not found`);
+      pushLocalChat(`\\red\\Error executing command: User ${targetUser} not found`);
     }
   }
 
@@ -885,9 +885,9 @@ let armorHudGap = parseInt(localStorage.getItem('uv2-armorhud-gap') || '4', 10);
               }
 
             if (config.moduleBindings) {
-  moduleBindings = config.moduleBindings;
-  Object.keys(moduleBindings).forEach(name => {
-    if (moduleBindings[name]) updateModuleKeybindPill(name, moduleBindings[name]);
+                moduleBindings = config.moduleBindings;
+                Object.keys(moduleBindings).forEach(name => {
+      if (moduleBindings[name]) updateModuleKeybindPill(name, moduleBindings[name]);
   });
 }
             setTimeout(() => {
