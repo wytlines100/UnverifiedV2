@@ -1,8 +1,9 @@
 // ==UserScript==
-// @name         Music Player UV2
-// @namespace    http://tampermonkey.net/
+// @name         UV2 Music
+// @namespace    music4life
 // @version      3.5
-// @description  Music Player for UnverifiedV2 in a new userscript
+// @description  A Simple Music Player linking to YT for UV2
+// @author       TheM1ddleM1n
 // @match        https://miniblox.io/
 // @grant        none
 // ==/UserScript==
@@ -324,7 +325,6 @@
   });
 
   let dragging = false, offX = 0, offY = 0, frame = null, pL = 0, pT = 0;
-
   function clamp(l, t) {
     const r = root.getBoundingClientRect();
     return { l: Math.min(Math.max(l, 0), window.innerWidth - r.width), t: Math.min(Math.max(t, 0), window.innerHeight - r.height) };
