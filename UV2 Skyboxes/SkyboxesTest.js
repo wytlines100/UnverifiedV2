@@ -2,7 +2,7 @@
 // @name         Mblx Skyboxes
 // @namespace    tampogmonkey
 // @version      3
-// @description  Skyboxes :D
+// @description  Skyboxes :D. Credit to whoever made Candy!
 // @author       TheMysteryMan
 // @match        https://miniblox.io/*
 // @match        https://*.miniblox.io/*
