@@ -455,10 +455,6 @@ style.innerHTML = `
 .module-container:hover .uv2-shine {
   animation: uv2ModuleShine 2.9s cubic-bezier(0.4, 0, 0.2, 1) forwards;
 }
-.bind-popup { position:absolute; background-color:#2c3e50; color:white; padding:20px; border-radius:10px; box-shadow:0 0 10px rgba(0,0,0,0.7); z-index:10001; font-family:'MinibloxFont',sans-serif; display:none; text-align:center; }
-.bind-popup input { background-color:#34495e; color:white; border:2px solid #e74c3c; border-radius:5px; padding:10px; font-size:18px; width:200px; }
-.bind-popup button { background-color:#e74c3c; color:white; border:none; border-radius:5px; padding:10px 20px; margin-top:10px; cursor:pointer; }
-.bind-popup button:hover { background-color:#c0392b; }
 .module-tooltip { visibility:hidden; position:absolute; background-color:#2c3e50; color:white; padding:5px 10px; border-radius:5px; font-size:14px; z-index:10000; opacity:0; transition:opacity 0.3s ease; bottom:6px; right:10px; white-space:nowrap; pointer-events:none; }
 .other-notification { font-family:'MinibloxFont',sans-serif; font-size:14px; color:white; background:linear-gradient(135deg,#1a1a1a,#111111); padding:12px 24px; border-radius:8px; margin-bottom:12px; box-shadow:0 4px 15px rgba(0,0,0,0.3); font-weight:500; letter-spacing:0.5px; position:relative; overflow:hidden; will-change:transform,opacity; animation:uv2NotifEnter 0.35s cubic-bezier(0.22,1,0.36,1) forwards; }
 .other-notification.uv2-notif-exit { animation:uv2NotifExit 0.3s cubic-bezier(0.4,0,1,1) forwards; }
@@ -915,8 +911,11 @@ let armorHudGap = parseInt(localStorage.getItem('uv2-armorhud-gap') || '4', 10);
               }
 
             if (config.moduleBindings) {
-              moduleBindings = config.moduleBindings;
-            }
+  moduleBindings = config.moduleBindings;
+  Object.keys(moduleBindings).forEach(name => {
+    if (moduleBindings[name]) updateModuleKeybindPill(name, moduleBindings[name]);
+  });
+}
             setTimeout(() => {
               if (config.moduleStates) {
                 isRestoring = true;
@@ -1697,9 +1696,9 @@ moduleSearchInput.addEventListener("input", () => {
 });
 
 if (holiday === 'halloween' || holiday === 'christmas') {
-  if (!localStorage.getItem('uv2-gui-primary-color')) {
-    guiPrimaryColor = holiday === 'halloween' ? '#ff6600' : '#cc0000';
-  }
+  guiPrimaryColor = holiday === 'halloween' ? '#ff6600' : '#cc0000';
+  localStorage.setItem('uv2-gui-primary-color', guiPrimaryColor);
+
   const banner = document.createElement('div');
   const isHalloween = holiday === 'halloween';
   banner.style.cssText = `width:100%;text-align:center;padding:6px 0;font-size:12px;font-family:MinibloxFont,sans-serif;letter-spacing:1px;background:${isHalloween ? '#ff660022' : '#cc000022'};border-bottom:1px solid ${isHalloween ? '#ff660055' : '#cc000055'};color:${isHalloween ? '#ff6600' : '#cc0000'};flex-shrink:0;`;
@@ -1809,51 +1808,121 @@ function showNotification(message) {
     setTimeout(() => notification.remove(), 350);
   }, 4000);
 }
+    function updateModuleKeybindPill(moduleName, key) {
+  const mc = [...gridContainer.children].find(c => c.dataset.moduleName === moduleName);
+  if (!mc) return;
+  let pill = mc.querySelector('.uv2-keybind-pill');
+  if (!key) {
+    if (pill) pill.remove();
+    return;
+  }
+  if (!pill) {
+    pill = document.createElement('div');
+    pill.className = 'uv2-keybind-pill';
+    pill.style.cssText = 'display:flex;align-items:center;gap:5px;background:#1e1e1e;border:1px solid rgba(255,255,255,0.1);border-radius:20px;padding:3px 9px 3px 7px;flex-shrink:0;margin-left:8px;pointer-events:none;position:relative;z-index:1;';
+    const icon = document.createElement('i');
+    icon.className = 'fa fa-keyboard-o';
+    icon.style.cssText = 'font-size:11px;color:#888;';
+    pill.appendChild(icon);
+    const label = document.createElement('span');
+    label.className = 'uv2-keybind-pill-label';
+    label.style.cssText = 'font-size:11px;color:#aaa;font-family:MinibloxFont,sans-serif;white-space:nowrap;';
+    pill.appendChild(label);
+    mc.insertBefore(pill, mc._toggleWrap);
+  }
+  pill.querySelector('.uv2-keybind-pill-label').textContent = key;
+}
 function showBindPopup(moduleElement, moduleName) {
-  const existingPopup = document.querySelector('.bind-popup');
-  if (existingPopup) existingPopup.remove();
-  const popup = document.createElement("div"); popup.classList.add("bind-popup"); document.body.appendChild(popup);
-  const popupTitle = document.createElement("h3"); popupTitle.textContent = `Bind Key for ${moduleName}`; popup.appendChild(popupTitle);
-  const inputBox = document.createElement("input"); inputBox.placeholder = "Press a key...";
-  if (moduleBindings[moduleName]) inputBox.value = moduleBindings[moduleName];
-  popup.appendChild(inputBox);
-  const bindButton = document.createElement("button"); bindButton.textContent = "Bind";
-  const resetButton = document.createElement("button"); resetButton.textContent = "Unbind";
-  const closeBtn = document.createElement("button"); closeBtn.textContent = "Close";
-  popup.appendChild(bindButton); popup.appendChild(resetButton); popup.appendChild(closeBtn);
-  closeBtn.addEventListener("click", () => { popup.style.display = "none"; isBinding = false; });
-  let keyBinding = null;
-  inputBox.addEventListener("keydown", e => { e.preventDefault(); keyBinding = e.key; inputBox.value = e.key; });
-  bindButton.addEventListener("click", () => {
-    if (keyBinding) {
-      const conflictModule = Object.keys(moduleBindings).find(m => m !== moduleName && moduleBindings[m] === keyBinding);
-      const uiKeyMatches = (uiKeybind === 'backtick' && keyBinding === '`') || (uiKeybind === 'rshift' && keyBinding === 'Shift') || (uiKeybind === 'backslash' && keyBinding === '\\');
+  const existing = document.getElementById('uv2-keybind-modal');
+  if (existing) existing.remove();
+  const modal = document.createElement('div');
+  modal.id = 'uv2-keybind-modal';
+  modal.style.cssText = 'position:fixed;inset:0;z-index:100003;display:flex;align-items:center;justify-content:center;background:rgba(0,0,0,0.45);backdrop-filter:blur(6px);';
+  const box = document.createElement('div');
+  box.style.cssText = 'background:#141414;border:1px solid rgba(255,255,255,0.09);border-radius:16px;padding:24px 28px;width:300px;font-family:MinibloxFont,sans-serif;color:#fff;box-shadow:0 16px 48px rgba(0,0,0,0.7);display:flex;flex-direction:column;gap:16px;';
+  const heading = document.createElement('div');
+  heading.style.cssText = 'font-size:14px;color:#ccc;letter-spacing:0.5px;';
+  heading.textContent = `Bind key for ${moduleName}`;
+  box.appendChild(heading);
+  const keyDisplay = document.createElement('div');
+  keyDisplay.style.cssText = `display:flex;align-items:center;justify-content:center;gap:10px;background:#1a1a1a;border:1px solid rgba(255,255,255,0.08);border-radius:10px;padding:14px;`;
+  const kbIcon = document.createElement('i');
+  kbIcon.className = 'fa fa-keyboard-o';
+  kbIcon.style.cssText = `color:${guiPrimaryColor};font-size:18px;`;
+  keyDisplay.appendChild(kbIcon);
+  const keyLabel = document.createElement('div');
+  keyLabel.style.cssText = `font-size:20px;color:#fff;min-width:80px;text-align:center;`;
+  keyLabel.textContent = moduleBindings[moduleName] || 'Press a key...';
+  keyDisplay.appendChild(keyLabel);
+  box.appendChild(keyDisplay);
+  let pendingKey = moduleBindings[moduleName] || null;
+  function onKey(e) {
+    e.preventDefault();
+    e.stopPropagation();
+    pendingKey = e.key;
+    keyLabel.textContent = e.key;
+  }
+  window.addEventListener('keydown', onKey, true);
+  const btnRow = document.createElement('div');
+  btnRow.style.cssText = 'display:flex;gap:8px;';
+  const bindBtn = document.createElement('button');
+  bindBtn.textContent = 'Bind';
+  bindBtn.style.cssText = `flex:1;background:${guiPrimaryColor};color:#fff;border:none;border-radius:10px;padding:10px;cursor:pointer;font-family:MinibloxFont,sans-serif;font-size:13px;`;
+  bindBtn.addEventListener('click', () => {
+    window.removeEventListener('keydown', onKey, true);
+    if (pendingKey) {
+      const conflictModule = Object.keys(moduleBindings).find(m => m !== moduleName && moduleBindings[m] === pendingKey);
+      const uiKeyMatches = (uiKeybind === 'backtick' && pendingKey === '`') || (uiKeybind === 'rshift' && pendingKey === 'Shift') || (uiKeybind === 'backslash' && pendingKey === '\\');
       if (conflictModule) {
-        showNotification(`${keyBinding} is already bound to ${conflictModule}`);
+        showNotification(`${pendingKey} is already bound to ${conflictModule}`);
       } else if (uiKeyMatches) {
-        showNotification(`${keyBinding} conflicts with the UI keybind`);
+        showNotification(`${pendingKey} conflicts with the UI keybind`);
       } else {
-        moduleBindings[moduleName] = keyBinding;
-        showNotification(`${moduleName} bound to ${keyBinding}`);
+        moduleBindings[moduleName] = pendingKey;
+        updateModuleKeybindPill(moduleName, pendingKey);
+        showNotification(`${moduleName} bound to ${pendingKey}`);
       }
     }
-    popup.style.display = "none";
+    modal.remove();
     isBinding = false;
   });
-  resetButton.addEventListener("click", () => {
+  const unbindBtn = document.createElement('button');
+  unbindBtn.textContent = 'Unbind';
+  unbindBtn.style.cssText = 'flex:1;background:#2a2a2a;color:#fff;border:1px solid #444;border-radius:10px;padding:10px;cursor:pointer;font-family:MinibloxFont,sans-serif;font-size:13px;';
+  unbindBtn.addEventListener('click', () => {
+    window.removeEventListener('keydown', onKey, true);
     if (moduleBindings[moduleName]) {
       delete moduleBindings[moduleName];
+      updateModuleKeybindPill(moduleName, null);
       showNotification(`${moduleName} unbound`);
     } else {
-      showNotification(`${moduleName} has no keybind to unbind`);
+      showNotification(`${moduleName} has no keybind`);
     }
-    popup.style.display = "none";
+    modal.remove();
     isBinding = false;
   });
-  const rect = moduleElement.getBoundingClientRect();
-  popup.style.top = `${rect.top + window.scrollY + rect.height + 10}px`;
-  popup.style.left = `${rect.left + window.scrollX}px`;
-  popup.style.display = "block"; isBinding = true;
+  const cancelBtn = document.createElement('button');
+  cancelBtn.textContent = 'Cancel';
+  cancelBtn.style.cssText = 'flex:1;background:#1a1a1a;color:#888;border:1px solid #333;border-radius:10px;padding:10px;cursor:pointer;font-family:MinibloxFont,sans-serif;font-size:13px;';
+  cancelBtn.addEventListener('click', () => {
+    window.removeEventListener('keydown', onKey, true);
+    modal.remove();
+    isBinding = false;
+  });
+  btnRow.appendChild(bindBtn);
+  btnRow.appendChild(unbindBtn);
+  btnRow.appendChild(cancelBtn);
+  box.appendChild(btnRow);
+  modal.appendChild(box);
+  modal.addEventListener('click', e => {
+    if (e.target === modal) {
+      window.removeEventListener('keydown', onKey, true);
+      modal.remove();
+      isBinding = false;
+    }
+  });
+  document.body.appendChild(modal);
+  isBinding = true;
 }
 
 function sortModulesByFavorite() {
@@ -1865,7 +1934,8 @@ function sortModulesByFavorite() {
   });
   const favCount = children.filter(c => c.dataset.favorited === '1').length;
   gridContainer.innerHTML = '';
-  if (favCount > 0 && favCount < children.length) {
+  const hasPartial = favCount > 0 && favCount < children.length;
+  if (hasPartial) {
     const favLabel = document.createElement('div');
     favLabel.className = 'uv2-fav-label';
     favLabel.style.cssText = 'font-size:10px;color:#ffd700;text-transform:uppercase;letter-spacing:0.08em;margin:2px 0 2px 4px;';
@@ -1873,7 +1943,7 @@ function sortModulesByFavorite() {
     gridContainer.appendChild(favLabel);
   }
   children.forEach((c, i) => {
-    if (favCount > 0 && favCount < children.length && i === favCount) {
+    if (hasPartial && i === favCount) {
       const allLabel = document.createElement('div');
       allLabel.className = 'uv2-fav-label';
       allLabel.style.cssText = 'font-size:10px;color:#666;text-transform:uppercase;letter-spacing:0.08em;margin:10px 0 2px 4px;';
@@ -2917,7 +2987,6 @@ function _afkActivityHandler(e) {
 }
 
 const _afkEvents = ['mousemove', 'keydown', 'mousedown', 'wheel'];
-
 function startAfkDetector() {
   _afkEvents.forEach(evt => window.addEventListener(evt, _afkActivityHandler));
   clearTimeout(afkTimer);
@@ -2937,6 +3006,5 @@ function stopAfkDetector() {
     }
   }
 }
-
 if (settings.autoAfk) startAfkDetector();
 })();
