@@ -6,6 +6,7 @@
 - Added inline keybind pill on each module showing the bound key with a keyboard icon
 - Keybind pills persist through favorite sorting and config load
 - Fixed favorite section labels showing when all or no modules are favorited
+- Removed title screen background image enforcement and its MutationObserver
 
 ## v4.4
 - Added holiday system with themed banners, accent colors, and match join chat messages for each holiday
