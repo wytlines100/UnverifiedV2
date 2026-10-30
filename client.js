@@ -519,32 +519,6 @@ style.innerHTML = `
   faLink.href = "https://cdnjs.cloudflare.com/ajax/libs/font-awesome/4.7.0/css/font-awesome.min.css";
   document.head.appendChild(faLink);
 
-  const targetImageUrl = "https://images3.alphacoders.com/133/1333794.jpeg";
-  const targetImageSelector = "img.chakra-image.css-139opjw";
-
-  function enforceTargetImage() {
-    const img = document.querySelector(targetImageSelector);
-    if (!img) return;
-
-    if (img.getAttribute("src") !== targetImageUrl) {
-      img.src = targetImageUrl;
-    }
-    if (img.getAttribute("srcset") !== targetImageUrl) {
-      img.srcset = targetImageUrl;
-    }
-  }
-  enforceTargetImage();
-  const imageObserver = new MutationObserver(() => {
-    enforceTargetImage();
-  });
-
-  imageObserver.observe(document.body, {
-    childList: true,
-    subtree: true,
-    attributes: true,
-    attributeFilter: ["src", "srcset"]
-  });
-
   const uv2Sidebar = document.createElement("div");
   uv2Sidebar.id = "uv2-sidebar";
   uv2Sidebar.style.cssText = [
