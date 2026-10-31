@@ -9,7 +9,7 @@
 - Removed title screen background image enforcement and its MutationObserver
 - Removed non armor enchantments
 - UI fixes
-- Locked Accent Color to Orange (Halloween) / Red (On Christmas)
+- Locked Accent Color to Orange (On Halloween) / Red (On Christmas)
 
 ## v4.4
 - Added holiday system with themed banners, accent colors, and match join chat messages for each holiday
