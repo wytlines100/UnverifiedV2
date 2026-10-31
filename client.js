@@ -68,7 +68,7 @@ function getHoliday() {
   const now = new Date();
   const m = now.getMonth() + 1;
   const d = now.getDate();
-  if (m === 10 && d >= 24 || m === 11 && d === 1) return 'halloween';
+  if (m === 10 && (d === 30 || d === 31)) return 'halloween';
   if (m === 12 && d >= 20 && d <= 26) return 'christmas';
   if (m === 12 && d === 31 || m === 1 && d === 1) return 'newyear';
   if (m === 4 && d === 1) return 'aprilfools';
@@ -459,10 +459,6 @@ style.innerHTML = `
 .other-notification { font-family:'MinibloxFont',sans-serif; font-size:14px; color:white; background:linear-gradient(135deg,#1a1a1a,#111111); padding:12px 24px; border-radius:8px; margin-bottom:12px; box-shadow:0 4px 15px rgba(0,0,0,0.3); font-weight:500; letter-spacing:0.5px; position:relative; overflow:hidden; will-change:transform,opacity; animation:uv2NotifEnter 0.35s cubic-bezier(0.22,1,0.36,1) forwards; }
 .other-notification.uv2-notif-exit { animation:uv2NotifExit 0.3s cubic-bezier(0.4,0,1,1) forwards; }
 .notification-progress { position:absolute; bottom:0; left:0; height:3px; background:#ffcc00; width:100%; animation:notificationProgress 4s linear forwards; }
-.settings-icon { width:30px; height:30px; fill:white; transition:transform 0.3s ease; }
-.settings-icon:hover { transform:rotate(90deg); }
-#uv2-sidebar { box-sizing:border-box; }
-#uv2-page-settings-content { box-sizing:border-box; height:100%; }
 #uv2-settings-panel { width:100% !important; height:100% !important; max-height:none !important; border-radius:0 !important; border:none !important; box-shadow:none !important; background:#000000 !important; display:flex; flex-direction:column; }
 #uv2-settings-titlebar { background:#000000 !important; border-bottom:1px solid rgba(255,255,255,0.07) !important; flex-shrink:0; }
 #uv2-settings-titlebar { display:flex; align-items:center; justify-content:space-between; padding:14px 18px; }
@@ -611,6 +607,8 @@ ui.appendChild(uv2Sidebar);
   uv2ContentArea.appendChild(uv2ChangelogPage);
 
 let guiPrimaryColor = localStorage.getItem('uv2-gui-primary-color') || '#e74c3c';
+if (holiday === 'halloween') guiPrimaryColor = '#ff6600';
+if (holiday === 'christmas') guiPrimaryColor = '#cc0000';
 let armorHudDocked = localStorage.getItem('uv2-armorhud-docked') === 'true';
 let armorHudOpacity = parseFloat(localStorage.getItem('uv2-armorhud-opacity') || '1');
 let armorHudBgOpacity = parseFloat(localStorage.getItem('uv2-armorhud-bgopacity') || '0.55');
@@ -693,6 +691,8 @@ let armorHudGap = parseInt(localStorage.getItem('uv2-armorhud-gap') || '4', 10);
   function buildGUIPage() {
   uv2GUIPage.innerHTML = '';
 
+  const isHoliday = holiday === 'halloween' || holiday === 'christmas';
+
   const heading = document.createElement('h2');
   heading.textContent = 'Color';
   heading.style.cssText = 'font-size:28px;font-family:MinibloxFont,sans-serif;margin:0 0 20px 0;text-align:center;color:#fff;';
@@ -721,11 +721,21 @@ let armorHudGap = parseInt(localStorage.getItem('uv2-armorhud-gap') || '4', 10);
   hexInput.style.cssText = 'background:#111;color:#fff;border:1px solid rgba(255,255,255,0.12);border-radius:6px;padding:10px 14px;font-size:14px;font-family:MinibloxFont,sans-serif;width:110px;outline:none;';
   row.appendChild(hexInput);
 
+  if (isHoliday) {
+    picker.disabled = true;
+    hexInput.disabled = true;
+    picker.style.opacity = '0.4';
+    picker.style.cursor = 'not-allowed';
+    hexInput.style.opacity = '0.4';
+    hexInput.style.cursor = 'not-allowed';
+    hexInput.style.pointerEvents = 'none';
+  }
+
   const previewDot = document.createElement('div');
   previewDot.style.cssText = `width:28px;height:28px;border-radius:50%;background:${guiPrimaryColor};box-shadow:0 0 12px ${guiPrimaryColor}88;transition:background 0.15s,box-shadow 0.15s;flex-shrink:0;`;
   row.appendChild(previewDot);
 
-    const recentLabel = document.createElement('div');
+  const recentLabel = document.createElement('div');
   recentLabel.className = 'uv2-section-title';
   recentLabel.textContent = 'Recent colors';
   uv2GUIPage.appendChild(recentLabel);
@@ -747,6 +757,7 @@ let armorHudGap = parseInt(localStorage.getItem('uv2-armorhud-gap') || '4', 10);
 
   function renderRecent() {
     recentRow.innerHTML = '';
+    if (isHoliday) return;
     loadRecent().forEach(hex => {
       const swatch = document.createElement('div');
       swatch.style.cssText = `width:32px;height:32px;border-radius:6px;background:${hex};cursor:pointer;border:2px solid transparent;transition:border-color 0.15s,transform 0.15s;flex-shrink:0;`;
@@ -1670,9 +1681,6 @@ moduleSearchInput.addEventListener("input", () => {
 });
 
 if (holiday === 'halloween' || holiday === 'christmas') {
-  guiPrimaryColor = holiday === 'halloween' ? '#ff6600' : '#cc0000';
-  localStorage.setItem('uv2-gui-primary-color', guiPrimaryColor);
-
   const banner = document.createElement('div');
   const isHalloween = holiday === 'halloween';
   banner.style.cssText = `width:100%;text-align:center;padding:6px 0;font-size:12px;font-family:MinibloxFont,sans-serif;letter-spacing:1px;background:${isHalloween ? '#ff660022' : '#cc000022'};border-bottom:1px solid ${isHalloween ? '#ff660055' : '#cc000055'};color:${isHalloween ? '#ff6600' : '#cc0000'};flex-shrink:0;`;
