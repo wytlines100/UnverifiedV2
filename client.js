@@ -1776,19 +1776,38 @@ notificationContainer.style.cssText = "position:fixed;bottom:1in;right:20px;z-in
 document.body.appendChild(notificationContainer);
 
 function showNotification(message) {
-  const notification = document.createElement('div');
-  notification.textContent = message;
+  const existing = [...notificationContainer.children].find(
+    n => n.dataset.message === message && !n.classList.contains('uv2-notif-exit')
+  );
+  if (existing) {
+    let badge = existing.querySelector('.uv2-notif-badge');
+    if (!badge) {
+      badge = Object.assign(document.createElement('span'), { className: 'uv2-notif-badge', textContent: '2' });
+      badge.dataset.count = '2';
+      badge.style.cssText = `margin-left:8px;background:${guiPrimaryColor};color:#fff;border-radius:10px;padding:1px 7px;font-size:11px;vertical-align:middle;`;
+      existing.insertBefore(badge, existing.querySelector('.notification-progress'));
+    } else {
+      badge.textContent = badge.dataset.count = String(parseInt(badge.dataset.count) + 1);
+    }
+    existing.querySelector('.notification-progress')?.replaceWith(existing.querySelector('.notification-progress').cloneNode(false));
+    clearTimeout(existing._uv2RemoveTimer);
+    existing._uv2RemoveTimer = setTimeout(() => { existing.classList.add('uv2-notif-exit'); setTimeout(() => existing.remove(), 350); }, 4000);
+    return;
+  }
+  if (notificationContainer.children.length >= 4) {
+    const oldest = notificationContainer.children[notificationContainer.children.length - 1];
+    oldest.classList.add('uv2-notif-exit');
+    setTimeout(() => oldest.remove(), 350);
+  }
+  const notification = Object.assign(document.createElement('div'), { textContent: message });
+  notification.dataset.message = message;
   notification.classList.add('other-notification');
   notification.style.borderLeft = `4px solid ${guiPrimaryColor}`;
-  const progressBar = document.createElement('div');
-  progressBar.classList.add('notification-progress');
+  const progressBar = Object.assign(document.createElement('div'), { className: 'notification-progress' });
   progressBar.style.background = guiPrimaryColor;
   notification.appendChild(progressBar);
   notificationContainer.appendChild(notification);
-  setTimeout(() => {
-    notification.classList.add('uv2-notif-exit');
-    setTimeout(() => notification.remove(), 350);
-  }, 4000);
+  notification._uv2RemoveTimer = setTimeout(() => { notification.classList.add('uv2-notif-exit'); setTimeout(() => notification.remove(), 350); }, 4000);
 }
     function updateModuleKeybindPill(moduleName, key) {
   const mc = [...gridContainer.children].find(c => c.dataset.moduleName === moduleName);
