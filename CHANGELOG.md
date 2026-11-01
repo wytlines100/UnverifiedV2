@@ -11,6 +11,7 @@
 - UI fixes
 - Locked Accent Color to Orange (On Halloween) / Red (On Christmas)
 - Notification overhaul
+- Initial Phase of Client Simplification 
 
 ## v4.4
 - Added holiday system with themed banners, accent colors, and match join chat messages for each holiday
