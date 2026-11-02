@@ -1670,11 +1670,7 @@ moduleSearchInput.addEventListener("input", () => {
   });
 });
 
-if (holiday === 'halloween' || holiday === 'christmas') {
-  const banner = document.createElement('div');
-  const isHalloween = holiday === 'halloween';
-  banner.style.cssText = `width:100%;text-align:center;padding:6px 0;font-size:12px;font-family:MinibloxFont,sans-serif;letter-spacing:1px;background:${isHalloween ? '#ff660022' : '#cc000022'};border-bottom:1px solid ${isHalloween ? '#ff660055' : '#cc000055'};color:${isHalloween ? '#ff6600' : '#cc0000'};flex-shrink:0;`;
-  banner.textContent = isHalloween ? '🎃 Happy Halloween' : '❄️ Merry Christmas';
+function applyHolidayBanner(banner) {
   ui.insertBefore(banner, ui.firstChild);
   ui.style.flexDirection = 'column';
   const inner = document.createElement('div');
@@ -1683,16 +1679,19 @@ if (holiday === 'halloween' || holiday === 'christmas') {
   ui.appendChild(inner);
 }
 
+if (holiday === 'halloween' || holiday === 'christmas') {
+  const isHalloween = holiday === 'halloween';
+  const banner = document.createElement('div');
+  banner.style.cssText = `width:100%;text-align:center;padding:6px 0;font-size:12px;font-family:MinibloxFont,sans-serif;letter-spacing:1px;background:${isHalloween ? '#ff660022' : '#cc000022'};border-bottom:1px solid ${isHalloween ? '#ff660055' : '#cc000055'};color:${isHalloween ? '#ff6600' : '#cc0000'};flex-shrink:0;`;
+  banner.textContent = isHalloween ? 'Happy Halloween' : 'Merry Christmas';
+  applyHolidayBanner(banner);
+}
+
 if (holiday === 'newyear') {
   const nyBanner = document.createElement('div');
   nyBanner.style.cssText = 'width:100%;text-align:center;padding:6px 0;font-size:12px;font-family:MinibloxFont,sans-serif;letter-spacing:1px;background:#ffffff11;border-bottom:1px solid #ffffff33;color:#ffffff;flex-shrink:0;';
-  nyBanner.textContent = new Date().getMonth() === 0 ? '🎉 Happy New Year!' : '🎉 Happy New Year\'s Eve!';
-  ui.insertBefore(nyBanner, ui.firstChild);
-  ui.style.flexDirection = 'column';
-  const nyInner = document.createElement('div');
-  nyInner.style.cssText = 'display:flex;flex-direction:row;flex:1;min-height:0;';
-  [...ui.children].forEach(c => { if (c !== nyBanner) nyInner.appendChild(c); });
-  ui.appendChild(nyInner);
+  nyBanner.textContent = new Date().getMonth() === 0 ? 'Happy New Year!' : 'Happy New Year\'s Eve!';
+  applyHolidayBanner(nyBanner);
   const targetYear = new Date().getMonth() === 0 ? new Date().getFullYear() : new Date().getFullYear() + 1;
   const target = new Date(`January 1, ${targetYear} 00:00:00`).getTime();
   function updateNewYearFooter() {
@@ -1728,13 +1727,8 @@ if (holiday === 'newyear') {
 if (holiday === 'aprilfools') {
   const aprilBanner = document.createElement('div');
   aprilBanner.style.cssText = 'width:100%;text-align:center;padding:6px 0;font-size:12px;font-family:MinibloxFont,sans-serif;letter-spacing:1px;background:#ffffff11;border-bottom:1px solid #ffffff33;color:#ffffff;flex-shrink:0;';
-  aprilBanner.textContent = '🤡 Happy April Fools Day from the UV2 Dev Team!';
-  ui.insertBefore(aprilBanner, ui.firstChild);
-  ui.style.flexDirection = 'column';
-  const aprilInner = document.createElement('div');
-  aprilInner.style.cssText = 'display:flex;flex-direction:row;flex:1;min-height:0;';
-  [...ui.children].forEach(c => { if (c !== aprilBanner) aprilInner.appendChild(c); });
-  ui.appendChild(aprilInner);
+  aprilBanner.textContent = 'Happy April Fools Day from the UV2 Dev Team!';
+  applyHolidayBanner(aprilBanner);
   moduleSearchInput.placeholder = 'Sorry no modules are here lol';
   const origOpenUI = openUI;
   openUI = function() {
