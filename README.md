@@ -15,7 +15,7 @@ A custom utility client for [Miniblox](https://miniblox.io), actively developed 
 4. Navigate to or reload `miniblox.io`.
 5. Press **Right Shift** (default), `` ` ``, or `\` to open the menu.
 
-> UV2 Music Player is a separate script (`MusicPlayer.js`) installed independently.
+> UV2 Music Player is a separate script (`MusicPlayer.js`) that you can install independently.
 
 ## Modules
 
