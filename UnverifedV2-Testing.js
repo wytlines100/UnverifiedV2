@@ -103,8 +103,6 @@ const waitForGame = setInterval(() => {
 
 (function() {
   'use strict';
-  let rawTypedSlash = false;
-
   const gameRef = {
     _game: null,
     get game() {
@@ -1504,6 +1502,8 @@ document.querySelector("#uv2-toggle-vpnwarning")?.addEventListener("change", fun
   if (afkChatToggle) afkChatToggle.checked = settings.afkChat;
   const vpnWarningToggle = document.querySelector("#uv2-toggle-vpnwarning");
   if (vpnWarningToggle) vpnWarningToggle.checked = settings.vpnWarning;
+  const afkMusicToggle = document.querySelector("#uv2-toggle-afkmusic");
+  if (afkMusicToggle) afkMusicToggle.checked = settings.afkMusic;
 
     const uiKeybindSelect = document.querySelector("#uv2-uikeybind-select");
   if (uiKeybindSelect) uiKeybindSelect.value = uiKeybind;
