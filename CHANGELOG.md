@@ -7,6 +7,8 @@
 - Improved UI open/close animation smoothness
 - Reduced build size from 137KB to 135KB
 - Replaced bind popup modal backdrop click handler with shared dismiss function
+- Added right-click hint text to module page header
+- Removed module tooltip in favor of hint text
 
 ## v4.5
 
