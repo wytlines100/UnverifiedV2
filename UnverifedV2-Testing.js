@@ -17,52 +17,47 @@
 // ==/UserScript==
 
 document.title = GM_info.script.name;
-class UnverifiedIntro {
-  constructor() {
-    this.container = document.createElement("div");
-    this.container.style.cssText = "position:fixed;top:0;left:0;width:100vw;height:100vh;display:flex;align-items:center;justify-content:center;flex-direction:column;background-color:black;overflow:hidden;z-index:9999;opacity:0;transition:opacity 0.6s ease;";
-    this.check = document.createElement("div");
-    this.check.textContent = "✓";
-    this.check.style.cssText = "color:red;font-size:5rem;opacity:0.05;transition:opacity 1.4s ease,transform 1.4s ease;text-shadow:0 0 5px red,0 0 10px red,0 0 20px red;";
-    this.circle = document.createElement("div");
-    this.circle.style.cssText = "width:100px;height:100px;background-color:black;border:2px solid red;border-radius:50%;box-shadow:0 0 10px red,0 0 20px red,0 0 30px red;display:flex;align-items:center;justify-content:center;opacity:0;transform:scale(0.85);transition:opacity 1.4s ease,transform 1.4s cubic-bezier(0.22,1,0.36,1);";
-    this.circle.appendChild(this.check);
-    this.container.appendChild(this.circle);
-    this.unverifiedText = document.createElement("div");
-    this.unverifiedText.textContent = "Unverified V2";
-    this.unverifiedText.style.cssText = "color:red;font-size:60px;opacity:0;margin-top:50px;transition:opacity 1.1s ease;text-shadow:0 0 5px red,0 0 10px red,0 0 20px red;";
-    this.container.appendChild(this.unverifiedText);
-    this.creditsText = document.createElement("div");
-    this.creditsText.textContent = "\nBy wytlines,\nTheM1ddleM1n, joudaALT, Trust, \njet";
-    this.creditsText.style.cssText = "color:red;font-size:30px;opacity:0;transition:opacity 1.1s ease;white-space:pre-line;text-align:center;text-shadow:0 0 5px red,0 0 10px red,0 0 20px red;";
-    this.container.appendChild(this.creditsText);
-    this.keybindText = document.createElement("div");
-    const introKeybind = localStorage.getItem('uv2-setting-uikeybind') || 'rshift';
-    this.keybindText.textContent = `Press ${introKeybind === 'backtick' ? '`' : introKeybind === 'backslash' ? '\\' : 'Right Shift'} to open the menu`;
-    this.keybindText.style.cssText = "color:red;font-size:30px;opacity:0;margin-top:30px;transition:opacity 1.1s ease;text-shadow:0 0 5px red,0 0 10px red,0 0 20px red;";
-    this.container.appendChild(this.keybindText);
-  }
-  playIntro() {
-  document.body.appendChild(this.container);
-  requestAnimationFrame(() => { this.container.style.opacity = 1; });
+function playIntro() {
+  const container = document.createElement("div");
+  container.style.cssText = "position:fixed;top:0;left:0;width:100vw;height:100vh;display:flex;align-items:center;justify-content:center;flex-direction:column;background-color:black;overflow:hidden;z-index:9999;opacity:0;transition:opacity 0.6s ease;";
+  const check = document.createElement("div");
+  check.textContent = "✓";
+  check.style.cssText = "color:red;font-size:5rem;opacity:0.05;transition:opacity 1.4s ease,transform 1.4s ease;text-shadow:0 0 5px red,0 0 10px red,0 0 20px red;";
+  const circle = document.createElement("div");
+  circle.style.cssText = "width:100px;height:100px;background-color:black;border:2px solid red;border-radius:50%;box-shadow:0 0 10px red,0 0 20px red,0 0 30px red;display:flex;align-items:center;justify-content:center;opacity:0;transform:scale(0.85);transition:opacity 1.4s ease,transform 1.4s cubic-bezier(0.22,1,0.36,1);";
+  circle.appendChild(check);
+  container.appendChild(circle);
+  const unverifiedText = document.createElement("div");
+  unverifiedText.textContent = "Unverified V2";
+  unverifiedText.style.cssText = "color:red;font-size:60px;opacity:0;margin-top:50px;transition:opacity 1.1s ease;text-shadow:0 0 5px red,0 0 10px red,0 0 20px red;";
+  container.appendChild(unverifiedText);
+  const creditsText = document.createElement("div");
+  creditsText.textContent = "\nBy wytlines,\nTheM1ddleM1n, joudaALT, Trust, \njet";
+  creditsText.style.cssText = "color:red;font-size:30px;opacity:0;transition:opacity 1.1s ease;white-space:pre-line;text-align:center;text-shadow:0 0 5px red,0 0 10px red,0 0 20px red;";
+  container.appendChild(creditsText);
+  const keybindText = document.createElement("div");
+  const introKeybind = localStorage.getItem('uv2-setting-uikeybind') || 'rshift';
+  keybindText.textContent = `Press ${introKeybind === 'backtick' ? '`' : introKeybind === 'backslash' ? '\\' : 'Right Shift'} to open the menu`;
+  keybindText.style.cssText = "color:red;font-size:30px;opacity:0;margin-top:30px;transition:opacity 1.1s ease;text-shadow:0 0 5px red,0 0 10px red,0 0 20px red;";
+  container.appendChild(keybindText);
+  document.body.appendChild(container);
+  requestAnimationFrame(() => { container.style.opacity = 1; });
   setTimeout(() => {
-    this.circle.style.opacity = 1;
-    this.circle.style.transform = "scale(1)";
-    this.check.style.opacity = 1;
+    circle.style.opacity = 1;
+    circle.style.transform = "scale(1)";
+    check.style.opacity = 1;
   }, 200);
-  setTimeout(() => { this.check.style.transform = "rotate(540deg)"; }, 900);
+  setTimeout(() => { check.style.transform = "rotate(540deg)"; }, 900);
+  setTimeout(() => { unverifiedText.style.opacity = 1; }, 2400);
+  setTimeout(() => { creditsText.style.opacity = 1; }, 3600);
+  setTimeout(() => { keybindText.style.opacity = 1; }, 4800);
   setTimeout(() => {
-    this.unverifiedText.style.opacity = 1;
-  }, 2400);
-  setTimeout(() => { this.creditsText.style.opacity = 1; }, 3600);
-  setTimeout(() => { this.keybindText.style.opacity = 1; }, 4800);
-  setTimeout(() => {
-    this.container.style.transition = "opacity 1.8s cubic-bezier(0.4,0,0.2,1)";
-    this.container.style.opacity = 0;
+    container.style.transition = "opacity 1.8s cubic-bezier(0.4,0,0.2,1)";
+    container.style.opacity = 0;
   }, 10800);
-  setTimeout(() => { this.container.remove(); }, 12600);
-  }
+  setTimeout(() => { container.remove(); }, 12600);
 }
+playIntro();
 
 function getHoliday() {
   const now = new Date();
@@ -201,8 +196,6 @@ function hookChatEngine() {
 
 (function() {
   'use strict';
-const intro = new UnverifiedIntro();
-intro.playIntro();
 const UV2_RAW_BASE = 'https://raw.githubusercontent.com/wytlines100/UnverifiedV2/refs/heads/main/';
 const UV2_SCRIPT_URL = UV2_RAW_BASE + 'client.js';
 const UV2_CHANGELOG_URL = UV2_RAW_BASE + 'CHANGELOG.md';
