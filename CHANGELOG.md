@@ -13,6 +13,7 @@
 - Notification overhaul
 - Initial Phase of Client Simplification
 - Replaced UnverifiedIntro class with a plain function
+- Inlined isInMatch regex, removed unnecessary function and try/catch
 
 ## v4.4
 - Added holiday system with themed banners, accent colors, and match join chat messages for each holiday
