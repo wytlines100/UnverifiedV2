@@ -6,6 +6,7 @@
 - Simplified buildArmorHudSettingsPage with data-driven slider loop
 - Improved UI open/close animation smoothness
 - Reduced build size from 137KB to 135KB
+- Replaced bind popup modal backdrop click handler with shared dismiss function
 
 ## v4.5
 
