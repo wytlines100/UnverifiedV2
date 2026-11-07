@@ -375,18 +375,18 @@ style.innerHTML = `
   src: url('https://cdn.glitch.global/adb12490-d563-43cb-9711-2a69a8bb1c06/Faithful.ttf?v=1735593093308') format('truetype');
 }
 @keyframes uv2UIOpen {
-  from { opacity: 0; transform: translate(-50%, -46%) scale(0.94); }
+  from { opacity: 0; transform: translate(-50%, -48%) scale(0.96); }
   to   { opacity: 1; transform: translate(-50%, -50%) scale(1); }
 }
 @keyframes uv2UIClose {
   from { opacity: 1; transform: translate(-50%, -50%) scale(1); }
-  to   { opacity: 0; transform: translate(-50%, -54%) scale(0.94); }
+  to   { opacity: 0; transform: translate(-50%, -52%) scale(0.96); }
 }
 #uv2-main-ui.uv2-animate-in {
-  animation: uv2UIOpen 0.22s cubic-bezier(0.22, 1, 0.36, 1) forwards;
+  animation: uv2UIOpen 0.35s cubic-bezier(0.16, 1, 0.3, 1) forwards;
 }
 #uv2-main-ui.uv2-animate-out {
-  animation: uv2UIClose 0.18s cubic-bezier(0.22, 1, 0.36, 1) forwards;
+  animation: uv2UIClose 0.2s cubic-bezier(0.4, 0, 1, 1) forwards;
 }
 @keyframes uv2-title-shine-loop {
   0%   { background-position: 200% center; }
@@ -2690,17 +2690,16 @@ notVpnBtn.addEventListener('mouseleave', () => { notVpnBtn.style.background = '#
 
   function openUI() {
   ui.style.display = 'flex';
-  ui.classList.remove('uv2-animate-in', 'uv2-animate-out');
+  ui.classList.remove('uv2-animate-out');
   void ui.offsetWidth;
   ui.classList.add('uv2-animate-in');
 }
+
 function closeUI() {
   switchUv2Page('main');
   if (closeUITimeout) { clearTimeout(closeUITimeout); closeUITimeout = null; }
   uiAnimating = true;
-  ui.classList.remove('uv2-animate-in');
-  void ui.offsetWidth;
-  ui.classList.add('uv2-animate-out');
+  ui.classList.replace('uv2-animate-in', 'uv2-animate-out');
   closeUITimeout = setTimeout(() => {
     ui.style.display = 'none';
     ui.classList.remove('uv2-animate-out');
