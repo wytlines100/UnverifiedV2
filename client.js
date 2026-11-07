@@ -915,83 +915,54 @@ let armorHudGap = parseInt(localStorage.getItem('uv2-armorhud-gap') || '4', 10);
   statusBtn.id = 'armor-hud-status-btn';
   statusBtn.textContent = armorHudDocked ? 'Undock' : 'Dock Now';
   statusBtn.style.cssText = `background:${guiPrimaryColor};color:white;border:none;border-radius:6px;padding:8px 16px;cursor:pointer;font-family:MinibloxFont,sans-serif;font-size:12px;`;
-  statusRow.appendChild(statusText);
-  statusRow.appendChild(statusBtn);
-  container.appendChild(statusRow);
-
   statusBtn.addEventListener('click', () => {
     const btn = document.querySelector('#armor-hud-dock-btn');
     if (btn) btn.click();
     else showNotification('Enable Armor HUD in a match');
   });
+  statusRow.appendChild(statusText);
+  statusRow.appendChild(statusBtn);
+  container.appendChild(statusRow);
 
-  function buildSliderRow(labelText, id, min, max, value, formatFn) {
+  [
+    { label: 'Icon Opacity', id: 'armor-hud-opacity-slider', min: 20, max: 100, get: () => Math.round(armorHudOpacity * 100), fmt: v => v + '%', set(v) { armorHudOpacity = v / 100; localStorage.setItem('uv2-armorhud-opacity', armorHudOpacity); if (armorHudEl) armorHudEl.style.opacity = armorHudOpacity; } },
+    { label: 'Background Opacity', id: 'armor-hud-bgopacity-slider', min: 0, max: 100, get: () => Math.round(armorHudBgOpacity * 100), fmt: v => v + '%', set(v) { armorHudBgOpacity = v / 100; localStorage.setItem('uv2-armorhud-bgopacity', armorHudBgOpacity); if (armorHudDocked) armorHudRender(); } },
+    { label: 'Icon Size', id: 'armor-hud-size-slider', min: 0, max: 64, get: () => armorHudIconSize, fmt: v => v == 0 ? 'Auto' : v + 'px', set(v) { armorHudIconSize = parseInt(v, 10); localStorage.setItem('uv2-armorhud-iconsize', armorHudIconSize); if (armorHudDocked) armorHudRender(); } },
+    { label: 'Spacing', id: 'armor-hud-gap-slider', min: 0, max: 16, get: () => armorHudGap, fmt: v => v + 'px', set(v) { armorHudGap = parseInt(v, 10); localStorage.setItem('uv2-armorhud-gap', armorHudGap); if (armorHudDocked) armorHudRender(); } },
+  ].forEach(s => {
     const row = document.createElement('div');
     row.style.cssText = 'margin-bottom:14px;';
     const labelRow = document.createElement('div');
     labelRow.style.cssText = 'display:flex;justify-content:space-between;align-items:center;margin-bottom:5px;';
     const label = document.createElement('span');
     label.style.cssText = 'font-size:11px;color:#888;text-transform:uppercase;letter-spacing:0.05em;';
-    label.textContent = labelText;
+    label.textContent = s.label;
     const valueEl = document.createElement('span');
-    valueEl.id = id + '-value';
+    valueEl.id = s.id + '-value';
     valueEl.style.cssText = `font-size:12px;color:${guiPrimaryColor};font-weight:600;`;
-    valueEl.textContent = formatFn(value);
+    valueEl.textContent = s.fmt(s.get());
     labelRow.appendChild(label);
     labelRow.appendChild(valueEl);
     row.appendChild(labelRow);
     const slider = document.createElement('input');
     slider.type = 'range';
-    slider.id = id;
-    slider.min = min;
-    slider.max = max;
-    slider.value = value;
+    slider.id = s.id;
+    slider.min = s.min;
+    slider.max = s.max;
+    slider.value = s.get();
     slider.style.cssText = `width:100%;accent-color:${guiPrimaryColor};`;
+    slider.addEventListener('input', function() {
+      valueEl.textContent = s.fmt(this.value);
+      s.set(this.value);
+    });
     row.appendChild(slider);
     container.appendChild(row);
-    return slider;
-  }
-
-  const opacitySlider = buildSliderRow('Icon Opacity', 'armor-hud-opacity-slider', 20, 100, Math.round(armorHudOpacity * 100), v => v + '%');
-  opacitySlider.addEventListener('input', function() {
-    armorHudOpacity = this.value / 100;
-    localStorage.setItem('uv2-armorhud-opacity', armorHudOpacity);
-    const el = document.querySelector('#armor-hud-opacity-slider-value');
-    if (el) el.textContent = this.value + '%';
-    if (armorHudEl) armorHudEl.style.opacity = armorHudOpacity;
-  });
-
-  const bgOpacitySlider = buildSliderRow('Background Opacity', 'armor-hud-bgopacity-slider', 0, 100, Math.round(armorHudBgOpacity * 100), v => v + '%');
-  bgOpacitySlider.addEventListener('input', function() {
-    armorHudBgOpacity = this.value / 100;
-    localStorage.setItem('uv2-armorhud-bgopacity', armorHudBgOpacity);
-    const el = document.querySelector('#armor-hud-bgopacity-slider-value');
-    if (el) el.textContent = this.value + '%';
-    if (armorHudDocked) armorHudRender();
-  });
-
-  const sizeSlider = buildSliderRow('Icon Size', 'armor-hud-size-slider', 0, 64, armorHudIconSize, v => v == 0 ? 'Auto' : v + 'px');
-  sizeSlider.addEventListener('input', function() {
-    armorHudIconSize = parseInt(this.value, 10);
-    localStorage.setItem('uv2-armorhud-iconsize', armorHudIconSize);
-    const el = document.querySelector('#armor-hud-size-slider-value');
-    if (el) el.textContent = armorHudIconSize == 0 ? 'Auto' : armorHudIconSize + 'px';
-    if (armorHudDocked) armorHudRender();
-  });
-
-  const gapSlider = buildSliderRow('Spacing', 'armor-hud-gap-slider', 0, 16, armorHudGap, v => v + 'px');
-  gapSlider.addEventListener('input', function() {
-    armorHudGap = parseInt(this.value, 10);
-    localStorage.setItem('uv2-armorhud-gap', armorHudGap);
-    const el = document.querySelector('#armor-hud-gap-slider-value');
-    if (el) el.textContent = armorHudGap + 'px';
-    if (armorHudDocked) armorHudRender();
   });
 
   const resetBtn = document.createElement('button');
   resetBtn.textContent = 'Reset to Default';
   resetBtn.style.cssText = `width:100%;background:${guiPrimaryColor};color:white;border:none;border-radius:6px;padding:10px;cursor:pointer;font-family:MinibloxFont,sans-serif;font-size:13px;letter-spacing:0.3px;`;
-   resetBtn.addEventListener('click', () => {
+  resetBtn.addEventListener('click', () => {
     armorHudOpacity = 1;
     armorHudBgOpacity = 0.55;
     armorHudIconSize = 0;
@@ -1006,8 +977,8 @@ let armorHudGap = parseInt(localStorage.getItem('uv2-armorhud-gap') || '4', 10);
   });
   container.appendChild(resetBtn);
 }
-    let uv2ChangelogLoaded = false;
 
+let uv2ChangelogLoaded = false;
 function buildChangelogPage() {
   uv2ChangelogPage.innerHTML = '';
 
