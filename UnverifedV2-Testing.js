@@ -66,7 +66,6 @@ function getHoliday() {
   if (m === 10 && (d === 30 || d === 31)) return 'halloween';
   if (m === 12 && d >= 20 && d <= 26) return 'christmas';
   if (m === 12 && d === 31 || m === 1 && d === 1) return 'newyear';
-  if (m === 4 && d === 1) return 'aprilfools';
   return null;
 }
 const holiday = getHoliday();
@@ -87,7 +86,6 @@ const waitForGame = setInterval(() => {
         newyear: new Date().getMonth() === 0
           ? "\\glow\\\\shiny\\\\#BF3011\\[Unverified V2]:\\reset\\ Happy New Year from the UV2 Dev Team! 🎉"
           : "\\glow\\\\shiny\\\\#BF3011\\[Unverified V2]:\\reset\\ Happy New Year's Eve from the UV2 Dev Team!",
-        aprilfools: "\\glow\\\\shiny\\\\#BF3011\\[Unverified V2]:\\reset\\ Happy April Fools Day from the UV2 Dev Team! 🤡",
       };
       game.chat.addChat({
         text: holidayMsg[holiday] || "\\glow\\\\shiny\\\\#BF3011\\[Unverified V2]:\\reset\\ Hello UV2 User! We hope you enjoy our client."
@@ -1710,30 +1708,6 @@ if (holiday === 'newyear') {
   }
   updateNewYearFooter();
   setInterval(updateNewYearFooter, 1000);
-}
-
-if (holiday === 'aprilfools') {
-  const aprilBanner = document.createElement('div');
-  aprilBanner.style.cssText = 'width:100%;text-align:center;padding:6px 0;font-size:12px;font-family:MinibloxFont,sans-serif;letter-spacing:1px;background:#ffffff11;border-bottom:1px solid #ffffff33;color:#ffffff;flex-shrink:0;';
-  aprilBanner.textContent = 'Happy April Fools Day from the UV2 Dev Team!';
-  applyHolidayBanner(aprilBanner);
-  moduleSearchInput.placeholder = 'Sorry no modules are here lol';
-  const origOpenUI = openUI;
-  openUI = function() {
-    origOpenUI();
-    ui.style.transform = `translate(calc(-50% + ${(Math.random()-0.5)*60}px), calc(-50% + ${(Math.random()-0.5)*40}px))`;
-    ui.style.transition = 'transform 0.3s cubic-bezier(0.34,1.56,0.64,1)';
-    setTimeout(() => { ui.style.transform = 'translate(-50%,-50%)'; }, 600);
-  };
-  const origShow = showNotification;
-  showNotification = function(message) {
-    const flipped = message.includes('enabled')
-      ? message.replace('enabled', 'disabled')
-      : message.includes('disabled')
-      ? message.replace('disabled', 'enabled')
-      : message;
-    origShow(flipped);
-  };
 }
 
 const gridContainer = document.createElement("div");
