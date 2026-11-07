@@ -1,5 +1,12 @@
 # Changelog
 
+## v4.6
+
+- Removed April Fools holiday event
+- Simplified buildArmorHudSettingsPage with data-driven slider loop
+- Improved UI open/close animation smoothness
+- Reduced build size from 137KB to 135KB
+
 ## v4.5
 
 - Replaced bind popup with a centered modal featuring a live key display and keyboard icon
