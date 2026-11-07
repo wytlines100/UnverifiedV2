@@ -434,7 +434,6 @@ style.innerHTML = `
 .module-container:hover .uv2-shine {
   animation: uv2ModuleShine 2.9s cubic-bezier(0.4, 0, 0.2, 1) forwards;
 }
-.module-tooltip { visibility:hidden; position:absolute; background-color:#2c3e50; color:white; padding:5px 10px; border-radius:5px; font-size:14px; z-index:10000; opacity:0; transition:opacity 0.3s ease; bottom:6px; right:10px; white-space:nowrap; pointer-events:none; }
 .other-notification { font-family:'MinibloxFont',sans-serif; font-size:14px; color:white; background:linear-gradient(135deg,#1a1a1a,#111111); padding:12px 24px; border-radius:8px; margin-bottom:12px; box-shadow:0 4px 15px rgba(0,0,0,0.3); font-weight:500; letter-spacing:0.5px; position:relative; overflow:hidden; will-change:transform,opacity; animation:uv2NotifEnter 0.35s cubic-bezier(0.22,1,0.36,1) forwards; }
 .other-notification.uv2-notif-exit { animation:uv2NotifExit 0.3s cubic-bezier(0.4,0,1,1) forwards; }
 .notification-progress { position:absolute; bottom:0; left:0; height:3px; background:#ffcc00; width:100%; animation:notificationProgress 4s linear forwards; }
@@ -1101,6 +1100,12 @@ function buildChangelogPage() {
   title.style.userSelect = "none";
   headerRow.appendChild(title);
 
+  const bindHint = document.createElement('div');
+  bindHint.style.cssText = 'position:absolute;top:22px;right:24px;font-size:15px;color:#888;font-family:MinibloxFont,sans-serif;letter-spacing:0.5px;pointer-events:none;';
+  bindHint.textContent = 'Right-click a module to bind a key';
+  uv2MainPage.style.position = 'relative';
+  uv2MainPage.appendChild(bindHint);
+
    const settingsOverlay = document.createElement("div");
 settingsOverlay.id = "uv2-settings-overlay";
 settingsOverlay.innerHTML = `
@@ -1759,7 +1764,7 @@ function showBindPopup(moduleElement, moduleName) {
   const box = document.createElement('div');
   box.style.cssText = 'background:#141414;border:1px solid rgba(255,255,255,0.09);border-radius:16px;padding:24px 28px;width:300px;font-family:MinibloxFont,sans-serif;color:#fff;box-shadow:0 16px 48px rgba(0,0,0,0.7);display:flex;flex-direction:column;gap:16px;';
   const heading = document.createElement('div');
-  heading.style.cssText = 'font-size:14px;color:#ccc;letter-spacing:0.5px;';
+  heading.style.cssText = 'font-size:20px;color:#fff;letter-spacing:0.5px;font-weight:600;';
   heading.textContent = `Bind key for ${moduleName}`;
   box.appendChild(heading);
   const keyDisplay = document.createElement('div');
@@ -1781,13 +1786,17 @@ function showBindPopup(moduleElement, moduleName) {
     keyLabel.textContent = e.key;
   }
   window.addEventListener('keydown', onKey, true);
+  function dismiss() {
+    window.removeEventListener('keydown', onKey, true);
+    modal.remove();
+    isBinding = false;
+  }
   const btnRow = document.createElement('div');
   btnRow.style.cssText = 'display:flex;gap:8px;';
   const bindBtn = document.createElement('button');
   bindBtn.textContent = 'Bind';
   bindBtn.style.cssText = `flex:1;background:${guiPrimaryColor};color:#fff;border:none;border-radius:10px;padding:10px;cursor:pointer;font-family:MinibloxFont,sans-serif;font-size:13px;`;
   bindBtn.addEventListener('click', () => {
-    window.removeEventListener('keydown', onKey, true);
     if (pendingKey) {
       const conflictModule = Object.keys(moduleBindings).find(m => m !== moduleName && moduleBindings[m] === pendingKey);
       const uiKeyMatches = (uiKeybind === 'backtick' && pendingKey === '`') || (uiKeybind === 'rshift' && pendingKey === 'Shift') || (uiKeybind === 'backslash' && pendingKey === '\\');
@@ -1801,14 +1810,12 @@ function showBindPopup(moduleElement, moduleName) {
         showNotification(`${moduleName} bound to ${pendingKey}`);
       }
     }
-    modal.remove();
-    isBinding = false;
+    dismiss();
   });
   const unbindBtn = document.createElement('button');
   unbindBtn.textContent = 'Unbind';
   unbindBtn.style.cssText = 'flex:1;background:#2a2a2a;color:#fff;border:1px solid #444;border-radius:10px;padding:10px;cursor:pointer;font-family:MinibloxFont,sans-serif;font-size:13px;';
   unbindBtn.addEventListener('click', () => {
-    window.removeEventListener('keydown', onKey, true);
     if (moduleBindings[moduleName]) {
       delete moduleBindings[moduleName];
       updateModuleKeybindPill(moduleName, null);
@@ -1816,29 +1823,18 @@ function showBindPopup(moduleElement, moduleName) {
     } else {
       showNotification(`${moduleName} has no keybind`);
     }
-    modal.remove();
-    isBinding = false;
+    dismiss();
   });
   const cancelBtn = document.createElement('button');
   cancelBtn.textContent = 'Cancel';
   cancelBtn.style.cssText = 'flex:1;background:#1a1a1a;color:#888;border:1px solid #333;border-radius:10px;padding:10px;cursor:pointer;font-family:MinibloxFont,sans-serif;font-size:13px;';
-  cancelBtn.addEventListener('click', () => {
-    window.removeEventListener('keydown', onKey, true);
-    modal.remove();
-    isBinding = false;
-  });
+  cancelBtn.addEventListener('click', dismiss);
   btnRow.appendChild(bindBtn);
   btnRow.appendChild(unbindBtn);
   btnRow.appendChild(cancelBtn);
   box.appendChild(btnRow);
   modal.appendChild(box);
-  modal.addEventListener('click', e => {
-    if (e.target === modal) {
-      window.removeEventListener('keydown', onKey, true);
-      modal.remove();
-      isBinding = false;
-    }
-  });
+  modal.addEventListener('click', e => { if (e.target === modal) dismiss(); });
   document.body.appendChild(modal);
   isBinding = true;
 }
@@ -1946,26 +1942,17 @@ moduleContainer.addEventListener("mouseleave", () => {
  toggleKnob.style.cssText = "position:absolute;top:2px;left:2px;width:14px;height:14px;border-radius:50%;background:#4a4a4a;transition:transform 0.35s cubic-bezier(0.34, 1.56, 0.64, 1), background 0.2s ease;";
   toggleWrap.appendChild(toggleKnob);
   moduleContainer.appendChild(toggleWrap);
-
-  const tooltip = document.createElement("div");
-  tooltip.classList.add("module-tooltip");
-  tooltip.textContent = "right-click to bind";
-  moduleContainer.appendChild(tooltip);
-
   moduleContainer._toggleWrap = toggleWrap;
   moduleContainer._toggleKnob = toggleKnob;
 
   gridContainer.appendChild(moduleContainer);
 
-  let tooltipTimeout;
   moduleContainer.addEventListener("mouseenter", () => {
-    tooltipTimeout = setTimeout(() => { tooltip.style.visibility = "visible"; tooltip.style.opacity = 1; }, 1500);
-    if (!moduleContainer._uv2Active) moduleContainer.style.background = "linear-gradient(135deg,#2c2c2c,#222222)";
-  });
-  moduleContainer.addEventListener("mouseleave", () => {
-    clearTimeout(tooltipTimeout); tooltip.style.visibility = "hidden"; tooltip.style.opacity = 0;
-    if (!moduleContainer._uv2Active) moduleContainer.style.background = "linear-gradient(135deg,#242424,#1c1c1c)";
-  });
+  if (!moduleContainer._uv2Active) moduleContainer.style.background = "linear-gradient(135deg,#2c2c2c,#222222)";
+});
+moduleContainer.addEventListener("mouseleave", () => {
+  if (!moduleContainer._uv2Active) moduleContainer.style.background = "linear-gradient(135deg,#242424,#1c1c1c)";
+});
   moduleContainer.addEventListener("click", () => {
     if (!isBinding) {
       moduleContainer._uv2Active = !moduleContainer._uv2Active;
