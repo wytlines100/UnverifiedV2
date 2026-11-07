@@ -434,7 +434,6 @@ style.innerHTML = `
 .module-container:hover .uv2-shine {
   animation: uv2ModuleShine 2.9s cubic-bezier(0.4, 0, 0.2, 1) forwards;
 }
-.module-tooltip { visibility:hidden; position:absolute; background-color:#2c3e50; color:white; padding:5px 10px; border-radius:5px; font-size:14px; z-index:10000; opacity:0; transition:opacity 0.3s ease; bottom:6px; right:10px; white-space:nowrap; pointer-events:none; }
 .other-notification { font-family:'MinibloxFont',sans-serif; font-size:14px; color:white; background:linear-gradient(135deg,#1a1a1a,#111111); padding:12px 24px; border-radius:8px; margin-bottom:12px; box-shadow:0 4px 15px rgba(0,0,0,0.3); font-weight:500; letter-spacing:0.5px; position:relative; overflow:hidden; will-change:transform,opacity; animation:uv2NotifEnter 0.35s cubic-bezier(0.22,1,0.36,1) forwards; }
 .other-notification.uv2-notif-exit { animation:uv2NotifExit 0.3s cubic-bezier(0.4,0,1,1) forwards; }
 .notification-progress { position:absolute; bottom:0; left:0; height:3px; background:#ffcc00; width:100%; animation:notificationProgress 4s linear forwards; }
@@ -915,54 +914,83 @@ let armorHudGap = parseInt(localStorage.getItem('uv2-armorhud-gap') || '4', 10);
   statusBtn.id = 'armor-hud-status-btn';
   statusBtn.textContent = armorHudDocked ? 'Undock' : 'Dock Now';
   statusBtn.style.cssText = `background:${guiPrimaryColor};color:white;border:none;border-radius:6px;padding:8px 16px;cursor:pointer;font-family:MinibloxFont,sans-serif;font-size:12px;`;
+  statusRow.appendChild(statusText);
+  statusRow.appendChild(statusBtn);
+  container.appendChild(statusRow);
+
   statusBtn.addEventListener('click', () => {
     const btn = document.querySelector('#armor-hud-dock-btn');
     if (btn) btn.click();
     else showNotification('Enable Armor HUD in a match');
   });
-  statusRow.appendChild(statusText);
-  statusRow.appendChild(statusBtn);
-  container.appendChild(statusRow);
 
-  [
-    { label: 'Icon Opacity', id: 'armor-hud-opacity-slider', min: 20, max: 100, get: () => Math.round(armorHudOpacity * 100), fmt: v => v + '%', set(v) { armorHudOpacity = v / 100; localStorage.setItem('uv2-armorhud-opacity', armorHudOpacity); if (armorHudEl) armorHudEl.style.opacity = armorHudOpacity; } },
-    { label: 'Background Opacity', id: 'armor-hud-bgopacity-slider', min: 0, max: 100, get: () => Math.round(armorHudBgOpacity * 100), fmt: v => v + '%', set(v) { armorHudBgOpacity = v / 100; localStorage.setItem('uv2-armorhud-bgopacity', armorHudBgOpacity); if (armorHudDocked) armorHudRender(); } },
-    { label: 'Icon Size', id: 'armor-hud-size-slider', min: 0, max: 64, get: () => armorHudIconSize, fmt: v => v == 0 ? 'Auto' : v + 'px', set(v) { armorHudIconSize = parseInt(v, 10); localStorage.setItem('uv2-armorhud-iconsize', armorHudIconSize); if (armorHudDocked) armorHudRender(); } },
-    { label: 'Spacing', id: 'armor-hud-gap-slider', min: 0, max: 16, get: () => armorHudGap, fmt: v => v + 'px', set(v) { armorHudGap = parseInt(v, 10); localStorage.setItem('uv2-armorhud-gap', armorHudGap); if (armorHudDocked) armorHudRender(); } },
-  ].forEach(s => {
+  function buildSliderRow(labelText, id, min, max, value, formatFn) {
     const row = document.createElement('div');
     row.style.cssText = 'margin-bottom:14px;';
     const labelRow = document.createElement('div');
     labelRow.style.cssText = 'display:flex;justify-content:space-between;align-items:center;margin-bottom:5px;';
     const label = document.createElement('span');
     label.style.cssText = 'font-size:11px;color:#888;text-transform:uppercase;letter-spacing:0.05em;';
-    label.textContent = s.label;
+    label.textContent = labelText;
     const valueEl = document.createElement('span');
-    valueEl.id = s.id + '-value';
+    valueEl.id = id + '-value';
     valueEl.style.cssText = `font-size:12px;color:${guiPrimaryColor};font-weight:600;`;
-    valueEl.textContent = s.fmt(s.get());
+    valueEl.textContent = formatFn(value);
     labelRow.appendChild(label);
     labelRow.appendChild(valueEl);
     row.appendChild(labelRow);
     const slider = document.createElement('input');
     slider.type = 'range';
-    slider.id = s.id;
-    slider.min = s.min;
-    slider.max = s.max;
-    slider.value = s.get();
+    slider.id = id;
+    slider.min = min;
+    slider.max = max;
+    slider.value = value;
     slider.style.cssText = `width:100%;accent-color:${guiPrimaryColor};`;
-    slider.addEventListener('input', function() {
-      valueEl.textContent = s.fmt(this.value);
-      s.set(this.value);
-    });
     row.appendChild(slider);
     container.appendChild(row);
+    return slider;
+  }
+
+  const opacitySlider = buildSliderRow('Icon Opacity', 'armor-hud-opacity-slider', 20, 100, Math.round(armorHudOpacity * 100), v => v + '%');
+  opacitySlider.addEventListener('input', function() {
+    armorHudOpacity = this.value / 100;
+    localStorage.setItem('uv2-armorhud-opacity', armorHudOpacity);
+    const el = document.querySelector('#armor-hud-opacity-slider-value');
+    if (el) el.textContent = this.value + '%';
+    if (armorHudEl) armorHudEl.style.opacity = armorHudOpacity;
+  });
+
+  const bgOpacitySlider = buildSliderRow('Background Opacity', 'armor-hud-bgopacity-slider', 0, 100, Math.round(armorHudBgOpacity * 100), v => v + '%');
+  bgOpacitySlider.addEventListener('input', function() {
+    armorHudBgOpacity = this.value / 100;
+    localStorage.setItem('uv2-armorhud-bgopacity', armorHudBgOpacity);
+    const el = document.querySelector('#armor-hud-bgopacity-slider-value');
+    if (el) el.textContent = this.value + '%';
+    if (armorHudDocked) armorHudRender();
+  });
+
+  const sizeSlider = buildSliderRow('Icon Size', 'armor-hud-size-slider', 0, 64, armorHudIconSize, v => v == 0 ? 'Auto' : v + 'px');
+  sizeSlider.addEventListener('input', function() {
+    armorHudIconSize = parseInt(this.value, 10);
+    localStorage.setItem('uv2-armorhud-iconsize', armorHudIconSize);
+    const el = document.querySelector('#armor-hud-size-slider-value');
+    if (el) el.textContent = armorHudIconSize == 0 ? 'Auto' : armorHudIconSize + 'px';
+    if (armorHudDocked) armorHudRender();
+  });
+
+  const gapSlider = buildSliderRow('Spacing', 'armor-hud-gap-slider', 0, 16, armorHudGap, v => v + 'px');
+  gapSlider.addEventListener('input', function() {
+    armorHudGap = parseInt(this.value, 10);
+    localStorage.setItem('uv2-armorhud-gap', armorHudGap);
+    const el = document.querySelector('#armor-hud-gap-slider-value');
+    if (el) el.textContent = armorHudGap + 'px';
+    if (armorHudDocked) armorHudRender();
   });
 
   const resetBtn = document.createElement('button');
   resetBtn.textContent = 'Reset to Default';
   resetBtn.style.cssText = `width:100%;background:${guiPrimaryColor};color:white;border:none;border-radius:6px;padding:10px;cursor:pointer;font-family:MinibloxFont,sans-serif;font-size:13px;letter-spacing:0.3px;`;
-  resetBtn.addEventListener('click', () => {
+   resetBtn.addEventListener('click', () => {
     armorHudOpacity = 1;
     armorHudBgOpacity = 0.55;
     armorHudIconSize = 0;
@@ -977,8 +1005,8 @@ let armorHudGap = parseInt(localStorage.getItem('uv2-armorhud-gap') || '4', 10);
   });
   container.appendChild(resetBtn);
 }
+    let uv2ChangelogLoaded = false;
 
-let uv2ChangelogLoaded = false;
 function buildChangelogPage() {
   uv2ChangelogPage.innerHTML = '';
 
@@ -1100,6 +1128,12 @@ function buildChangelogPage() {
   title.style.cursor = "pointer";
   title.style.userSelect = "none";
   headerRow.appendChild(title);
+
+  const bindHint = document.createElement('div');
+  bindHint.style.cssText = 'position:absolute;top:22px;right:24px;font-size:15px;color:#888;font-family:MinibloxFont,sans-serif;letter-spacing:0.5px;pointer-events:none;';
+  bindHint.textContent = 'Right-click a module to bind a key';
+  uv2MainPage.style.position = 'relative';
+  uv2MainPage.appendChild(bindHint);
 
    const settingsOverlay = document.createElement("div");
 settingsOverlay.id = "uv2-settings-overlay";
@@ -1759,7 +1793,7 @@ function showBindPopup(moduleElement, moduleName) {
   const box = document.createElement('div');
   box.style.cssText = 'background:#141414;border:1px solid rgba(255,255,255,0.09);border-radius:16px;padding:24px 28px;width:300px;font-family:MinibloxFont,sans-serif;color:#fff;box-shadow:0 16px 48px rgba(0,0,0,0.7);display:flex;flex-direction:column;gap:16px;';
   const heading = document.createElement('div');
-  heading.style.cssText = 'font-size:14px;color:#ccc;letter-spacing:0.5px;';
+  heading.style.cssText = 'font-size:20px;color:#fff;letter-spacing:0.5px;font-weight:600;';
   heading.textContent = `Bind key for ${moduleName}`;
   box.appendChild(heading);
   const keyDisplay = document.createElement('div');
@@ -1781,13 +1815,17 @@ function showBindPopup(moduleElement, moduleName) {
     keyLabel.textContent = e.key;
   }
   window.addEventListener('keydown', onKey, true);
+  function dismiss() {
+    window.removeEventListener('keydown', onKey, true);
+    modal.remove();
+    isBinding = false;
+  }
   const btnRow = document.createElement('div');
   btnRow.style.cssText = 'display:flex;gap:8px;';
   const bindBtn = document.createElement('button');
   bindBtn.textContent = 'Bind';
   bindBtn.style.cssText = `flex:1;background:${guiPrimaryColor};color:#fff;border:none;border-radius:10px;padding:10px;cursor:pointer;font-family:MinibloxFont,sans-serif;font-size:13px;`;
   bindBtn.addEventListener('click', () => {
-    window.removeEventListener('keydown', onKey, true);
     if (pendingKey) {
       const conflictModule = Object.keys(moduleBindings).find(m => m !== moduleName && moduleBindings[m] === pendingKey);
       const uiKeyMatches = (uiKeybind === 'backtick' && pendingKey === '`') || (uiKeybind === 'rshift' && pendingKey === 'Shift') || (uiKeybind === 'backslash' && pendingKey === '\\');
@@ -1801,14 +1839,12 @@ function showBindPopup(moduleElement, moduleName) {
         showNotification(`${moduleName} bound to ${pendingKey}`);
       }
     }
-    modal.remove();
-    isBinding = false;
+    dismiss();
   });
   const unbindBtn = document.createElement('button');
   unbindBtn.textContent = 'Unbind';
   unbindBtn.style.cssText = 'flex:1;background:#2a2a2a;color:#fff;border:1px solid #444;border-radius:10px;padding:10px;cursor:pointer;font-family:MinibloxFont,sans-serif;font-size:13px;';
   unbindBtn.addEventListener('click', () => {
-    window.removeEventListener('keydown', onKey, true);
     if (moduleBindings[moduleName]) {
       delete moduleBindings[moduleName];
       updateModuleKeybindPill(moduleName, null);
@@ -1816,29 +1852,18 @@ function showBindPopup(moduleElement, moduleName) {
     } else {
       showNotification(`${moduleName} has no keybind`);
     }
-    modal.remove();
-    isBinding = false;
+    dismiss();
   });
   const cancelBtn = document.createElement('button');
   cancelBtn.textContent = 'Cancel';
   cancelBtn.style.cssText = 'flex:1;background:#1a1a1a;color:#888;border:1px solid #333;border-radius:10px;padding:10px;cursor:pointer;font-family:MinibloxFont,sans-serif;font-size:13px;';
-  cancelBtn.addEventListener('click', () => {
-    window.removeEventListener('keydown', onKey, true);
-    modal.remove();
-    isBinding = false;
-  });
+  cancelBtn.addEventListener('click', dismiss);
   btnRow.appendChild(bindBtn);
   btnRow.appendChild(unbindBtn);
   btnRow.appendChild(cancelBtn);
   box.appendChild(btnRow);
   modal.appendChild(box);
-  modal.addEventListener('click', e => {
-    if (e.target === modal) {
-      window.removeEventListener('keydown', onKey, true);
-      modal.remove();
-      isBinding = false;
-    }
-  });
+  modal.addEventListener('click', e => { if (e.target === modal) dismiss(); });
   document.body.appendChild(modal);
   isBinding = true;
 }
@@ -1946,26 +1971,17 @@ moduleContainer.addEventListener("mouseleave", () => {
  toggleKnob.style.cssText = "position:absolute;top:2px;left:2px;width:14px;height:14px;border-radius:50%;background:#4a4a4a;transition:transform 0.35s cubic-bezier(0.34, 1.56, 0.64, 1), background 0.2s ease;";
   toggleWrap.appendChild(toggleKnob);
   moduleContainer.appendChild(toggleWrap);
-
-  const tooltip = document.createElement("div");
-  tooltip.classList.add("module-tooltip");
-  tooltip.textContent = "right-click to bind";
-  moduleContainer.appendChild(tooltip);
-
   moduleContainer._toggleWrap = toggleWrap;
   moduleContainer._toggleKnob = toggleKnob;
 
   gridContainer.appendChild(moduleContainer);
 
-  let tooltipTimeout;
   moduleContainer.addEventListener("mouseenter", () => {
-    tooltipTimeout = setTimeout(() => { tooltip.style.visibility = "visible"; tooltip.style.opacity = 1; }, 1500);
-    if (!moduleContainer._uv2Active) moduleContainer.style.background = "linear-gradient(135deg,#2c2c2c,#222222)";
-  });
-  moduleContainer.addEventListener("mouseleave", () => {
-    clearTimeout(tooltipTimeout); tooltip.style.visibility = "hidden"; tooltip.style.opacity = 0;
-    if (!moduleContainer._uv2Active) moduleContainer.style.background = "linear-gradient(135deg,#242424,#1c1c1c)";
-  });
+  if (!moduleContainer._uv2Active) moduleContainer.style.background = "linear-gradient(135deg,#2c2c2c,#222222)";
+});
+moduleContainer.addEventListener("mouseleave", () => {
+  if (!moduleContainer._uv2Active) moduleContainer.style.background = "linear-gradient(135deg,#242424,#1c1c1c)";
+});
   moduleContainer.addEventListener("click", () => {
     if (!isBinding) {
       moduleContainer._uv2Active = !moduleContainer._uv2Active;
