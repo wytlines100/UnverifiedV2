@@ -2450,7 +2450,7 @@ function armorHudRenderDocked() {
 function armorHudRender() {
   if (!armorHudEl) return;
 
-  if (!isInMatch()) {
+  if (!/\/join\//.test(window.location.pathname)) {
     armorHudEl.style.display = 'none';
     return;
   }
@@ -2533,7 +2533,7 @@ if (armorHudDocked) {
   armorHudDockBtn.style.color = '#666';
   armorHudDockBtn.style.textShadow = 'none';
 } else {
-  if (!isInMatch()) {
+  if (!/\/join\//.test(window.location.pathname)) {
     showNotification('Must be in a match to dock');
     return;
   }
@@ -2861,15 +2861,9 @@ function sendAfkChatMessage(msg) {
   } catch(e) {}
 }
 
-function isInMatch() {
-  try {
-    return /\/join\//.test(window.location.pathname);
-  } catch (e) { return false; }
-}
-
 function onAfkTriggered() {
   if (afkTriggered) return;
-  if (!isInMatch()) {
+  if (!/\/join\//.test(window.location.pathname)) {
     afkTimer = setTimeout(onAfkTriggered, afkDelay * 1000);
     return;
   }
