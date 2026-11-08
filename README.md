@@ -27,11 +27,24 @@ A custom utility client for [Miniblox](https://miniblox.io), actively developed 
 | **Clock** | Draggable live clock overlay |
 | **Armor HUD** | Draggable overlay showing armor durability, enchantments, and icons; floating or docked |
 
+## Features
+
+- Right-click any module to assign or clear a keybind; configurable UI open keybind (Right Shift, `` ` ``, or `\`)
+- Star modules to pin them to the top of the list; persisted across reloads
+- Real-time module search by name or description
+- Accent color picker with hex input and recent-color history
+- Export and import all settings, module states, and keybinds as a JSON file
+- Update checker comparing installed version against GitHub every minute with a changelog popup
+- Full changelog timeline fetched from GitHub on the Changelog sidebar page
+- Optional VPN/proxy detection warning on menu open
+- UI open/close animation, toast notifications, and module click audio feedback
+- Holiday system: themed banners, accent colors, and chat messages for Halloween, Christmas, and New Year's
+
 ## Keybinds
 
-- Press **Right Shift**, `` ` ``, or `\` to open and close the menu; configurable in Settings.
-- Right-click any module to assign or clear a keybind for toggling it from anywhere.
-- Keybinds are saved across reloads and exported with your config.
+- Press **Right Shift**, `` ` ``, or `\` to open and close the menu; configurable in Settings
+- Right-click any module to assign or clear a keybind for toggling it from anywhere
+- Keybinds are saved across reloads and exported with your config
 
 ## Commands
 
