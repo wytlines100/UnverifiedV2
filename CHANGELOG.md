@@ -9,6 +9,7 @@
 - Replaced bind popup modal backdrop click handler with shared dismiss function
 - Added right-click hint text to module page header
 - Removed module tooltip in favor of hint text
+- Updated README with Keybinds, Commands, Configuration, and Music Player sections
 - Reduced build size from 137KB to 132KB
 
 ## v4.5
