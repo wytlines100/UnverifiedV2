@@ -148,44 +148,43 @@ const waitForGame = setInterval(() => {
     }
   }
 
-  function checkAndExecuteInfo(inputStr) {
-  if (typeof inputStr !== 'string') return false;
-  const trimmed = inputStr.trim();
-  const cleanStr = trimmed.startsWith('/') ? trimmed.slice(1).trim() : trimmed;
-  if (cleanStr.toLowerCase() === 'info' || cleanStr.toLowerCase().startsWith('info ')) {
-    const parts = cleanStr.split(/\s+/);
-    handleInfoCommand(parts[1] || '');
+  function hookChatEngine() {
+    const game = gameRef.game;
+    if (!game || !game.chat) return false;
+    const chat = game.chat;
+
+    function isInfoCmd(inputStr) {
+      if (typeof inputStr !== 'string') return false;
+      const clean = inputStr.trim().replace(/^\//, '').trim();
+      if (clean.toLowerCase() === 'info' || clean.toLowerCase().startsWith('info ')) {
+        handleInfoCommand(clean.split(/\s+/)[1] || '');
+        return true;
+      }
+      return false;
+    }
+
+    if (typeof chat.runCommand === 'function' && !chat.runCommand._isHooked) {
+      const origRunCommand = chat.runCommand;
+      chat.runCommand = function(cmdText, ...args) {
+        if (isInfoCmd(cmdText)) return;
+        return origRunCommand.apply(this, [cmdText, ...args]);
+      };
+      chat.runCommand._isHooked = true;
+    }
+    if (typeof chat.submit === 'function' && !chat.submit._isHooked) {
+      const origSubmit = chat.submit;
+      chat.submit = function(...args) {
+        if (isInfoCmd(chat.inputValue)) {
+          chat.setInputValue ? chat.setInputValue('') : (chat.inputValue = '');
+          if (typeof chat.closeInput === 'function') chat.closeInput();
+          return;
+        }
+        return origSubmit.apply(this, args);
+      };
+      chat.submit._isHooked = true;
+    }
     return true;
   }
-  return false;
-}
-
-function hookChatEngine() {
-  const game = gameRef.game;
-  if (!game || !game.chat) return false;
-  const chat = game.chat;
-  if (typeof chat.runCommand === 'function' && !chat.runCommand._isHooked) {
-    const origRunCommand = chat.runCommand;
-    chat.runCommand = function(cmdText, ...args) {
-      if (checkAndExecuteInfo(cmdText)) return;
-      return origRunCommand.apply(this, [cmdText, ...args]);
-    };
-    chat.runCommand._isHooked = true;
-  }
-  if (typeof chat.submit === 'function' && !chat.submit._isHooked) {
-    const origSubmit = chat.submit;
-    chat.submit = function(...args) {
-      if (checkAndExecuteInfo(chat.inputValue)) {
-        chat.setInputValue ? chat.setInputValue('') : (chat.inputValue = '');
-        if (typeof chat.closeInput === 'function') chat.closeInput();
-        return;
-      }
-      return origSubmit.apply(this, args);
-    };
-    chat.submit._isHooked = true;
-  }
-  return true;
-}
 
   const initInterval = setInterval(() => {
     if (hookChatEngine()) clearInterval(initInterval);
