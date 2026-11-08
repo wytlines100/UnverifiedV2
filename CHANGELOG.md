@@ -3,18 +3,16 @@
 ## v4.6
 
 - Removed April Fools holiday event
-- Simplified buildArmorHudSettingsPage with data-driven slider loop, removing buildSliderRow helper
-- Simplified buildContributorsGrid with innerHTML templating, moved shimmer CSS to main stylesheet
-- Refactored buildConfigPage to use direct DOM construction instead of innerHTML and querySelector
-- Improved UI open/close animation smoothness and timing
-- closeUI no longer resets to the main page, preserving the active page on reopen
-- Replaced bind popup modal backdrop click handler with shared dismiss function
-- Added right-click hint text to module page header
-- Removed module tooltip in favor of hint text
-- Updated README with Requirements and Installation, Keybinds, Commands, Configuration, and Music Player sections
-- Reduced build size from 137KB to 132KB
+- Refactored buildArmorHudSettingsPage, buildContributorsGrid, and buildConfigPage for cleaner code
+- Moved contributor card shimmer CSS to main stylesheet
+- Improved UI open/close animation smoothness
+- closeUI no longer resets to the main page on reopen
 - Fixed bind bar persisting when reopening the menu mid-bind
-- Inlined checkAndExecuteInfo into hookChatEngine, removing the standalone function
+- Inlined checkAndExecuteInfo into hookChatEngine
+- Added right-click hint text to module page, removed module tooltip
+- Simplified config file name format
+- Updated README with Keybinds, Commands, Configuration, and Music Player sections
+- Reduced build size from 137KB to 132KB
 
 ## v4.5
 
