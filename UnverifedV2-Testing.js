@@ -770,141 +770,152 @@ let armorHudGap = parseInt(localStorage.getItem('uv2-armorhud-gap') || '4', 10);
 }
 
   function buildConfigPage() {
-    uv2ConfigPage.innerHTML = `
-  <h2 style="font-size:30px;font-family:MinibloxFont,sans-serif;margin:0 0 20px 0;text-align:center;">Config Management</h2>
-  <div class="uv2-section-title">Save / Load Configuration</div>
-  <div class="uv2-setting-row" style="display:flex;flex-direction:row;height:auto;padding:16px;gap:16px;">
-    <button id="save-config-btn" style="flex:1;background:${guiPrimaryColor};color:white;border:none;border-radius:6px;padding:12px 20px;cursor:pointer;font-family:MinibloxFont,sans-serif;">Save Config</button>
-    <input type="file" id="config-file-input" accept=".json" style="display:none;">
-    <button id="load-config-btn" style="flex:1;background:${guiPrimaryColor};color:white;border:none;border-radius:6px;padding:12px 20px;cursor:pointer;font-family:MinibloxFont,sans-serif;">Load Config</button>
-  </div>
-`;
-    const saveBtn = uv2ConfigPage.querySelector('#save-config-btn');
-    if (saveBtn) {
-      saveBtn.addEventListener('click', () => {
-  const config = {
-  version: GM_info.script.version,
-  gui: {
-    primaryColor: guiPrimaryColor,
-  },
-  settings: {
-    moduleSounds: settings.moduleSounds,
-    saving: settings.saving,
-    autoAfk: settings.autoAfk,
-    afkChat: settings.afkChat,
-    afkDelay: afkDelay,
-    uiKeybind: uiKeybind,
-  },
-  moduleBindings: moduleBindings,
-  moduleStates: {},
-};
-        [...gridContainer.children].forEach(mc => {
-          const name = mc.dataset.moduleName;
-          if (name) config.moduleStates[name] = mc._uv2Active;
-        });
-        const jsonStr = JSON.stringify(config, null, 2);
-        const blob = new Blob([jsonStr], { type: 'application/json' });
-        const url = URL.createObjectURL(blob);
-        const a = document.createElement('a');
-        a.href = url;
-        a.download = `unverified-config-${new Date().toISOString().slice(0,19)}.json`;
-        a.click();
-        URL.revokeObjectURL(url);
-        showNotification('Config saved');
-      });
-    }
+  uv2ConfigPage.innerHTML = '';
 
-    const fileInput = uv2ConfigPage.querySelector('#config-file-input');
-    const loadBtn = uv2ConfigPage.querySelector('#load-config-btn');
-    if (fileInput && loadBtn) {
-      loadBtn.addEventListener('click', () => {
-        fileInput.click();
-      });
-      fileInput.addEventListener('change', (e) => {
-        const file = e.target.files[0];
-        if (!file) return;
-        const reader = new FileReader();
-        reader.onload = (event) => {
-          try {
-            const config = JSON.parse(event.target.result);
+  const heading = document.createElement('h2');
+  heading.textContent = 'Config Management';
+  heading.style.cssText = 'font-size:30px;font-family:MinibloxFont,sans-serif;margin:0 0 20px 0;text-align:center;';
+  uv2ConfigPage.appendChild(heading);
 
-            if (config.gui) {
-  if (config.gui.primaryColor) {
-    guiPrimaryColor = config.gui.primaryColor;
-    localStorage.setItem('uv2-gui-primary-color', guiPrimaryColor);
-  }
-  applyGUIStyles();
-  buildGUIPage();
-}
-            if (config.settings) {
-              if (typeof config.settings.moduleSounds === 'boolean') {
-                settings.moduleSounds = config.settings.moduleSounds;
-                localStorage.setItem('uv2-setting-sounds', settings.moduleSounds);
-                const soundsToggle = document.querySelector("#uv2-toggle-sounds");
-                if (soundsToggle) soundsToggle.checked = settings.moduleSounds;
-              }
-              if (typeof config.settings.saving === 'boolean') {
-                settings.saving = config.settings.saving;
-                localStorage.setItem('uv2-setting-saving', settings.saving ? 'true' : 'false');
-                const savingToggle = document.querySelector("#uv2-toggle-saving");
-                if (savingToggle) savingToggle.checked = settings.saving;
-              }
-              if (typeof config.settings.autoAfk === 'boolean') {
-                settings.autoAfk = config.settings.autoAfk;
-                localStorage.setItem('uv2-setting-autoafk', settings.autoAfk ? 'true' : 'false');
-                const autoAfkToggle = document.querySelector("#uv2-toggle-autoafk");
-                if (autoAfkToggle) autoAfkToggle.checked = settings.autoAfk;
-                if (settings.autoAfk) startAfkDetector(); else stopAfkDetector();
-              }
-              if (typeof config.settings.afkChat === 'boolean') {
-                settings.afkChat = config.settings.afkChat;
-                localStorage.setItem('uv2-setting-afkchat', settings.afkChat);
-                const afkChatToggle = document.querySelector("#uv2-toggle-afkchat");
-                if (afkChatToggle) afkChatToggle.checked = settings.afkChat;
-              }
-              if (typeof config.settings.afkDelay === 'number') {
-                afkDelay = Math.min(120, Math.max(10, config.settings.afkDelay));
-                localStorage.setItem('uv2-setting-afkdelay', afkDelay);
-                if (afkDelayInput) afkDelayInput.value = afkDelay;
-              }
-            }
-             if (typeof config.settings.uiKeybind === 'string') {
-                uiKeybind = config.settings.uiKeybind;
-                localStorage.setItem('uv2-setting-uikeybind', uiKeybind);
-                const uiKeybindSelect = document.querySelector("#uv2-uikeybind-select");
-                if (uiKeybindSelect) uiKeybindSelect.value = uiKeybind;
-              }
+  const sectionLabel = document.createElement('div');
+  sectionLabel.className = 'uv2-section-title';
+  sectionLabel.textContent = 'Save / Load Configuration';
+  uv2ConfigPage.appendChild(sectionLabel);
 
-            if (config.moduleBindings) {
-                moduleBindings = config.moduleBindings;
-                Object.keys(moduleBindings).forEach(name => {
-      if (moduleBindings[name]) updateModuleKeybindPill(name, moduleBindings[name]);
+  const row = document.createElement('div');
+  row.className = 'uv2-setting-row';
+  row.style.cssText = 'display:flex;flex-direction:row;height:auto;padding:16px;gap:16px;';
+
+  const saveBtn = document.createElement('button');
+  saveBtn.style.cssText = `flex:1;background:${guiPrimaryColor};color:white;border:none;border-radius:6px;padding:12px 20px;cursor:pointer;font-family:MinibloxFont,sans-serif;`;
+  saveBtn.textContent = 'Save Config';
+  saveBtn.id = 'save-config-btn';
+  saveBtn.addEventListener('click', () => {
+    const config = {
+      version: GM_info.script.version,
+      gui: { primaryColor: guiPrimaryColor },
+      settings: {
+        moduleSounds: settings.moduleSounds,
+        saving: settings.saving,
+        autoAfk: settings.autoAfk,
+        afkChat: settings.afkChat,
+        afkDelay: afkDelay,
+        uiKeybind: uiKeybind,
+      },
+      moduleBindings: moduleBindings,
+      moduleStates: {},
+    };
+    [...gridContainer.children].forEach(mc => {
+      const name = mc.dataset.moduleName;
+      if (name) config.moduleStates[name] = mc._uv2Active;
+    });
+    const blob = new Blob([JSON.stringify(config, null, 2)], { type: 'application/json' });
+    const url = URL.createObjectURL(blob);
+    const a = document.createElement('a');
+    a.href = url;
+    a.download = `unverified-config-${new Date().toISOString().slice(0,19)}.json`;
+    a.click();
+    URL.revokeObjectURL(url);
+    showNotification('Config saved');
   });
-}
-            setTimeout(() => {
-              if (config.moduleStates) {
-                isRestoring = true;
-                [...gridContainer.children].forEach(mc => {
-                  const name = mc.dataset.moduleName;
-                  if (name && config.moduleStates[name] !== undefined) {
-                    if (config.moduleStates[name] && !mc._uv2Active) mc.click();
-                    else if (!config.moduleStates[name] && mc._uv2Active) mc.click();
-                  }
-                });
-                isRestoring = false;
-              }
-            }, 500);
-            showNotification('Config loaded');
-          } catch (err) {
-            console.error(err);
-            showNotification('Invalid config file');
+
+  const fileInput = document.createElement('input');
+  fileInput.type = 'file';
+  fileInput.id = 'config-file-input';
+  fileInput.accept = '.json';
+  fileInput.style.display = 'none';
+
+  const loadBtn = document.createElement('button');
+  loadBtn.style.cssText = `flex:1;background:${guiPrimaryColor};color:white;border:none;border-radius:6px;padding:12px 20px;cursor:pointer;font-family:MinibloxFont,sans-serif;`;
+  loadBtn.textContent = 'Load Config';
+  loadBtn.id = 'load-config-btn';
+  loadBtn.addEventListener('click', () => fileInput.click());
+
+  fileInput.addEventListener('change', e => {
+    const file = e.target.files[0];
+    if (!file) return;
+    const reader = new FileReader();
+    reader.onload = event => {
+      try {
+        const config = JSON.parse(event.target.result);
+        if (config.gui?.primaryColor) {
+          guiPrimaryColor = config.gui.primaryColor;
+          localStorage.setItem('uv2-gui-primary-color', guiPrimaryColor);
+          applyGUIStyles();
+          buildGUIPage();
+        }
+        if (config.settings) {
+          if (typeof config.settings.moduleSounds === 'boolean') {
+            settings.moduleSounds = config.settings.moduleSounds;
+            localStorage.setItem('uv2-setting-sounds', settings.moduleSounds);
+            const t = document.querySelector("#uv2-toggle-sounds");
+            if (t) t.checked = settings.moduleSounds;
           }
-        };
-        reader.readAsText(file);
-        fileInput.value = '';
-      });
-    }
-  }
+          if (typeof config.settings.saving === 'boolean') {
+            settings.saving = config.settings.saving;
+            localStorage.setItem('uv2-setting-saving', settings.saving ? 'true' : 'false');
+            const t = document.querySelector("#uv2-toggle-saving");
+            if (t) t.checked = settings.saving;
+          }
+          if (typeof config.settings.autoAfk === 'boolean') {
+            settings.autoAfk = config.settings.autoAfk;
+            localStorage.setItem('uv2-setting-autoafk', settings.autoAfk ? 'true' : 'false');
+            const t = document.querySelector("#uv2-toggle-autoafk");
+            if (t) t.checked = settings.autoAfk;
+            if (settings.autoAfk) startAfkDetector(); else stopAfkDetector();
+          }
+          if (typeof config.settings.afkChat === 'boolean') {
+            settings.afkChat = config.settings.afkChat;
+            localStorage.setItem('uv2-setting-afkchat', settings.afkChat);
+            const t = document.querySelector("#uv2-toggle-afkchat");
+            if (t) t.checked = settings.afkChat;
+          }
+          if (typeof config.settings.afkDelay === 'number') {
+            afkDelay = Math.min(120, Math.max(10, config.settings.afkDelay));
+            localStorage.setItem('uv2-setting-afkdelay', afkDelay);
+            if (afkDelayInput) afkDelayInput.value = afkDelay;
+          }
+          if (typeof config.settings.uiKeybind === 'string') {
+            uiKeybind = config.settings.uiKeybind;
+            localStorage.setItem('uv2-setting-uikeybind', uiKeybind);
+            const t = document.querySelector("#uv2-uikeybind-select");
+            if (t) t.value = uiKeybind;
+          }
+        }
+        if (config.moduleBindings) {
+          moduleBindings = config.moduleBindings;
+          Object.keys(moduleBindings).forEach(name => {
+            if (moduleBindings[name]) updateModuleKeybindPill(name, moduleBindings[name]);
+          });
+        }
+        setTimeout(() => {
+          if (config.moduleStates) {
+            isRestoring = true;
+            [...gridContainer.children].forEach(mc => {
+              const name = mc.dataset.moduleName;
+              if (name && config.moduleStates[name] !== undefined) {
+                if (config.moduleStates[name] && !mc._uv2Active) mc.click();
+                else if (!config.moduleStates[name] && mc._uv2Active) mc.click();
+              }
+            });
+            isRestoring = false;
+          }
+        }, 500);
+        showNotification('Config loaded');
+      } catch (err) {
+        console.error(err);
+        showNotification('Invalid config file');
+      }
+    };
+    reader.readAsText(file);
+    fileInput.value = '';
+  });
+
+  row.appendChild(saveBtn);
+  row.appendChild(fileInput);
+  row.appendChild(loadBtn);
+  uv2ConfigPage.appendChild(row);
+}
 
   function buildArmorHudSettingsPage() {
   const container = document.getElementById('uv2-armorhud-settings-section');
@@ -2528,7 +2539,6 @@ notVpnBtn.addEventListener('mouseleave', () => { notVpnBtn.style.background = '#
 }
 
 function closeUI() {
-  switchUv2Page('main');
   if (closeUITimeout) { clearTimeout(closeUITimeout); closeUITimeout = null; }
   uiAnimating = true;
   ui.classList.replace('uv2-animate-in', 'uv2-animate-out');
