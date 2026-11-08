@@ -13,6 +13,7 @@
 - Simplified config file name format
 - Updated README with Keybinds, Commands, Configuration, and Music Player sections
 - Reduced build size from 137KB to 132KB
+- Simplified uv2ParseChangelog using reduce
 
 ## v4.5
 
