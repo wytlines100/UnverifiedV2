@@ -3,12 +3,13 @@
 ## v4.6
 
 - Removed April Fools holiday event
-- Simplified buildArmorHudSettingsPage with data-driven slider loop
-- Improved UI open/close animation smoothness
-- Reduced build size from 137KB to 135KB
+- Simplified buildArmorHudSettingsPage with data-driven slider loop, removing buildSliderRow helper
+- Simplified buildContributorsGrid with innerHTML templating, moved shimmer CSS to main stylesheet
+- Improved UI open/close animation smoothness and timing
 - Replaced bind popup modal backdrop click handler with shared dismiss function
 - Added right-click hint text to module page header
 - Removed module tooltip in favor of hint text
+- Reduced build size from 137KB to 132KB
 
 ## v4.5
 
