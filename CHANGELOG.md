@@ -13,6 +13,7 @@
 - Removed module tooltip in favor of hint text
 - Updated README with Requirements and Installation, Keybinds, Commands, Configuration, and Music Player sections
 - Reduced build size from 137KB to 132KB
+- Fixed bind bar persisting when reopening the menu mid-bind
 
 ## v4.5
 
