@@ -15,8 +15,6 @@ A custom utility client for [Miniblox](https://miniblox.io), actively developed 
 4. Navigate to or reload `miniblox.io`.
 5. Press **Right Shift** (default), `` ` ``, or `\` to open the menu.
 
-> UV2 Music Player is a separate script (`MusicPlayer.js`) that you can install independently.
-
 ## Modules
 
 | Module | Description |
@@ -29,18 +27,25 @@ A custom utility client for [Miniblox](https://miniblox.io), actively developed 
 | **Clock** | Draggable live clock overlay |
 | **Armor HUD** | Draggable overlay showing armor durability, enchantments, and icons; floating or docked |
 
-## Features
+## Keybinds
 
-- Right-click any module to assign or clear a keybind; configurable UI open keybind (Right Shift, `` ` ``, or `\`)
-- Star modules to pin them to the top of the list; persisted across reloads
-- Real-time module search by name or description
-- Accent color picker with hex input and recent-color history
-- Export and import all settings, module states, and keybinds as a JSON file
-- Update checker comparing installed version against GitHub every minute with a changelog popup
-- Full changelog timeline fetched from GitHub on the Changelog sidebar page
-- Optional VPN/proxy detection warning on menu open
-- UI open/close animation, toast notifications, and module click audio feedback
-- Holiday system: themed banners, accent colors, chat messages, and effects for Halloween, Christmas, New Year's Eve/Day
+- Press **Right Shift**, `` ` ``, or `\` to open and close the menu; configurable in Settings.
+- Right-click any module to assign or clear a keybind for toggling it from anywhere.
+- Keybinds are saved across reloads and exported with your config.
+
+## Commands
+
+| Command | Description |
+|---|---|
+| `/info <username>` | Looks up a player's username, rank, and level |
+
+## Configuration
+
+Use the **Config** page to export all settings, module states, and keybinds as a JSON file, or import a previously saved config. Configs are versioned and portable across installs.
+
+## Music Player
+
+UV2 Music Player is a separate script (`MusicPlayer.js`) installable independently via Tampermonkey. It is not bundled with the main client.
 
 ## Menu Pages
 
