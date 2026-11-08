@@ -14,6 +14,7 @@
 - Updated README with Requirements and Installation, Keybinds, Commands, Configuration, and Music Player sections
 - Reduced build size from 137KB to 132KB
 - Fixed bind bar persisting when reopening the menu mid-bind
+- Inlined checkAndExecuteInfo into hookChatEngine, removing the standalone function
 
 ## v4.5
 
