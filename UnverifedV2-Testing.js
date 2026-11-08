@@ -69,7 +69,6 @@ function getHoliday() {
   return null;
 }
 const holiday = getHoliday();
-
 const waitForGame = setInterval(() => {
   if (!/\/join\//.test(window.location.pathname)) return;
   const reactRoot = document.querySelector("#react");
@@ -212,17 +211,11 @@ function uv2CompareVersions(a, b) {
 }
 
 function uv2ParseChangelog(text) {
-  const entries = [];
-  const parts = text.split(/\n(?=## )/);
-  parts.forEach(part => {
+  return text.split(/\n(?=## )/).reduce((entries, part) => {
     const m = part.match(/^## ([^\n]+)\n?([\s\S]*)$/);
-    if (!m) return;
-    entries.push({
-      heading: m[1].trim(),
-      notes: m[2].trim().split('\n').map(l => l.replace(/^-\s*/, '').trim()).filter(l => l.length > 0)
-    });
-  });
-  return entries;
+    if (m) entries.push({ heading: m[1].trim(), notes: m[2].trim().split('\n').map(l => l.replace(/^-\s*/, '').trim()).filter(l => l) });
+    return entries;
+  }, []);
 }
 
 function uv2ShowPopup(opts) {
@@ -669,9 +662,7 @@ let armorHudGap = parseInt(localStorage.getItem('uv2-armorhud-gap') || '4', 10);
 
   function buildGUIPage() {
   uv2GUIPage.innerHTML = '';
-
   const isHoliday = holiday === 'halloween' || holiday === 'christmas';
-
   const heading = document.createElement('h2');
   heading.textContent = 'Color';
   heading.style.cssText = 'font-size:28px;font-family:MinibloxFont,sans-serif;margin:0 0 20px 0;text-align:center;color:#fff;';
