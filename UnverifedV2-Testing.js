@@ -388,6 +388,13 @@ style.innerHTML = `
 #uv2-main-ui.uv2-animate-out {
   animation: uv2UIClose 0.2s cubic-bezier(0.4, 0, 1, 1) forwards;
 }
+@keyframes uv2-card-shimmer {
+  0%   { transform: translateX(-100%) skewX(-15deg); }
+  100% { transform: translateX(300%) skewX(-15deg); }
+}
+.uv2-contrib-card:hover .uv2-card-shimmer {
+  animation: uv2-card-shimmer 0.8s cubic-bezier(0.4, 0, 0.2, 1) forwards;
+}
 @keyframes uv2-title-shine-loop {
   0%   { background-position: 200% center; }
   100% { background-position: -200% center; }
@@ -1217,176 +1224,43 @@ settingsOverlay.querySelector('#uv2-page-visuals')?.appendChild(resetRow);
 
 (function buildContributorsGrid() {
   const UV2_CONTRIBUTORS = [
-    {
-      name: "wytlines",
-      role: "Lead Developer",
-      badge: "Founder",
-      bio: "Created UnverifiedV2 and drives the project forward for future development.",
-      avatar: "https://github.com/wytlines100.png",
-      color: { bg: "#3b1a00", text: "#fdba74", border: "#ea580c", strip: "#ea580c", icon: "★" },
-    },
-    {
-      name: "jet",
-      role: "Ex-Developer",
-      badge: "Ex-Dev",
-      bio: "Former developer who helped build early versions of the client.",
-      avatar: "https://github.com/h9ndcuffs.png",
-      color: { bg: "#1c1c1c", text: "#a1a1aa", border: "#52525b", strip: "#52525b", icon: "◇" },
-    },
-    {
-      name: "joudaALT",
-      role: "Developer",
-      badge: "Mod & Dev",
-      bio: "Miniblox moderator and coder who keeps the community and code in check.",
-      avatar: "https://github.com/joudaALT.png",
-      color: { bg: "#1a1f3a", text: "#93c5fd", border: "#3b82f6", strip: "#3b82f6", icon: "⬡" },
-    },
-    {
-      name: "Trust",
-      role: "Developer",
-      badge: "Coder",
-      bio: "Coder for UV2 with a knack for clean implementations.",
-      avatar: "https://github.com/lttlgrl.png",
-      color: { bg: "#2d1a3a", text: "#d8b4fe", border: "#9333ea", strip: "#9333ea", icon: "✦" },
-    },
-    {
-      name: "TheM1ddleM1n",
-      role: "Developer",
-      badge: "Coder",
-      bio: "Coder for UV2, helping shape the client's future. Professional in Python/JavaScript Coding!",
-      avatar: "https://github.com/TheM1ddleM1n.png",
-      color: { bg: "#1a2a1a", text: "#6ee7b7", border: "#059669", strip: "#059669", icon: "⚔" },
-    },
+    { name: "wytlines", role: "Lead Developer", badge: "Founder", bio: "Founded and leads UV2.", avatar: "https://github.com/wytlines100.png", color: { bg: "#3b1a00", text: "#fdba74", border: "#ea580c", strip: "#ea580c", icon: "★" } },
+    { name: "jet", role: "Ex-Developer", badge: "Ex-Dev", bio: "Helped build early versions.", avatar: "https://github.com/h9ndcuffs.png", color: { bg: "#1c1c1c", text: "#a1a1aa", border: "#52525b", strip: "#52525b", icon: "◇" } },
+    { name: "joudaALT", role: "Developer", badge: "Mod & Dev", bio: "Miniblox moderator and UV2 developer.", avatar: "https://github.com/joudaALT.png", color: { bg: "#1a1f3a", text: "#93c5fd", border: "#3b82f6", strip: "#3b82f6", icon: "⬡" } },
+    { name: "Trust", role: "Developer", badge: "Coder", bio: "Developer with a knack for clean code.", avatar: "https://github.com/lttlgrl.png", color: { bg: "#2d1a3a", text: "#d8b4fe", border: "#9333ea", strip: "#9333ea", icon: "✦" } },
+    { name: "TheM1ddleM1n", role: "Developer", badge: "Coder", bio: "Developer and Python/JavaScript specialist.", avatar: "https://github.com/TheM1ddleM1n.png", color: { bg: "#1a2a1a", text: "#6ee7b7", border: "#059669", strip: "#059669", icon: "⚔" } },
   ];
 
   const grid = settingsOverlay.querySelector("#uv2-contributors-grid");
   if (!grid) return;
   grid.style.cssText = "display:flex;flex-wrap:wrap;gap:12px;padding:4px 0 8px 0;";
 
-  const shimmerStyle = document.createElement("style");
-  shimmerStyle.textContent = `
-@keyframes uv2-card-shimmer {
-  0% { transform:translateX(-100%) skewX(-15deg); }
-  100% { transform:translateX(300%) skewX(-15deg); }
-}
-.uv2-contrib-card:hover .uv2-card-shimmer {
-  animation: uv2-card-shimmer 0.65s ease forwards;
-}
-`;
-  document.head.appendChild(shimmerStyle);
-  UV2_CONTRIBUTORS.forEach(contributor => {
-    const c = contributor.color;
-
+  UV2_CONTRIBUTORS.forEach(({ name, role, badge, bio, avatar, color: c }) => {
     const card = document.createElement("div");
     card.className = "uv2-contrib-card";
-    card.style.cssText = [
-      "display:flex;flex-direction:column;",
-      "background:linear-gradient(160deg,#1c1c1c,#111111);",
-      `border:1px solid ${c.strip}30;border-radius:10px;`,
-      "flex:1;min-width:200px;max-width:calc(50% - 6px);",
-      "transition:border-color 0.2s ease,box-shadow 0.2s ease;",
-      "cursor:default;box-sizing:border-box;position:relative;overflow:hidden;",
-    ].join("");
-
-    card.addEventListener("mouseenter", () => {
-      card.style.borderColor = `${c.strip}80`;
-      card.style.boxShadow = `0 0 0 1px ${c.strip}25, 0 6px 24px rgba(0,0,0,0.6), inset 0 0 40px ${c.strip}08`;
-    });
-    card.addEventListener("mouseleave", () => {
-      card.style.borderColor = `${c.strip}30`;
-      card.style.boxShadow = "none";
-    });
-
-    const shimmer = document.createElement("div");
-    shimmer.className = "uv2-card-shimmer";
-    shimmer.style.cssText = [
-      "pointer-events:none;position:absolute;top:0;left:0;width:40%;height:100%;",
-      "background:linear-gradient(120deg,transparent,rgba(255,255,255,0.07),transparent);",
-      "transform:translateX(-100%) skewX(-15deg);z-index:1;",
-    ].join("");
-    card.appendChild(shimmer);
-
-    const strip = document.createElement("div");
-    strip.style.cssText = `height:3px;background:linear-gradient(90deg,${c.strip},${c.strip}44);border-radius:10px 10px 0 0;flex-shrink:0;`;
-    card.appendChild(strip);
-
-    const body = document.createElement("div");
-    body.style.cssText = "display:flex;flex-direction:column;gap:10px;padding:12px 14px 14px;position:relative;z-index:2;";
-
-    const topRow = document.createElement("div");
-    topRow.style.cssText = "display:flex;align-items:center;gap:10px;";
-
-    const avatarWrap = document.createElement("div");
-    avatarWrap.style.cssText = "position:relative;flex-shrink:0;";
-
-    const avatarGlow = document.createElement("div");
-    avatarGlow.style.cssText = [
-      "position:absolute;inset:-3px;border-radius:50%;",
-      `background:radial-gradient(circle,${c.strip}55,transparent 70%);`,
-      "z-index:0;",
-    ].join("");
-    avatarWrap.appendChild(avatarGlow);
-
-    const avatar = document.createElement("img");
-    avatar.src = contributor.avatar;
-    avatar.style.cssText = [
-      "width:44px;height:44px;border-radius:50%;display:block;position:relative;z-index:1;",
-      `border:2px solid ${c.strip}99;background:#111;`,
-    ].join("");
-    avatar.onerror = function() {
-      this.src = `https://github.com/identicons/${contributor.name}.png`;
-    };
-    avatarWrap.appendChild(avatar);
-
-    const topInfo = document.createElement("div");
-    topInfo.style.cssText = "display:flex;flex-direction:column;gap:4px;min-width:0;flex:1;";
-
-    const nameRow = document.createElement("div");
-    nameRow.style.cssText = "display:flex;align-items:center;gap:6px;flex-wrap:wrap;";
-
-    const nameEl = document.createElement("div");
-    nameEl.textContent = contributor.name;
-    nameEl.style.cssText = "font-size:13px;font-weight:600;color:#fff;font-family:MinibloxFont,sans-serif;white-space:nowrap;";
-
-    const badgeEl = document.createElement("div");
-    badgeEl.style.cssText = [
-      `background:${c.bg};color:${c.text};border:1px solid ${c.border};`,
-      "font-size:9px;font-family:MinibloxFont,sans-serif;letter-spacing:0.5px;",
-      "padding:2px 6px;border-radius:4px;white-space:nowrap;display:flex;align-items:center;gap:3px;",
-    ].join("");
-
-    const badgeIcon = document.createElement("span");
-    badgeIcon.textContent = c.icon;
-    badgeIcon.style.cssText = "font-size:8px;";
-    const badgeText = document.createElement("span");
-    badgeText.textContent = contributor.badge;
-    badgeEl.appendChild(badgeIcon);
-    badgeEl.appendChild(badgeText);
-
-    nameRow.appendChild(nameEl);
-    nameRow.appendChild(badgeEl);
-
-    const roleEl = document.createElement("div");
-    roleEl.textContent = contributor.role;
-    roleEl.style.cssText = `font-size:11px;color:${c.strip};font-family:MinibloxFont,sans-serif;opacity:0.9;`;
-
-    topInfo.appendChild(nameRow);
-    topInfo.appendChild(roleEl);
-
-    topRow.appendChild(avatarWrap);
-    topRow.appendChild(topInfo);
-
-    const divider = document.createElement("div");
-    divider.style.cssText = `height:1px;background:linear-gradient(90deg,${c.strip}30,transparent);`;
-
-    const bioEl = document.createElement("div");
-    bioEl.textContent = contributor.bio;
-    bioEl.style.cssText = "font-size:11.5px;color:#666;font-family:MinibloxFont,sans-serif;line-height:1.55;";
-
-    body.appendChild(topRow);
-    body.appendChild(divider);
-    body.appendChild(bioEl);
-    card.appendChild(body);
+    card.style.cssText = `display:flex;flex-direction:column;background:linear-gradient(160deg,#1c1c1c,#111111);border:1px solid ${c.strip}30;border-radius:10px;flex:1;min-width:200px;max-width:calc(50% - 6px);transition:border-color 0.25s ease,box-shadow 0.25s ease;cursor:default;box-sizing:border-box;position:relative;overflow:hidden;`;
+    card.addEventListener("mouseenter", () => { card.style.borderColor = `${c.strip}80`; card.style.boxShadow = `0 0 0 1px ${c.strip}25,0 6px 24px rgba(0,0,0,0.6),inset 0 0 40px ${c.strip}08`; });
+    card.addEventListener("mouseleave", () => { card.style.borderColor = `${c.strip}30`; card.style.boxShadow = "none"; });
+    card.innerHTML = `
+<div class="uv2-card-shimmer" style="pointer-events:none;position:absolute;top:0;left:0;width:40%;height:100%;background:linear-gradient(120deg,transparent,rgba(255,255,255,0.07),transparent);transform:translateX(-100%) skewX(-15deg);z-index:1;"></div>
+<div style="height:3px;background:linear-gradient(90deg,${c.strip},${c.strip}44);border-radius:10px 10px 0 0;flex-shrink:0;"></div>
+<div style="display:flex;flex-direction:column;gap:10px;padding:12px 14px 14px;position:relative;z-index:2;">
+  <div style="display:flex;align-items:center;gap:10px;">
+    <div style="position:relative;flex-shrink:0;">
+      <div style="position:absolute;inset:-3px;border-radius:50%;background:radial-gradient(circle,${c.strip}55,transparent 70%);z-index:0;"></div>
+      <img src="${avatar}" onerror="this.src='https://github.com/identicons/${name}.png'" style="width:44px;height:44px;border-radius:50%;display:block;position:relative;z-index:1;border:2px solid ${c.strip}99;background:#111;">
+    </div>
+    <div style="display:flex;flex-direction:column;gap:4px;min-width:0;flex:1;">
+      <div style="display:flex;align-items:center;gap:6px;flex-wrap:wrap;">
+        <div style="font-size:13px;font-weight:600;color:#fff;font-family:MinibloxFont,sans-serif;white-space:nowrap;">${name}</div>
+        <div style="background:${c.bg};color:${c.text};border:1px solid ${c.border};font-size:9px;font-family:MinibloxFont,sans-serif;letter-spacing:0.5px;padding:2px 6px;border-radius:4px;white-space:nowrap;display:flex;align-items:center;gap:3px;"><span style="font-size:8px;">${c.icon}</span><span>${badge}</span></div>
+      </div>
+      <div style="font-size:11px;color:${c.strip};font-family:MinibloxFont,sans-serif;opacity:0.9;">${role}</div>
+    </div>
+  </div>
+  <div style="height:1px;background:linear-gradient(90deg,${c.strip}30,transparent);"></div>
+  <div style="font-size:11.5px;color:#666;font-family:MinibloxFont,sans-serif;line-height:1.55;">${bio}</div>
+</div>`;
     grid.appendChild(card);
   });
 })();
