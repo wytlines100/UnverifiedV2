@@ -813,7 +813,7 @@ let armorHudGap = parseInt(localStorage.getItem('uv2-armorhud-gap') || '4', 10);
     const url = URL.createObjectURL(blob);
     const a = document.createElement('a');
     a.href = url;
-    a.download = `unverified-config-${new Date().toISOString().slice(0,19)}.json`;
+    a.download = `uv2-config-${new Date().toISOString().slice(0,10)}.json`;
     a.click();
     URL.revokeObjectURL(url);
     showNotification('Config saved');
@@ -2532,6 +2532,8 @@ notVpnBtn.addEventListener('mouseleave', () => { notVpnBtn.style.background = '#
   }
 
   function openUI() {
+  const existingBar = document.getElementById('uv2-bind-bar');
+  if (existingBar) { existingBar.remove(); isBinding = false; }
   ui.style.display = 'flex';
   ui.classList.remove('uv2-animate-out');
   void ui.offsetWidth;
