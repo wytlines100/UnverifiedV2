@@ -2,18 +2,19 @@
 
 A custom utility client for [Miniblox](https://miniblox.io), actively developed since October 2024.
 
-## Requirements
+## Requirements & Installation
 
-- Chromium-based browser
-- [Tampermonkey](https://www.tampermonkey.net) with **Allow UserScripts** enabled
+1. Install [Tampermonkey](https://www.tampermonkey.net) for your Chromium-based browser (Chrome, Edge, Brave, etc.).
+2. In your browser's extension settings, find Tampermonkey and enable **Allow UserScripts**.
+3. Open Tampermonkey and go to the **Dashboard**.
+4. Click the **+** tab to create a new script.
+5. Delete all existing code in the editor.
+6. Copy the entire contents of `client.js` and paste it into the editor.
+7. Press **Ctrl+S** to save.
+8. Navigate to [miniblox.io](https://miniblox.io) or reload it if already open.
+9. Press **Right Shift** to open the UV2 menu.
 
-## Installation
-
-1. Install Tampermonkey and enable **Allow UserScripts** in Chromium Settings.
-2. Open the Tampermonkey dashboard and create a new script.
-3. Paste the contents of `client.js` into the editor and save.
-4. Navigate to or reload `miniblox.io`.
-5. Press **Right Shift** (default), `` ` ``, or `\` to open the menu.
+> If the menu does not appear, ensure Tampermonkey is enabled and the script is active in the dashboard.
 
 ## Modules
 
