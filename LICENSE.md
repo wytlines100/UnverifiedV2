@@ -1,6 +1,6 @@
 # Proprietary License
 
-Copyright (c) 2026 wytlines100. All Rights Reserved.
+Copyright (c) 2026 wytlines100 All Rights Reserved.
 
 ## 1. Ownership
 
