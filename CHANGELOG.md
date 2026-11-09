@@ -141,5 +141,5 @@
 ## v2.1.1
 - Added Chat Filter (profanity and spam detection)
 
-## v2.1.0
+## v2.1.0 (Initial Client)
 - Added Settings panel, Anti-AFK, VPN detection warning, theme presets, config save/load.
