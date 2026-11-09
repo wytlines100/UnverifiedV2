@@ -2,7 +2,7 @@
 // @name         Mblx Skyboxes
 // @namespace    tampogmonkey
 // @version      3
-// @description  Skyboxes :D. Credit to whoever made Candy!
+// @description  Skyboxes+ (Credit to whoever made Candy!)
 // @author       TheMysteryMan
 // @match        https://miniblox.io/*
 // @match        https://*.miniblox.io/*
@@ -14,7 +14,6 @@
 
   const FACES = [0, 1, 2, 3, 4, 5];
   const CUBE_MAP = 'https://raw.githubusercontent.com/wytlines100/UnverifiedV2/main/UV2%20Skyboxes/candy';
-
   const ghBase = u => {
     u = String(u || '').trim();
     let m = u.match(/^https?:\/\/github\.com\/([^/]+)\/([^/]+)\/(?:tree|blob)\/([^/]+)\/(.+?)\/?$/i);
