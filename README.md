@@ -84,4 +84,4 @@ UV2 Music Player is a separate script (`MusicPlayer.js`) installable independent
 
 wytlines, jet, joudaALT, Trust, TheM1ddleM1n
 
-Distributed under a proprietary All Rights Reserved license — [Discord](https://dsc.gg/unverifiedv2)
+Distributed under a proprietary All Rights Reserved license — see [LICENSE.md](LICENSE.md) for details — [Discord](https://dsc.gg/unverifiedv2)
