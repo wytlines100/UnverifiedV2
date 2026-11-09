@@ -39,7 +39,7 @@
 
 ## v4.3
 - Removed Fullscreen module (redundant with in-game fullscreen message)
-- Documentation clarity updates
+- Readme clarity updates
 
 ## v4.2
 - Removed click sound initial transient oscillator (3 oscillators to 2 on enable)
@@ -68,7 +68,6 @@
 - Fixed Fullscreen module desyncing when Escape is used to exit fullscreen
 - Updated intro credits order to reflect contribution ranking
 - Improved Notification Animations
-- Updated Settings -> Contributors
 - Smooth spring easing on module toggle knob using cubic-bezier
 - Fixed config load clamping afkDelay to a minimum of 5 instead of 10
 - Keep Sprint now also triggers on arrow keys
@@ -90,7 +89,7 @@
 - Slower, smoother intro fade with adjusted timing
 
 ## v3.5
-- Removed Profile/User (cosmetic only)
+- Removed Profile/User (cosmetic)
 
 ## v3.4
 - Link blocking in Chat Filter (incoming and outgoing)
@@ -124,7 +123,6 @@
 ## v2.3
 - Armor HUD docked to right side only
 - Removed unused Armor HUD variables and resize listener
-- Removed Russian and Dutch language support
 
 ## v2.2.2
 - Shine animation on module cards
@@ -133,20 +131,15 @@
 - Moved Music Player to MusicPlayer.js
 
 ## v2.2.1
-- New title screen background
 - Extended intro sequence
 - Reduced build size (139 KB to 125 KB)
 
 ## v2.2
-- Added Armor HUD (floating and docked modes)
-- Added French, Dutch, and Russian language support
+- Added Armor HUD (floating/docked modes)
 - Added new theme preset
 
 ## v2.1.1
 - Added Chat Filter (profanity and spam detection)
 
 ## v2.1.0
-- Added Settings panel, Anti-AFK, VPN detection warning, theme presets, config save/load, and multi-language support
-
-## v1.0
-- Base client with Keystrokes, FPS, CPS display and minimal UI
+- Added Settings panel, Anti-AFK, VPN detection warning, theme presets, config save/load.
