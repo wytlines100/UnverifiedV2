@@ -7,7 +7,7 @@
 // @downloadURL  https://raw.githubusercontent.com/wytlines100/UnverifiedV2/refs/heads/main/client.js
 // @updateURL    https://raw.githubusercontent.com/wytlines100/UnverifiedV2/refs/heads/main/client.js
 // @license      Proprietary License
-// @author       wytlines, jet, joudaALT, Trust, TheM1ddleM1n
+// @author       wyt, jet, joudaALT, Trust, TheM1ddleM1n
 // @match        https://miniblox.io/*
 // @grant        GM_xmlhttpRequest
 // @grant        GM_info
@@ -32,7 +32,7 @@ function playIntro() {
   unverifiedText.style.cssText = "color:red;font-size:60px;opacity:0;margin-top:50px;transition:opacity 1.1s ease;text-shadow:0 0 5px red,0 0 10px red,0 0 20px red;";
   container.appendChild(unverifiedText);
   const creditsText = document.createElement("div");
-  creditsText.textContent = "\nBy wytlines,\nTheM1ddleM1n, joudaALT, Trust, \njet";
+  creditsText.textContent = "\nBy wyt,\nTheM1ddleM1n, joudaALT, Trust, \njet";
   creditsText.style.cssText = "color:red;font-size:30px;opacity:0;transition:opacity 1.1s ease;white-space:pre-line;text-align:center;text-shadow:0 0 5px red,0 0 10px red,0 0 20px red;";
   container.appendChild(creditsText);
   const keybindText = document.createElement("div");
@@ -1225,7 +1225,7 @@ settingsOverlay.querySelector('#uv2-page-visuals')?.appendChild(resetRow);
 
 (function buildContributorsGrid() {
   const UV2_CONTRIBUTORS = [
-    { name: "wytlines", role: "Lead Developer", badge: "Founder", bio: "Founded and leads UV2.", avatar: "https://github.com/wytlines100.png", color: { bg: "#3b1a00", text: "#fdba74", border: "#ea580c", strip: "#ea580c", icon: "★" } },
+    { name: "wyt", role: "Lead Developer", badge: "Founder", bio: "Founded and leads UV2.", avatar: "https://github.com/wytlines100.png", color: { bg: "#3b1a00", text: "#fdba74", border: "#ea580c", strip: "#ea580c", icon: "★" } },
     { name: "jet", role: "Ex-Developer", badge: "Ex-Dev", bio: "Helped build early versions.", avatar: "https://github.com/h9ndcuffs.png", color: { bg: "#1c1c1c", text: "#a1a1aa", border: "#52525b", strip: "#52525b", icon: "◇" } },
     { name: "joudaALT", role: "Developer", badge: "Mod & Dev", bio: "Miniblox moderator and UV2 developer.", avatar: "https://github.com/joudaALT.png", color: { bg: "#1a1f3a", text: "#93c5fd", border: "#3b82f6", strip: "#3b82f6", icon: "⬡" } },
     { name: "Trust", role: "Developer", badge: "Coder", bio: "Developer with a knack for clean code.", avatar: "https://github.com/lttlgrl.png", color: { bg: "#2d1a3a", text: "#d8b4fe", border: "#9333ea", strip: "#9333ea", icon: "✦" } },
