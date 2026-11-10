@@ -80,14 +80,14 @@ const waitForGame = setInterval(() => {
     if (!sessionStorage.getItem(joinKey)) {
       sessionStorage.setItem(joinKey, '1');
       const holidayMsg = {
-        halloween: "\\glow\\\\shiny\\\\#BF3011\\[Unverified V2]:\\reset\\ Happy Halloween from the UV2 Dev Team! 🎃",
-        christmas: "\\glow\\\\shiny\\\\#BF3011\\[Unverified V2]:\\reset\\ Merry Christmas from the UV2 Dev Team! ❄️",
+        halloween: "\\glow\\\\shiny\\\\#BF3011\\[Unverified V2]:\\reset\\ Happy Halloween from the UV2 Dev Team 🎃",
+        christmas: "\\glow\\\\shiny\\\\#BF3011\\[Unverified V2]:\\reset\\ Merry Christmas from the UV2 Dev Team ❄️",
         newyear: new Date().getMonth() === 0
-          ? "\\glow\\\\shiny\\\\#BF3011\\[Unverified V2]:\\reset\\ Happy New Year from the UV2 Dev Team! 🎉"
-          : "\\glow\\\\shiny\\\\#BF3011\\[Unverified V2]:\\reset\\ Happy New Year's Eve from the UV2 Dev Team!",
+          ? "\\glow\\\\shiny\\\\#BF3011\\[Unverified V2]:\\reset\\ Happy New Year from the UV2 Dev Team 🎉"
+          : "\\glow\\\\shiny\\\\#BF3011\\[Unverified V2]:\\reset\\ Happy New Year's Eve from the UV2 Dev Team 🌃",
       };
       game.chat.addChat({
-        text: holidayMsg[holiday] || "\\glow\\\\shiny\\\\#BF3011\\[Unverified V2]:\\reset\\ Hello UV2 User! We hope you enjoy our client."
+        text: holidayMsg[holiday] || "\\glow\\\\shiny\\\\#BF3011\\[Unverified V2]:\\reset\\ Hi UV2 User, we hope you enjoy our client."
       });
     }
   }
@@ -1757,7 +1757,7 @@ function createModule(name, description) {
   moduleContainer.dataset.moduleName = name;
   moduleContainer._uv2Active = false;
 
-    const shine = document.createElement("div");
+const shine = document.createElement("div");
 shine.className = "uv2-shine";
 moduleContainer.appendChild(shine);
 
@@ -2032,7 +2032,7 @@ chatFilterModule.addEventListener("click", () => {
   }
 });
 
-createModule(MODULE_NAMES.ANTI_AFK, "Presses WASD on its own to avoid being kicked for being AFK");
+createModule(MODULE_NAMES.ANTI_AFK, "Presses WASD automatically to avoid being kicked while AFK");
 const antiAfkModule = [...gridContainer.children].find(c => c.dataset.moduleName === MODULE_NAMES.ANTI_AFK);
 let isAntiAfkActive=false, antiAfkInterval=null, antiAfkBox=null;
 const antiAfkListeners = [];
@@ -2101,7 +2101,7 @@ if (antiAfkModule) {
 });
 }
 
-  createModule(MODULE_NAMES.CLOCK, "Shows you the time so you dont have to exit full screen.");
+  createModule(MODULE_NAMES.CLOCK, "Shows you the time so you don't have to exit full screen.");
 const timeModule = [...gridContainer.children].find(c => c.dataset.moduleName === MODULE_NAMES.CLOCK);
 let isTimeVisible=false, timeElement=null;
 const timeListeners = [];
@@ -2256,18 +2256,15 @@ function armorHudRenderDocked() {
 
 function armorHudRender() {
   if (!armorHudEl) return;
-
   if (!/\/join\//.test(window.location.pathname)) {
     armorHudEl.style.display = 'none';
     return;
   }
-
   if (armorHudDocked && !armorHudDrag) {
     armorHudEl.style.display = 'flex';
     armorHudRenderDocked();
     return;
   }
-
   const reactRoot = document.querySelector("#react");
   const fiber = reactRoot ? Object.values(reactRoot)[0] : null;
   const game = fiber?.updateQueue?.baseState?.element?.props?.game;
@@ -2280,18 +2277,14 @@ function armorHudRender() {
 
   armorHudEl.style.display = 'block';
   armorHudEl.style.opacity = armorHudOpacity;
-
   let html = `<div style="font-weight:600;margin-bottom:8px;letter-spacing:0.5px;color:${guiPrimaryColor};">Armor HUD</div>`;
-
   for (let i = 0; i < 4; i++) {
     const slot = armor[i];
     const label = ARMOR_SLOT_LABELS[i];
-
     if (!slot) {
       html += `<div style="display:flex;align-items:center;gap:10px;opacity:0.4;padding:4px 0;"><div style="width:${ARMOR_ICON_DISPLAY_SIZE}px;height:${ARMOR_ICON_DISPLAY_SIZE}px;flex-shrink:0;"></div><span style="flex:1;">${label}</span><span>empty</span></div>`;
       continue;
     }
-
     const damage = slot.itemDamage || 0;
     const max = slot.item?.maxDurability;
     const percent = max ? Math.round((1 - damage / max) * 100) : 100;
@@ -2304,17 +2297,14 @@ function armorHudRender() {
     html += `<div style="${iconStyle}"></div>`;
     html += `<div style="flex:1;min-width:0;">`;
     html += `<div style="display:flex;justify-content:space-between;gap:12px;"><span>${name}</span><span style="color:${color};font-weight:600;">${percent}%</span></div>`;
-
     if (enchants.length) {
       const spans = enchants
         .map(e => `<span title="${e.full}" style="cursor:default;">${e.short}</span>`)
         .join(', ');
       html += `<div style="opacity:0.7;font-size:11px;">${spans}</div>`;
     }
-
     html += `</div></div>`;
   }
-
   armorHudEl.innerHTML = html;
 }
 
@@ -2341,7 +2331,7 @@ if (armorHudDocked) {
   armorHudDockBtn.style.textShadow = 'none';
 } else {
   if (!/\/join\//.test(window.location.pathname)) {
-    showNotification('Must be in a match to dock');
+    showNotification('You must be in a match to dock');
     return;
   }
       armorHudDocked = true;
@@ -2455,7 +2445,7 @@ sortModulesByFavorite();
     box.appendChild(gateTitle);
 
     const desc = document.createElement('div');
-    desc.textContent = "We detected that your connection is coming through a VPN or proxy.";
+    desc.textContent = "We detected that your connection is coming through a VPN/proxy. Please turn it off.";
     desc.style.cssText = 'font-size:13px;color:#888;margin-bottom:22px;line-height:1.5;';
     box.appendChild(desc);
 
@@ -2676,8 +2666,8 @@ function onAfkTriggered() {
   }
   afkTriggered = true;
   afkGraceUntil = Date.now() + 2000;
-  showToast('Idle — Anti-AFK enabled', '#e74c3c');
-  if (settings.afkChat) sendAfkChatMessage("I am Currently AFK, Be back shortly.");
+  showToast('Anti-AFK enabled', '#e74c3c');
+  if (settings.afkChat) sendAfkChatMessage("I am Currently AFK, Be back momentarily.");
   const afkMod = [...gridContainer.children].find(c => c.dataset.moduleName === MODULE_NAMES.ANTI_AFK);
   if (afkMod && !afkMod._uv2Active) {
     afkAntiAfkWasOff = true;
@@ -2720,7 +2710,7 @@ function onUserReturn() {
     const afkMod = [...gridContainer.children].find(c => c.dataset.moduleName === MODULE_NAMES.ANTI_AFK);
     if (afkMod && afkMod._uv2Active) {
       afkMod.click();
-      showToast('Welcome back — Anti-AFK disabled', '#2ecc71');
+      showToast('Anti-AFK disabled. Welcome Back!', '#2ecc71');
     }
     afkAntiAfkWasOff = false;
   }
