@@ -6,7 +6,10 @@
 - Converted armorHudColorForPercent to a single-line arrow function
 - Simplified getHoliday using single Date instantiation
 - Converted armorHudFormatEnchantName to a single-line arrow function
-
+- Merged armorHudRenderDocked into armorHudRender, removing redundant function
+- Simplified dock button toggle logic
+- Simplified drag boundary clamping using Math.min/Math.max
+  
 ## v4.6
 
 - Removed April Fools holiday event
