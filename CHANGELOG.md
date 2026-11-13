@@ -1,5 +1,12 @@
 # Changelog
 
+## v4.7
+
+- Simplified uv2CompareVersions to reduce branching
+- Converted armorHudColorForPercent to a single-line arrow function
+- Simplified getHoliday using single Date instantiation
+- Converted armorHudFormatEnchantName to a single-line arrow function
+
 ## v4.6
 
 - Removed April Fools holiday event
