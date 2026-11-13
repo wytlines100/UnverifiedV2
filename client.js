@@ -2194,102 +2194,47 @@ let armorHudOffX = 0;
 let armorHudOffY = 0;
 const armorHudListeners = [];
 
-function armorHudRenderDocked() {
-  const size = armorHudIconSize > 0 ? armorHudIconSize : 32;
-  const gap = armorHudGap;
-  const totalWidth = size * 4 + gap * 3;
-
-  armorHudEl.style.bottom = '90px';
-  armorHudEl.style.top = 'auto';
-  armorHudEl.style.right = '20px';
-  armorHudEl.style.left = 'auto';
-  armorHudEl.style.cursor = 'default';
-  armorHudEl.style.width = totalWidth + 'px';
-  armorHudEl.style.minWidth = 'auto';
-  armorHudEl.style.height = size + 'px';
-  armorHudEl.style.padding = '0';
-  armorHudEl.style.background = 'transparent';
-  armorHudEl.style.border = 'none';
-  armorHudEl.style.backdropFilter = 'none';
-  armorHudEl.style.display = 'flex';
-  armorHudEl.style.gap = gap + 'px';
-  armorHudEl.style.opacity = armorHudOpacity;
-
-  const reactRoot = document.querySelector("#react");
-  const fiber = reactRoot ? Object.values(reactRoot)[0] : null;
-  const game = fiber?.updateQueue?.baseState?.element?.props?.game;
-  const armor = game?.player?.inventory?.armor;
-
-  let html = '';
-  for (let i = 0; i < 4; i++) {
-    const slot = armor ? armor[i] : null;
-    html += `<div style="width:${size}px;height:${size}px;background:rgba(0,0,0,${armorHudBgOpacity});border:1px solid rgba(255,255,255,0.2);border-radius:4px;position:relative;display:flex;align-items:center;justify-content:center;flex-shrink:0;">`;
-    if (slot) {
-      const damage = slot.itemDamage || 0;
-      const max = slot.item?.maxDurability;
-      const percent = max ? Math.round((1 - damage / max) * 100) : 100;
-      const color = armorHudColorForPercent(percent);
-      const iconStyle = armorHudGetIconStyle(slot.item?.name);
-      html += `<div style="${iconStyle}"></div>`;
-      html += `<div style="position:absolute;bottom:1px;right:2px;font-size:9px;font-weight:700;color:${color};text-shadow:0 0 3px rgba(0,0,0,0.9);">${percent}%</div>`;
-    }
-    html += `</div>`;
-  }
-  armorHudEl.innerHTML = html;
-}
-
 function armorHudRender() {
   if (!armorHudEl) return;
   if (!/\/join\//.test(window.location.pathname)) {
     armorHudEl.style.display = 'none';
     return;
   }
+  const fiber = Object.values(document.querySelector("#react") || {})[0];
+  const armor = fiber?.updateQueue?.baseState?.element?.props?.game?.player?.inventory?.armor;
   if (armorHudDocked && !armorHudDrag) {
-    armorHudEl.style.display = 'flex';
-    armorHudRenderDocked();
+    const size = armorHudIconSize > 0 ? armorHudIconSize : 32;
+    const gap = armorHudGap;
+    Object.assign(armorHudEl.style, {
+      display: 'flex', bottom: '90px', top: 'auto', right: '20px', left: 'auto',
+      cursor: 'default', width: (size * 4 + gap * 3) + 'px', minWidth: 'auto',
+      height: size + 'px', padding: '0', background: 'transparent', border: 'none',
+      backdropFilter: 'none', gap: gap + 'px', opacity: armorHudOpacity,
+    });
+    armorHudEl.innerHTML = Array.from({length: 4}, (_, i) => {
+      const slot = armor?.[i];
+      const base = `width:${size}px;height:${size}px;background:rgba(0,0,0,${armorHudBgOpacity});border:1px solid rgba(255,255,255,0.2);border-radius:4px;position:relative;display:flex;align-items:center;justify-content:center;flex-shrink:0;`;
+      if (!slot) return `<div style="${base}"></div>`;
+      const percent = slot.item?.maxDurability ? Math.round((1 - (slot.itemDamage || 0) / slot.item.maxDurability) * 100) : 100;
+      return `<div style="${base}"><div style="${armorHudGetIconStyle(slot.item?.name)}"></div><div style="position:absolute;bottom:1px;right:2px;font-size:9px;font-weight:700;color:${armorHudColorForPercent(percent)};text-shadow:0 0 3px rgba(0,0,0,0.9);">${percent}%</div></div>`;
+    }).join('');
     return;
   }
-  const reactRoot = document.querySelector("#react");
-  const fiber = reactRoot ? Object.values(reactRoot)[0] : null;
-  const game = fiber?.updateQueue?.baseState?.element?.props?.game;
-  const armor = game?.player?.inventory?.armor;
-
   if (!armor) {
     armorHudEl.style.display = 'none';
     return;
   }
-
   armorHudEl.style.display = 'block';
   armorHudEl.style.opacity = armorHudOpacity;
-  let html = `<div style="font-weight:600;margin-bottom:8px;letter-spacing:0.5px;color:${guiPrimaryColor};">Armor HUD</div>`;
-  for (let i = 0; i < 4; i++) {
-    const slot = armor[i];
-    const label = ARMOR_SLOT_LABELS[i];
-    if (!slot) {
-      html += `<div style="display:flex;align-items:center;gap:10px;opacity:0.4;padding:4px 0;"><div style="width:${ARMOR_ICON_DISPLAY_SIZE}px;height:${ARMOR_ICON_DISPLAY_SIZE}px;flex-shrink:0;"></div><span style="flex:1;">${label}</span><span>empty</span></div>`;
-      continue;
-    }
-    const damage = slot.itemDamage || 0;
-    const max = slot.item?.maxDurability;
-    const percent = max ? Math.round((1 - damage / max) * 100) : 100;
-    const color = armorHudColorForPercent(percent);
-    const name = slot.item?.displayName || label;
-    const enchants = armorHudGetEnchantLabels(slot);
-    const iconStyle = armorHudGetIconStyle(slot.item?.name);
-
-    html += `<div style="display:flex;align-items:center;gap:10px;padding:4px 0;">`;
-    html += `<div style="${iconStyle}"></div>`;
-    html += `<div style="flex:1;min-width:0;">`;
-    html += `<div style="display:flex;justify-content:space-between;gap:12px;"><span>${name}</span><span style="color:${color};font-weight:600;">${percent}%</span></div>`;
-    if (enchants.length) {
-      const spans = enchants
-        .map(e => `<span title="${e.full}" style="cursor:default;">${e.short}</span>`)
-        .join(', ');
-      html += `<div style="opacity:0.7;font-size:11px;">${spans}</div>`;
-    }
-    html += `</div></div>`;
-  }
-  armorHudEl.innerHTML = html;
+  armorHudEl.innerHTML = `<div style="font-weight:600;margin-bottom:8px;letter-spacing:0.5px;color:${guiPrimaryColor};">Armor HUD</div>` +
+    Array.from({length: 4}, (_, i) => {
+      const slot = armor[i];
+      const label = ARMOR_SLOT_LABELS[i];
+      if (!slot) return `<div style="display:flex;align-items:center;gap:10px;opacity:0.4;padding:4px 0;"><div style="width:${ARMOR_ICON_DISPLAY_SIZE}px;height:${ARMOR_ICON_DISPLAY_SIZE}px;flex-shrink:0;"></div><span style="flex:1;">${label}</span><span>empty</span></div>`;
+      const percent = slot.item?.maxDurability ? Math.round((1 - (slot.itemDamage || 0) / slot.item.maxDurability) * 100) : 100;
+      const enchants = armorHudGetEnchantLabels(slot);
+      return `<div style="display:flex;align-items:center;gap:10px;padding:4px 0;"><div style="${armorHudGetIconStyle(slot.item?.name)}"></div><div style="flex:1;min-width:0;"><div style="display:flex;justify-content:space-between;gap:12px;"><span>${slot.item?.displayName || label}</span><span style="color:${armorHudColorForPercent(percent)};font-weight:600;">${percent}%</span></div>${enchants.length ? `<div style="opacity:0.7;font-size:11px;">${enchants.map(e => `<span title="${e.full}" style="cursor:default;">${e.short}</span>`).join(', ')}</div>` : ''}</div></div>`;
+    }).join('');
 }
 
 if (armorHudModule && armorHudModule._toggleWrap) {
@@ -2302,24 +2247,17 @@ if (armorHudModule && armorHudModule._toggleWrap) {
   armorHudDockBtn.addEventListener('mouseleave', () => { if (!armorHudDocked) armorHudDockBtn.style.color = '#666'; armorHudDockBtn.style.transform = 'scale(1)'; });
   armorHudDockBtn.addEventListener('click', e => {
     e.stopPropagation();
-    if (!armorHudEl) {
-  showNotification('Enable Armor HUD first');
-  return;
-}
-if (armorHudDocked) {
-  armorHudDocked = false;
-  localStorage.setItem('uv2-armorhud-docked', 'false');
-  armorHudEl.style.cssText = 'position:fixed;top:100px;right:20px;left:auto;padding:10px 14px;background:rgba(0,0,0,0.6);backdrop-filter:blur(8px);border:1px solid rgba(255,255,255,0.15);border-radius:8px;z-index:9999;cursor:move;user-select:none;font-family:Segoe UI,Roboto,sans-serif;font-size:14px;color:white;min-width:220px;';
-  armorHudEl.style.display = 'block';
-  armorHudDockBtn.style.color = '#666';
-  armorHudDockBtn.style.textShadow = 'none';
-} else {
-  if (!/\/join\//.test(window.location.pathname)) {
-    showNotification('You must be in a match to dock');
-    return;
-  }
-      armorHudDocked = true;
-      localStorage.setItem('uv2-armorhud-docked', 'true');
+    if (!armorHudEl) { showNotification('Enable Armor HUD first'); return; }
+    const docking = !armorHudDocked;
+    if (docking && !/\/join\//.test(window.location.pathname)) { showNotification('You must be in a match to dock'); return; }
+    armorHudDocked = docking;
+    localStorage.setItem('uv2-armorhud-docked', docking);
+    if (!docking) {
+      armorHudEl.style.cssText = 'position:fixed;top:100px;right:20px;left:auto;padding:10px 14px;background:rgba(0,0,0,0.6);backdrop-filter:blur(8px);border:1px solid rgba(255,255,255,0.15);border-radius:8px;z-index:9999;cursor:move;user-select:none;font-family:Segoe UI,Roboto,sans-serif;font-size:14px;color:white;min-width:220px;';
+      armorHudEl.style.display = 'block';
+      armorHudDockBtn.style.color = '#666';
+      armorHudDockBtn.style.textShadow = 'none';
+    } else {
       armorHudRender();
       armorHudDockBtn.style.color = guiPrimaryColor;
       armorHudDockBtn.style.textShadow = `0 0 8px ${guiPrimaryColor}80`;
@@ -2341,7 +2279,6 @@ if (armorHudModule) {
       armorHudEl.id = 'armor-hud';
       armorHudEl.style.cssText = 'position:fixed;top:100px;right:20px;left:auto;padding:10px 14px;background:rgba(0,0,0,0.6);backdrop-filter:blur(8px);border:1px solid rgba(255,255,255,0.15);border-radius:8px;z-index:9999;cursor:move;user-select:none;font-family:Segoe UI,Roboto,sans-serif;font-size:14px;color:white;min-width:220px;display:none;';
       document.body.appendChild(armorHudEl);
-
       armorHudEl.addEventListener('mousedown', e => {
         if (armorHudDocked) return;
         armorHudDrag = true;
@@ -2349,27 +2286,16 @@ if (armorHudModule) {
         armorHudOffY = e.clientY - armorHudEl.getBoundingClientRect().top;
         e.preventDefault();
       });
-
       addTrackedListener(armorHudListeners, 'mousemove', e => {
         if (!armorHudDrag || !armorHudEl) return;
         const rect = armorHudEl.getBoundingClientRect();
-        let left = e.clientX - armorHudOffX;
-        let top = e.clientY - armorHudOffY;
-        const maxLeft = window.innerWidth - rect.width;
-        const maxTop = window.innerHeight - rect.height;
-        if (left < 0) left = 0;
-        if (top < 0) top = 0;
-        if (left > maxLeft) left = maxLeft;
-        if (top > maxTop) top = maxTop;
+        let left = Math.min(Math.max(e.clientX - armorHudOffX, 0), window.innerWidth - rect.width);
+        let top = Math.min(Math.max(e.clientY - armorHudOffY, 0), window.innerHeight - rect.height);
         armorHudEl.style.left = left + 'px';
         armorHudEl.style.top = top + 'px';
         armorHudEl.style.right = 'auto';
       });
-
-      addTrackedListener(armorHudListeners, 'mouseup', () => {
-        armorHudDrag = false;
-      });
-
+      addTrackedListener(armorHudListeners, 'mouseup', () => { armorHudDrag = false; });
       armorHudInterval = setInterval(armorHudRender, 500);
       armorHudRender();
     } else {
