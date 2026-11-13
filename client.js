@@ -1638,70 +1638,54 @@ function showBindPopup(moduleElement, moduleName) {
   heading.textContent = `Bind key for ${moduleName}`;
   box.appendChild(heading);
   const keyDisplay = document.createElement('div');
-  keyDisplay.style.cssText = `display:flex;align-items:center;justify-content:center;gap:10px;background:#1a1a1a;border:1px solid rgba(255,255,255,0.08);border-radius:10px;padding:14px;`;
+  keyDisplay.style.cssText = 'display:flex;align-items:center;justify-content:center;gap:10px;background:#1a1a1a;border:1px solid rgba(255,255,255,0.08);border-radius:10px;padding:14px;';
   const kbIcon = document.createElement('i');
   kbIcon.className = 'fa fa-keyboard-o';
   kbIcon.style.cssText = `color:${guiPrimaryColor};font-size:18px;`;
   keyDisplay.appendChild(kbIcon);
   const keyLabel = document.createElement('div');
-  keyLabel.style.cssText = `font-size:20px;color:#fff;min-width:80px;text-align:center;`;
+  keyLabel.style.cssText = 'font-size:20px;color:#fff;min-width:80px;text-align:center;';
   keyLabel.textContent = moduleBindings[moduleName] || 'Press a key...';
   keyDisplay.appendChild(keyLabel);
   box.appendChild(keyDisplay);
   let pendingKey = moduleBindings[moduleName] || null;
   function onKey(e) {
-    e.preventDefault();
-    e.stopPropagation();
-    pendingKey = e.key;
-    keyLabel.textContent = e.key;
-  }
+  if (e.key === 'Escape') { e.preventDefault(); dismiss(); return; }
+  e.preventDefault();
+  e.stopPropagation();
+  pendingKey = e.key;
+  keyLabel.textContent = e.key;
+}
   window.addEventListener('keydown', onKey, true);
   function dismiss() {
     window.removeEventListener('keydown', onKey, true);
     modal.remove();
     isBinding = false;
   }
+  const makeBtn = (label, bg, border, onClick) => {
+    const btn = document.createElement('button');
+    btn.textContent = label;
+    btn.style.cssText = `flex:1;background:${bg};color:#fff;border:${border};border-radius:10px;padding:10px;cursor:pointer;font-family:MinibloxFont,sans-serif;font-size:13px;`;
+    btn.addEventListener('click', onClick);
+    return btn;
+  };
   const btnRow = document.createElement('div');
   btnRow.style.cssText = 'display:flex;gap:8px;';
-  const bindBtn = document.createElement('button');
-  bindBtn.textContent = 'Bind';
-  bindBtn.style.cssText = `flex:1;background:${guiPrimaryColor};color:#fff;border:none;border-radius:10px;padding:10px;cursor:pointer;font-family:MinibloxFont,sans-serif;font-size:13px;`;
-  bindBtn.addEventListener('click', () => {
+  btnRow.appendChild(makeBtn('Bind', guiPrimaryColor, 'none', () => {
     if (pendingKey) {
       const conflictModule = Object.keys(moduleBindings).find(m => m !== moduleName && moduleBindings[m] === pendingKey);
       const uiKeyMatches = (uiKeybind === 'backtick' && pendingKey === '`') || (uiKeybind === 'rshift' && pendingKey === 'Shift') || (uiKeybind === 'backslash' && pendingKey === '\\');
-      if (conflictModule) {
-        showNotification(`${pendingKey} is already bound to ${conflictModule}`);
-      } else if (uiKeyMatches) {
-        showNotification(`${pendingKey} conflicts with the UI keybind`);
-      } else {
-        moduleBindings[moduleName] = pendingKey;
-        updateModuleKeybindPill(moduleName, pendingKey);
-        showNotification(`${moduleName} bound to ${pendingKey}`);
-      }
+      if (conflictModule) showNotification(`${pendingKey} is already bound to ${conflictModule}`);
+      else if (uiKeyMatches) showNotification(`${pendingKey} conflicts with the UI keybind`);
+      else { moduleBindings[moduleName] = pendingKey; updateModuleKeybindPill(moduleName, pendingKey); showNotification(`${moduleName} bound to ${pendingKey}`); }
     }
     dismiss();
-  });
-  const unbindBtn = document.createElement('button');
-  unbindBtn.textContent = 'Unbind';
-  unbindBtn.style.cssText = 'flex:1;background:#2a2a2a;color:#fff;border:1px solid #444;border-radius:10px;padding:10px;cursor:pointer;font-family:MinibloxFont,sans-serif;font-size:13px;';
-  unbindBtn.addEventListener('click', () => {
-    if (moduleBindings[moduleName]) {
-      delete moduleBindings[moduleName];
-      updateModuleKeybindPill(moduleName, null);
-      showNotification(`${moduleName} unbound`);
-    } else {
-      showNotification(`${moduleName} has no keybind`);
-    }
+  }));
+  btnRow.appendChild(makeBtn('Unbind', '#2a2a2a', '1px solid #444', () => {
+    if (moduleBindings[moduleName]) { delete moduleBindings[moduleName]; updateModuleKeybindPill(moduleName, null); showNotification(`${moduleName} unbound`); }
+    else showNotification(`${moduleName} has no keybind`);
     dismiss();
-  });
-  const cancelBtn = document.createElement('button');
-  cancelBtn.textContent = 'Cancel';
-  cancelBtn.style.cssText = 'flex:1;background:#1a1a1a;color:#888;border:1px solid #333;border-radius:10px;padding:10px;cursor:pointer;font-family:MinibloxFont,sans-serif;font-size:13px;';
-  cancelBtn.addEventListener('click', dismiss);
-  btnRow.appendChild(bindBtn);
-  btnRow.appendChild(unbindBtn);
-  btnRow.appendChild(cancelBtn);
+  }));
   box.appendChild(btnRow);
   modal.appendChild(box);
   modal.addEventListener('click', e => { if (e.target === modal) dismiss(); });
