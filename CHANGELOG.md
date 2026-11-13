@@ -9,6 +9,7 @@
 - Merged armorHudRenderDocked into armorHudRender, removing redundant function
 - Simplified dock button toggle logic
 - Simplified drag boundary clamping using Math.min/Math.max
+- Remove "Cancel" button on ShowBindPopup and simplify 
   
 ## v4.6
 
