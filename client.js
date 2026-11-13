@@ -1174,7 +1174,7 @@ settingsOverlay.innerHTML = `
   </div>
 `;
 
-    const resetSection = document.createElement('div');
+const resetSection = document.createElement('div');
 resetSection.className = 'uv2-section-title';
 resetSection.style.marginTop = '14px';
 resetSection.textContent = 'Danger Zone';
@@ -1225,6 +1225,7 @@ settingsOverlay.querySelector('#uv2-page-visuals')?.appendChild(resetRow);
     { name: "joudaALT", role: "Developer", badge: "Mod & Dev", bio: "Miniblox moderator and UV2 developer.", avatar: "https://github.com/joudaALT.png", color: { bg: "#1a1f3a", text: "#93c5fd", border: "#3b82f6", strip: "#3b82f6", icon: "⬡" } },
     { name: "Trust", role: "Developer", badge: "Coder", bio: "Developer with a knack for clean code.", avatar: "https://github.com/lttlgrl.png", color: { bg: "#2d1a3a", text: "#d8b4fe", border: "#9333ea", strip: "#9333ea", icon: "✦" } },
     { name: "TheM1ddleM1n", role: "Developer", badge: "Coder", bio: "Developer and Python/JavaScript specialist.", avatar: "https://github.com/TheM1ddleM1n.png", color: { bg: "#1a2a1a", text: "#6ee7b7", border: "#059669", strip: "#059669", icon: "⚔" } },
+    { name: "mrdaddycat", role: "Discord", badge: "OG", bio: "cat", avatar: "https://marketplace.canva.com/xHPJk/MAHA8XxHPJk/1/tl/canva-MAHA8XxHPJk.jpg", color: { bg: "#1a2a1a", text: "#6ee7b7", border: "#059669", strip: "#059669", icon: "🐾" } },
   ];
 
   const grid = settingsOverlay.querySelector("#uv2-contributors-grid");
