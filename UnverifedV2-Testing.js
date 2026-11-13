@@ -60,10 +60,8 @@ function playIntro() {
 playIntro();
 
 function getHoliday() {
-  const now = new Date();
-  const m = now.getMonth() + 1;
-  const d = now.getDate();
-  if (m === 10 && (d === 30 || d === 31)) return 'halloween';
+  const m = new Date().getMonth() + 1, d = new Date().getDate();
+  if (m === 10 && d >= 30) return 'halloween';
   if (m === 12 && d >= 20 && d <= 26) return 'christmas';
   if (m === 12 && d === 31 || m === 1 && d === 1) return 'newyear';
   return null;
@@ -198,14 +196,11 @@ const UV2_CHANGELOG_URL = UV2_RAW_BASE + 'CHANGELOG.md';
 let uv2LastCheck = 0;
 
 function uv2CompareVersions(a, b) {
-  const pa = String(a).split('.').map(n => parseInt(n, 10) || 0);
-  const pb = String(b).split('.').map(n => parseInt(n, 10) || 0);
-  const len = Math.max(pa.length, pb.length);
-  for (let i = 0; i < len; i++) {
-    const x = pa[i] || 0;
-    const y = pb[i] || 0;
-    if (x > y) return 1;
-    if (x < y) return -1;
+  const pa = String(a).split('.').map(Number);
+  const pb = String(b).split('.').map(Number);
+  for (let i = 0; i < Math.max(pa.length, pb.length); i++) {
+    const d = (pa[i] || 0) - (pb[i] || 0);
+    if (d !== 0) return d > 0 ? 1 : -1;
   }
   return 0;
 }
@@ -300,10 +295,10 @@ function uv2Check() {
       const m = r.responseText.match(/@version\s+([\d.]+)/);
       const latest = m ? m[1] : null;
       const hasUpdate = latest && uv2CompareVersions(latest, installed) > 0 && sessionStorage.getItem('uv2-update-dismissed') !== latest;
-      const needsWhatsNew = localStorage.getItem('uv2-whatsnew-version') !== installed;
+      const lastSeen = localStorage.getItem('uv2-whatsnew-version');
+      const needsWhatsNew = lastSeen && uv2CompareVersions(installed, lastSeen) > 0;
       if (!hasUpdate && !needsWhatsNew) return;
       if (document.getElementById('uv2-popup')) return;
-
       GM_xmlhttpRequest({
         method: 'GET',
         url: UV2_CHANGELOG_URL + '?t=' + Date.now(),
@@ -320,7 +315,7 @@ function uv2Check() {
               onPrimary: () => window.open(UV2_SCRIPT_URL, '_blank'),
               onSecondary: () => sessionStorage.setItem('uv2-update-dismissed', latest)
             });
-          } else if (log) {
+          } else if (needsWhatsNew && log) {
             uv2ShowPopup({
               title: "What's New",
               subtitle: log.heading,
@@ -2156,19 +2151,8 @@ const ARMOR_ENCHANT_ABBR = {
   mending: 'Mend',
 };
 
-function armorHudColorForPercent(percent) {
-  if (percent >= 60) return '#2ecc71';
-  if (percent >= 30) return '#f39c12';
-  return '#e74c3c';
-}
-
-function armorHudFormatEnchantName(rawName) {
-  return rawName
-    .split('_')
-    .map(w => w.charAt(0).toUpperCase() + w.slice(1))
-    .join(' ');
-}
-
+const armorHudColorForPercent = p => p >= 60 ? '#2ecc71' : p >= 30 ? '#f39c12' : '#e74c3c';
+const armorHudFormatEnchantName = s => s.split('_').map(w => w[0].toUpperCase() + w.slice(1)).join(' ');
 function armorHudGetEnchantLabels(slot) {
   const list = slot.data?.ench;
   if (!list || !list.length || !unsafeWindow.Enchantment) return [];
