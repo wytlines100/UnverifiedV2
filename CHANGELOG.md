@@ -9,7 +9,9 @@
 - Merged armorHudRenderDocked into armorHudRender, removing redundant function
 - Simplified dock button toggle logic
 - Simplified drag boundary clamping using Math.min/Math.max
-- Remove "Cancel" button on ShowBindPopup and simplify
+- Removed redundant Cancel button from keybind modal (click outside or Escape to dismiss)
+- Extracted button builder helper in showBindPopup to reduce repetition
+- Added Escape key support to dismiss keybind modal
 - Add mrdaddycat to contributors
   
 ## v4.6
