@@ -36,8 +36,9 @@ function playIntro() {
   creditsText.style.cssText = "color:red;font-size:30px;opacity:0;transition:opacity 1.1s ease;white-space:pre-line;text-align:center;text-shadow:0 0 5px red,0 0 10px red,0 0 20px red;";
   container.appendChild(creditsText);
   const keybindText = document.createElement("div");
+  const introKeybindMap = { backtick: '`', backslash: '\\', rshift: 'Right Shift' };
   const introKeybind = localStorage.getItem('uv2-setting-uikeybind') || 'rshift';
-  keybindText.textContent = `Press ${introKeybind === 'backtick' ? '`' : introKeybind === 'backslash' ? '\\' : 'Right Shift'} to open the menu`;
+  keybindText.textContent = `Press ${introKeybindMap[introKeybind] || 'Right Shift'} to open the menu`;
   keybindText.style.cssText = "color:red;font-size:30px;opacity:0;margin-top:30px;transition:opacity 1.1s ease;text-shadow:0 0 5px red,0 0 10px red,0 0 20px red;";
   container.appendChild(keybindText);
   document.body.appendChild(container);
