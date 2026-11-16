@@ -1,160 +1,91 @@
 # Changelog
 
 ## v4.7
-
-- Simplified uv2CompareVersions to reduce branching
-- Converted armorHudColorForPercent to a single-line arrow function
-- Simplified getHoliday using single Date instantiation
-- Converted armorHudFormatEnchantName to a single-line arrow function
-- Merged armorHudRenderDocked into armorHudRender, removing redundant function
+- Simplified armorHudRender by merging docked/floating branches
 - Simplified dock button toggle logic
-- Simplified drag boundary clamping using Math.min/Math.max
-- Removed redundant Cancel button from keybind modal (click outside or Escape to dismiss)
-- Extracted button builder helper in showBindPopup to reduce repetition
+- Simplified drag boundary clamping
+- Removed Cancel button from keybind modal (Escape or click outside to dismiss)
+- Extracted button builder helper in showBindPopup
 - Added Escape key support to dismiss keybind modal
-- Add mrdaddycat to contributors
-- Replaced nested ternary in intro keybind display with a lookup object
-  
-## v4.6
+- Added mrdaddycat to contributors
 
+## v4.6
 - Removed April Fools holiday event
-- Refactored buildArmorHudSettingsPage, buildContributorsGrid, and buildConfigPage for cleaner code
-- Moved contributor card shimmer CSS to main stylesheet
 - Improved UI open/close animation smoothness
-- closeUI no longer resets to the main page on reopen
+- closeUI no longer resets to main page on reopen
 - Fixed bind bar persisting when reopening the menu mid-bind
-- Inlined checkAndExecuteInfo into hookChatEngine
-- Added right-click hint text to module page, removed module tooltip
+- Added right-click hint text to module page
 - Simplified config file name format
-- Updated README with Keybinds, Commands, Configuration, and Music Player sections
-- Reduced build size from 137KB to 132KB
-- Simplified uv2ParseChangelog using reduce
+- Reduced build size from 137KB to 130KB
 
 ## v4.5
-
-- Replaced bind popup with a centered modal featuring a live key display and keyboard icon
-- Added inline keybind pill on each module showing the bound key with a keyboard icon
+- Replaced bind popup with a centered modal with live key display
+- Added inline keybind pill on each module showing the bound key
 - Keybind pills persist through favorite sorting and config load
 - Fixed favorite section labels showing when all or no modules are favorited
-- Removed title screen background image enforcement and its MutationObserver
-- Removed non armor enchantments
-- UI fixes/improvements
-- Locked Accent Color to Orange (On Halloween) / Red (On Christmas)
+- Locked accent color to orange on Halloween and red on Christmas
 - Notification overhaul
-- Initial Phase of Client Simplification
 - Replaced UnverifiedIntro class with a plain function
-- Inlined isInMatch regex, removed unnecessary function and try/catch
 
 ## v4.4
-- Added holiday system with themed banners, accent colors, and match join chat messages for each holiday
-- Halloween (Oct 30 – Oct 31): forced accent color #ff6600, banner, chat message
-- Christmas (Dec 20 – Dec 26): forced accent color #cc0000, banner, chat message
-- New Year's (Dec 31 – Jan 1): banner, live countdown in sidebar footer, confetti burst on midnight, toast, chat message
-- Fix: Armor enchantments only go up to V instead of X
+- Added holiday system with themed banners, accent colors, and match join chat messages
+- Halloween: forced accent #ff6600, banner, chat message
+- Christmas: forced accent #cc0000, banner, chat message
+- New Year's: banner, live countdown, confetti burst at midnight, toast, chat message
+- Fixed armor enchantments capping at V instead of X
 
 ## v4.3
-- Removed Fullscreen module (redundant with in-game fullscreen message)
-- Readme clarity updates
+- Removed Fullscreen module
 
 ## v4.2
-- Removed click sound initial transient oscillator (3 oscillators to 2 on enable)
-- Removed redundant buildArmorHudSettingsPage calls on init and reset
-- Removed border from sidebar logo image
-- Fixed arrow functions in VPN gate buttons returning assignments#
-- Removed all true/false from showNotification
-- Fixed Keybind intro
-- Fixed ArmorHUD settings not resetting
-- Improved Animations/Performance
+- Fixed keybind intro display
+- Fixed Armor HUD settings not resetting
+- Improved animations and performance
 
 ## v4.1
-- Added module toggle press animation on click
-- Improved notification enter and exit animations
+- Added module toggle press animation
+- Improved notification animations
 - Notifications now inherit accent color for border and progress bar
-- Simplified and standardized all notification messages
-- Removed unused isOn parameter from showNotification
-- Removed dead showNotifications and animateUI config flags
-- Fixed UI open/close animation broken after animateUI removal
-- Replaced Object.assign style blocks with cssText strings in UnverifiedIntro
 
 ## v4
-- AFK music that fades in when Anti-AFK auto-enables and fades out on user return
-- Optional AFK music toggle in Settings
-- Updated Idle Delay from 5 seconds (minimum) to 10 seconds
-- Fixed Fullscreen module desyncing when Escape is used to exit fullscreen
-- Updated intro credits order to reflect contribution ranking
-- Improved Notification Animations
-- Smooth spring easing on module toggle knob using cubic-bezier
-- Fixed config load clamping afkDelay to a minimum of 5 instead of 10
-- Keep Sprint now also triggers on arrow keys
-- Keep Sprint now dispatches Right Shift instead of Left Shift
+- AFK music that fades in on auto-enable and fades out on return
+- Added AFK music toggle in Settings
+- Updated minimum idle delay to 10 seconds
+- Keep Sprint now triggers on arrow keys and dispatches Right Shift
 
 ## v3.8
-- Removed unused color variables and dead config keys
 - Merged Save and Load config buttons side by side
-- Removed unused style loop and object declarations from Chat Filter
 
 ## v3.7
-- Smoother notification slide animation
 - Welcome message now only appears when joining a match
 - Fixed Anti-AFK style element leaking on each enable
-- Removed unused settings toggles
 
 ## v3.6
 - Intro now displays the active UI keybind
-- Slower, smoother intro fade with adjusted timing
-
-## v3.5
-- Removed Profile/User (cosmetic)
 
 ## v3.4
-- Link blocking in Chat Filter (incoming and outgoing)
-- Changelog sidebar page with full version history
+- Link blocking in Chat Filter
+- Changelog sidebar page
 - /info command
-
-## v3.3.1
-- Restored version display to sidebar
-- Split Settings into three sections
-
-## v3.3
-- Removed language dropdown and translation support (English only)
 
 ## v3.2
 - Update checker comparing installed version against GitHub every minute
-- Merged Update and What's New into a single pill-style popup
 - Added @downloadURL and @updateURL to userscript header
 
 ## v3.1
-- Added profanity regex filter
+- Added profanity filter
 
 ## v3
 - Added duplicate keybind conflict notification
-- Fixed incorrect "was turned off" notification on enable
 
 ## v2.7
-- Added UI keybind setting (Right Shift or `)
+- Added UI keybind setting
 - Added What's New popup shown once per version
 - Fixed draggable module bounding boxes
 
-## v2.3
-- Armor HUD docked to right side only
-- Removed unused Armor HUD variables and resize listener
-
-## v2.2.2
-- Shine animation on module cards
-- Contributor bios and icons in Settings
-- Color theme refresh
-- Moved Music Player to MusicPlayer.js
-
-## v2.2.1
-- Extended intro sequence
-- Reduced build size (139 KB to 125 KB)
-
 ## v2.2
-- Added Armor HUD (floating/docked modes)
-- Added new theme preset
+- Added Armor HUD with floating and docked modes
+- Added Chat Filter with profanity and spam detection
 
-## v2.1.1
-- Added Chat Filter (profanity and spam detection)
-
-## v2.1.0 (Initial Client)
-- Added Settings panel, Anti-AFK, VPN detection warning, theme presets, config save/load.
+## v2.1.0
+- Added Settings panel, Anti-AFK, VPN detection warning, config save/load
