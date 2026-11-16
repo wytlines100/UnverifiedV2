@@ -8,6 +8,8 @@
 - Extracted button builder helper in showBindPopup
 - Added Escape key support to dismiss keybind modal
 - Added mrdaddycat to contributors
+- Refactored buildContributorsGrid to use a single card builder function
+- Flattened contributor color objects into top-level properties
 
 ## v4.6
 - Removed April Fools holiday event
