@@ -30,7 +30,7 @@
 ## v4.4
 - Added holiday system with themed banners, accent colors, and match join chat messages
 - Halloween: forced accent #ff6600, banner, chat message
-- Christmas: forced accent #cc0000, banner, chat message
+- Christmas (Dec 20-26): forced accent #cc0000, banner, chat message
 - New Year's: banner, live countdown, confetti burst at midnight, toast, chat message
 - Fixed armor enchantments capping at V instead of X
 
