@@ -1988,6 +1988,7 @@ chatFilterModule.addEventListener("click", () => {
       return chatFilterOriginalSubmit(...args);
     };
   } else {
+    chatFilterMessageCache = [];
     if (chatFilterOriginalSubmit) chat.submit = chatFilterOriginalSubmit;
     restoreChatAddChatIfUnused();
   }
