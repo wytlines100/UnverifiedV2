@@ -59,7 +59,7 @@ Use the **Config** page to export all settings, module states, and keybinds as a
 
 ## Music Player
 
-UV2 Music Player is a separate script (`MusicPlayer.js`) installable independently via Tampermonkey. It is not bundled with the main client.
+UV2 Music Player is a separate script (`MusicPlayer.js`) installable independently. It is not bundled with the main client.
 
 ## Menu Pages
 
@@ -85,6 +85,6 @@ UV2 Music Player is a separate script (`MusicPlayer.js`) installable independent
 wyt, jet, joudaALT, Trust, TheM1ddleM1n
 
 > [!NOTE]
-wyt is inactive. And TheM1ddleM1n (known as C0smic) cannot access discord at the moment.
+wyt is inactive. And TheM1ddleM1n (known as C0smic) cannot access Discord at all right now.
 
 Distributed under a proprietary All Rights Reserved license — see [LICENSE.md](LICENSE.md) for details — [Discord](https://dsc.gg/unverifiedv2)
