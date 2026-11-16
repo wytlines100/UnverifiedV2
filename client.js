@@ -1220,47 +1220,27 @@ resetRow.appendChild(resetBtn);
 settingsOverlay.querySelector('#uv2-page-visuals')?.appendChild(resetRow);
 
 (function buildContributorsGrid() {
-  const UV2_CONTRIBUTORS = [
-    { name: "wyt", role: "Lead Developer", badge: "Founder", bio: "Founded and leads UV2.", avatar: "https://github.com/wytlines100.png", color: { bg: "#3b1a00", text: "#fdba74", border: "#ea580c", strip: "#ea580c", icon: "★" } },
-    { name: "jet", role: "Ex-Developer", badge: "Ex-Dev", bio: "Helped build early versions.", avatar: "https://github.com/h9ndcuffs.png", color: { bg: "#1c1c1c", text: "#a1a1aa", border: "#52525b", strip: "#52525b", icon: "◇" } },
-    { name: "joudaALT", role: "Developer", badge: "Mod & Dev", bio: "Miniblox moderator and UV2 developer.", avatar: "https://github.com/joudaALT.png", color: { bg: "#1a1f3a", text: "#93c5fd", border: "#3b82f6", strip: "#3b82f6", icon: "⬡" } },
-    { name: "Trust", role: "Developer", badge: "Coder", bio: "Developer with a knack for clean code.", avatar: "https://github.com/lttlgrl.png", color: { bg: "#2d1a3a", text: "#d8b4fe", border: "#9333ea", strip: "#9333ea", icon: "✦" } },
-    { name: "TheM1ddleM1n", role: "Developer", badge: "Coder", bio: "Developer and Python/JavaScript specialist.", avatar: "https://github.com/TheM1ddleM1n.png", color: { bg: "#1a2a1a", text: "#6ee7b7", border: "#059669", strip: "#059669", icon: "⚔" } },
-    { name: "mrdaddycat", role: "Discord", badge: "OG", bio: "cat", avatar: "https://marketplace.canva.com/xHPJk/MAHA8XxHPJk/1/tl/canva-MAHA8XxHPJk.jpg", color: { bg: "#1a2a1a", text: "#6ee7b7", border: "#059669", strip: "#059669", icon: "🐾" } },
+  const contributors = [
+    { name: "wyt", role: "Lead Developer", badge: "Founder", bio: "Founded and leads UV2.", avatar: "https://github.com/wytlines100.png", bg: "#3b1a00", text: "#fdba74", border: "#ea580c", strip: "#ea580c", icon: "★" },
+    { name: "jet", role: "Ex-Developer", badge: "Ex-Dev", bio: "Helped build early versions.", avatar: "https://github.com/h9ndcuffs.png", bg: "#1c1c1c", text: "#a1a1aa", border: "#52525b", strip: "#52525b", icon: "◇" },
+    { name: "joudaALT", role: "Developer", badge: "Mod & Dev", bio: "Miniblox moderator and UV2 developer.", avatar: "https://github.com/joudaALT.png", bg: "#1a1f3a", text: "#93c5fd", border: "#3b82f6", strip: "#3b82f6", icon: "⬡" },
+    { name: "Trust", role: "Developer", badge: "Coder", bio: "Developer with a knack for clean code.", avatar: "https://github.com/lttlgrl.png", bg: "#2d1a3a", text: "#d8b4fe", border: "#9333ea", strip: "#9333ea", icon: "✦" },
+    { name: "TheM1ddleM1n", role: "Developer", badge: "Coder", bio: "Developer and Python/JavaScript specialist.", avatar: "https://github.com/TheM1ddleM1n.png", bg: "#1a2a1a", text: "#6ee7b7", border: "#059669", strip: "#059669", icon: "⚔" },
+    { name: "mrdaddycat", role: "Discord", badge: "OG", bio: "cat", avatar: "https://marketplace.canva.com/xHPJk/MAHA8XxHPJk/1/tl/canva-MAHA8XxHPJk.jpg", bg: "#1a2a1a", text: "#6ee7b7", border: "#059669", strip: "#059669", icon: "🐾" },
   ];
-
   const grid = settingsOverlay.querySelector("#uv2-contributors-grid");
   if (!grid) return;
   grid.style.cssText = "display:flex;flex-wrap:wrap;gap:12px;padding:4px 0 8px 0;";
-
-  UV2_CONTRIBUTORS.forEach(({ name, role, badge, bio, avatar, color: c }) => {
+  function buildCard(c) {
     const card = document.createElement("div");
     card.className = "uv2-contrib-card";
     card.style.cssText = `display:flex;flex-direction:column;background:linear-gradient(160deg,#1c1c1c,#111111);border:1px solid ${c.strip}30;border-radius:10px;flex:1;min-width:200px;max-width:calc(50% - 6px);transition:border-color 0.25s ease,box-shadow 0.25s ease;cursor:default;box-sizing:border-box;position:relative;overflow:hidden;`;
     card.addEventListener("mouseenter", () => { card.style.borderColor = `${c.strip}80`; card.style.boxShadow = `0 0 0 1px ${c.strip}25,0 6px 24px rgba(0,0,0,0.6),inset 0 0 40px ${c.strip}08`; });
     card.addEventListener("mouseleave", () => { card.style.borderColor = `${c.strip}30`; card.style.boxShadow = "none"; });
-    card.innerHTML = `
-<div class="uv2-card-shimmer" style="pointer-events:none;position:absolute;top:0;left:0;width:40%;height:100%;background:linear-gradient(120deg,transparent,rgba(255,255,255,0.07),transparent);transform:translateX(-100%) skewX(-15deg);z-index:1;"></div>
-<div style="height:3px;background:linear-gradient(90deg,${c.strip},${c.strip}44);border-radius:10px 10px 0 0;flex-shrink:0;"></div>
-<div style="display:flex;flex-direction:column;gap:10px;padding:12px 14px 14px;position:relative;z-index:2;">
-  <div style="display:flex;align-items:center;gap:10px;">
-    <div style="position:relative;flex-shrink:0;">
-      <div style="position:absolute;inset:-3px;border-radius:50%;background:radial-gradient(circle,${c.strip}55,transparent 70%);z-index:0;"></div>
-      <img src="${avatar}" onerror="this.src='https://github.com/identicons/${name}.png'" style="width:44px;height:44px;border-radius:50%;display:block;position:relative;z-index:1;border:2px solid ${c.strip}99;background:#111;">
-    </div>
-    <div style="display:flex;flex-direction:column;gap:4px;min-width:0;flex:1;">
-      <div style="display:flex;align-items:center;gap:6px;flex-wrap:wrap;">
-        <div style="font-size:13px;font-weight:600;color:#fff;font-family:MinibloxFont,sans-serif;white-space:nowrap;">${name}</div>
-        <div style="background:${c.bg};color:${c.text};border:1px solid ${c.border};font-size:9px;font-family:MinibloxFont,sans-serif;letter-spacing:0.5px;padding:2px 6px;border-radius:4px;white-space:nowrap;display:flex;align-items:center;gap:3px;"><span style="font-size:8px;">${c.icon}</span><span>${badge}</span></div>
-      </div>
-      <div style="font-size:11px;color:${c.strip};font-family:MinibloxFont,sans-serif;opacity:0.9;">${role}</div>
-    </div>
-  </div>
-  <div style="height:1px;background:linear-gradient(90deg,${c.strip}30,transparent);"></div>
-  <div style="font-size:11.5px;color:#666;font-family:MinibloxFont,sans-serif;line-height:1.55;">${bio}</div>
-</div>`;
-    grid.appendChild(card);
-  });
+    card.innerHTML = `<div class="uv2-card-shimmer" style="pointer-events:none;position:absolute;top:0;left:0;width:40%;height:100%;background:linear-gradient(120deg,transparent,rgba(255,255,255,0.07),transparent);transform:translateX(-100%) skewX(-15deg);z-index:1;"></div><div style="height:3px;background:linear-gradient(90deg,${c.strip},${c.strip}44);border-radius:10px 10px 0 0;flex-shrink:0;"></div><div style="display:flex;flex-direction:column;gap:10px;padding:12px 14px 14px;position:relative;z-index:2;"><div style="display:flex;align-items:center;gap:10px;"><div style="position:relative;flex-shrink:0;"><div style="position:absolute;inset:-3px;border-radius:50%;background:radial-gradient(circle,${c.strip}55,transparent 70%);z-index:0;"></div><img src="${c.avatar}" onerror="this.src='https://github.com/identicons/${c.name}.png'" style="width:44px;height:44px;border-radius:50%;display:block;position:relative;z-index:1;border:2px solid ${c.strip}99;background:#111;"></div><div style="display:flex;flex-direction:column;gap:4px;min-width:0;flex:1;"><div style="display:flex;align-items:center;gap:6px;flex-wrap:wrap;"><div style="font-size:13px;font-weight:600;color:#fff;font-family:MinibloxFont,sans-serif;white-space:nowrap;">${c.name}</div><div style="background:${c.bg};color:${c.text};border:1px solid ${c.border};font-size:9px;font-family:MinibloxFont,sans-serif;letter-spacing:0.5px;padding:2px 6px;border-radius:4px;white-space:nowrap;display:flex;align-items:center;gap:3px;"><span style="font-size:8px;">${c.icon}</span><span>${c.badge}</span></div></div><div style="font-size:11px;color:${c.strip};font-family:MinibloxFont,sans-serif;opacity:0.9;">${c.role}</div></div></div><div style="height:1px;background:linear-gradient(90deg,${c.strip}30,transparent);"></div><div style="font-size:11.5px;color:#666;font-family:MinibloxFont,sans-serif;line-height:1.55;">${c.bio}</div></div>`;
+    return card;
+  }
+  contributors.forEach(c => grid.appendChild(buildCard(c)));
 })();
 
   const uv2InlineSettings = settingsOverlay.querySelector('#uv2-settings-panel');
