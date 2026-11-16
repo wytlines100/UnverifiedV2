@@ -1005,8 +1005,8 @@ function buildChangelogPage() {
         status.textContent = 'No changelog entries found.';
         return;
       }
-      status.remove();
       uv2ChangelogLoaded = true;
+      status.remove();
 
       const timeline = document.createElement('div');
       timeline.style.cssText = 'display:flex;flex-direction:column;padding-left:6px;';
