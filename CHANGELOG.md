@@ -13,6 +13,7 @@
 - Extracted button builder helper in showBindPopup to reduce repetition
 - Added Escape key support to dismiss keybind modal
 - Add mrdaddycat to contributors
+- Replaced nested ternary in intro keybind display with a lookup object
   
 ## v4.6
 
