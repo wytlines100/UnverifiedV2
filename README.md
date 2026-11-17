@@ -66,18 +66,17 @@ UV2 Music Player is a separate script (`MusicPlayer.js`) installable independent
 | Page | Contents |
 |---|---|
 | **Modules** | All toggleable modules, favorites, search bar |
-| **Color** | Accent color picker with hex input and recent colors |
+| **Color** | Accent color picker with recent colors |
 | **Config** | Save and load configuration as a JSON file |
 | **Settings** | Sounds, persistence, UI keybind, VPN warning, Anti-AFK, Armor HUD options |
 | **Changelog** | Full version history fetched from GitHub |
 
 ## Notes
 
-- Not affiliated with or endorsed by Miniblox.
+- **Not affiliated with or endorsed by Miniblox.**
 - Modules depend on Miniblox's front-end structure and may break after game updates.
-- Armor HUD requires `unsafeWindow.spriteMap` and `unsafeWindow.Enchantment`; only active in a match.
 - Auto-AFK will not trigger outside of an active match (`/join/` URL).
-- VPN detection uses a third-party IP lookup and may produce false positives.
+- **VPN detection uses a third-party IP lookup and may produce false positives.**
 - **Use at your own risk. Maintainers are not responsible for any account actions resulting from use.**
 
 ## Contributors
