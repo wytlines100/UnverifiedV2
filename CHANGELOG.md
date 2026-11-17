@@ -1,5 +1,10 @@
 # Changelog
 
+## v4.8
+- Removed Color on Color Section
+- Increased text size for Accent Color/Recent Colors
+- Removed Hex code for color and X for Settings Page
+
 ## v4.7
 - Simplified armorHudRender by merging docked/floating branches
 - Simplified dock button toggle logic
