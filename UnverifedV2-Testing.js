@@ -436,8 +436,6 @@ style.innerHTML = `
 #uv2-settings-titlebar { background:#000000 !important; border-bottom:1px solid rgba(255,255,255,0.07) !important; display:flex; align-items:center; justify-content:space-between; padding:14px 18px; flex-shrink:0; }
 #uv2-settings-titlebar span { font-size:15px; font-weight:600; display:flex; align-items:center; gap:8px; }
 #uv2-settings-titlebar span svg { fill:#e74c3c; }
-#uv2-settings-close { background:none; border:none; color:#aaa; font-size:20px; cursor:pointer; line-height:1; padding:2px 6px; border-radius:4px; transition:background 0.2s,color 0.2s; }
-#uv2-settings-close:hover { background:#e74c3c; color:#fff; }
 #uv2-settings-body { display:flex; flex:1; min-height:0; overflow:hidden; }
 #uv2-settings-content { flex:1; min-height:0; overflow-y:auto; padding:16px 20px; }
 .uv2-settings-page { display:block; }
@@ -659,15 +657,10 @@ let armorHudGap = parseInt(localStorage.getItem('uv2-armorhud-gap') || '4', 10);
   function buildGUIPage() {
   uv2GUIPage.innerHTML = '';
   const isHoliday = holiday === 'halloween' || holiday === 'christmas';
-  const heading = document.createElement('h2');
-  heading.textContent = 'Color';
-  heading.style.cssText = 'font-size:28px;font-family:MinibloxFont,sans-serif;margin:0 0 20px 0;text-align:center;color:#fff;';
-  uv2GUIPage.appendChild(heading);
 
   const sectionLabel = document.createElement('div');
-  sectionLabel.className = 'uv2-section-title';
   sectionLabel.textContent = 'Accent color';
-  sectionLabel.style.marginTop = '0';
+  sectionLabel.style.cssText = 'font-size:14px;color:#aaa;margin:0 0 10px 0;letter-spacing:0.05em;';
   uv2GUIPage.appendChild(sectionLabel);
 
   const row = document.createElement('div');
@@ -680,21 +673,10 @@ let armorHudGap = parseInt(localStorage.getItem('uv2-armorhud-gap') || '4', 10);
   picker.style.cssText = 'width:48px;height:48px;border:none;border-radius:8px;cursor:pointer;background:none;padding:0;flex-shrink:0;';
   row.appendChild(picker);
 
-  const hexInput = document.createElement('input');
-  hexInput.type = 'text';
-  hexInput.value = guiPrimaryColor;
-  hexInput.maxLength = 7;
-  hexInput.style.cssText = 'background:#111;color:#fff;border:1px solid rgba(255,255,255,0.12);border-radius:6px;padding:10px 14px;font-size:14px;font-family:MinibloxFont,sans-serif;width:110px;outline:none;';
-  row.appendChild(hexInput);
-
   if (isHoliday) {
     picker.disabled = true;
-    hexInput.disabled = true;
     picker.style.opacity = '0.4';
     picker.style.cursor = 'not-allowed';
-    hexInput.style.opacity = '0.4';
-    hexInput.style.cursor = 'not-allowed';
-    hexInput.style.pointerEvents = 'none';
   }
 
   const previewDot = document.createElement('div');
@@ -702,8 +684,8 @@ let armorHudGap = parseInt(localStorage.getItem('uv2-armorhud-gap') || '4', 10);
   row.appendChild(previewDot);
 
   const recentLabel = document.createElement('div');
-  recentLabel.className = 'uv2-section-title';
   recentLabel.textContent = 'Recent colors';
+  recentLabel.style.cssText = 'font-size:14px;color:#aaa;margin:0 0 10px 0;letter-spacing:0.05em;';
   uv2GUIPage.appendChild(recentLabel);
 
   const recentRow = document.createElement('div');
@@ -739,20 +721,15 @@ let armorHudGap = parseInt(localStorage.getItem('uv2-armorhud-gap') || '4', 10);
     guiPrimaryColor = hex;
     localStorage.setItem('uv2-gui-primary-color', hex);
     picker.value = hex;
-    hexInput.value = hex;
     previewDot.style.background = hex;
     previewDot.style.boxShadow = `0 0 12px ${hex}88`;
     saveRecent(hex);
     renderRecent();
     applyGUIStyles();
   }
+
   renderRecent();
   picker.addEventListener('change', () => { applyColor(picker.value); });
-  hexInput.addEventListener('input', () => {
-    const val = hexInput.value.trim();
-    if (/^#[0-9a-fA-F]{6}$/.test(val)) applyColor(val);
-  });
-  hexInput.addEventListener('keydown', e => { if (e.key === 'Enter') hexInput.blur(); });
 }
 
   function buildConfigPage() {
@@ -1116,7 +1093,6 @@ settingsOverlay.innerHTML = `
   <div id="uv2-settings-panel">
     <div id="uv2-settings-titlebar">
       <span><svg width="16" height="16" viewBox="0 0 24 24"><path d="M19.14,12.94c0.04-0.3,0.06-0.61,0.06-0.94c0-0.32-0.02-0.64-0.07-0.94l2.03-1.58c0.18-0.14,0.23-0.41,0.12-0.61l-1.92-3.32c-0.12-0.22-0.37-0.29-0.59-0.22l-2.39,0.96c-0.5-0.38-1.03-0.7-1.62-0.94L14.4,2.81c-0.04-0.24-0.24-0.41-0.48-0.41h-3.84c-0.24,0-0.43,0.17-0.47,0.41L9.25,5.35C8.66,5.59,8.12,5.92,7.63,6.29L5.24,5.33c-0.22-0.08-0.47,0-0.59,0.22L2.74,8.87C2.62,9.08,2.66,9.34,2.86,9.48l2.03,1.58C4.84,11.36,4.8,11.69,4.8,12s0.02,0.64,0.07,0.94l-2.03,1.58c-0.18,0.14-0.23,0.41-0.12,0.61l1.92,3.32c0.12,0.22,0.37,0.29,0.59,0.22l2.39-0.96c0.5,0.38,1.03,0.7,1.62,0.94l0.36,2.54c0.05,0.24,0.24,0.41,0.48,0.41h3.84c0.24,0,0.44-0.17,0.47-0.41l0.36-2.54c0.59-0.24,1.13-0.56,1.62-0.94l2.39,0.96c0.22,0.08,0.47,0,0.59-0.22l1.92-3.32c0.12-0.22,0.07-0.47-0.12-0.61L19.14,12.94zM12,15.6c-1.98,0-3.6-1.62-3.6-3.6s1.62-3.6,3.6-3.6S13.98,15.6,12,15.6z"/></svg>Settings</span>
-      <button id="uv2-settings-close">✕</button>
     </div>
     <div id="uv2-settings-body">
       <div id="uv2-settings-content">
@@ -1259,7 +1235,6 @@ buildConfigPage();
 applyGUIStyles();
 switchUv2Page('main');
 
-  document.querySelector("#uv2-settings-close")?.addEventListener("click", () => switchUv2Page('main'));
 document.querySelector("#uv2-toggle-sounds")?.addEventListener("change", function() {
   settings.moduleSounds = this.checked;
   localStorage.setItem('uv2-setting-sounds', this.checked);
