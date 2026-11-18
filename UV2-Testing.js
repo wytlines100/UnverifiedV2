@@ -2,7 +2,7 @@
 // @name         UV2-Testing
 // @namespace    http://tampermonkey.net/
 // @version      4.8
-// @description  Look at my license before you modify, I WILL DMCA you.
+// @description  This is UV2-Testing Script. We test our new features on here. 
 // @icon         https://raw.githubusercontent.com/wytlines100/UnverifiedV2/refs/heads/main/logo.jpg
 // @downloadURL  https://raw.githubusercontent.com/wytlines100/UnverifiedV2/refs/heads/main/client.js
 // @updateURL    https://raw.githubusercontent.com/wytlines100/UnverifiedV2/refs/heads/main/client.js
