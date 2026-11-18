@@ -1,7 +1,7 @@
 // ==UserScript==
 // @name         Skyboxes
 // @namespace    tampogmonkey
-// @version      3
+// @version      4.8
 // @description  Credit to whoever made Candy!
 // @author       TheMysteryMan
 // @match        https://miniblox.io/*
