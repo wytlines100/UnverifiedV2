@@ -4,6 +4,8 @@
 - Removed Color on Color Section
 - Increased text size for Accent Color/Recent Colors
 - Removed Hex code for color and X for Settings Page
+- Added AbortController to draggable modules
+- cleanup of MusicPlayer.js, client.js and UV2Testing.js
 
 ## v4.7
 - Simplified armorHudRender by merging docked/floating branches
