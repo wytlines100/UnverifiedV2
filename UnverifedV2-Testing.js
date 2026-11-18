@@ -184,7 +184,7 @@ const waitForGame = setInterval(() => {
     return true;
   }
 
-  const initInterval = setInterval(() => {
+const initInterval = setInterval(() => {
     if (hookChatEngine()) clearInterval(initInterval);
   }, 500);
 })();
@@ -205,7 +205,7 @@ function uv2CompareVersions(a, b) {
   }
   return 0;
 }
-
+  
 function uv2ParseChangelog(text) {
   return text.split(/\n(?=## )/).reduce((entries, part) => {
     const m = part.match(/^## ([^\n]+)\n?([\s\S]*)$/);
@@ -217,7 +217,6 @@ function uv2ParseChangelog(text) {
 function uv2ShowPopup(opts) {
   const existing = document.getElementById('uv2-popup');
   if (existing) existing.remove();
-
   const wrap = document.createElement('div');
   wrap.id = 'uv2-popup';
   wrap.style.cssText = 'position:fixed;top:-300px;left:50%;transform:translateX(-50%);z-index:100002;pointer-events:none;transition:top 0.5s ease,opacity 0.5s ease;opacity:0;';
@@ -260,7 +259,6 @@ function uv2ShowPopup(opts) {
 
   const btnRow = document.createElement('div');
   btnRow.style.cssText = 'display:flex;gap:8px;';
-
   const primaryBtn = document.createElement('button');
   primaryBtn.textContent = opts.primaryLabel;
   primaryBtn.style.cssText = 'flex:1;background:#e74c3c;color:#fff;border:none;border-radius:16px;padding:8px 14px;cursor:pointer;font-family:MinibloxFont,sans-serif;font-size:12px;';
@@ -1793,50 +1791,38 @@ moduleContainer.addEventListener("mouseleave", () => {
   return moduleContainer;
 }
 
-function addTrackedListener(list, type, handler) {
-  document.addEventListener(type, handler);
-  list.push([type, handler]);
-}
-
-function clearTrackedListeners(list) {
-  list.splice(0).forEach(([type, handler]) => document.removeEventListener(type, handler));
-}
-
 const keystrokesModule = createModule(MODULE_NAMES.KEYSTROKES, "Displays the keys you press in real-time.");
 let isKeystrokesActive = false;
-const keystrokesListeners = [];
+let keystrokesController = null;
 keystrokesModule.addEventListener("click", () => {
   isKeystrokesActive = !isKeystrokesActive;
-  clearTrackedListeners(keystrokesListeners);
+  if (keystrokesController) { keystrokesController.abort(); keystrokesController = null; }
   if (isKeystrokesActive) {
-    if (document.getElementById('keystrokes-container')) document.getElementById('keystrokes-container').remove();
-    const kc = document.createElement('div'); kc.id = 'keystrokes-container';
+    const existing = document.getElementById('keystrokes-container');
+    if (existing) existing.remove();
+    const kc = document.createElement('div');
+    kc.id = 'keystrokes-container';
     kc.style.cssText = 'z-index:10000;width:300px;height:230px;position:fixed;opacity:100%;box-shadow:none;background-color:transparent;transform:translate(-50%,-50%);display:flex;flex-direction:column;align-items:center;user-select:none;';
     const savedL = localStorage.getItem('left'), savedT = localStorage.getItem('top');
     kc.style.left = (savedL ? parseInt(savedL) : window.innerWidth/2) + 'px';
     kc.style.top = (savedT ? parseInt(savedT) : window.innerHeight/2) + 'px';
     document.body.appendChild(kc);
+    keystrokesController = new AbortController();
+    const signal = keystrokesController.signal;
     let isDragging = false;
     kc.addEventListener('mousedown', e => { if (e.target.nodeName !== 'INPUT') isDragging = true; });
-    addTrackedListener(keystrokesListeners, 'mousemove', e => {
-      if (isDragging) {
-        let left = e.clientX;
-        let top = e.clientY;
-        const halfWidth = kc.offsetWidth / 2;
-        const halfHeight = kc.offsetHeight / 2;
-        if (left < halfWidth) left = halfWidth;
-        if (top < halfHeight) top = halfHeight;
-        if (left > window.innerWidth - halfWidth) left = window.innerWidth - halfWidth;
-        if (top > window.innerHeight - halfHeight) top = window.innerHeight - halfHeight;
-        kc.style.left = left + 'px';
-        kc.style.top = top + 'px';
-        localStorage.setItem('left', left);
-        localStorage.setItem('top', top);
-      }
-    });
-    addTrackedListener(keystrokesListeners, 'mouseup', () => { isDragging = false; });
+    document.addEventListener('mousemove', e => {
+      if (!isDragging) return;
+      const halfW = kc.offsetWidth / 2, halfH = kc.offsetHeight / 2;
+      kc.style.left = Math.min(Math.max(e.clientX, halfW), window.innerWidth - halfW) + 'px';
+      kc.style.top = Math.min(Math.max(e.clientY, halfH), window.innerHeight - halfH) + 'px';
+      localStorage.setItem('left', kc.style.left);
+      localStorage.setItem('top', kc.style.top);
+    }, { signal });
+    document.addEventListener('mouseup', () => { isDragging = false; }, { signal });
     const createKey = (text, style = {}) => {
-      const key = document.createElement('div'); key.textContent = text;
+      const key = document.createElement('div');
+      key.textContent = text;
       Object.assign(key.style, { position:'absolute', color:'#ffffff', fontWeight:'bold', borderRadius:'0', backgroundColor:'rgba(128,128,128,0.7)', border:'3px solid #333333', fontSize:'18px', height:'50px', width:'50px', textAlign:'center', lineHeight:'50px', fontFamily:'Roboto Mono, monospace', zIndex:'10000', ...style });
       return key;
     };
@@ -1844,12 +1830,15 @@ keystrokesModule.addEventListener("click", () => {
     const lmb = createKey('LMB', {top:'110px',left:'70px',width:'79px'}), rmb = createKey('RMB', {top:'110px',left:'150px',width:'79px'}), space = createKey('_____', {top:'170px',left:'70px',width:'160px'});
     kc.append(wkey, akey, skey, dkey, lmb, rmb, space);
     const downColor = '#8B0000', upColor = 'rgba(128,128,128,0.7)';
-    addTrackedListener(keystrokesListeners, 'keydown', e => { if(e.code==='KeyW') wkey.style.backgroundColor=downColor; if(e.code==='KeyS') skey.style.backgroundColor=downColor; if(e.code==='KeyA') akey.style.backgroundColor=downColor; if(e.code==='KeyD') dkey.style.backgroundColor=downColor; if(e.code==='Space') space.style.backgroundColor=downColor; });
-    addTrackedListener(keystrokesListeners, 'keyup', e => { if(e.code==='KeyW') wkey.style.backgroundColor=upColor; if(e.code==='KeyS') skey.style.backgroundColor=upColor; if(e.code==='KeyA') akey.style.backgroundColor=upColor; if(e.code==='KeyD') dkey.style.backgroundColor=upColor; if(e.code==='Space') space.style.backgroundColor=upColor; });
-    addTrackedListener(keystrokesListeners, 'mousedown', e => { if(e.button===0) lmb.style.backgroundColor=downColor; if(e.button===2) rmb.style.backgroundColor=downColor; });
-    addTrackedListener(keystrokesListeners, 'mouseup', e => { if(e.button===0) lmb.style.backgroundColor=upColor; if(e.button===2) rmb.style.backgroundColor=upColor; });
+    const keyMap = { KeyW:wkey, KeyA:akey, KeyS:skey, KeyD:dkey, Space:space };
+    const mouseMap = { 0:lmb, 2:rmb };
+    document.addEventListener('keydown', e => { if (keyMap[e.code]) keyMap[e.code].style.backgroundColor = downColor; }, { signal });
+    document.addEventListener('keyup', e => { if (keyMap[e.code]) keyMap[e.code].style.backgroundColor = upColor; }, { signal });
+    document.addEventListener('mousedown', e => { if (mouseMap[e.button]) mouseMap[e.button].style.backgroundColor = downColor; }, { signal });
+    document.addEventListener('mouseup', e => { if (mouseMap[e.button]) mouseMap[e.button].style.backgroundColor = upColor; }, { signal });
   } else {
-    const kc = document.getElementById('keystrokes-container'); if (kc) kc.remove();
+    const kc = document.getElementById('keystrokes-container');
+    if (kc) kc.remove();
   }
 });
 
@@ -1972,22 +1961,29 @@ chatFilterModule.addEventListener("click", () => {
 createModule(MODULE_NAMES.ANTI_AFK, "Presses WASD automatically to avoid being kicked while AFK");
 const antiAfkModule = [...gridContainer.children].find(c => c.dataset.moduleName === MODULE_NAMES.ANTI_AFK);
 let isAntiAfkActive=false, antiAfkInterval=null, antiAfkBox=null;
-const antiAfkListeners = [];
+let antiAfkController = null;
 if (antiAfkModule) {
   antiAfkModule.addEventListener("click", () => {
     isAntiAfkActive = !isAntiAfkActive;
-    clearTrackedListeners(antiAfkListeners);
+    if (antiAfkController) { antiAfkController.abort(); antiAfkController = null; }
     if (isAntiAfkActive) {
-      antiAfkBox = document.createElement("div"); antiAfkBox.id="anti-afk-counter";
+      antiAfkController = new AbortController();
+      const signal = antiAfkController.signal;
+      antiAfkBox = document.createElement("div");
+      antiAfkBox.id = "anti-afk-counter";
       antiAfkBox.style.cssText = "position:fixed;top:100px;left:20px;padding:8px 14px;background:rgba(0,0,0,0.6);backdrop-filter:blur(8px);border:1px solid rgba(255,255,255,0.15);border-radius:8px;z-index:9999;cursor:move;user-select:none;font-family:'Segoe UI','Roboto',sans-serif;display:flex;align-items:center;gap:8px;box-shadow:0 4px 12px rgba(0,0,0,0.3);";
-      const afkDot = document.createElement("div"); afkDot.style.cssText = `width:10px;height:10px;border-radius:50%;background-color:${guiPrimaryColor};box-shadow:0 0 12px ${guiPrimaryColor}99;animation:afkPulse 1.5s infinite;`;
-      const afkText = document.createElement("div"); afkText.textContent="Anti-AFK"; afkText.style.cssText = `font-size:16px;font-weight:700;color:${guiPrimaryColor};letter-spacing:0.5px;`;
-      antiAfkBox.appendChild(afkDot); antiAfkBox.appendChild(afkText);
+      const afkDot = document.createElement("div");
+      afkDot.style.cssText = `width:10px;height:10px;border-radius:50%;background-color:${guiPrimaryColor};box-shadow:0 0 12px ${guiPrimaryColor}99;animation:afkPulse 1.5s infinite;`;
+      const afkText = document.createElement("div");
+      afkText.textContent = "Anti-AFK";
+      afkText.style.cssText = `font-size:16px;font-weight:700;color:${guiPrimaryColor};letter-spacing:0.5px;`;
+      antiAfkBox.appendChild(afkDot);
+      antiAfkBox.appendChild(afkText);
       document.body.appendChild(antiAfkBox);
       let isDrag=false, offX=0, offY=0;
       antiAfkBox.addEventListener("mousedown", e => { isDrag=true; offX=e.clientX-antiAfkBox.getBoundingClientRect().left; offY=e.clientY-antiAfkBox.getBoundingClientRect().top; e.preventDefault(); });
-      addTrackedListener(antiAfkListeners, "mousemove", e => {
-        if(isDrag){
+      document.addEventListener("mousemove", e => {
+        if (isDrag) {
           const rect = antiAfkBox.getBoundingClientRect();
           let left = e.clientX-offX;
           let top = e.clientY-offY;
@@ -1997,19 +1993,23 @@ if (antiAfkModule) {
           if (top < 0) top = 0;
           if (left > maxLeft) left = maxLeft;
           if (top > maxTop) top = maxTop;
-          antiAfkBox.style.left=`${left}px`;
-          antiAfkBox.style.top=`${top}px`;
+          antiAfkBox.style.left = `${left}px`;
+          antiAfkBox.style.top = `${top}px`;
         }
-      });
-      addTrackedListener(antiAfkListeners, "mouseup", () => { isDrag=false; });
-      const keys=[['w','KeyW',87],['a','KeyA',65],['s','KeyS',83],['d','KeyD',68],[' ','Space',32],['ArrowUp','ArrowUp',38],['ArrowDown','ArrowDown',40],['ArrowLeft','ArrowLeft',37],['ArrowRight','ArrowRight',39]]; let idx=0;
+      }, { signal });
+      document.addEventListener("mouseup", () => { isDrag=false; }, { signal });
+      const keys=[['w','KeyW',87],['a','KeyA',65],['s','KeyS',83],['d','KeyD',68],[' ','Space',32],['ArrowUp','ArrowUp',38],['ArrowDown','ArrowDown',40],['ArrowLeft','ArrowLeft',37],['ArrowRight','ArrowRight',39]];
+      let idx=0;
       antiAfkInterval = setInterval(() => {
         const [key,code,keyCode]=keys[idx]; idx=(idx+1)%keys.length;
         const t=document.activeElement||document.body;
         t.dispatchEvent(new KeyboardEvent('keydown',{key,code,keyCode,which:keyCode,bubbles:true,cancelable:true}));
         setTimeout(()=>t.dispatchEvent(new KeyboardEvent('keyup',{key,code,keyCode,which:keyCode,bubbles:true,cancelable:true})),50);
       }, 500);
-    } else { if(antiAfkInterval) clearInterval(antiAfkInterval); if(antiAfkBox) antiAfkBox.remove(); }
+    } else {
+      if (antiAfkInterval) clearInterval(antiAfkInterval);
+      if (antiAfkBox) antiAfkBox.remove();
+    }
   });
 }
 
@@ -2041,18 +2041,21 @@ if (antiAfkModule) {
   createModule(MODULE_NAMES.CLOCK, "Shows you the time so you don't have to exit full screen.");
 const timeModule = [...gridContainer.children].find(c => c.dataset.moduleName === MODULE_NAMES.CLOCK);
 let isTimeVisible=false, timeElement=null;
-const timeListeners = [];
+let timeController = null;
 if (timeModule) {
   timeModule.addEventListener("click", () => {
     isTimeVisible = !isTimeVisible;
-    clearTrackedListeners(timeListeners);
+    if (timeController) { timeController.abort(); timeController = null; }
     if (isTimeVisible) {
-      timeElement = document.createElement("div"); timeElement.id="fullscreen-clock";
+      timeController = new AbortController();
+      const signal = timeController.signal;
+      timeElement = document.createElement("div");
+      timeElement.id = "fullscreen-clock";
       timeElement.style.cssText = `position:fixed;bottom:20px;right:20px;background-color:#000000CC;color:#ffffff;padding:10px 15px;border-radius:8px;font-size:18px;font-family:monospace;z-index:99999;cursor:move;border:1px solid ${guiPrimaryColor};`;
       let isDrag=false, offX=0, offY=0;
       timeElement.addEventListener("mousedown", e => { isDrag=true; offX=e.clientX-timeElement.getBoundingClientRect().left; offY=e.clientY-timeElement.getBoundingClientRect().top; e.preventDefault(); });
-      addTrackedListener(timeListeners, "mousemove", e => {
-        if(isDrag){
+      document.addEventListener("mousemove", e => {
+        if (isDrag) {
           const rect = timeElement.getBoundingClientRect();
           let left = e.clientX-offX;
           let top = e.clientY-offY;
@@ -2062,17 +2065,22 @@ if (timeModule) {
           if (top < 0) top = 0;
           if (left > maxLeft) left = maxLeft;
           if (top > maxTop) top = maxTop;
-          timeElement.style.left=`${left}px`;
-          timeElement.style.top=`${top}px`;
-          timeElement.style.bottom="auto";
-          timeElement.style.right="auto";
+          timeElement.style.left = `${left}px`;
+          timeElement.style.top = `${top}px`;
+          timeElement.style.bottom = "auto";
+          timeElement.style.right = "auto";
         }
-      });
-      addTrackedListener(timeListeners, "mouseup", () => { isDrag=false; });
+      }, { signal });
+      document.addEventListener("mouseup", () => { isDrag=false; }, { signal });
       document.body.appendChild(timeElement);
       const updateClock = () => { timeElement.textContent = new Date().toLocaleTimeString(); };
-      updateClock(); timeElement._interval = setInterval(updateClock, 1000);
-    } else if (timeElement) { clearInterval(timeElement._interval); timeElement.remove(); timeElement=null; }
+      updateClock();
+      timeElement._interval = setInterval(updateClock, 1000);
+    } else if (timeElement) {
+      clearInterval(timeElement._interval);
+      timeElement.remove();
+      timeElement = null;
+    }
   });
 }
 
@@ -2134,7 +2142,6 @@ let armorHudInterval = null;
 let armorHudDrag = false;
 let armorHudOffX = 0;
 let armorHudOffY = 0;
-const armorHudListeners = [];
 
 function armorHudRender() {
   if (!armorHudEl) return;
@@ -2212,11 +2219,14 @@ if (armorHudModule && armorHudModule._toggleWrap) {
   armorHudModule.insertBefore(armorHudDockBtn, armorHudModule._toggleWrap);
 }
 
+let armorHudController = null;
 if (armorHudModule) {
   armorHudModule.addEventListener("click", () => {
     isArmorHudActive = !isArmorHudActive;
-    clearTrackedListeners(armorHudListeners);
+    if (armorHudController) { armorHudController.abort(); armorHudController = null; }
     if (isArmorHudActive) {
+      armorHudController = new AbortController();
+      const signal = armorHudController.signal;
       armorHudEl = document.createElement('div');
       armorHudEl.id = 'armor-hud';
       armorHudEl.style.cssText = 'position:fixed;top:100px;right:20px;left:auto;padding:10px 14px;background:rgba(0,0,0,0.6);backdrop-filter:blur(8px);border:1px solid rgba(255,255,255,0.15);border-radius:8px;z-index:9999;cursor:move;user-select:none;font-family:Segoe UI,Roboto,sans-serif;font-size:14px;color:white;min-width:220px;display:none;';
@@ -2228,7 +2238,7 @@ if (armorHudModule) {
         armorHudOffY = e.clientY - armorHudEl.getBoundingClientRect().top;
         e.preventDefault();
       });
-      addTrackedListener(armorHudListeners, 'mousemove', e => {
+      document.addEventListener('mousemove', e => {
         if (!armorHudDrag || !armorHudEl) return;
         const rect = armorHudEl.getBoundingClientRect();
         let left = Math.min(Math.max(e.clientX - armorHudOffX, 0), window.innerWidth - rect.width);
@@ -2236,8 +2246,8 @@ if (armorHudModule) {
         armorHudEl.style.left = left + 'px';
         armorHudEl.style.top = top + 'px';
         armorHudEl.style.right = 'auto';
-      });
-      addTrackedListener(armorHudListeners, 'mouseup', () => { armorHudDrag = false; });
+      }, { signal });
+      document.addEventListener('mouseup', () => { armorHudDrag = false; }, { signal });
       armorHudInterval = setInterval(armorHudRender, 500);
       armorHudRender();
     } else {
