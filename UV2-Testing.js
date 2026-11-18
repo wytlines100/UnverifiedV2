@@ -1,5 +1,5 @@
 // ==UserScript==
-// @name         UnverifiedV2-Testing
+// @name         UV2-Testing
 // @namespace    http://tampermonkey.net/
 // @version      4.8
 // @description  Look at my license before you modify, I WILL DMCA you.
