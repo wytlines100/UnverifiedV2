@@ -2,7 +2,7 @@
 // @name         UV2 Music
 // @namespace    music4life
 // @version      3.5
-// @description  A Simple Music Player linking to YT for UV2
+// @description  Vibe 2 Your Playlist while playing miniblox. Simple YT -> UV2 Music Player.
 // @author       TheM1ddleM1n
 // @match        https://miniblox.io/
 // @grant        none
