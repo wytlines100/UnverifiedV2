@@ -6,6 +6,9 @@
 - Removed Hex code for color and X for Settings Page
 - Added AbortController to draggable modules
 - Renamed UnverifedV2-Testing.js to UV2-Testing.js
+- Refactored Keystrokes, Anti-AFK, Clock, and Armor HUD to use AbortController for listener cleanup
+- Simplified Keystrokes key/mouse handling to use lookup maps
+- Simplified Keystrokes drag boundary clamping
 
 ## v4.7
 - Simplified armorHudRender by merging docked/floating branches
