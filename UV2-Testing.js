@@ -17,6 +17,7 @@
 // ==/UserScript==
 
 document.title = GM_info.script.name;
+let introFinished = false;
 function playIntro() {
   const container = document.createElement("div");
   container.style.cssText = "position:fixed;top:0;left:0;width:100vw;height:100vh;display:flex;align-items:center;justify-content:center;flex-direction:column;background-color:black;overflow:hidden;z-index:9999;opacity:0;transition:opacity 0.6s ease;";
@@ -52,13 +53,14 @@ function playIntro() {
   setTimeout(() => { unverifiedText.style.opacity = 1; }, 2400);
   setTimeout(() => { creditsText.style.opacity = 1; }, 3600);
   setTimeout(() => { keybindText.style.opacity = 1; }, 4800);
-  setTimeout(() => {
-    container.style.transition = "opacity 1.8s cubic-bezier(0.4,0,0.2,1)";
-    container.style.opacity = 0;
-  }, 10800);
-  setTimeout(() => { container.remove(); }, 12600);
+  setTimeout(() => { container.style.transition = "opacity 1.8s cubic-bezier(0.4,0,0.2,1)"; container.style.opacity = 0; }, 10800);
+  setTimeout(() => { container.remove(); introFinished = true; }, 12600);
+
+if (document.readyState === 'loading') {
+  document.addEventListener('DOMContentLoaded', playIntro);
+} else {
+  playIntro();
 }
-playIntro();
 
 function getHoliday() {
   const m = new Date().getMonth() + 1, d = new Date().getDate();
@@ -205,7 +207,7 @@ function uv2CompareVersions(a, b) {
   }
   return 0;
 }
-  
+
 function uv2ParseChangelog(text) {
   return text.split(/\n(?=## )/).reduce((entries, part) => {
     const m = part.match(/^## ([^\n]+)\n?([\s\S]*)$/);
@@ -1958,7 +1960,7 @@ chatFilterModule.addEventListener("click", () => {
   }
 });
 
-createModule(MODULE_NAMES.ANTI_AFK, "Presses WASD automatically to avoid being kicked while AFK");
+createModule(MODULE_NAMES.ANTI_AFK, "Presses WASD, arrow keys, and Space automatically to prevent being kicked.");
 const antiAfkModule = [...gridContainer.children].find(c => c.dataset.moduleName === MODULE_NAMES.ANTI_AFK);
 let isAntiAfkActive=false, antiAfkInterval=null, antiAfkBox=null;
 let antiAfkController = null;
@@ -2394,20 +2396,20 @@ function closeUI() {
   }, 180);
 }
   function toggleUI() {
-    if (uiAnimating) return;
-    if (uiVisible) { closeUI(); uiVisible = false; }
-    else if (vpnGateDismissed || !settings.vpnWarning) {
-      openUI(); uiVisible = true;
-    } else {
-      checkIsVpn(isVpn => {
-        if (isVpn) {
-          showVpnGate(() => { openUI(); uiVisible = true; });
-        } else {
-          openUI(); uiVisible = true;
-        }
-      });
-    }
+  if (!introFinished || uiAnimating) return;
+  if (uiVisible) { closeUI(); uiVisible = false; }
+  else if (vpnGateDismissed || !settings.vpnWarning) {
+    openUI(); uiVisible = true;
+  } else {
+    checkIsVpn(isVpn => {
+      if (isVpn) {
+        showVpnGate(() => { openUI(); uiVisible = true; });
+      } else {
+        openUI(); uiVisible = true;
+      }
+    });
   }
+}
     document.addEventListener("keydown", event => {
     const isUiKey = (uiKeybind === 'backtick' && event.key === '`') || (uiKeybind === 'rshift' && event.key === 'Shift' && event.location === 2) || (uiKeybind === 'backslash' && event.key === '\\');
     if (isUiKey) toggleUI();
