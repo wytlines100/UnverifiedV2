@@ -3,6 +3,12 @@
 ## v4.9
 - Wrapped playIntro in DOMContentLoaded to ensure body exists before mounting
 - Blocked toggleUI until intro finishes to prevent UI opening during intro
+- Improved UI open/close animation smoothness and performance
+- Reduced animation scale delta for subtler motion
+- Added will-change to UI element for GPU layer promotion
+- Reduced close animation duration to 150ms
+- Fixed uiAnimating guard set before timeout instead of inside it
+- Removed forced reflow from openUI
 
 ## v4.8
 - Removed Color on Color Section
