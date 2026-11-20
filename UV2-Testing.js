@@ -370,18 +370,21 @@ style.innerHTML = `
   src: url('https://cdn.glitch.global/adb12490-d563-43cb-9711-2a69a8bb1c06/Faithful.ttf?v=1735593093308') format('truetype');
 }
 @keyframes uv2UIOpen {
-  from { opacity: 0; transform: translate(-50%, -48%) scale(0.96); }
+  from { opacity: 0; transform: translate(-50%, -50%) scale(0.97); }
   to   { opacity: 1; transform: translate(-50%, -50%) scale(1); }
 }
 @keyframes uv2UIClose {
   from { opacity: 1; transform: translate(-50%, -50%) scale(1); }
-  to   { opacity: 0; transform: translate(-50%, -52%) scale(0.96); }
+  to   { opacity: 0; transform: translate(-50%, -50%) scale(0.97); }
+}
+#uv2-main-ui {
+  will-change: opacity, transform;
 }
 #uv2-main-ui.uv2-animate-in {
-  animation: uv2UIOpen 0.35s cubic-bezier(0.16, 1, 0.3, 1) forwards;
+  animation: uv2UIOpen 0.2s cubic-bezier(0.16, 1, 0.3, 1) forwards;
 }
 #uv2-main-ui.uv2-animate-out {
-  animation: uv2UIClose 0.2s cubic-bezier(0.4, 0, 1, 1) forwards;
+  animation: uv2UIClose 0.15s cubic-bezier(0.4, 0, 1, 1) forwards;
 }
 @keyframes uv2-card-shimmer {
   0%   { transform: translateX(-100%) skewX(-15deg); }
@@ -2387,32 +2390,36 @@ notVpnBtn.addEventListener('mouseleave', () => { notVpnBtn.style.background = '#
   if (existingBar) { existingBar.remove(); isBinding = false; }
   ui.style.display = 'flex';
   ui.classList.remove('uv2-animate-out');
-  void ui.offsetWidth;
   ui.classList.add('uv2-animate-in');
 }
 
 function closeUI() {
   if (closeUITimeout) { clearTimeout(closeUITimeout); closeUITimeout = null; }
-  uiAnimating = true;
   ui.classList.replace('uv2-animate-in', 'uv2-animate-out');
   closeUITimeout = setTimeout(() => {
     ui.style.display = 'none';
     ui.classList.remove('uv2-animate-out');
     uiAnimating = false;
     closeUITimeout = null;
-  }, 180);
+  }, 150);
+  uiAnimating = true;
 }
-  function toggleUI() {
+
+function toggleUI() {
   if (!introFinished || uiAnimating) return;
-  if (uiVisible) { closeUI(); uiVisible = false; }
-  else if (vpnGateDismissed || !settings.vpnWarning) {
-    openUI(); uiVisible = true;
+  if (uiVisible) {
+    uiVisible = false;
+    closeUI();
+  } else if (vpnGateDismissed || !settings.vpnWarning) {
+    uiVisible = true;
+    openUI();
   } else {
     checkIsVpn(isVpn => {
       if (isVpn) {
-        showVpnGate(() => { openUI(); uiVisible = true; });
+        showVpnGate(() => { uiVisible = true; openUI(); });
       } else {
-        openUI(); uiVisible = true;
+        uiVisible = true;
+        openUI();
       }
     });
   }
