@@ -1,7 +1,7 @@
 // ==UserScript==
 // @name         Unverified V2
 // @namespace    http://tampermonkey.net/
-// @version      4.9
+// @version      4.8
 // @description  Look at my license before you modify, I WILL DMCA you.
 // @icon         https://raw.githubusercontent.com/wytlines100/UnverifiedV2/refs/heads/main/logo.jpg
 // @downloadURL  https://raw.githubusercontent.com/wytlines100/UnverifiedV2/refs/heads/main/client.js
@@ -18,7 +18,6 @@
 
 document.title = GM_info.script.name;
 let introFinished = false;
-
 function playIntro() {
   const container = document.createElement("div");
   container.style.cssText = "position:fixed;top:0;left:0;width:100vw;height:100vh;display:flex;align-items:center;justify-content:center;flex-direction:column;background-color:black;overflow:hidden;z-index:9999;opacity:0;transition:opacity 0.6s ease;";
