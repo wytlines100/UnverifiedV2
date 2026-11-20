@@ -1,7 +1,7 @@
 // ==UserScript==
 // @name         UV2-Testing
 // @namespace    http://tampermonkey.net/
-// @version      4.8
+// @version      4.9
 // @description  This is our UV2 Testing Script.
 // @icon         https://raw.githubusercontent.com/wytlines100/UnverifiedV2/refs/heads/main/logo.jpg
 // @downloadURL  https://raw.githubusercontent.com/wytlines100/UnverifiedV2/refs/heads/main/client.js
