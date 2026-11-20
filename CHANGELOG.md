@@ -1,5 +1,9 @@
 # Changelog
 
+## v4.9
+- Wrapped playIntro in DOMContentLoaded to ensure body exists before mounting
+- Blocked toggleUI until intro finishes to prevent UI opening during intro
+
 ## v4.8
 - Removed Color on Color Section
 - Increased text size for Accent Color/Recent Colors
