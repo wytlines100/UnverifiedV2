@@ -18,7 +18,6 @@
 
 document.title = GM_info.script.name;
 let introFinished = false;
-
 function playIntro() {
   const container = document.createElement("div");
   container.style.cssText = "position:fixed;top:0;left:0;width:100vw;height:100vh;display:flex;align-items:center;justify-content:center;flex-direction:column;background-color:black;overflow:hidden;z-index:9999;opacity:0;transition:opacity 0.6s ease;";
@@ -54,15 +53,8 @@ function playIntro() {
   setTimeout(() => { unverifiedText.style.opacity = 1; }, 2400);
   setTimeout(() => { creditsText.style.opacity = 1; }, 3600);
   setTimeout(() => { keybindText.style.opacity = 1; }, 4800);
-  setTimeout(() => {
-    container.style.transition = "opacity 1.8s cubic-bezier(0.4,0,0.2,1)";
-    container.style.opacity = 0;
-  }, 10800);
-  setTimeout(() => {
-    container.remove();
-    introFinished = true;
-  }, 12600);
-}
+  setTimeout(() => { container.style.transition = "opacity 1.8s cubic-bezier(0.4,0,0.2,1)"; container.style.opacity = 0; }, 10800);
+  setTimeout(() => { container.remove(); introFinished = true; }, 12600);
 
 if (document.readyState === 'loading') {
   document.addEventListener('DOMContentLoaded', playIntro);
