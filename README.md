@@ -59,7 +59,7 @@ Use the **Config** page to export all settings, module states, and keybinds as a
 
 ## Music Player
 
-UV2 Music Player is a separate script (`MusicPlayer.js`) installable independently. It is not bundled with the main client.
+UV2 Music Player is a separate script (`UV2Music.js`) installable independently. It is not bundled with the main client.
 
 ## Menu Pages
 
