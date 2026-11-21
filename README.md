@@ -422,4 +422,4 @@ wyt, jet, joudaALT, Trust, TheM1ddleM1n
 > [!NOTE]
 wyt is inactive. And TheM1ddleM1n (known as C0smic) cannot access Discord at all right now.
 
-Distributed under a proprietary All Rights Reserved license — see [LICENSE.md](LICENSE.md) for details — [Discord](https://dsc.gg/unverifiedv2)
+Distributed under a proprietary All Rights Reserved license — see [LICENSE.md](LICENSE.md) for details — [Discord](https://discord.gg/VwBcXPTuNw)
