@@ -1,5 +1,32 @@
 # Changelog
 
+## v5.0
+- New menu design: big centered window with tabs on top, or a side panel (Settings > Menu Layout)
+- New font, plus buttons, toggles and sliders that stay readable with any accent color
+- Modules are grouped into folders you can collapse, with category tabs, search and an on count
+- Module settings open in a side panel next to the module list
+- Opening the menu in a match frees your mouse, and closing it puts you back in the game
+- Press Escape or click outside the menu to close it
+- Added the Skies page: presets, your own skies, uploads, sky capture and a sky editor
+- Added Weather, Lightning, Time Changer, Sun & Moon, Cloud Styler, Fog Designer, Rain Style, Shooting Stars, Aurora and Ambient Particles
+- Added Day & Night Skies and Sky Playlist, which keep your chosen sky
+- Added Color Filter, Block Outline, Break Color, Kill Effects, Hit Particles and Low Health Warning
+- Added Highlights, Spam Stacking, Client Commands, Auto GG, Chat History and Nickname
+- Added UV2 Nametags: an icon or styled [UV2] tag next to other Unverified users on nametags, in chat and in the Tab List
+- Added Custom Rank & Level: any game rank or your own styled tag, plus a level changer with the game's real level colors
+- Added Tab List: a cleaner player list with heads, ranks, levels and ping bars
+- Added Ad Blocker: skips the ads between matches and hides banner ads
+- New HUD system: size, text color, chroma, shadow, background, border and corner options for every element
+- Added the HUD editor (Edit HUD button): drag, resize and snap elements, click one for its settings, or style them all at once
+- Added FPS, CPS, Ping, Speed, Coordinates, Compass, Potion Effects, Item Counter, Reach, Combo Counter, Session Timer and Session Stats
+- Rebuilt Keystrokes, Armor HUD and Clock with a lot more options
+- The game's own FPS, ping, coordinates, CPS, potion and player list displays hide when the client's version is on
+- Rebuilt Keep Sprint: uses the game's own sprint, works with any keybinds and no longer opens the menu
+- Config page: profiles, per-server profiles and share codes; configs now save module settings and your sky
+- Fixed module keybinds not saving after a reload and triggering while typing in chat
+- Fixed the menu font not loading
+- Click or press Escape to skip the intro
+
 ## v4.9
 - Wrapped playIntro in DOMContentLoaded to ensure body exists before mounting
 - Blocked toggleUI until intro finishes to prevent UI opening during intro
