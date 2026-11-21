@@ -403,7 +403,7 @@ Trigger an update from your dashboard (see [Updating](#updating)). If you instal
 <details>
 <summary><b>Something broke after a Miniblox update</b></summary>
 
-Modules depend on how Miniblox is built, so a game update can break one. Turn that module off and report it in the [Discord](https://dsc.gg/unverifiedv2).
+Modules depend on how Miniblox is built, so a game update can break one. Turn that module off and report it in the [Discord](https://discord.gg/VwBcXPTuNw).
 </details>
 
 ## Notes
