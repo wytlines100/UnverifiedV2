@@ -1,5 +1,16 @@
 # Changelog
 
+## v5.1
+- Added Hearts & Hunger: Minecraft-style hearts on the left of your hotbar and hunger on the right, snapped right above it, with smooth or pixel icons, your own colors and gradients for hearts, hunger, absorption, armor and saturation, glow, outlines, presets (Classic, Neon, Ice, Toxic, Void), armor points, gold absorption hearts, low-health shake, a damage flash and a regen wave; it hides while the pause menu or inventory is open, and the game's own health and hunger bars hide while it's on
+- Added Hotbar Customizer: restyle the hotbar with themes (Clean, Glass, Neon, Gradient, Rainbow, Minimal) or your own background, gradient, border, glow, blur, rounded corners, slot colors and spacing, slot numbers, and a selected slot with glow, fill, outline or underline styles, gradients, an animated rainbow ring, lift and enlarge
+- Added Scoreboard: every line of the game's match scoreboard, live from the server, but you can move, resize and restyle it (custom title, value alignment, spacing, classic red line numbers); the game's own scoreboard hides while it's on
+- Added Skins & Capes: wear any of the game's 56 skins or 16 capes, even ones you don't own, or upload your own PNG. It shows on your player, your first-person hand, your home avatar, your profile and the Dressing Room (previewing other skins there still works), and stays after a reload. Only you see it
+- Custom Rank & Level can now spoof your coins, daily streak and lootboxes, and shows your custom rank and level all over the menus: home card, profile, Dressing Room, Lootboxes panel and opener, Daily Hub and your shop balance. Just for looks: buying and opening still use your real balance
+- Custom Rank & Level can also show your rank and level on the game's own tab list
+- Session Stats now uses the match scoreboard's kill and death counts when there are any, and otherwise counts players you hit who die
+- Saved modules now turn back on within a couple of seconds on the home screen instead of waiting for you to join a match
+- Modules no longer wait for the sky presets to download before starting
+
 ## v5.0
 - New menu design: big centered window with tabs on top, or a side panel (Settings > Menu Layout)
 - New font, plus buttons, toggles and sliders that stay readable with any accent color
