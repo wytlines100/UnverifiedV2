@@ -2,7 +2,7 @@
 
 A utility client for [Miniblox](https://miniblox.io), actively developed and maintained since October 2024.
 
-Custom skyboxes, client-side weather and time, a full HUD system with a drag-and-drop layout editor, Lunar-style display mods, chat tools, profiles and a lot more, all inside one clean menu.
+Custom skyboxes, client-side weather and time, a full HUD system with a drag-and-drop layout editor, chat tools, profiles and a lot more, all inside one clean menu.
 
 ## Contents
 
