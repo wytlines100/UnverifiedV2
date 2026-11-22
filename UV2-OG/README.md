@@ -86,6 +86,6 @@ wyt, jet, joudaALT, Trust, TheM1ddleM1n
 > [!NOTE]
 wyt is inactive. And TheM1ddleM1n (known as C0smic) cannot access Discord at all right now.
 
-> Because Trust has updated client.js on the main repo and obfuscated the code, I have made a separate folder with my updates on.
+Because Trust has updated client.js/UV2-Testing on the main repo and obfuscated the code, I have made a separate folder with my updates on and for those who want less features.
 
 Distributed under a proprietary All Rights Reserved license — see [LICENSE.md](LICENSE.md) for details — [Discord](https://dsc.gg/unverifiedv2)
