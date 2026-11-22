@@ -4,8 +4,8 @@
 // @version      4.9
 // @description  Look at my license before you modify, I WILL DMCA you.
 // @icon         https://raw.githubusercontent.com/wytlines100/UnverifiedV2/refs/heads/main/logo.jpg
-// @downloadURL  https://raw.githubusercontent.com/wytlines100/UnverifiedV2/refs/heads/main/client.js
-// @updateURL    https://raw.githubusercontent.com/wytlines100/UnverifiedV2/refs/heads/main/client.js
+// @downloadURL  https://raw.githubusercontent.com/wytlines100/UnverifiedV2/refs/heads/main/UV2-OG/Client.js
+// @updateURL    https://raw.githubusercontent.com/wytlines100/UnverifiedV2/refs/heads/main/UV2-OG/Client.js
 // @license      Proprietary License
 // @author       wyt, jet, joudaALT, Trust, TheM1ddleM1n
 // @match        https://miniblox.io/*
@@ -200,8 +200,8 @@ const initInterval = setInterval(() => {
 
 (function() {
   'use strict';
-const UV2_RAW_BASE = 'https://raw.githubusercontent.com/wytlines100/UnverifiedV2/refs/heads/main/';
-const UV2_SCRIPT_URL = UV2_RAW_BASE + 'client.js';
+const UV2_RAW_BASE = 'https://raw.githubusercontent.com/wytlines100/UnverifiedV2/refs/heads/main/UV2-OG/';
+const UV2_SCRIPT_URL = UV2_RAW_BASE + 'Client.js';
 const UV2_CHANGELOG_URL = UV2_RAW_BASE + 'CHANGELOG.md';
 let uv2LastCheck = 0;
 
