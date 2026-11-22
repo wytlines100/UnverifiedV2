@@ -1,0 +1,2627 @@
+// ==UserScript==
+// @name         Unverified V2
+// @namespace    http://tampermonkey.net/
+// @version      4.9
+// @description  Look at my license before you modify, I WILL DMCA you.
+// @icon         https://raw.githubusercontent.com/wytlines100/UnverifiedV2/refs/heads/main/logo.jpg
+// @downloadURL  https://raw.githubusercontent.com/wytlines100/UnverifiedV2/refs/heads/main/client.js
+// @updateURL    https://raw.githubusercontent.com/wytlines100/UnverifiedV2/refs/heads/main/client.js
+// @license      Proprietary License
+// @author       wyt, jet, joudaALT, Trust, TheM1ddleM1n
+// @match        https://miniblox.io/*
+// @grant        GM_xmlhttpRequest
+// @grant        GM_info
+// @grant        unsafeWindow
+// @connect      raw.githubusercontent.com
+// @connect      ip-api.com
+// ==/UserScript==
+
+document.title = GM_info.script.name;
+let introFinished = false;
+function playIntro() {
+  const container = document.createElement("div");
+  container.style.cssText = "position:fixed;top:0;left:0;width:100vw;height:100vh;display:flex;align-items:center;justify-content:center;flex-direction:column;background-color:black;overflow:hidden;z-index:9999;opacity:0;transition:opacity 0.6s ease;";
+  const check = document.createElement("div");
+  check.textContent = "✓";
+  check.style.cssText = "color:red;font-size:5rem;opacity:0.05;transition:opacity 1.4s ease,transform 1.4s ease;text-shadow:0 0 5px red,0 0 10px red,0 0 20px red;";
+  const circle = document.createElement("div");
+  circle.style.cssText = "width:100px;height:100px;background-color:black;border:2px solid red;border-radius:50%;box-shadow:0 0 10px red,0 0 20px red,0 0 30px red;display:flex;align-items:center;justify-content:center;opacity:0;transform:scale(0.85);transition:opacity 1.4s ease,transform 1.4s cubic-bezier(0.22,1,0.36,1);";
+  circle.appendChild(check);
+  container.appendChild(circle);
+  const unverifiedText = document.createElement("div");
+  unverifiedText.textContent = "Unverified V2";
+  unverifiedText.style.cssText = "color:red;font-size:60px;opacity:0;margin-top:50px;transition:opacity 1.1s ease;text-shadow:0 0 5px red,0 0 10px red,0 0 20px red;";
+  container.appendChild(unverifiedText);
+  const creditsText = document.createElement("div");
+  creditsText.textContent = "\nBy wyt,\nTheM1ddleM1n, joudaALT, Trust, \njet";
+  creditsText.style.cssText = "color:red;font-size:30px;opacity:0;transition:opacity 1.1s ease;white-space:pre-line;text-align:center;text-shadow:0 0 5px red,0 0 10px red,0 0 20px red;";
+  container.appendChild(creditsText);
+  const keybindText = document.createElement("div");
+  const introKeybindMap = { backtick: '`', backslash: '\\', rshift: 'Right Shift' };
+  const introKeybind = localStorage.getItem('uv2-setting-uikeybind') || 'rshift';
+  keybindText.textContent = `Press ${introKeybindMap[introKeybind] || 'Right Shift'} to open the menu`;
+  keybindText.style.cssText = "color:red;font-size:30px;opacity:0;margin-top:30px;transition:opacity 1.1s ease;text-shadow:0 0 5px red,0 0 10px red,0 0 20px red;";
+  container.appendChild(keybindText);
+  document.body.appendChild(container);
+  requestAnimationFrame(() => { container.style.opacity = 1; });
+  setTimeout(() => {
+    circle.style.opacity = 1;
+    circle.style.transform = "scale(1)";
+    check.style.opacity = 1;
+  }, 200);
+  setTimeout(() => { check.style.transform = "rotate(540deg)"; }, 900);
+  setTimeout(() => { unverifiedText.style.opacity = 1; }, 2400);
+  setTimeout(() => { creditsText.style.opacity = 1; }, 3600);
+  setTimeout(() => { keybindText.style.opacity = 1; }, 4800);
+  setTimeout(() => {
+    container.style.transition = "opacity 1.8s cubic-bezier(0.4,0,0.2,1)";
+    container.style.opacity = 0;
+  }, 10800);
+  setTimeout(() => {
+    container.remove();
+    introFinished = true;
+  }, 12600);
+}
+
+if (document.readyState === 'loading') {
+  document.addEventListener('DOMContentLoaded', playIntro);
+} else {
+  playIntro();
+}
+
+function getHoliday() {
+  const m = new Date().getMonth() + 1, d = new Date().getDate();
+  if (m === 10 && d >= 30) return 'halloween';
+  if (m === 12 && d >= 20 && d <= 26) return 'christmas';
+  if (m === 12 && d === 31 || m === 1 && d === 1) return 'newyear';
+  return null;
+}
+const holiday = getHoliday();
+const waitForGame = setInterval(() => {
+  if (!/\/join\//.test(window.location.pathname)) return;
+  const reactRoot = document.querySelector("#react");
+  if (!reactRoot) return;
+  const game = Object.values(reactRoot)[0]?.updateQueue?.baseState?.element?.props?.game;
+  if (game && game.chat && typeof game.chat.addChat === "function") {
+    clearInterval(waitForGame);
+    const joinKey = 'uv2-welcomed-' + window.location.pathname;
+    if (!sessionStorage.getItem(joinKey)) {
+      sessionStorage.setItem(joinKey, '1');
+      const holidayMsg = {
+        halloween: "\\glow\\\\shiny\\\\#BF3011\\[Unverified V2]:\\reset\\ Happy Halloween from the UV2 Dev Team 🎃",
+        christmas: "\\glow\\\\shiny\\\\#BF3011\\[Unverified V2]:\\reset\\ Merry Christmas from the UV2 Dev Team ❄️",
+        newyear: new Date().getMonth() === 0
+          ? "\\glow\\\\shiny\\\\#BF3011\\[Unverified V2]:\\reset\\ Happy New Year from the UV2 Dev Team 🎉"
+          : "\\glow\\\\shiny\\\\#BF3011\\[Unverified V2]:\\reset\\ Happy New Year's Eve from the UV2 Dev Team 🌃",
+      };
+      game.chat.addChat({
+        text: holidayMsg[holiday] || "\\glow\\\\shiny\\\\#BF3011\\[Unverified V2]:\\reset\\ Hi UV2 User, we hope you enjoy our client."
+      });
+    }
+  }
+}, 500);
+
+(function() {
+  'use strict';
+  const gameRef = {
+    _game: null,
+    get game() {
+      if (this._game) return this._game;
+      const reactRoot = document.querySelector("#react");
+      if (!reactRoot) return null;
+      try {
+        const fiber = Object.values(reactRoot)[0];
+        const game = fiber?.updateQueue?.baseState?.element?.props?.game;
+        if (game) this._game = game;
+        return game;
+      } catch (e) { return null; }
+    }
+  };
+
+  function pushLocalChat(textMsg) {
+    const game = gameRef.game;
+    if (game && game.chat && typeof game.chat.addChat === "function") {
+      game.chat.addChat({ text: textMsg });
+    }
+  }
+
+  async function handleInfoCommand(targetUser) {
+    if (!targetUser) {
+      pushLocalChat("\\red\\Error executing command: /info <username>");
+      return;
+    }
+    try {
+      const res = await fetch('https://miniblox.io/auth-api/accounts/stats/username', {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify({ username: targetUser })
+      });
+      if (!res.ok) {
+        pushLocalChat(`\\red\\Error executing command: User ${targetUser} not found`);
+        return;
+      }
+      const data = await res.json();
+      if (data && data.profile) {
+        const username = data.profile.username || targetUser;
+        const rawRank = data.profile.rank ? data.profile.rank.trim().toLowerCase() : "";
+        const rank = (!rawRank || rawRank === "player") ? "None" : rawRank;
+        const level = data.profile.level !== undefined ? data.profile.level : "0";
+        pushLocalChat(`Username: ${username}\nRank: ${rank}\nLevel: ${level}`);
+      } else {
+        pushLocalChat(`\\red\\Error executing command: User ${targetUser} not found`);
+      }
+    } catch (err) {
+      pushLocalChat(`\\red\\Error executing command: User ${targetUser} not found`);
+    }
+  }
+
+  function hookChatEngine() {
+    const game = gameRef.game;
+    if (!game || !game.chat) return false;
+    const chat = game.chat;
+
+    function isInfoCmd(inputStr) {
+      if (typeof inputStr !== 'string') return false;
+      const clean = inputStr.trim().replace(/^\//, '').trim();
+      if (clean.toLowerCase() === 'info' || clean.toLowerCase().startsWith('info ')) {
+        handleInfoCommand(clean.split(/\s+/)[1] || '');
+        return true;
+      }
+      return false;
+    }
+
+    if (typeof chat.runCommand === 'function' && !chat.runCommand._isHooked) {
+      const origRunCommand = chat.runCommand;
+      chat.runCommand = function(cmdText, ...args) {
+        if (isInfoCmd(cmdText)) return;
+        return origRunCommand.apply(this, [cmdText, ...args]);
+      };
+      chat.runCommand._isHooked = true;
+    }
+    if (typeof chat.submit === 'function' && !chat.submit._isHooked) {
+      const origSubmit = chat.submit;
+      chat.submit = function(...args) {
+        if (isInfoCmd(chat.inputValue)) {
+          chat.setInputValue ? chat.setInputValue('') : (chat.inputValue = '');
+          if (typeof chat.closeInput === 'function') chat.closeInput();
+          return;
+        }
+        return origSubmit.apply(this, args);
+      };
+      chat.submit._isHooked = true;
+    }
+    return true;
+  }
+
+const initInterval = setInterval(() => {
+    if (hookChatEngine()) clearInterval(initInterval);
+  }, 500);
+})();
+
+(function() {
+  'use strict';
+const UV2_RAW_BASE = 'https://raw.githubusercontent.com/wytlines100/UnverifiedV2/refs/heads/main/';
+const UV2_SCRIPT_URL = UV2_RAW_BASE + 'client.js';
+const UV2_CHANGELOG_URL = UV2_RAW_BASE + 'CHANGELOG.md';
+let uv2LastCheck = 0;
+
+function uv2CompareVersions(a, b) {
+  const pa = String(a).split('.').map(Number);
+  const pb = String(b).split('.').map(Number);
+  for (let i = 0; i < Math.max(pa.length, pb.length); i++) {
+    const d = (pa[i] || 0) - (pb[i] || 0);
+    if (d !== 0) return d > 0 ? 1 : -1;
+  }
+  return 0;
+}
+
+function uv2ParseChangelog(text) {
+  return text.split(/\n(?=## )/).reduce((entries, part) => {
+    const m = part.match(/^## ([^\n]+)\n?([\s\S]*)$/);
+    if (m) entries.push({ heading: m[1].trim(), notes: m[2].trim().split('\n').map(l => l.replace(/^-\s*/, '').trim()).filter(l => l) });
+    return entries;
+  }, []);
+}
+
+function uv2ShowPopup(opts) {
+  const existing = document.getElementById('uv2-popup');
+  if (existing) existing.remove();
+  const wrap = document.createElement('div');
+  wrap.id = 'uv2-popup';
+  wrap.style.cssText = 'position:fixed;top:-300px;left:50%;transform:translateX(-50%);z-index:100002;pointer-events:none;transition:top 0.5s ease,opacity 0.5s ease;opacity:0;';
+
+  const box = document.createElement('div');
+  box.style.cssText = 'pointer-events:auto;background:#141414;border:1px solid rgba(231,76,60,0.5);border-radius:28px;padding:16px 24px;width:340px;max-width:90vw;font-family:MinibloxFont,sans-serif;color:#fff;box-shadow:0 12px 40px rgba(0,0,0,0.7);box-sizing:border-box;text-align:center;';
+
+  const title = document.createElement('div');
+  title.textContent = opts.title;
+  title.style.cssText = 'font-size:16px;color:#e74c3c;text-shadow:0 0 12px rgba(231,76,60,0.5);';
+  box.appendChild(title);
+
+  const subtitle = document.createElement('div');
+  subtitle.textContent = opts.subtitle;
+  subtitle.style.cssText = 'font-size:11px;color:#666;margin:2px 0 10px;letter-spacing:0.5px;';
+  box.appendChild(subtitle);
+
+  if (opts.notes.length) {
+    const list = document.createElement('div');
+    list.style.cssText = 'display:flex;flex-direction:column;gap:6px;margin-bottom:12px;max-height:120px;overflow-y:auto;text-align:left;';
+    opts.notes.forEach(line => {
+      const row = document.createElement('div');
+      row.style.cssText = 'display:flex;align-items:flex-start;gap:8px;font-size:12px;color:#ccc;line-height:1.4;';
+      const dot = document.createElement('div');
+      dot.style.cssText = 'width:4px;height:4px;border-radius:50%;background:#e74c3c;margin-top:6px;flex-shrink:0;';
+      const text = document.createElement('div');
+      text.textContent = line;
+      row.appendChild(dot);
+      row.appendChild(text);
+      list.appendChild(row);
+    });
+    box.appendChild(list);
+  }
+
+  function close() {
+    wrap.style.top = '-300px';
+    wrap.style.opacity = '0';
+    setTimeout(() => wrap.remove(), 500);
+  }
+
+  const btnRow = document.createElement('div');
+  btnRow.style.cssText = 'display:flex;gap:8px;';
+  const primaryBtn = document.createElement('button');
+  primaryBtn.textContent = opts.primaryLabel;
+  primaryBtn.style.cssText = 'flex:1;background:#e74c3c;color:#fff;border:none;border-radius:16px;padding:8px 14px;cursor:pointer;font-family:MinibloxFont,sans-serif;font-size:12px;';
+  primaryBtn.addEventListener('click', () => {
+    if (opts.onPrimary) opts.onPrimary();
+    close();
+  });
+  btnRow.appendChild(primaryBtn);
+
+  if (opts.secondaryLabel) {
+    const secondaryBtn = document.createElement('button');
+    secondaryBtn.textContent = opts.secondaryLabel;
+    secondaryBtn.style.cssText = 'flex:1;background:#2a2a2a;color:#fff;border:1px solid #444;border-radius:16px;padding:8px 14px;cursor:pointer;font-family:MinibloxFont,sans-serif;font-size:12px;';
+    secondaryBtn.addEventListener('click', () => {
+      if (opts.onSecondary) opts.onSecondary();
+      close();
+    });
+    btnRow.appendChild(secondaryBtn);
+  }
+
+  box.appendChild(btnRow);
+  wrap.appendChild(box);
+  document.body.appendChild(wrap);
+  setTimeout(() => { wrap.style.top = '18px'; wrap.style.opacity = '1'; }, 20);
+}
+
+function uv2Check() {
+  const installed = GM_info.script.version;
+  GM_xmlhttpRequest({
+    method: 'GET',
+    url: UV2_SCRIPT_URL + '?t=' + Date.now(),
+    onload(r) {
+      const m = r.responseText.match(/@version\s+([\d.]+)/);
+      const latest = m ? m[1] : null;
+      const hasUpdate = latest && uv2CompareVersions(latest, installed) > 0 && sessionStorage.getItem('uv2-update-dismissed') !== latest;
+      const lastSeen = localStorage.getItem('uv2-whatsnew-version');
+      const needsWhatsNew = lastSeen && uv2CompareVersions(installed, lastSeen) > 0;
+      if (!hasUpdate && !needsWhatsNew) return;
+      if (document.getElementById('uv2-popup')) return;
+      GM_xmlhttpRequest({
+        method: 'GET',
+        url: UV2_CHANGELOG_URL + '?t=' + Date.now(),
+        onload(c) {
+          if (document.getElementById('uv2-popup')) return;
+          const log = uv2ParseChangelog(c.responseText)[0];
+          if (hasUpdate) {
+            uv2ShowPopup({
+              title: 'Update Available',
+              subtitle: `v${installed} -> v${latest}`,
+              notes: log ? log.notes : [],
+              primaryLabel: 'Update Now',
+              secondaryLabel: 'Remind Me Later',
+              onPrimary: () => window.open(UV2_SCRIPT_URL, '_blank'),
+              onSecondary: () => sessionStorage.setItem('uv2-update-dismissed', latest)
+            });
+          } else if (needsWhatsNew && log) {
+            uv2ShowPopup({
+              title: "What's New",
+              subtitle: log.heading,
+              notes: log.notes,
+              primaryLabel: 'Dismiss',
+              onPrimary: () => localStorage.setItem('uv2-whatsnew-version', installed)
+            });
+          }
+        },
+        onerror() {
+          if (hasUpdate && !document.getElementById('uv2-popup')) {
+            uv2ShowPopup({
+              title: 'Update Available',
+              subtitle: `v${installed} -> v${latest}`,
+              notes: [],
+              primaryLabel: 'Update Now',
+              secondaryLabel: 'Remind Me Later',
+              onPrimary: () => window.open(UV2_SCRIPT_URL, '_blank'),
+              onSecondary: () => sessionStorage.setItem('uv2-update-dismissed', latest)
+            });
+          }
+        }
+      });
+    }
+  });
+}
+
+function uv2ThrottledCheck() {
+  const now = Date.now();
+  if (now - uv2LastCheck < 30000) return;
+  uv2LastCheck = now;
+  uv2Check();
+}
+
+setTimeout(uv2ThrottledCheck, 12800);
+setInterval(uv2ThrottledCheck, 60000);
+document.addEventListener('visibilitychange', () => {
+  if (!document.hidden) uv2ThrottledCheck();
+});
+  const style = document.createElement('style');
+style.innerHTML = `
+@font-face {
+  font-family: 'MinibloxFont';
+  src: url('https://cdn.glitch.global/adb12490-d563-43cb-9711-2a69a8bb1c06/Faithful.ttf?v=1735593093308') format('truetype');
+}
+@keyframes uv2UIOpen {
+  from { opacity: 0; transform: translate(-50%, -50%) scale(0.97); }
+  to   { opacity: 1; transform: translate(-50%, -50%) scale(1); }
+}
+@keyframes uv2UIClose {
+  from { opacity: 1; transform: translate(-50%, -50%) scale(1); }
+  to   { opacity: 0; transform: translate(-50%, -50%) scale(0.97); }
+}
+#uv2-main-ui {
+  will-change: opacity, transform;
+}
+#uv2-main-ui.uv2-animate-in {
+  animation: uv2UIOpen 0.2s cubic-bezier(0.16, 1, 0.3, 1) forwards;
+}
+#uv2-main-ui.uv2-animate-out {
+  animation: uv2UIClose 0.15s cubic-bezier(0.4, 0, 1, 1) forwards;
+}
+@keyframes uv2-card-shimmer {
+  0%   { transform: translateX(-100%) skewX(-15deg); }
+  100% { transform: translateX(300%) skewX(-15deg); }
+}
+.uv2-contrib-card:hover .uv2-card-shimmer {
+  animation: uv2-card-shimmer 0.8s cubic-bezier(0.4, 0, 0.2, 1) forwards;
+}
+@keyframes uv2-title-shine-loop {
+  0%   { background-position: 200% center; }
+  100% { background-position: -200% center; }
+}
+.uv2-title-shine {
+  background-image: linear-gradient(100deg, #e74c3c 0%, #e74c3c 40%, #ff8a80 50%, #e74c3c 60%, #e74c3c 100%);
+  background-size: 250% auto;
+  background-clip: text;
+  -webkit-background-clip: text;
+  -webkit-text-fill-color: transparent;
+  color: transparent;
+  animation: uv2-title-shine-loop 3.5s linear infinite;
+  text-shadow: 0 0 18px rgba(231,76,60,0.55);
+}
+@keyframes uv2NotifEnter {
+  from { transform: translateX(105%); opacity: 0; }
+  to   { transform: translateX(0);    opacity: 1; }
+}
+@keyframes uv2NotifExit {
+  from { transform: translateX(0);    opacity: 1; }
+  to   { transform: translateX(105%); opacity: 0; }
+}
+@keyframes notificationProgress {
+  0%   { width: 100%; }
+  100% { width: 0%; }
+}
+@keyframes afkPulse {
+  0%, 100% { opacity: 1; }
+  50% { opacity: 0.45; }
+}
+@keyframes uv2ModuleShine {
+  0%   { transform: translateX(-170%) skewX(-15deg); }
+  100% { transform: translateX(270%) skewX(-15deg); }
+}
+.module-container .uv2-shine {
+  position: absolute;
+  top: 0; left: 0;
+  width: 60%; height: 100%;
+  background: linear-gradient(120deg, transparent 0%, rgba(255,255,255,0.13) 45%, rgba(255,255,255,0.22) 50%, rgba(255,255,255,0.13) 55%, transparent 100%);
+  transform: translateX(-170%) skewX(-15deg);
+  pointer-events: none;
+  will-change: transform;
+}
+.module-container:hover .uv2-shine {
+  animation: uv2ModuleShine 2.9s cubic-bezier(0.4, 0, 0.2, 1) forwards;
+}
+.other-notification { font-family:'MinibloxFont',sans-serif; font-size:14px; color:white; background:linear-gradient(135deg,#1a1a1a,#111111); padding:12px 24px; border-radius:8px; margin-bottom:12px; box-shadow:0 4px 15px rgba(0,0,0,0.3); font-weight:500; letter-spacing:0.5px; position:relative; overflow:hidden; will-change:transform,opacity; animation:uv2NotifEnter 0.35s cubic-bezier(0.22,1,0.36,1) forwards; }
+.other-notification.uv2-notif-exit { animation:uv2NotifExit 0.3s cubic-bezier(0.4,0,1,1) forwards; }
+.notification-progress { position:absolute; bottom:0; left:0; height:3px; background:#ffcc00; width:100%; animation:notificationProgress 4s linear forwards; }
+#uv2-settings-panel { width:100% !important; height:100% !important; max-height:none !important; border-radius:0 !important; border:none !important; box-shadow:none !important; background:#000000 !important; display:flex; flex-direction:column; }
+#uv2-settings-titlebar { background:#000000 !important; border-bottom:1px solid rgba(255,255,255,0.07) !important; display:flex; align-items:center; justify-content:space-between; padding:14px 18px; flex-shrink:0; }
+#uv2-settings-titlebar span { font-size:15px; font-weight:600; display:flex; align-items:center; gap:8px; }
+#uv2-settings-titlebar span svg { fill:#e74c3c; }
+#uv2-settings-body { display:flex; flex:1; min-height:0; overflow:hidden; }
+#uv2-settings-content { flex:1; min-height:0; overflow-y:auto; padding:16px 20px; }
+.uv2-settings-page { display:block; }
+.uv2-section-title { font-size:10px; text-transform:uppercase; letter-spacing:0.1em; color:#555; margin:16px 0 8px; padding-left:4px; }
+.uv2-setting-row { display:flex; align-items:center; height:52px; padding:0 16px; border-radius:8px; background:linear-gradient(135deg,#222222,#191919); border:1px solid rgba(255,255,255,0.07); margin-bottom:8px; box-shadow:0 1px 4px rgba(0,0,0,0.35); transition:background 0.15s ease; box-sizing:border-box; border-bottom:1px solid rgba(255,255,255,0.07); }
+.uv2-setting-row:last-child { margin-bottom:0; }
+.uv2-setting-row:hover { background:linear-gradient(135deg,#2a2a2a,#202020); }
+.uv2-setting-row > div:first-child { display:flex; align-items:center; flex:1; min-width:0; }
+.uv2-setting-label { font-size:13px; color:#ccc; min-width:155px; flex-shrink:0; padding-right:16px; border-right:1px solid rgba(255,255,255,0.09); font-family:'MinibloxFont',sans-serif; white-space:nowrap; }
+.uv2-setting-desc { font-size:11.5px; color:#555; padding-left:16px; flex:1; font-family:'MinibloxFont',sans-serif; white-space:nowrap; overflow:hidden; text-overflow:ellipsis; }
+.uv2-toggle { position:relative; width:42px; height:22px; flex-shrink:0; }
+.uv2-toggle input { display:none; }
+.uv2-toggle-track { position:absolute; inset:0; background:#444; border-radius:999px; cursor:pointer; transition:background 0.2s; }
+.uv2-toggle-track::after { content:''; position:absolute; top:3px; left:3px; width:16px; height:16px; background:#fff; border-radius:50%; transition:transform 0.35s cubic-bezier(0.34, 1.56, 0.64, 1); }
+.uv2-toggle input:checked + .uv2-toggle-track { background:#e74c3c; }
+.uv2-toggle input:checked + .uv2-toggle-track::after { transform:translateX(20px); }
+`;
+document.head.appendChild(style);
+  const ui = document.createElement("div");
+  ui.id = "uv2-main-ui";
+  ui.style.position = "fixed";
+  ui.style.top = "50%";
+  ui.style.left = "50%";
+  ui.style.transform = "translate(-50%, -50%)";
+  ui.style.backgroundColor = "#000000";
+  ui.style.color = "white";
+  ui.style.padding = "0";
+  ui.style.borderRadius = "10px";
+  ui.style.display = "none";
+  ui.style.flexDirection = "row";
+  ui.style.zIndex = "9999";
+  ui.style.boxShadow = "0 32px 80px rgba(0,0,0,0.95), 0 0 0 1px rgba(231,76,60,0.15), inset 0 1px 0 rgba(255,255,255,0.04)";
+  ui.style.fontFamily = 'MinibloxFont, sans-serif';
+  ui.style.maxHeight = "90vh";
+  ui.style.maxWidth = "92vw";
+  ui.style.width = "960px";
+  ui.style.borderTop = "2px solid rgba(231,76,60,0.8)";
+  ui.style.overflow = "hidden";
+  document.body.appendChild(ui);
+
+  const faLink = document.createElement("link");
+  faLink.rel = "stylesheet";
+  faLink.href = "https://cdnjs.cloudflare.com/ajax/libs/font-awesome/4.7.0/css/font-awesome.min.css";
+  document.head.appendChild(faLink);
+
+  const uv2Sidebar = document.createElement("div");
+  uv2Sidebar.id = "uv2-sidebar";
+  uv2Sidebar.style.cssText = [
+    "width:160px;min-width:160px;background:#000000;display:flex;flex-direction:column;",
+    "border-right:1px solid rgba(255,255,255,0.06);overflow:hidden;flex-shrink:0;",
+    "border-radius:0 0 0 10px;"
+  ].join("");
+
+  const uv2SidebarLogo = document.createElement("div");
+uv2SidebarLogo.style.cssText = [
+  "padding:18px 14px 16px;border-bottom:1px solid rgba(255,255,255,0.06);",
+  "display:flex;align-items:center;gap:9px;"
+].join("");
+uv2SidebarLogo.innerHTML = [
+  '<img src="https://raw.githubusercontent.com/wytlines100/UnverifiedV2/refs/heads/main/logo.jpg" style="width:28px;height:28px;border-radius:6px;object-fit:cover;flex-shrink:0;">',
+  '<span style="color:#e74c3c;font-size:10px;letter-spacing:2px;text-transform:uppercase;',
+  'font-family:MinibloxFont,sans-serif;line-height:1.2;">UV2</span>'
+].join("");
+uv2Sidebar.appendChild(uv2SidebarLogo);
+
+  const uv2NavDefs = [
+  { page: 'main', label: 'Modules', icon: 'fa-th-large' },
+  { page: 'gui', label: 'Color', icon: 'fa-paint-brush' },
+  { page: 'config', label: 'Config', icon: 'fa-cog' },
+  { page: 'settings', label: 'Settings', icon: 'fa-sliders' },
+  { page: 'changelog', label: 'Changelog', icon: 'fa-history' },
+];
+
+  const uv2NavEls = {};
+  const uv2SidebarNav = document.createElement("div");
+  uv2SidebarNav.style.cssText = "display:flex;flex-direction:column;padding:8px 0;flex:1;";
+  uv2NavDefs.forEach(def => {
+    const el = document.createElement("div");
+    el.dataset.page = def.page;
+    el.style.cssText = [
+      "display:flex;align-items:center;gap:10px;padding:11px 16px;cursor:pointer;",
+      "font-size:13px;color:#666;border-left:2px solid transparent;",
+      "transition:all 0.15s ease;font-family:MinibloxFont,sans-serif;user-select:none;"
+    ].join("");
+    el.innerHTML = `<i class="fa ${def.icon}" style="font-size:15px;width:18px;text-align:center;flex-shrink:0;"></i><span>${def.label}</span>`;
+    el.addEventListener("mouseenter", () => {
+      if (el.dataset.active !== "1") { el.style.color = "#ccc"; el.style.backgroundColor = "rgba(255,255,255,0.04)"; }
+    });
+    el.addEventListener("mouseleave", () => {
+      if (el.dataset.active !== "1") { el.style.color = "#666"; el.style.backgroundColor = ""; }
+    });
+    el.addEventListener("click", () => switchUv2Page(def.page));
+    uv2NavEls[def.page] = el;
+    uv2SidebarNav.appendChild(el);
+  });
+  uv2Sidebar.appendChild(uv2SidebarNav);
+
+const uv2SidebarFooter = document.createElement("div");
+uv2SidebarFooter.style.cssText = [
+  "padding:12px 14px;border-top:1px solid rgba(255,255,255,0.05);",
+  "font-size:11px;color:#888;letter-spacing:1.5px;text-transform:uppercase;",
+  "font-family:MinibloxFont,sans-serif;text-align:center;"
+].join("");
+uv2SidebarFooter.textContent = "v" + GM_info.script.version;
+uv2Sidebar.appendChild(uv2SidebarFooter);
+ui.appendChild(uv2Sidebar);
+
+  const uv2ContentArea = document.createElement("div");
+  uv2ContentArea.style.cssText = "flex:1;display:flex;flex-direction:column;overflow:hidden;min-width:0;";
+  ui.appendChild(uv2ContentArea);
+
+  const uv2MainPage = document.createElement("div");
+  uv2MainPage.id = "uv2-page-main-content";
+  uv2MainPage.style.cssText = "flex:1;display:flex;flex-direction:column;overflow-y:auto;overflow-x:hidden;padding:22px 24px;";
+  uv2ContentArea.appendChild(uv2MainPage);
+
+  const uv2GUIPage = document.createElement("div");
+  uv2GUIPage.id = "uv2-page-gui-content";
+  uv2GUIPage.style.cssText = "flex:1;display:none;flex-direction:column;overflow-y:auto;overflow-x:hidden;padding:22px 24px;";
+  uv2ContentArea.appendChild(uv2GUIPage);
+
+  const uv2ConfigPage = document.createElement("div");
+  uv2ConfigPage.id = "uv2-page-config-content";
+  uv2ConfigPage.style.cssText = "flex:1;display:none;flex-direction:column;overflow-y:auto;overflow-x:hidden;padding:22px 24px;";
+  uv2ContentArea.appendChild(uv2ConfigPage);
+
+  const uv2SettingsPage = document.createElement("div");
+  uv2SettingsPage.id = "uv2-page-settings-content";
+  uv2SettingsPage.style.cssText = "flex:1;display:none;overflow:hidden;";
+  uv2ContentArea.appendChild(uv2SettingsPage);
+
+  const uv2ChangelogPage = document.createElement("div");
+  uv2ChangelogPage.id = "uv2-page-changelog-content";
+  uv2ChangelogPage.style.cssText = "flex:1;display:none;flex-direction:column;overflow-y:auto;overflow-x:hidden;padding:22px 24px;";
+  uv2ContentArea.appendChild(uv2ChangelogPage);
+
+let guiPrimaryColor = localStorage.getItem('uv2-gui-primary-color') || '#e74c3c';
+if (holiday === 'halloween') guiPrimaryColor = '#ff6600';
+if (holiday === 'christmas') guiPrimaryColor = '#cc0000';
+let armorHudDocked = localStorage.getItem('uv2-armorhud-docked') === 'true';
+let armorHudOpacity = parseFloat(localStorage.getItem('uv2-armorhud-opacity') || '1');
+let armorHudBgOpacity = parseFloat(localStorage.getItem('uv2-armorhud-bgopacity') || '0.55');
+let armorHudIconSize = parseInt(localStorage.getItem('uv2-armorhud-iconsize') || '0', 10);
+let armorHudGap = parseInt(localStorage.getItem('uv2-armorhud-gap') || '4', 10);
+
+  function applyGUIStyles() {
+    ui.style.backgroundColor = '#000000';
+    ui.style.color = '#ffffff';
+
+    ui.querySelectorAll('.mp-search-go').forEach(btn => {
+      btn.style.backgroundColor = guiPrimaryColor;
+    });
+
+    ui.querySelectorAll('.module-container').forEach(mc => {
+      const span = mc.querySelector('span');
+      if (span) {
+        span.style.color = guiPrimaryColor;
+        span.style.textShadow = `0 0 18px ${guiPrimaryColor}40`;
+      }
+      if (mc._uv2Active) {
+        mc.style.border = `1px solid ${guiPrimaryColor}80`;
+        mc.style.boxShadow = `0 0 0 3px ${guiPrimaryColor}14, 0 1px 4px rgba(0,0,0,0.4)`;
+        const tw = mc._toggleWrap;
+        const tk = mc._toggleKnob;
+        if (tw) { tw.style.background = `${guiPrimaryColor}40`; tw.style.borderColor = `${guiPrimaryColor}60`; }
+        if (tk) tk.style.background = guiPrimaryColor;
+      }
+    });
+
+    let toggleStyle = document.getElementById('uv2-dynamic-toggle-style');
+    if (!toggleStyle) {
+      toggleStyle = document.createElement('style');
+      toggleStyle.id = 'uv2-dynamic-toggle-style';
+      document.head.appendChild(toggleStyle);
+    }
+    toggleStyle.textContent = `.uv2-toggle input:checked + .uv2-toggle-track { background: ${guiPrimaryColor} !important; }`;
+
+    Object.values(uv2NavEls).forEach(el => {
+      if (el.dataset.active === "1") {
+        el.style.color = guiPrimaryColor;
+        el.style.borderLeftColor = guiPrimaryColor;
+        el.style.backgroundColor = `${guiPrimaryColor}14`;
+        const icon = el.querySelector('i');
+        if (icon) icon.style.color = guiPrimaryColor;
+      }
+    });
+
+    if (typeof title !== 'undefined' && title) {
+      title.style.color = guiPrimaryColor;
+    }
+
+    const armorHudPin = document.querySelector('#armor-hud-dock-btn');
+    if (armorHudPin && armorHudDocked) {
+      armorHudPin.style.color = guiPrimaryColor;
+      armorHudPin.style.textShadow = `0 0 8px ${guiPrimaryColor}80`;
+    }
+    try { if (typeof buildArmorHudSettingsPage === 'function') buildArmorHudSettingsPage(); } catch(e) {}
+
+    ['#save-config-btn', '#load-config-btn'].forEach(sel => {
+      const btn = document.querySelector(sel);
+      if (btn) { btn.style.background = guiPrimaryColor; btn.style.backgroundColor = guiPrimaryColor; }
+    });
+
+        const changelogPage = document.getElementById('uv2-page-changelog-content');
+    if (changelogPage) {
+      changelogPage.querySelectorAll('.uv2-changelog-title').forEach(el => { el.style.color = guiPrimaryColor; });
+      changelogPage.querySelectorAll('.uv2-changelog-dot').forEach(el => { el.style.background = guiPrimaryColor; });
+      changelogPage.querySelectorAll('.uv2-changelog-marker').forEach(el => {
+        el.style.background = guiPrimaryColor;
+        el.style.boxShadow = `0 0 10px ${guiPrimaryColor}80`;
+      });
+      changelogPage.querySelectorAll('.uv2-changelog-tag').forEach(el => {
+        el.style.color = guiPrimaryColor;
+        el.style.borderColor = `${guiPrimaryColor}80`;
+      });
+    }
+  }
+
+  function buildGUIPage() {
+  uv2GUIPage.innerHTML = '';
+  const isHoliday = holiday === 'halloween' || holiday === 'christmas';
+
+  const sectionLabel = document.createElement('div');
+  sectionLabel.textContent = 'Accent color';
+  sectionLabel.style.cssText = 'font-size:14px;color:#aaa;margin:0 0 10px 0;letter-spacing:0.05em;';
+  uv2GUIPage.appendChild(sectionLabel);
+
+  const row = document.createElement('div');
+  row.style.cssText = 'display:flex;align-items:center;gap:16px;padding:4px 0 20px 0;';
+  uv2GUIPage.appendChild(row);
+
+  const picker = document.createElement('input');
+  picker.type = 'color';
+  picker.value = guiPrimaryColor;
+  picker.style.cssText = 'width:48px;height:48px;border:none;border-radius:8px;cursor:pointer;background:none;padding:0;flex-shrink:0;';
+  row.appendChild(picker);
+
+  if (isHoliday) {
+    picker.disabled = true;
+    picker.style.opacity = '0.4';
+    picker.style.cursor = 'not-allowed';
+  }
+
+  const previewDot = document.createElement('div');
+  previewDot.style.cssText = `width:28px;height:28px;border-radius:50%;background:${guiPrimaryColor};box-shadow:0 0 12px ${guiPrimaryColor}88;transition:background 0.15s,box-shadow 0.15s;flex-shrink:0;`;
+  row.appendChild(previewDot);
+
+  const recentLabel = document.createElement('div');
+  recentLabel.textContent = 'Recent colors';
+  recentLabel.style.cssText = 'font-size:14px;color:#aaa;margin:0 0 10px 0;letter-spacing:0.05em;';
+  uv2GUIPage.appendChild(recentLabel);
+
+  const recentRow = document.createElement('div');
+  recentRow.style.cssText = 'display:flex;flex-wrap:wrap;gap:10px;padding:4px 0 0 0;';
+  uv2GUIPage.appendChild(recentRow);
+
+  function loadRecent() {
+    try { return JSON.parse(localStorage.getItem('uv2-recent-colors') || '[]'); } catch(e) { return []; }
+  }
+
+  function saveRecent(hex) {
+    let list = loadRecent().filter(c => c !== hex);
+    list.unshift(hex);
+    if (list.length > 7) list = list.slice(0, 7);
+    localStorage.setItem('uv2-recent-colors', JSON.stringify(list));
+  }
+
+  function renderRecent() {
+    recentRow.innerHTML = '';
+    if (isHoliday) return;
+    loadRecent().forEach(hex => {
+      const swatch = document.createElement('div');
+      swatch.style.cssText = `width:32px;height:32px;border-radius:6px;background:${hex};cursor:pointer;border:2px solid transparent;transition:border-color 0.15s,transform 0.15s;flex-shrink:0;`;
+      swatch.addEventListener('mouseenter', () => { swatch.style.transform = 'scale(1.15)'; });
+      swatch.addEventListener('mouseleave', () => { swatch.style.transform = 'scale(1)'; });
+      swatch.addEventListener('click', () => { applyColor(hex); });
+      if (hex === guiPrimaryColor) swatch.style.borderColor = '#fff';
+      recentRow.appendChild(swatch);
+    });
+  }
+
+  function applyColor(hex) {
+    guiPrimaryColor = hex;
+    localStorage.setItem('uv2-gui-primary-color', hex);
+    picker.value = hex;
+    previewDot.style.background = hex;
+    previewDot.style.boxShadow = `0 0 12px ${hex}88`;
+    saveRecent(hex);
+    renderRecent();
+    applyGUIStyles();
+  }
+
+  renderRecent();
+  picker.addEventListener('change', () => { applyColor(picker.value); });
+}
+
+  function buildConfigPage() {
+  uv2ConfigPage.innerHTML = '';
+
+  const heading = document.createElement('h2');
+  heading.textContent = 'Config Management';
+  heading.style.cssText = 'font-size:30px;font-family:MinibloxFont,sans-serif;margin:0 0 20px 0;text-align:center;';
+  uv2ConfigPage.appendChild(heading);
+
+  const sectionLabel = document.createElement('div');
+  sectionLabel.className = 'uv2-section-title';
+  sectionLabel.textContent = 'Save / Load Configuration';
+  uv2ConfigPage.appendChild(sectionLabel);
+
+  const row = document.createElement('div');
+  row.className = 'uv2-setting-row';
+  row.style.cssText = 'display:flex;flex-direction:row;height:auto;padding:16px;gap:16px;';
+
+  const saveBtn = document.createElement('button');
+  saveBtn.style.cssText = `flex:1;background:${guiPrimaryColor};color:white;border:none;border-radius:6px;padding:12px 20px;cursor:pointer;font-family:MinibloxFont,sans-serif;`;
+  saveBtn.textContent = 'Save Config';
+  saveBtn.id = 'save-config-btn';
+  saveBtn.addEventListener('click', () => {
+    const config = {
+      version: GM_info.script.version,
+      gui: { primaryColor: guiPrimaryColor },
+      settings: {
+        moduleSounds: settings.moduleSounds,
+        saving: settings.saving,
+        autoAfk: settings.autoAfk,
+        afkChat: settings.afkChat,
+        afkDelay: afkDelay,
+        uiKeybind: uiKeybind,
+      },
+      moduleBindings: moduleBindings,
+      moduleStates: {},
+    };
+    [...gridContainer.children].forEach(mc => {
+      const name = mc.dataset.moduleName;
+      if (name) config.moduleStates[name] = mc._uv2Active;
+    });
+    const blob = new Blob([JSON.stringify(config, null, 2)], { type: 'application/json' });
+    const url = URL.createObjectURL(blob);
+    const a = document.createElement('a');
+    a.href = url;
+    a.download = `uv2-config-${new Date().toISOString().slice(0,10)}.json`;
+    a.click();
+    URL.revokeObjectURL(url);
+    showNotification('Config saved');
+  });
+
+  const fileInput = document.createElement('input');
+  fileInput.type = 'file';
+  fileInput.id = 'config-file-input';
+  fileInput.accept = '.json';
+  fileInput.style.display = 'none';
+
+  const loadBtn = document.createElement('button');
+  loadBtn.style.cssText = `flex:1;background:${guiPrimaryColor};color:white;border:none;border-radius:6px;padding:12px 20px;cursor:pointer;font-family:MinibloxFont,sans-serif;`;
+  loadBtn.textContent = 'Load Config';
+  loadBtn.id = 'load-config-btn';
+  loadBtn.addEventListener('click', () => fileInput.click());
+
+  fileInput.addEventListener('change', e => {
+    const file = e.target.files[0];
+    if (!file) return;
+    const reader = new FileReader();
+    reader.onload = event => {
+      try {
+        const config = JSON.parse(event.target.result);
+        if (config.gui?.primaryColor) {
+          guiPrimaryColor = config.gui.primaryColor;
+          localStorage.setItem('uv2-gui-primary-color', guiPrimaryColor);
+          applyGUIStyles();
+          buildGUIPage();
+        }
+        if (config.settings) {
+          if (typeof config.settings.moduleSounds === 'boolean') {
+            settings.moduleSounds = config.settings.moduleSounds;
+            localStorage.setItem('uv2-setting-sounds', settings.moduleSounds);
+            const t = document.querySelector("#uv2-toggle-sounds");
+            if (t) t.checked = settings.moduleSounds;
+          }
+          if (typeof config.settings.saving === 'boolean') {
+            settings.saving = config.settings.saving;
+            localStorage.setItem('uv2-setting-saving', settings.saving ? 'true' : 'false');
+            const t = document.querySelector("#uv2-toggle-saving");
+            if (t) t.checked = settings.saving;
+          }
+          if (typeof config.settings.autoAfk === 'boolean') {
+            settings.autoAfk = config.settings.autoAfk;
+            localStorage.setItem('uv2-setting-autoafk', settings.autoAfk ? 'true' : 'false');
+            const t = document.querySelector("#uv2-toggle-autoafk");
+            if (t) t.checked = settings.autoAfk;
+            if (settings.autoAfk) startAfkDetector(); else stopAfkDetector();
+          }
+          if (typeof config.settings.afkChat === 'boolean') {
+            settings.afkChat = config.settings.afkChat;
+            localStorage.setItem('uv2-setting-afkchat', settings.afkChat);
+            const t = document.querySelector("#uv2-toggle-afkchat");
+            if (t) t.checked = settings.afkChat;
+          }
+          if (typeof config.settings.afkDelay === 'number') {
+            afkDelay = Math.min(120, Math.max(10, config.settings.afkDelay));
+            localStorage.setItem('uv2-setting-afkdelay', afkDelay);
+            if (afkDelayInput) afkDelayInput.value = afkDelay;
+          }
+          if (typeof config.settings.uiKeybind === 'string') {
+            uiKeybind = config.settings.uiKeybind;
+            localStorage.setItem('uv2-setting-uikeybind', uiKeybind);
+            const t = document.querySelector("#uv2-uikeybind-select");
+            if (t) t.value = uiKeybind;
+          }
+        }
+        if (config.moduleBindings) {
+          moduleBindings = config.moduleBindings;
+          Object.keys(moduleBindings).forEach(name => {
+            if (moduleBindings[name]) updateModuleKeybindPill(name, moduleBindings[name]);
+          });
+        }
+        setTimeout(() => {
+          if (config.moduleStates) {
+            isRestoring = true;
+            [...gridContainer.children].forEach(mc => {
+              const name = mc.dataset.moduleName;
+              if (name && config.moduleStates[name] !== undefined) {
+                if (config.moduleStates[name] && !mc._uv2Active) mc.click();
+                else if (!config.moduleStates[name] && mc._uv2Active) mc.click();
+              }
+            });
+            isRestoring = false;
+          }
+        }, 500);
+        showNotification('Config loaded');
+      } catch (err) {
+        console.error(err);
+        showNotification('Invalid config file');
+      }
+    };
+    reader.readAsText(file);
+    fileInput.value = '';
+  });
+
+  row.appendChild(saveBtn);
+  row.appendChild(fileInput);
+  row.appendChild(loadBtn);
+  uv2ConfigPage.appendChild(row);
+}
+
+  function buildArmorHudSettingsPage() {
+  const container = document.getElementById('uv2-armorhud-settings-section');
+  if (!container) return;
+  container.innerHTML = '';
+
+  const statusRow = document.createElement('div');
+  statusRow.style.cssText = 'display:flex;align-items:center;justify-content:space-between;padding:14px 16px;border-radius:8px;background:linear-gradient(135deg,#222,#191919);border:1px solid rgba(255,255,255,0.07);margin-bottom:12px;';
+  const statusText = document.createElement('div');
+  statusText.id = 'armor-hud-status-text';
+  statusText.style.cssText = 'font-size:13px;color:#ccc;font-family:MinibloxFont,sans-serif;';
+  statusText.textContent = armorHudDocked ? 'Status: Docked' : 'Status: Floating';
+  const statusBtn = document.createElement('button');
+  statusBtn.id = 'armor-hud-status-btn';
+  statusBtn.textContent = armorHudDocked ? 'Undock' : 'Dock Now';
+  statusBtn.style.cssText = `background:${guiPrimaryColor};color:white;border:none;border-radius:6px;padding:8px 16px;cursor:pointer;font-family:MinibloxFont,sans-serif;font-size:12px;`;
+  statusBtn.addEventListener('click', () => {
+    const btn = document.querySelector('#armor-hud-dock-btn');
+    if (btn) btn.click();
+    else showNotification('Enable Armor HUD in a match');
+  });
+  statusRow.appendChild(statusText);
+  statusRow.appendChild(statusBtn);
+  container.appendChild(statusRow);
+
+  [
+    { label: 'Icon Opacity', id: 'armor-hud-opacity-slider', min: 20, max: 100, get: () => Math.round(armorHudOpacity * 100), fmt: v => v + '%', set(v) { armorHudOpacity = v / 100; localStorage.setItem('uv2-armorhud-opacity', armorHudOpacity); if (armorHudEl) armorHudEl.style.opacity = armorHudOpacity; } },
+    { label: 'Background Opacity', id: 'armor-hud-bgopacity-slider', min: 0, max: 100, get: () => Math.round(armorHudBgOpacity * 100), fmt: v => v + '%', set(v) { armorHudBgOpacity = v / 100; localStorage.setItem('uv2-armorhud-bgopacity', armorHudBgOpacity); if (armorHudDocked) armorHudRender(); } },
+    { label: 'Icon Size', id: 'armor-hud-size-slider', min: 0, max: 64, get: () => armorHudIconSize, fmt: v => v == 0 ? 'Auto' : v + 'px', set(v) { armorHudIconSize = parseInt(v, 10); localStorage.setItem('uv2-armorhud-iconsize', armorHudIconSize); if (armorHudDocked) armorHudRender(); } },
+    { label: 'Spacing', id: 'armor-hud-gap-slider', min: 0, max: 16, get: () => armorHudGap, fmt: v => v + 'px', set(v) { armorHudGap = parseInt(v, 10); localStorage.setItem('uv2-armorhud-gap', armorHudGap); if (armorHudDocked) armorHudRender(); } },
+  ].forEach(s => {
+    const row = document.createElement('div');
+    row.style.cssText = 'margin-bottom:14px;';
+    const labelRow = document.createElement('div');
+    labelRow.style.cssText = 'display:flex;justify-content:space-between;align-items:center;margin-bottom:5px;';
+    const label = document.createElement('span');
+    label.style.cssText = 'font-size:11px;color:#888;text-transform:uppercase;letter-spacing:0.05em;';
+    label.textContent = s.label;
+    const valueEl = document.createElement('span');
+    valueEl.id = s.id + '-value';
+    valueEl.style.cssText = `font-size:12px;color:${guiPrimaryColor};font-weight:600;`;
+    valueEl.textContent = s.fmt(s.get());
+    labelRow.appendChild(label);
+    labelRow.appendChild(valueEl);
+    row.appendChild(labelRow);
+    const slider = document.createElement('input');
+    slider.type = 'range';
+    slider.id = s.id;
+    slider.min = s.min;
+    slider.max = s.max;
+    slider.value = s.get();
+    slider.style.cssText = `width:100%;accent-color:${guiPrimaryColor};`;
+    slider.addEventListener('input', function() {
+      valueEl.textContent = s.fmt(this.value);
+      s.set(this.value);
+    });
+    row.appendChild(slider);
+    container.appendChild(row);
+  });
+
+  const resetBtn = document.createElement('button');
+  resetBtn.textContent = 'Reset to Default';
+  resetBtn.style.cssText = `width:100%;background:${guiPrimaryColor};color:white;border:none;border-radius:6px;padding:10px;cursor:pointer;font-family:MinibloxFont,sans-serif;font-size:13px;letter-spacing:0.3px;`;
+  resetBtn.addEventListener('click', () => {
+    armorHudOpacity = 1;
+    armorHudBgOpacity = 0.55;
+    armorHudIconSize = 0;
+    armorHudGap = 4;
+    localStorage.setItem('uv2-armorhud-opacity', '1');
+    localStorage.setItem('uv2-armorhud-bgopacity', '0.55');
+    localStorage.setItem('uv2-armorhud-iconsize', '0');
+    localStorage.setItem('uv2-armorhud-gap', '4');
+    if (armorHudEl) armorHudEl.style.opacity = 1;
+    if (armorHudDocked) armorHudRender();
+    buildArmorHudSettingsPage();
+  });
+  container.appendChild(resetBtn);
+}
+
+let uv2ChangelogLoaded = false;
+function buildChangelogPage() {
+  uv2ChangelogPage.innerHTML = '';
+
+  const heading = document.createElement('h2');
+  heading.textContent = 'Changelog';
+  heading.style.cssText = 'font-size:28px;font-family:MinibloxFont,sans-serif;margin:0 0 20px 0;text-align:center;color:#fff;';
+  uv2ChangelogPage.appendChild(heading);
+
+  const status = document.createElement('div');
+  status.textContent = 'Loading...';
+  status.style.cssText = 'text-align:center;color:#666;font-size:13px;font-family:MinibloxFont,sans-serif;padding:20px 0;';
+  uv2ChangelogPage.appendChild(status);
+
+  GM_xmlhttpRequest({
+    method: 'GET',
+    url: UV2_CHANGELOG_URL + '?t=' + Date.now(),
+    timeout: 8000,
+    onload(r) {
+      const entries = uv2ParseChangelog(r.responseText);
+      if (!entries.length) {
+        status.textContent = 'No changelog entries found.';
+        return;
+      }
+      uv2ChangelogLoaded = true;
+      status.remove();
+
+      const timeline = document.createElement('div');
+      timeline.style.cssText = 'display:flex;flex-direction:column;padding-left:6px;';
+
+      entries.forEach((entry, index) => {
+        const isLast = index === entries.length - 1;
+
+        const item = document.createElement('div');
+        item.style.cssText = `position:relative;padding:0 0 ${isLast ? '0' : '26px'} 22px;border-left:2px solid ${isLast ? 'transparent' : 'rgba(255,255,255,0.08)'};margin-left:5px;`;
+
+        const marker = document.createElement('div');
+        marker.className = 'uv2-changelog-marker';
+        marker.style.cssText = `position:absolute;left:-7px;top:3px;width:12px;height:12px;border-radius:50%;background:${guiPrimaryColor};box-shadow:0 0 10px ${guiPrimaryColor}80;`;
+        item.appendChild(marker);
+
+        const head = document.createElement('div');
+        head.style.cssText = 'display:flex;align-items:center;gap:10px;margin-bottom:10px;flex-wrap:wrap;';
+
+        const headTitle = document.createElement('span');
+        headTitle.className = 'uv2-changelog-title';
+        headTitle.textContent = entry.heading;
+        headTitle.style.cssText = `font-size:15px;font-family:MinibloxFont,sans-serif;color:${guiPrimaryColor};`;
+        head.appendChild(headTitle);
+
+        if (index === 0) {
+          const tag = document.createElement('span');
+          tag.className = 'uv2-changelog-tag';
+          tag.textContent = 'Latest';
+          tag.style.cssText = `font-size:9px;font-family:MinibloxFont,sans-serif;letter-spacing:1px;text-transform:uppercase;color:${guiPrimaryColor};border:1px solid ${guiPrimaryColor}80;border-radius:4px;padding:2px 6px;`;
+          head.appendChild(tag);
+        }
+        item.appendChild(head);
+
+        const list = document.createElement('div');
+        list.style.cssText = 'display:flex;flex-direction:column;gap:6px;background:linear-gradient(135deg,#1c1c1c,#141414);border:1px solid rgba(255,255,255,0.06);border-radius:8px;padding:12px 14px;';
+        entry.notes.forEach(line => {
+          const row = document.createElement('div');
+          row.style.cssText = 'display:flex;align-items:flex-start;gap:9px;font-size:12px;color:#bbb;line-height:1.5;font-family:MinibloxFont,sans-serif;';
+          const dot = document.createElement('div');
+          dot.className = 'uv2-changelog-dot';
+          dot.style.cssText = `width:4px;height:4px;border-radius:50%;background:${guiPrimaryColor};margin-top:7px;flex-shrink:0;`;
+          const text = document.createElement('div');
+          text.textContent = line;
+          row.appendChild(dot);
+          row.appendChild(text);
+          list.appendChild(row);
+        });
+        item.appendChild(list);
+        timeline.appendChild(item);
+      });
+
+      uv2ChangelogPage.appendChild(timeline);
+    },
+    onerror() {
+      status.textContent = 'Failed to load changelog.';
+      uv2ChangelogLoaded = false;
+    },
+    ontimeout() {
+      status.textContent = 'Failed to load changelog.';
+      uv2ChangelogLoaded = false;
+    }
+  });
+}
+
+  function switchUv2Page(page) {
+  uv2MainPage.style.display = page === 'main' ? 'flex' : 'none';
+  uv2GUIPage.style.display = page === 'gui' ? 'flex' : 'none';
+  uv2ConfigPage.style.display = page === 'config' ? 'flex' : 'none';
+  uv2SettingsPage.style.display = page === 'settings' ? 'flex' : 'none';
+  uv2ChangelogPage.style.display = page === 'changelog' ? 'flex' : 'none';
+  if (page === 'changelog' && !uv2ChangelogLoaded) buildChangelogPage();
+  Object.entries(uv2NavEls).forEach(([p, el]) => {
+    const active = p === page;
+    el.dataset.active = active ? "1" : "0";
+    el.style.color = active ? guiPrimaryColor : "#666";
+    el.style.backgroundColor = active ? `${guiPrimaryColor}14` : "";
+    el.style.borderLeft = active ? `2px solid ${guiPrimaryColor}` : "2px solid transparent";
+    const icon = el.querySelector("i");
+    if (icon) icon.style.color = active ? guiPrimaryColor : "";
+  });
+}
+
+  const headerRow = document.createElement("div");
+  headerRow.style.cssText = "display:flex;align-items:center;justify-content:center;margin-bottom:18px;padding-bottom:16px;border-bottom:1px solid rgba(255,255,255,0.07);position:relative;";
+  uv2MainPage.appendChild(headerRow);
+
+  const title = document.createElement("h2");
+  title.textContent = "Unverified V2";
+  title.classList.add('uv2-title-shine');
+  title.style.fontSize = "30px";
+  title.style.fontFamily = 'MinibloxFont, sans-serif'; title.style.margin = "0";
+  title.style.letterSpacing = "1px";
+  title.style.textAlign = "center";
+  title.style.cursor = "pointer";
+  title.style.userSelect = "none";
+  headerRow.appendChild(title);
+
+  const bindHint = document.createElement('div');
+  bindHint.style.cssText = 'position:absolute;top:22px;right:24px;font-size:15px;color:#888;font-family:MinibloxFont,sans-serif;letter-spacing:0.5px;pointer-events:none;';
+  bindHint.textContent = 'Right-click a module to bind a key';
+  uv2MainPage.style.position = 'relative';
+  uv2MainPage.appendChild(bindHint);
+
+   const settingsOverlay = document.createElement("div");
+settingsOverlay.id = "uv2-settings-overlay";
+settingsOverlay.innerHTML = `
+  <div id="uv2-settings-panel">
+    <div id="uv2-settings-titlebar">
+      <span><svg width="16" height="16" viewBox="0 0 24 24"><path d="M19.14,12.94c0.04-0.3,0.06-0.61,0.06-0.94c0-0.32-0.02-0.64-0.07-0.94l2.03-1.58c0.18-0.14,0.23-0.41,0.12-0.61l-1.92-3.32c-0.12-0.22-0.37-0.29-0.59-0.22l-2.39,0.96c-0.5-0.38-1.03-0.7-1.62-0.94L14.4,2.81c-0.04-0.24-0.24-0.41-0.48-0.41h-3.84c-0.24,0-0.43,0.17-0.47,0.41L9.25,5.35C8.66,5.59,8.12,5.92,7.63,6.29L5.24,5.33c-0.22-0.08-0.47,0-0.59,0.22L2.74,8.87C2.62,9.08,2.66,9.34,2.86,9.48l2.03,1.58C4.84,11.36,4.8,11.69,4.8,12s0.02,0.64,0.07,0.94l-2.03,1.58c-0.18,0.14-0.23,0.41-0.12,0.61l1.92,3.32c0.12,0.22,0.37,0.29,0.59,0.22l2.39-0.96c0.5,0.38,1.03,0.7,1.62,0.94l0.36,2.54c0.05,0.24,0.24,0.41,0.48,0.41h3.84c0.24,0,0.44-0.17,0.47-0.41l0.36-2.54c0.59-0.24,1.13-0.56,1.62-0.94l2.39,0.96c0.22,0.08,0.47,0,0.59-0.22l1.92-3.32c0.12-0.22,0.07-0.47-0.12-0.61L19.14,12.94zM12,15.6c-1.98,0-3.6-1.62-3.6-3.6s1.62-3.6,3.6-3.6S13.98,15.6,12,15.6z"/></svg>Settings</span>
+    </div>
+    <div id="uv2-settings-body">
+      <div id="uv2-settings-content">
+        <div class="uv2-settings-page" id="uv2-page-visuals">
+          <div class="uv2-section-title">Interface</div>
+          <div class="uv2-setting-row">
+            <div><div class="uv2-setting-label">Module Click Sounds</div><div class="uv2-setting-desc">Play a sound when toggling modules on or off</div></div>
+            <label class="uv2-toggle"><input type="checkbox" id="uv2-toggle-sounds"><div class="uv2-toggle-track"></div></label>
+          </div>
+          <div class="uv2-setting-row">
+            <div><div class="uv2-setting-label">Save Modules</div><div class="uv2-setting-desc">Restore your active modules after a page reload</div></div>
+            <label class="uv2-toggle"><input type="checkbox" id="uv2-toggle-saving"><div class="uv2-toggle-track"></div></label>
+          </div>
+          <div class="uv2-setting-row">
+            <div><div class="uv2-setting-label">UI Keybind</div><div class="uv2-setting-desc">Choose the key that opens and closes the menu</div></div>
+            <select id="uv2-uikeybind-select" style="background:#2a2a2a;color:white;border:1px solid #444;border-radius:6px;padding:6px 10px;font-size:13px;font-family:MinibloxFont,sans-serif;outline:none;cursor:pointer;">
+              <option value="rshift">Right Shift</option>
+              <option value="backtick">&#96;</option>
+              <option value="backslash">\\</option>
+            </select>
+          </div>
+          <div class="uv2-setting-row">
+            <div><div class="uv2-setting-label">Show VPN Warning</div><div class="uv2-setting-desc">Show the VPN detection popup when opening the menu</div></div>
+            <label class="uv2-toggle"><input type="checkbox" id="uv2-toggle-vpnwarning"><div class="uv2-toggle-track"></div></label>
+          </div>
+          <div class="uv2-section-title" style="margin-top:14px;">Anti-AFK</div>
+<div class="uv2-setting-row">
+  <div><div class="uv2-setting-label">Auto Enable</div><div class="uv2-setting-desc">Turns on Anti-AFK automatically after idling</div></div>
+  <label class="uv2-toggle"><input type="checkbox" id="uv2-toggle-autoafk"><div class="uv2-toggle-track"></div></label>
+</div>
+<div class="uv2-setting-row">
+  <div><div class="uv2-setting-label">Sends AFK Message In Chat</div><div class="uv2-setting-desc">Sends a chat message when you go AFK</div></div>
+  <label class="uv2-toggle"><input type="checkbox" id="uv2-toggle-afkchat"><div class="uv2-toggle-track"></div></label>
+</div>
+<div class="uv2-setting-row">
+  <div><div class="uv2-setting-label">AFK Music</div><div class="uv2-setting-desc">Play music when Anti-AFK auto-enables</div></div>
+  <label class="uv2-toggle"><input type="checkbox" id="uv2-toggle-afkmusic"><div class="uv2-toggle-track"></div></label>
+</div>
+<div class="uv2-setting-row">
+  <div><div class="uv2-setting-label">Idle Delay</div><div class="uv2-setting-desc">Seconds before Anti-AFK auto-enables (10–120)</div></div>
+  <div style="display:flex;align-items:center;gap:6px;flex-shrink:0;">
+    <input type="number" id="uv2-afkdelay-input" min="10" max="120" value="10" style="width:60px;background:#2a2a2a;color:white;border:1px solid #444;border-radius:6px;padding:5px 8px;font-size:14px;font-family:'MinibloxFont',sans-serif;text-align:center;outline:none;">
+    <span style="color:#888;font-size:13px;">s</span>
+  </div>
+</div>
+        <div class="uv2-settings-page" id="uv2-page-armorhud-settings">
+          <div class="uv2-section-title" style="margin-top:14px;">Armor HUD</div>
+          <div id="uv2-armorhud-settings-section"></div>
+        </div>
+        <div class="uv2-settings-page" id="uv2-page-about">
+          <div class="uv2-section-title" style="margin-top:16px;">Contributors</div>
+          <div id="uv2-contributors-grid"></div>
+        </div>
+      </div>
+    </div>
+  </div>
+`;
+
+const resetSection = document.createElement('div');
+resetSection.className = 'uv2-section-title';
+resetSection.style.marginTop = '14px';
+resetSection.textContent = 'Danger Zone';
+settingsOverlay.querySelector('#uv2-page-visuals')?.appendChild(resetSection);
+const resetRow = document.createElement('div');
+resetRow.className = 'uv2-setting-row';
+resetRow.style.cssText = 'height:auto;padding:16px;flex-direction:column;gap:0;';
+const resetBtn = document.createElement('button');
+resetBtn.textContent = 'Reset All Settings';
+resetBtn.style.cssText = 'width:100%;background:#e74c3c;color:white;border:none;border-radius:6px;padding:12px 20px;cursor:pointer;font-family:MinibloxFont,sans-serif;';
+resetBtn.addEventListener('click', () => {
+  const existing = document.getElementById('uv2-reset-confirm');
+  if (existing) return;
+  const confirm = document.createElement('div');
+  confirm.id = 'uv2-reset-confirm';
+  confirm.style.cssText = 'margin-top:10px;display:flex;flex-direction:column;gap:8px;';
+  const question = document.createElement('div');
+  question.textContent = 'Are you sure? This cannot be undone.';
+  question.style.cssText = 'font-size:13px;color:#ccc;font-family:MinibloxFont,sans-serif;text-align:center;';
+  const btnRow = document.createElement('div');
+  btnRow.style.cssText = 'display:flex;gap:8px;';
+  const yesBtn = document.createElement('button');
+  yesBtn.textContent = 'Yes';
+  yesBtn.style.cssText = 'flex:1;background:#e74c3c;color:white;border:none;border-radius:6px;padding:10px;cursor:pointer;font-family:MinibloxFont,sans-serif;';
+  yesBtn.addEventListener('click', () => {
+    Object.keys(localStorage).filter(k => k.startsWith('uv2-')).forEach(k => localStorage.removeItem(k));
+    sessionStorage.clear();
+    showNotification('Settings reset');
+    location.reload();
+  });
+  const noBtn = document.createElement('button');
+  noBtn.textContent = 'No';
+  noBtn.style.cssText = 'flex:1;background:#2a2a2a;color:#fff;border:1px solid #444;border-radius:6px;padding:10px;cursor:pointer;font-family:MinibloxFont,sans-serif;';
+  noBtn.addEventListener('click', () => confirm.remove());
+  btnRow.appendChild(yesBtn);
+  btnRow.appendChild(noBtn);
+  confirm.appendChild(question);
+  confirm.appendChild(btnRow);
+  resetRow.appendChild(confirm);
+});
+resetRow.appendChild(resetBtn);
+settingsOverlay.querySelector('#uv2-page-visuals')?.appendChild(resetRow);
+
+(function buildContributorsGrid() {
+  const contributors = [
+    { name: "wyt", role: "Lead Developer", badge: "Founder", bio: "Founded and leads UV2.", avatar: "https://github.com/wytlines100.png", bg: "#3b1a00", text: "#fdba74", border: "#ea580c", strip: "#ea580c", icon: "★" },
+    { name: "jet", role: "Ex-Developer", badge: "Ex-Dev", bio: "Helped build early versions.", avatar: "https://github.com/h9ndcuffs.png", bg: "#1c1c1c", text: "#a1a1aa", border: "#52525b", strip: "#52525b", icon: "◇" },
+    { name: "joudaALT", role: "Developer", badge: "Mod & Dev", bio: "Miniblox moderator and UV2 developer.", avatar: "https://github.com/joudaALT.png", bg: "#1a1f3a", text: "#93c5fd", border: "#3b82f6", strip: "#3b82f6", icon: "⬡" },
+    { name: "Trust", role: "Developer", badge: "Coder", bio: "Developer with a knack for clean code.", avatar: "https://github.com/lttlgrl.png", bg: "#2d1a3a", text: "#d8b4fe", border: "#9333ea", strip: "#9333ea", icon: "✦" },
+    { name: "TheM1ddleM1n", role: "Developer", badge: "Coder", bio: "Developer and Python/JavaScript specialist.", avatar: "https://github.com/TheM1ddleM1n.png", bg: "#1a2a1a", text: "#6ee7b7", border: "#059669", strip: "#059669", icon: "⚔" },
+    { name: "mrdaddycat", role: "Discord", badge: "OG", bio: "cat", avatar: "https://marketplace.canva.com/xHPJk/MAHA8XxHPJk/1/tl/canva-MAHA8XxHPJk.jpg", bg: "#1a2a1a", text: "#6ee7b7", border: "#059669", strip: "#059669", icon: "🐾" },
+  ];
+  const grid = settingsOverlay.querySelector("#uv2-contributors-grid");
+  if (!grid) return;
+  grid.style.cssText = "display:flex;flex-wrap:wrap;gap:12px;padding:4px 0 8px 0;";
+  function buildCard(c) {
+    const card = document.createElement("div");
+    card.className = "uv2-contrib-card";
+    card.style.cssText = `display:flex;flex-direction:column;background:linear-gradient(160deg,#1c1c1c,#111111);border:1px solid ${c.strip}30;border-radius:10px;flex:1;min-width:200px;max-width:calc(50% - 6px);transition:border-color 0.25s ease,box-shadow 0.25s ease;cursor:default;box-sizing:border-box;position:relative;overflow:hidden;`;
+    card.addEventListener("mouseenter", () => { card.style.borderColor = `${c.strip}80`; card.style.boxShadow = `0 0 0 1px ${c.strip}25,0 6px 24px rgba(0,0,0,0.6),inset 0 0 40px ${c.strip}08`; });
+    card.addEventListener("mouseleave", () => { card.style.borderColor = `${c.strip}30`; card.style.boxShadow = "none"; });
+    card.innerHTML = `<div class="uv2-card-shimmer" style="pointer-events:none;position:absolute;top:0;left:0;width:40%;height:100%;background:linear-gradient(120deg,transparent,rgba(255,255,255,0.07),transparent);transform:translateX(-100%) skewX(-15deg);z-index:1;"></div><div style="height:3px;background:linear-gradient(90deg,${c.strip},${c.strip}44);border-radius:10px 10px 0 0;flex-shrink:0;"></div><div style="display:flex;flex-direction:column;gap:10px;padding:12px 14px 14px;position:relative;z-index:2;"><div style="display:flex;align-items:center;gap:10px;"><div style="position:relative;flex-shrink:0;"><div style="position:absolute;inset:-3px;border-radius:50%;background:radial-gradient(circle,${c.strip}55,transparent 70%);z-index:0;"></div><img src="${c.avatar}" onerror="this.src='https://github.com/identicons/${c.name}.png'" style="width:44px;height:44px;border-radius:50%;display:block;position:relative;z-index:1;border:2px solid ${c.strip}99;background:#111;"></div><div style="display:flex;flex-direction:column;gap:4px;min-width:0;flex:1;"><div style="display:flex;align-items:center;gap:6px;flex-wrap:wrap;"><div style="font-size:13px;font-weight:600;color:#fff;font-family:MinibloxFont,sans-serif;white-space:nowrap;">${c.name}</div><div style="background:${c.bg};color:${c.text};border:1px solid ${c.border};font-size:9px;font-family:MinibloxFont,sans-serif;letter-spacing:0.5px;padding:2px 6px;border-radius:4px;white-space:nowrap;display:flex;align-items:center;gap:3px;"><span style="font-size:8px;">${c.icon}</span><span>${c.badge}</span></div></div><div style="font-size:11px;color:${c.strip};font-family:MinibloxFont,sans-serif;opacity:0.9;">${c.role}</div></div></div><div style="height:1px;background:linear-gradient(90deg,${c.strip}30,transparent);"></div><div style="font-size:11.5px;color:#666;font-family:MinibloxFont,sans-serif;line-height:1.55;">${c.bio}</div></div>`;
+    return card;
+  }
+  contributors.forEach(c => grid.appendChild(buildCard(c)));
+})();
+
+  const uv2InlineSettings = settingsOverlay.querySelector('#uv2-settings-panel');
+  if (uv2InlineSettings) {
+    uv2InlineSettings.style.width = "100%";
+    uv2InlineSettings.style.height = "100%";
+    uv2InlineSettings.style.maxHeight = "none";
+    uv2InlineSettings.style.borderRadius = "0";
+    uv2InlineSettings.style.border = "none";
+    uv2InlineSettings.style.boxShadow = "none";
+    uv2SettingsPage.appendChild(uv2InlineSettings);
+  }
+
+buildGUIPage();
+buildConfigPage();
+applyGUIStyles();
+switchUv2Page('main');
+
+document.querySelector("#uv2-toggle-sounds")?.addEventListener("change", function() {
+  settings.moduleSounds = this.checked;
+  localStorage.setItem('uv2-setting-sounds', this.checked);
+});
+document.querySelector("#uv2-toggle-saving")?.addEventListener("change", function() {
+  settings.saving = this.checked;
+  localStorage.setItem('uv2-setting-saving', this.checked ? 'true' : 'false');
+  if (this.checked) {
+    saveAllModuleStates();
+  } else {
+    Object.keys(localStorage).filter(k => k.startsWith('uv2-module-')).forEach(k => localStorage.removeItem(k));
+  }
+});
+document.querySelector("#uv2-toggle-autoafk")?.addEventListener("change", function() {
+  settings.autoAfk = this.checked;
+  localStorage.setItem('uv2-setting-autoafk', this.checked ? 'true' : 'false');
+  if (this.checked) startAfkDetector(); else stopAfkDetector();
+});
+document.querySelector("#uv2-toggle-afkchat")?.addEventListener("change", function() {
+  settings.afkChat = this.checked;
+  localStorage.setItem('uv2-setting-afkchat', this.checked);
+});
+document.querySelector("#uv2-toggle-afkmusic")?.addEventListener("change", function() {
+  settings.afkMusic = this.checked;
+  localStorage.setItem('uv2-setting-afkmusic', this.checked);
+});
+document.querySelector("#uv2-toggle-vpnwarning")?.addEventListener("change", function() {
+  settings.vpnWarning = this.checked;
+  localStorage.setItem('uv2-setting-vpnwarning', this.checked);
+  if (this.checked) vpnGateDismissed = false;
+});
+
+  let moduleBindings = {};
+  let isBinding = false;
+  let lastKeyPressTime = {};
+  let vpnGateDismissed = false;
+  let uiVisible = false;
+  let uiAnimating = false;
+  let closeUITimeout = null;
+  let isRestoring = false;
+  let uiKeybind = localStorage.getItem('uv2-setting-uikeybind') || 'rshift';
+
+    const settings = {
+    moduleSounds: localStorage.getItem('uv2-setting-sounds') !== 'false',
+    saving: localStorage.getItem('uv2-setting-saving') === 'true',
+    autoAfk: localStorage.getItem('uv2-setting-autoafk') === 'true',
+    afkChat: localStorage.getItem('uv2-setting-afkchat') !== 'false',
+    vpnWarning: localStorage.getItem('uv2-setting-vpnwarning') !== 'false',
+    afkMusic: localStorage.getItem('uv2-setting-afkmusic') !== 'false',
+  };
+
+  const soundsToggle = document.querySelector("#uv2-toggle-sounds");
+  if (soundsToggle) soundsToggle.checked = settings.moduleSounds;
+  const savingToggle = document.querySelector("#uv2-toggle-saving");
+  if (savingToggle) savingToggle.checked = settings.saving;
+  const autoAfkToggle = document.querySelector("#uv2-toggle-autoafk");
+  if (autoAfkToggle) autoAfkToggle.checked = settings.autoAfk;
+  const afkChatToggle = document.querySelector("#uv2-toggle-afkchat");
+  if (afkChatToggle) afkChatToggle.checked = settings.afkChat;
+  const vpnWarningToggle = document.querySelector("#uv2-toggle-vpnwarning");
+  if (vpnWarningToggle) vpnWarningToggle.checked = settings.vpnWarning;
+  const afkMusicToggle = document.querySelector("#uv2-toggle-afkmusic");
+  if (afkMusicToggle) afkMusicToggle.checked = settings.afkMusic;
+
+    const uiKeybindSelect = document.querySelector("#uv2-uikeybind-select");
+  if (uiKeybindSelect) uiKeybindSelect.value = uiKeybind;
+  uiKeybindSelect?.addEventListener("change", function() {
+    const newKey = this.value;
+    const conflictModule = Object.keys(moduleBindings).find(m => {
+      const bound = moduleBindings[m];
+      return (newKey === 'backtick' && bound === '`') || (newKey === 'rshift' && bound === 'Shift') || (newKey === 'backslash' && bound === '\\');
+    });
+    if (conflictModule) {
+      showNotification(`Cannot set UI Keybind, conflicts with ${conflictModule}`);
+      this.value = uiKeybind;
+      return;
+    }
+    uiKeybind = newKey;
+    localStorage.setItem('uv2-setting-uikeybind', uiKeybind);
+  });
+
+let afkDelay = parseInt(localStorage.getItem('uv2-setting-afkdelay') || '10', 10);
+if (isNaN(afkDelay) || afkDelay < 10) afkDelay = 10;
+if (afkDelay > 120) afkDelay = 120;
+let afkTimer = null;
+const afkDelayInput = document.querySelector("#uv2-afkdelay-input");
+if (afkDelayInput) afkDelayInput.value = afkDelay;
+afkDelayInput?.addEventListener("change", function() {
+  let val = parseInt(this.value, 10);
+  if (isNaN(val) || val < 10) val = 10;
+  if (val > 120) val = 120;
+  this.value = val;
+  afkDelay = val;
+  localStorage.setItem('uv2-setting-afkdelay', afkDelay);
+  if (settings.autoAfk) {
+    clearTimeout(afkTimer);
+    afkTimer = setTimeout(onAfkTriggered, afkDelay * 1000);
+  }
+});
+
+  function playModuleClickSound(turningOn) {
+  if (!settings.moduleSounds) return;
+  try {
+    const ctx = new (window.AudioContext || window.webkitAudioContext)();
+    const now = ctx.currentTime;
+    const master = ctx.createGain();
+    master.gain.value = 0.6;
+    master.connect(ctx.destination);
+    if (turningOn) {
+      const tone1 = ctx.createOscillator();
+      tone1.type = "sine";
+      tone1.frequency.setValueAtTime(520, now);
+      const gain1 = ctx.createGain();
+      gain1.gain.setValueAtTime(0.0, now);
+      gain1.gain.linearRampToValueAtTime(0.4, now + 0.025);
+      gain1.gain.exponentialRampToValueAtTime(0.0001, now + 0.13);
+      tone1.connect(gain1);
+      gain1.connect(master);
+      tone1.start(now);
+      tone1.stop(now + 0.14);
+      const tone2 = ctx.createOscillator();
+      tone2.type = "sine";
+      tone2.frequency.setValueAtTime(880, now + 0.1);
+      tone2.frequency.exponentialRampToValueAtTime(1100, now + 0.22);
+      const gain2 = ctx.createGain();
+      gain2.gain.setValueAtTime(0.0, now + 0.1);
+      gain2.gain.linearRampToValueAtTime(0.45, now + 0.13);
+      gain2.gain.exponentialRampToValueAtTime(0.0001, now + 0.28);
+      tone2.connect(gain2);
+      gain2.connect(master);
+      tone2.start(now + 0.1);
+      tone2.stop(now + 0.3);
+    } else {
+      const tone = ctx.createOscillator();
+      tone.type = "sine";
+      tone.frequency.setValueAtTime(600, now);
+      tone.frequency.exponentialRampToValueAtTime(280, now + 0.18);
+      const gainNode = ctx.createGain();
+      gainNode.gain.setValueAtTime(0.35, now);
+      gainNode.gain.exponentialRampToValueAtTime(0.0001, now + 0.2);
+      tone.connect(gainNode);
+      gainNode.connect(master);
+      tone.start(now);
+      tone.stop(now + 0.22);
+    }
+    setTimeout(() => ctx.close(), 600);
+  } catch(e) {}
+}
+
+const CHAT_FILTER_LINK_PATTERN = /(https?:\/\/|www\.|discord\.gg\/|discord(app)?\.com\/invite\/|dsc\.gg\/|[a-z0-9-]+\.(com|net|org|io|gg|xyz|co|me|tv|ru|de|uk|us|info|club|site|online|shop|ly|to|cc|app|dev)(\/|$|[^a-z0-9]))/i;
+function chatFilterContainsLink(text) {
+  const cleanText = text.replace(/\\#[0-9A-Fa-f]{6}\\|\\reset\\|\\glow\\/g, '');
+  return CHAT_FILTER_LINK_PATTERN.test(cleanText) || CHAT_FILTER_LINK_PATTERN.test(cleanText.replace(/\s*(\(dot\)|\[dot\]|\{dot\})\s*/gi, '.').replace(/\s*\.\s*/g, '.'));
+}
+
+function chatFilterStripSeparators(text) {
+  return text.replace(/[\s\.\-\_\*\|\~\+\=\\\/]/g, '');
+}
+
+const CHAT_FILTER_PATTERN = new RegExp('(^|[^a-z])(' + [
+  'f+u+c*k+\\w*|ph?u+c?k+|f[vx]ck|fuk|fck|fuc+',
+  'motherf\\w+',
+  'sh[i1y]+t\\w*|bullshit|sht|shyt',
+  'b[i1]+a?tch\\w*|btch',
+  'a+s+holes?|arse(hole)?s?|asses|ass|azz|a\\$\\$|a55',
+  'goddamn\\w*|damned',
+  'crap\\w*',
+  'bastards?',
+  'd[i1]ck\\w*|dck',
+  'cocks?(suckers?)?',
+  'pussy|pussies|pen[i1]s',
+  'piss(ed|ing|off)?',
+  'c[u*]nts?|cnt',
+  'twats?',
+  'wank\\w*',
+  'bollocks?',
+  'pricks?',
+  'douche(bags?)?',
+  'sluts?|whores?',
+  'fag(got)?s?|dykes?',
+  'n[i1]gg(er|a|s)?s?|nigg',
+  'retard(ed|s)?',
+  'nazis?|kikes?|chinks?|spics?|wetbacks?|trann(y|ies)|gooks?|beaners?|pakis?|towelheads?',
+  'coons?|goons?|gooner|cums?|gypsy|gypsies|slapper|crack',
+  'porn\\w*|hentai',
+  'rap(e|ing|ed|ist)s?',
+  'kys|kms|killyourself'
+].join('|') + ')($|[^a-z])', 'i');
+
+function chatFilterContainsBadWords(text) {
+  const cleanText = text.replace(/\\#[0-9A-Fa-f]{6}\\|\\reset\\|\\glow\\/g, '').toLowerCase();
+  return CHAT_FILTER_PATTERN.test(cleanText) || CHAT_FILTER_PATTERN.test(chatFilterStripSeparators(cleanText));
+}
+
+const MODULE_NAMES = { KEYSTROKES: "Keystrokes", MUTE_CHAT: "Mute Chat", CHAT_FILTER: "Chat Filter", ANTI_AFK: "Anti-Afk", KEEP_SPRINT: "Keep Sprint", CLOCK: "Clock", ARMOR_HUD: "Armor HUD" };
+
+const moduleSearchWrap = document.createElement("div");
+moduleSearchWrap.style.cssText = "position:relative;margin-top:4px;";
+const moduleSearchInput = document.createElement("input");
+moduleSearchInput.type = "text";
+moduleSearchInput.id = "uv2-module-search";
+moduleSearchInput.placeholder = "Search modules...";
+moduleSearchInput.style.cssText = "width:100%;background:#161616;color:#fff;border:1px solid rgba(255,255,255,0.1);border-radius:8px;padding:10px 14px 10px 34px;font-size:13px;font-family:MinibloxFont,sans-serif;outline:none;box-sizing:border-box;transition:border-color 0.15s ease;";
+const moduleSearchIcon = document.createElement("i");
+moduleSearchIcon.className = "fa fa-search";
+moduleSearchIcon.style.cssText = "position:absolute;left:12px;top:50%;transform:translateY(-50%);color:#555;font-size:12px;pointer-events:none;";
+moduleSearchWrap.appendChild(moduleSearchIcon);
+moduleSearchWrap.appendChild(moduleSearchInput);
+uv2MainPage.appendChild(moduleSearchWrap);
+moduleSearchInput.addEventListener("focus", () => { moduleSearchInput.style.borderColor = guiPrimaryColor; });
+moduleSearchInput.addEventListener("blur", () => { moduleSearchInput.style.borderColor = "rgba(255,255,255,0.1)"; });
+moduleSearchInput.addEventListener("input", () => {
+  const q = moduleSearchInput.value.trim().toLowerCase();
+  [...gridContainer.children].forEach(mc => {
+    if (mc.classList.contains('uv2-fav-label')) {
+      mc.style.display = q ? "none" : "block";
+      return;
+    }
+    const name = (mc.dataset.moduleName || "").toLowerCase();
+    const desc = (mc.querySelector("p")?.textContent || "").toLowerCase();
+    mc.style.display = (!q || name.includes(q) || desc.includes(q)) ? "flex" : "none";
+  });
+});
+
+function applyHolidayBanner(banner) {
+  ui.insertBefore(banner, ui.firstChild);
+  ui.style.flexDirection = 'column';
+  const inner = document.createElement('div');
+  inner.style.cssText = 'display:flex;flex-direction:row;flex:1;min-height:0;';
+  [...ui.children].forEach(c => { if (c !== banner) inner.appendChild(c); });
+  ui.appendChild(inner);
+}
+
+if (holiday === 'halloween' || holiday === 'christmas') {
+  const isHalloween = holiday === 'halloween';
+  const banner = document.createElement('div');
+  banner.style.cssText = `width:100%;text-align:center;padding:6px 0;font-size:12px;font-family:MinibloxFont,sans-serif;letter-spacing:1px;background:${isHalloween ? '#ff660022' : '#cc000022'};border-bottom:1px solid ${isHalloween ? '#ff660055' : '#cc000055'};color:${isHalloween ? '#ff6600' : '#cc0000'};flex-shrink:0;`;
+  banner.textContent = isHalloween ? 'Happy Halloween' : 'Merry Christmas';
+  applyHolidayBanner(banner);
+}
+
+if (holiday === 'newyear') {
+  const nyBanner = document.createElement('div');
+  nyBanner.style.cssText = 'width:100%;text-align:center;padding:6px 0;font-size:12px;font-family:MinibloxFont,sans-serif;letter-spacing:1px;background:#ffffff11;border-bottom:1px solid #ffffff33;color:#ffffff;flex-shrink:0;';
+  nyBanner.textContent = new Date().getMonth() === 0 ? 'Happy New Year!' : 'Happy New Year\'s Eve!';
+  applyHolidayBanner(nyBanner);
+  const targetYear = new Date().getMonth() === 0 ? new Date().getFullYear() : new Date().getFullYear() + 1;
+  const target = new Date(`January 1, ${targetYear} 00:00:00`).getTime();
+  function updateNewYearFooter() {
+    const now = Date.now();
+    const diff = target - now;
+    if (diff <= 0) {
+      uv2SidebarFooter.textContent = 'v' + GM_info.script.version;
+      if (!sessionStorage.getItem('uv2-newyear-toast')) {
+        sessionStorage.setItem('uv2-newyear-toast', '1');
+        showToast('Happy New Year!', '#e74c3c', 5000);
+        const confettiStyle = document.createElement('style');
+        confettiStyle.textContent = `@keyframes uv2Confetti{0%{transform:translateY(0) rotate(0deg);opacity:1;}100%{transform:translateY(-80vh) rotate(720deg);opacity:0;}}`;
+        document.head.appendChild(confettiStyle);
+        const colors = ['#e74c3c','#f39c12','#2ecc71','#3498db','#9b59b6','#fff'];
+        for (let i = 0; i < 20; i++) {
+          const c = document.createElement('div');
+          c.style.cssText = `position:fixed;bottom:0;left:${Math.random()*100}vw;width:8px;height:8px;border-radius:2px;background:${colors[Math.floor(Math.random()*colors.length)]};z-index:99999;pointer-events:none;animation:uv2Confetti ${1.5+Math.random()*2}s ease-out ${Math.random()*0.5}s forwards;`;
+          document.body.appendChild(c);
+          setTimeout(() => c.remove(), 4000);
+        }
+      }
+      return;
+    }
+    const h = Math.floor(diff / 3600000);
+    const min = Math.floor((diff % 3600000) / 60000);
+    const sec = Math.floor((diff % 60000) / 1000);
+    uv2SidebarFooter.textContent = `${h}h ${min}m ${sec}s`;
+  }
+  updateNewYearFooter();
+  setInterval(updateNewYearFooter, 1000);
+}
+
+const gridContainer = document.createElement("div");
+gridContainer.style.display = "flex";
+gridContainer.style.flexDirection = "column";
+gridContainer.style.gap = "8px";
+gridContainer.style.marginTop = "16px";
+uv2MainPage.appendChild(gridContainer);
+
+const notificationContainer = document.createElement("div");
+notificationContainer.style.cssText = "position:fixed;bottom:1in;right:20px;z-index:10000;display:flex;flex-direction:column-reverse;align-items:flex-end;";
+document.body.appendChild(notificationContainer);
+
+function showNotification(message) {
+  const existing = [...notificationContainer.children].find(
+    n => n.dataset.message === message && !n.classList.contains('uv2-notif-exit')
+  );
+  if (existing) {
+    let badge = existing.querySelector('.uv2-notif-badge');
+    if (!badge) {
+      badge = Object.assign(document.createElement('span'), { className: 'uv2-notif-badge', textContent: '2' });
+      badge.dataset.count = '2';
+      badge.style.cssText = `margin-left:8px;background:${guiPrimaryColor};color:#fff;border-radius:10px;padding:1px 7px;font-size:11px;vertical-align:middle;`;
+      existing.insertBefore(badge, existing.querySelector('.notification-progress'));
+    } else {
+      badge.textContent = badge.dataset.count = String(parseInt(badge.dataset.count) + 1);
+    }
+    existing.querySelector('.notification-progress')?.replaceWith(existing.querySelector('.notification-progress').cloneNode(false));
+    clearTimeout(existing._uv2RemoveTimer);
+    existing._uv2RemoveTimer = setTimeout(() => { existing.classList.add('uv2-notif-exit'); setTimeout(() => existing.remove(), 350); }, 4000);
+    return;
+  }
+  if (notificationContainer.children.length >= 4) {
+    const oldest = notificationContainer.children[notificationContainer.children.length - 1];
+    oldest.classList.add('uv2-notif-exit');
+    setTimeout(() => oldest.remove(), 350);
+  }
+  const notification = Object.assign(document.createElement('div'), { textContent: message });
+  notification.dataset.message = message;
+  notification.classList.add('other-notification');
+  notification.style.borderLeft = `4px solid ${guiPrimaryColor}`;
+  const progressBar = Object.assign(document.createElement('div'), { className: 'notification-progress' });
+  progressBar.style.background = guiPrimaryColor;
+  notification.appendChild(progressBar);
+  notificationContainer.appendChild(notification);
+  notification._uv2RemoveTimer = setTimeout(() => { notification.classList.add('uv2-notif-exit'); setTimeout(() => notification.remove(), 350); }, 4000);
+}
+    function updateModuleKeybindPill(moduleName, key) {
+  const mc = [...gridContainer.children].find(c => c.dataset.moduleName === moduleName);
+  if (!mc) return;
+  let pill = mc.querySelector('.uv2-keybind-pill');
+  if (!key) {
+    if (pill) pill.remove();
+    return;
+  }
+  if (!pill) {
+    pill = document.createElement('div');
+    pill.className = 'uv2-keybind-pill';
+    pill.style.cssText = 'display:flex;align-items:center;gap:5px;background:#1e1e1e;border:1px solid rgba(255,255,255,0.1);border-radius:20px;padding:3px 9px 3px 7px;flex-shrink:0;margin-left:8px;pointer-events:none;position:relative;z-index:1;';
+    const icon = document.createElement('i');
+    icon.className = 'fa fa-keyboard-o';
+    icon.style.cssText = 'font-size:11px;color:#888;';
+    pill.appendChild(icon);
+    const label = document.createElement('span');
+    label.className = 'uv2-keybind-pill-label';
+    label.style.cssText = 'font-size:11px;color:#aaa;font-family:MinibloxFont,sans-serif;white-space:nowrap;';
+    pill.appendChild(label);
+    mc.insertBefore(pill, mc._toggleWrap);
+  }
+  pill.querySelector('.uv2-keybind-pill-label').textContent = key;
+}
+function showBindPopup(moduleElement, moduleName) {
+  const existing = document.getElementById('uv2-keybind-modal');
+  if (existing) existing.remove();
+  const modal = document.createElement('div');
+  modal.id = 'uv2-keybind-modal';
+  modal.style.cssText = 'position:fixed;inset:0;z-index:100003;display:flex;align-items:center;justify-content:center;background:rgba(0,0,0,0.45);backdrop-filter:blur(6px);';
+  const box = document.createElement('div');
+  box.style.cssText = 'background:#141414;border:1px solid rgba(255,255,255,0.09);border-radius:16px;padding:24px 28px;width:300px;font-family:MinibloxFont,sans-serif;color:#fff;box-shadow:0 16px 48px rgba(0,0,0,0.7);display:flex;flex-direction:column;gap:16px;';
+  const heading = document.createElement('div');
+  heading.style.cssText = 'font-size:20px;color:#fff;letter-spacing:0.5px;font-weight:600;';
+  heading.textContent = `Bind key for ${moduleName}`;
+  box.appendChild(heading);
+  const keyDisplay = document.createElement('div');
+  keyDisplay.style.cssText = 'display:flex;align-items:center;justify-content:center;gap:10px;background:#1a1a1a;border:1px solid rgba(255,255,255,0.08);border-radius:10px;padding:14px;';
+  const kbIcon = document.createElement('i');
+  kbIcon.className = 'fa fa-keyboard-o';
+  kbIcon.style.cssText = `color:${guiPrimaryColor};font-size:18px;`;
+  keyDisplay.appendChild(kbIcon);
+  const keyLabel = document.createElement('div');
+  keyLabel.style.cssText = 'font-size:20px;color:#fff;min-width:80px;text-align:center;';
+  keyLabel.textContent = moduleBindings[moduleName] || 'Press a key...';
+  keyDisplay.appendChild(keyLabel);
+  box.appendChild(keyDisplay);
+  let pendingKey = moduleBindings[moduleName] || null;
+  function onKey(e) {
+  if (e.key === 'Escape') { e.preventDefault(); dismiss(); return; }
+  e.preventDefault();
+  e.stopPropagation();
+  pendingKey = e.key;
+  keyLabel.textContent = e.key;
+}
+  window.addEventListener('keydown', onKey, true);
+  function dismiss() {
+    window.removeEventListener('keydown', onKey, true);
+    modal.remove();
+    isBinding = false;
+  }
+  const makeBtn = (label, bg, border, onClick) => {
+    const btn = document.createElement('button');
+    btn.textContent = label;
+    btn.style.cssText = `flex:1;background:${bg};color:#fff;border:${border};border-radius:10px;padding:10px;cursor:pointer;font-family:MinibloxFont,sans-serif;font-size:13px;`;
+    btn.addEventListener('click', onClick);
+    return btn;
+  };
+  const btnRow = document.createElement('div');
+  btnRow.style.cssText = 'display:flex;gap:8px;';
+  btnRow.appendChild(makeBtn('Bind', guiPrimaryColor, 'none', () => {
+    if (pendingKey) {
+      const conflictModule = Object.keys(moduleBindings).find(m => m !== moduleName && moduleBindings[m] === pendingKey);
+      const uiKeyMatches = (uiKeybind === 'backtick' && pendingKey === '`') || (uiKeybind === 'rshift' && pendingKey === 'Shift') || (uiKeybind === 'backslash' && pendingKey === '\\');
+      if (conflictModule) showNotification(`${pendingKey} is already bound to ${conflictModule}`);
+      else if (uiKeyMatches) showNotification(`${pendingKey} conflicts with the UI keybind`);
+      else { moduleBindings[moduleName] = pendingKey; updateModuleKeybindPill(moduleName, pendingKey); showNotification(`${moduleName} bound to ${pendingKey}`); }
+    }
+    dismiss();
+  }));
+  btnRow.appendChild(makeBtn('Unbind', '#2a2a2a', '1px solid #444', () => {
+    if (moduleBindings[moduleName]) { delete moduleBindings[moduleName]; updateModuleKeybindPill(moduleName, null); showNotification(`${moduleName} unbound`); }
+    else showNotification(`${moduleName} has no keybind`);
+    dismiss();
+  }));
+  box.appendChild(btnRow);
+  modal.appendChild(box);
+  modal.addEventListener('click', e => { if (e.target === modal) dismiss(); });
+  document.body.appendChild(modal);
+  isBinding = true;
+}
+
+function sortModulesByFavorite() {
+  const children = [...gridContainer.children].filter(c => !c.classList.contains('uv2-fav-label'));
+  children.sort((a, b) => {
+    const favA = a.dataset.favorited === '1' ? 1 : 0;
+    const favB = b.dataset.favorited === '1' ? 1 : 0;
+    return favB - favA;
+  });
+  const favCount = children.filter(c => c.dataset.favorited === '1').length;
+  gridContainer.innerHTML = '';
+  const hasPartial = favCount > 0 && favCount < children.length;
+  if (hasPartial) {
+    const favLabel = document.createElement('div');
+    favLabel.className = 'uv2-fav-label';
+    favLabel.style.cssText = 'font-size:10px;color:#ffd700;text-transform:uppercase;letter-spacing:0.08em;margin:2px 0 2px 4px;';
+    favLabel.textContent = '★ Favorites';
+    gridContainer.appendChild(favLabel);
+  }
+  children.forEach((c, i) => {
+    if (hasPartial && i === favCount) {
+      const allLabel = document.createElement('div');
+      allLabel.className = 'uv2-fav-label';
+      allLabel.style.cssText = 'font-size:10px;color:#666;text-transform:uppercase;letter-spacing:0.08em;margin:10px 0 2px 4px;';
+      allLabel.textContent = 'All Modules';
+      gridContainer.appendChild(allLabel);
+    }
+    gridContainer.appendChild(c);
+  });
+}
+
+function createModule(name, description) {
+  const moduleContainer = document.createElement("div");
+  moduleContainer.style.cssText = [
+    "display:flex;align-items:center;height:52px;padding:0 16px;",
+    "border-radius:8px;background:linear-gradient(135deg,#242424,#1c1c1c);",
+    "border:1px solid rgba(255,255,255,0.07);cursor:pointer;",
+    "transition:all 0.18s ease;box-shadow:0 1px 4px rgba(0,0,0,0.4);",
+    "position:relative;user-select:none;width:100%;box-sizing:border-box;flex-shrink:0;",
+    "overflow:hidden;"
+  ].join("");
+  moduleContainer.classList.add('module-container');
+  moduleContainer.dataset.moduleName = name;
+  moduleContainer._uv2Active = false;
+
+const shine = document.createElement("div");
+shine.className = "uv2-shine";
+moduleContainer.appendChild(shine);
+
+moduleContainer.addEventListener("mouseenter", () => {
+  if (!moduleContainer._uv2Active) moduleContainer.style.background = "linear-gradient(135deg,#2c2c2c,#222222)";
+});
+moduleContainer.addEventListener("mouseleave", () => {
+  if (!moduleContainer._uv2Active) moduleContainer.style.background = "linear-gradient(135deg,#242424,#1c1c1c)";
+});
+
+  const favoriteKey = 'uv2-favorite-' + name;
+  let isFavorited = localStorage.getItem(favoriteKey) === 'true';
+
+  const favStrip = document.createElement("div");
+  favStrip.style.cssText = `position:absolute;top:0;left:0;width:3px;height:100%;background:#ffd700;box-shadow:0 0 8px rgba(255,215,0,0.6);display:${isFavorited ? 'block' : 'none'};pointer-events:none;`;
+  moduleContainer.appendChild(favStrip);
+
+  const favoriteBtn = document.createElement("div");
+  favoriteBtn.innerHTML = '<i class="fa fa-star"></i>';
+  favoriteBtn.title = "Favorite";
+  favoriteBtn.style.cssText = `font-size:13px;cursor:pointer;flex-shrink:0;margin-right:12px;color:${isFavorited ? '#ffd700' : '#3a3a3a'};text-shadow:${isFavorited ? '0 0 8px rgba(255,215,0,0.6)' : 'none'};transition:color 0.15s ease,transform 0.15s ease;position:relative;z-index:1;`;
+  favoriteBtn.addEventListener("mouseenter", () => { favoriteBtn.style.transform = "scale(1.2)"; });
+  favoriteBtn.addEventListener("mouseleave", () => { favoriteBtn.style.transform = "scale(1)"; });
+  favoriteBtn.addEventListener("click", e => {
+    e.stopPropagation();
+    isFavorited = !isFavorited;
+    localStorage.setItem(favoriteKey, isFavorited ? 'true' : 'false');
+    favoriteBtn.style.color = isFavorited ? '#ffd700' : '#3a3a3a';
+    favoriteBtn.style.textShadow = isFavorited ? '0 0 8px rgba(255,215,0,0.6)' : 'none';
+    favStrip.style.display = isFavorited ? 'block' : 'none';
+    moduleContainer.dataset.favorited = isFavorited ? '1' : '0';
+    sortModulesByFavorite();
+  });
+  moduleContainer.dataset.favorited = isFavorited ? '1' : '0';
+  moduleContainer.appendChild(favoriteBtn);
+
+  const nameSection = document.createElement("div");
+  nameSection.style.cssText = "min-width:155px;flex-shrink:0;display:flex;align-items:center;gap:9px;";
+  const moduleTitleEl = document.createElement("span");
+  moduleTitleEl.textContent = name;
+  moduleTitleEl.style.cssText = `color:${guiPrimaryColor};font-size:13.5px;font-family:MinibloxFont,sans-serif;white-space:nowrap;text-shadow:0 0 18px ${guiPrimaryColor}40;`;
+  nameSection.appendChild(moduleTitleEl);
+  moduleContainer.appendChild(nameSection);
+
+  const divider = document.createElement("div");
+  divider.style.cssText = "width:1px;height:22px;background:rgba(255,255,255,0.09);flex-shrink:0;margin:0 16px;";
+  moduleContainer.appendChild(divider);
+
+  const descEl = document.createElement("p");
+  descEl.textContent = description;
+  descEl.style.cssText = "flex:1;color:#555;font-size:12px;font-family:MinibloxFont,sans-serif;margin:0;white-space:nowrap;overflow:hidden;text-overflow:ellipsis;";
+  moduleContainer.appendChild(descEl);
+
+  const toggleWrap = document.createElement("div");
+  toggleWrap.style.cssText = "width:36px;height:20px;border-radius:10px;background:#252525;flex-shrink:0;margin-left:14px;position:relative;transition:background 0.2s ease;border:1px solid rgba(255,255,255,0.07);";
+  const toggleKnob = document.createElement("div");
+ toggleKnob.style.cssText = "position:absolute;top:2px;left:2px;width:14px;height:14px;border-radius:50%;background:#4a4a4a;transition:transform 0.35s cubic-bezier(0.34, 1.56, 0.64, 1), background 0.2s ease;";
+  toggleWrap.appendChild(toggleKnob);
+  moduleContainer.appendChild(toggleWrap);
+  moduleContainer._toggleWrap = toggleWrap;
+  moduleContainer._toggleKnob = toggleKnob;
+
+  gridContainer.appendChild(moduleContainer);
+
+  moduleContainer.addEventListener("mouseenter", () => {
+  if (!moduleContainer._uv2Active) moduleContainer.style.background = "linear-gradient(135deg,#2c2c2c,#222222)";
+});
+moduleContainer.addEventListener("mouseleave", () => {
+  if (!moduleContainer._uv2Active) moduleContainer.style.background = "linear-gradient(135deg,#242424,#1c1c1c)";
+});
+  moduleContainer.addEventListener("click", () => {
+    if (!isBinding) {
+      moduleContainer._uv2Active = !moduleContainer._uv2Active;
+      const isActive = moduleContainer._uv2Active;
+      if (!isRestoring) {
+        if (settings.saving) localStorage.setItem('uv2-module-' + name, isActive ? 'true' : 'false');
+        playModuleClickSound(isActive);
+      }
+      if (isActive) {
+        moduleContainer.style.border = `1px solid ${guiPrimaryColor}80`;
+        moduleContainer.style.background = "linear-gradient(135deg,#1d2b1f,#182018)";
+        moduleContainer.style.boxShadow = `0 0 0 3px ${guiPrimaryColor}14, 0 1px 4px rgba(0,0,0,0.4)`;
+        toggleWrap.style.background = `${guiPrimaryColor}40`; toggleWrap.style.borderColor = `${guiPrimaryColor}60`;
+        toggleKnob.style.background = guiPrimaryColor; toggleKnob.style.transform = "translateX(16px)";
+        if (!isRestoring) showNotification(`${name} enabled`);
+      } else {
+        moduleContainer.style.border = "1px solid rgba(255,255,255,0.07)";
+        moduleContainer.style.background = "linear-gradient(135deg,#242424,#1c1c1c)";
+        moduleContainer.style.boxShadow = "0 1px 4px rgba(0,0,0,0.4)";
+        toggleWrap.style.background = "#252525"; toggleWrap.style.borderColor = "rgba(255,255,255,0.07)";
+        toggleKnob.style.background = "#4a4a4a"; toggleKnob.style.transform = "translateX(0)";
+        if (!isRestoring) showNotification(`${name} disabled`);
+      }
+    }
+  });
+  moduleContainer.addEventListener("contextmenu", event => { event.preventDefault(); showBindPopup(moduleContainer, name); });
+  return moduleContainer;
+}
+
+const keystrokesModule = createModule(MODULE_NAMES.KEYSTROKES, "Displays the keys you press in real-time.");
+let isKeystrokesActive = false;
+let keystrokesController = null;
+keystrokesModule.addEventListener("click", () => {
+  isKeystrokesActive = !isKeystrokesActive;
+  if (keystrokesController) { keystrokesController.abort(); keystrokesController = null; }
+  if (isKeystrokesActive) {
+    const existing = document.getElementById('keystrokes-container');
+    if (existing) existing.remove();
+    const kc = document.createElement('div');
+    kc.id = 'keystrokes-container';
+    kc.style.cssText = 'z-index:10000;width:300px;height:230px;position:fixed;opacity:100%;box-shadow:none;background-color:transparent;transform:translate(-50%,-50%);display:flex;flex-direction:column;align-items:center;user-select:none;';
+    const savedL = localStorage.getItem('left'), savedT = localStorage.getItem('top');
+    kc.style.left = (savedL ? parseInt(savedL) : window.innerWidth/2) + 'px';
+    kc.style.top = (savedT ? parseInt(savedT) : window.innerHeight/2) + 'px';
+    document.body.appendChild(kc);
+    keystrokesController = new AbortController();
+    const signal = keystrokesController.signal;
+    let isDragging = false;
+    kc.addEventListener('mousedown', e => { if (e.target.nodeName !== 'INPUT') isDragging = true; });
+    document.addEventListener('mousemove', e => {
+      if (!isDragging) return;
+      const halfW = kc.offsetWidth / 2, halfH = kc.offsetHeight / 2;
+      kc.style.left = Math.min(Math.max(e.clientX, halfW), window.innerWidth - halfW) + 'px';
+      kc.style.top = Math.min(Math.max(e.clientY, halfH), window.innerHeight - halfH) + 'px';
+      localStorage.setItem('left', kc.style.left);
+      localStorage.setItem('top', kc.style.top);
+    }, { signal });
+    document.addEventListener('mouseup', () => { isDragging = false; }, { signal });
+    const createKey = (text, style = {}) => {
+      const key = document.createElement('div');
+      key.textContent = text;
+      Object.assign(key.style, { position:'absolute', color:'#ffffff', fontWeight:'bold', borderRadius:'0', backgroundColor:'rgba(128,128,128,0.7)', border:'3px solid #333333', fontSize:'18px', height:'50px', width:'50px', textAlign:'center', lineHeight:'50px', fontFamily:'Roboto Mono, monospace', zIndex:'10000', ...style });
+      return key;
+    };
+    const wkey = createKey('W', {top:'0px',left:'125px'}), akey = createKey('A', {top:'55px',left:'70px'}), skey = createKey('S', {top:'55px',left:'125px'}), dkey = createKey('D', {top:'55px',left:'180px'});
+    const lmb = createKey('LMB', {top:'110px',left:'70px',width:'79px'}), rmb = createKey('RMB', {top:'110px',left:'150px',width:'79px'}), space = createKey('_____', {top:'170px',left:'70px',width:'160px'});
+    kc.append(wkey, akey, skey, dkey, lmb, rmb, space);
+    const downColor = '#8B0000', upColor = 'rgba(128,128,128,0.7)';
+    const keyMap = { KeyW:wkey, KeyA:akey, KeyS:skey, KeyD:dkey, Space:space };
+    const mouseMap = { 0:lmb, 2:rmb };
+    document.addEventListener('keydown', e => { if (keyMap[e.code]) keyMap[e.code].style.backgroundColor = downColor; }, { signal });
+    document.addEventListener('keyup', e => { if (keyMap[e.code]) keyMap[e.code].style.backgroundColor = upColor; }, { signal });
+    document.addEventListener('mousedown', e => { if (mouseMap[e.button]) mouseMap[e.button].style.backgroundColor = downColor; }, { signal });
+    document.addEventListener('mouseup', e => { if (mouseMap[e.button]) mouseMap[e.button].style.backgroundColor = upColor; }, { signal });
+  } else {
+    const kc = document.getElementById('keystrokes-container');
+    if (kc) kc.remove();
+  }
+});
+
+let isMuteChatActive = false;
+let isChatFilterActive = false;
+let chatFilterOriginalSubmit = null;
+let chatOriginalAddChat = null;
+let chatFilterMessageCache = [];
+function chatFilterIsSpam(text) {
+  const now = Date.now();
+  chatFilterMessageCache = chatFilterMessageCache.filter(m => now - m.time < 10000);
+  const similarMessages = chatFilterMessageCache.filter(m => m.text === text);
+  if (similarMessages.length >= 2) {
+    return true;
+  }
+  chatFilterMessageCache.push({ text, time: now });
+  return false;
+}
+
+function chatFilterGetBlockReason(text) {
+  if (chatFilterContainsBadWords(text)) return 'profanity';
+  if (chatFilterContainsLink(text)) return 'link';
+  if (chatFilterIsSpam(text)) return 'spam';
+  return null;
+}
+
+function chatFilterShowBlockedNotice(reason) {
+  try {
+    const reactRoot = document.querySelector("#react");
+    if (!reactRoot) return;
+    const fiber = Object.values(reactRoot)[0];
+    const game = fiber?.updateQueue?.baseState?.element?.props?.game;
+    if (game && game.chat && typeof game.chat.addChat === "function") {
+      const messages = {
+        spam: "Please do not spam.",
+        link: "Message included a link.",
+        profanity: "Message included Profanity.",
+      };
+      game.chat.addChat({ text: `\\#FF0000\\${messages[reason]}\\reset\\` });
+    }
+  } catch(e) {}
+}
+
+function getGameChat() {
+  const reactRoot = document.querySelector("#react");
+  if (!reactRoot) return null;
+  const fiber = Object.values(reactRoot)[0];
+  const game = fiber?.updateQueue?.baseState?.element?.props?.game;
+  if (!game || !game.chat) return null;
+  return game.chat;
+}
+
+function ensureChatAddChatPatched() {
+  const chat = getGameChat();
+  if (!chat) return;
+  if (chatOriginalAddChat) return;
+  chatOriginalAddChat = chat.addChat.bind(chat);
+  chat.addChat = function(chatObj) {
+    if (isMuteChatActive) return;
+    if (!chatObj || typeof chatObj.text !== 'string') {
+      return chatOriginalAddChat(chatObj);
+    }
+      if (chatObj.text.includes('Please do not spam.') || chatObj.text.includes('Message included Profanity.') || chatObj.text.includes('Message included a link.')) {
+      return chatOriginalAddChat(chatObj);
+    }
+    if (isChatFilterActive) {
+      const reason = chatFilterGetBlockReason(chatObj.text);
+      if (reason) return;
+    }
+    return chatOriginalAddChat(chatObj);
+  };
+}
+
+function restoreChatAddChatIfUnused() {
+  if (isMuteChatActive || isChatFilterActive) return;
+  const chat = getGameChat();
+  if (chat && chatOriginalAddChat) {
+    chat.addChat = chatOriginalAddChat;
+    chatOriginalAddChat = null;
+  }
+}
+
+const muteChatModule = createModule(MODULE_NAMES.MUTE_CHAT, "Prevents other players messages from appearing in chat.");
+muteChatModule.addEventListener("click", () => {
+  isMuteChatActive = !isMuteChatActive;
+  if (isMuteChatActive) {
+    ensureChatAddChatPatched();
+  } else {
+    restoreChatAddChatIfUnused();
+  }
+});
+
+const chatFilterModule = createModule(MODULE_NAMES.CHAT_FILTER, "Blocks swear words, links and spam from appearing in chat.");
+chatFilterModule.addEventListener("click", () => {
+  isChatFilterActive = !isChatFilterActive;
+  const chat = getGameChat();
+  if (!chat) return;
+  if (isChatFilterActive) {
+    ensureChatAddChatPatched();
+    if (!chatFilterOriginalSubmit) chatFilterOriginalSubmit = chat.submit.bind(chat);
+    chat.submit = function(...args) {
+      const text = chat.inputValue;
+      if (text) {
+        const reason = chatFilterGetBlockReason(text);
+        if (reason) {
+          chat.setInputValue('');
+          chatFilterShowBlockedNotice(reason);
+          return;
+        }
+      }
+      return chatFilterOriginalSubmit(...args);
+    };
+  } else {
+    chatFilterMessageCache = [];
+    if (chatFilterOriginalSubmit) chat.submit = chatFilterOriginalSubmit;
+    restoreChatAddChatIfUnused();
+  }
+});
+
+createModule(MODULE_NAMES.ANTI_AFK, "Presses WASD, arrow keys, and Space automatically to prevent being kicked.");
+const antiAfkModule = [...gridContainer.children].find(c => c.dataset.moduleName === MODULE_NAMES.ANTI_AFK);
+let isAntiAfkActive=false, antiAfkInterval=null, antiAfkBox=null;
+let antiAfkController = null;
+if (antiAfkModule) {
+  antiAfkModule.addEventListener("click", () => {
+    isAntiAfkActive = !isAntiAfkActive;
+    if (antiAfkController) { antiAfkController.abort(); antiAfkController = null; }
+    if (isAntiAfkActive) {
+      antiAfkController = new AbortController();
+      const signal = antiAfkController.signal;
+      antiAfkBox = document.createElement("div");
+      antiAfkBox.id = "anti-afk-counter";
+      antiAfkBox.style.cssText = "position:fixed;top:100px;left:20px;padding:8px 14px;background:rgba(0,0,0,0.6);backdrop-filter:blur(8px);border:1px solid rgba(255,255,255,0.15);border-radius:8px;z-index:9999;cursor:move;user-select:none;font-family:'Segoe UI','Roboto',sans-serif;display:flex;align-items:center;gap:8px;box-shadow:0 4px 12px rgba(0,0,0,0.3);";
+      const afkDot = document.createElement("div");
+      afkDot.style.cssText = `width:10px;height:10px;border-radius:50%;background-color:${guiPrimaryColor};box-shadow:0 0 12px ${guiPrimaryColor}99;animation:afkPulse 1.5s infinite;`;
+      const afkText = document.createElement("div");
+      afkText.textContent = "Anti-AFK";
+      afkText.style.cssText = `font-size:16px;font-weight:700;color:${guiPrimaryColor};letter-spacing:0.5px;`;
+      antiAfkBox.appendChild(afkDot);
+      antiAfkBox.appendChild(afkText);
+      document.body.appendChild(antiAfkBox);
+      let isDrag=false, offX=0, offY=0;
+      antiAfkBox.addEventListener("mousedown", e => { isDrag=true; offX=e.clientX-antiAfkBox.getBoundingClientRect().left; offY=e.clientY-antiAfkBox.getBoundingClientRect().top; e.preventDefault(); });
+      document.addEventListener("mousemove", e => {
+        if (isDrag) {
+          const rect = antiAfkBox.getBoundingClientRect();
+          let left = e.clientX-offX;
+          let top = e.clientY-offY;
+          const maxLeft = window.innerWidth - rect.width;
+          const maxTop = window.innerHeight - rect.height;
+          if (left < 0) left = 0;
+          if (top < 0) top = 0;
+          if (left > maxLeft) left = maxLeft;
+          if (top > maxTop) top = maxTop;
+          antiAfkBox.style.left = `${left}px`;
+          antiAfkBox.style.top = `${top}px`;
+        }
+      }, { signal });
+      document.addEventListener("mouseup", () => { isDrag=false; }, { signal });
+      const keys=[['w','KeyW',87],['a','KeyA',65],['s','KeyS',83],['d','KeyD',68],[' ','Space',32],['ArrowUp','ArrowUp',38],['ArrowDown','ArrowDown',40],['ArrowLeft','ArrowLeft',37],['ArrowRight','ArrowRight',39]];
+      let idx=0;
+      antiAfkInterval = setInterval(() => {
+        const [key,code,keyCode]=keys[idx]; idx=(idx+1)%keys.length;
+        const t=document.activeElement||document.body;
+        t.dispatchEvent(new KeyboardEvent('keydown',{key,code,keyCode,which:keyCode,bubbles:true,cancelable:true}));
+        setTimeout(()=>t.dispatchEvent(new KeyboardEvent('keyup',{key,code,keyCode,which:keyCode,bubbles:true,cancelable:true})),50);
+      }, 500);
+    } else {
+      if (antiAfkInterval) clearInterval(antiAfkInterval);
+      if (antiAfkBox) antiAfkBox.remove();
+    }
+  });
+}
+
+  createModule(MODULE_NAMES.KEEP_SPRINT, "Keeps you sprinting automatically.");
+  const keepSprintModule = [...gridContainer.children].find(c => c.dataset.moduleName === MODULE_NAMES.KEEP_SPRINT);
+  let keepSprintHandler = null;
+  if (keepSprintModule) {
+    keepSprintModule.addEventListener("click", () => {
+  const isActive = keepSprintModule._uv2Active;
+  if (isActive) {
+    keepSprintHandler = e => {
+  if (!['KeyW', 'KeyA', 'KeyS', 'KeyD', 'ArrowUp', 'ArrowDown', 'ArrowLeft', 'ArrowRight'].includes(e.code)) return;
+  const t = document.activeElement || document.body;
+  t.dispatchEvent(new KeyboardEvent('keydown', {
+    key: 'Shift', code: 'ShiftRight', keyCode: 16, which: 16,
+    location: 2, bubbles: true, cancelable: true,
+  }));
+};
+    document.addEventListener('keydown', keepSprintHandler);
+  } else {
+    if (keepSprintHandler) {
+      document.removeEventListener('keydown', keepSprintHandler);
+      keepSprintHandler = null;
+    }
+  }
+});
+}
+
+  createModule(MODULE_NAMES.CLOCK, "Shows you the time so you don't have to exit full screen.");
+const timeModule = [...gridContainer.children].find(c => c.dataset.moduleName === MODULE_NAMES.CLOCK);
+let isTimeVisible=false, timeElement=null;
+let timeController = null;
+if (timeModule) {
+  timeModule.addEventListener("click", () => {
+    isTimeVisible = !isTimeVisible;
+    if (timeController) { timeController.abort(); timeController = null; }
+    if (isTimeVisible) {
+      timeController = new AbortController();
+      const signal = timeController.signal;
+      timeElement = document.createElement("div");
+      timeElement.id = "fullscreen-clock";
+      timeElement.style.cssText = `position:fixed;bottom:20px;right:20px;background-color:#000000CC;color:#ffffff;padding:10px 15px;border-radius:8px;font-size:18px;font-family:monospace;z-index:99999;cursor:move;border:1px solid ${guiPrimaryColor};`;
+      let isDrag=false, offX=0, offY=0;
+      timeElement.addEventListener("mousedown", e => { isDrag=true; offX=e.clientX-timeElement.getBoundingClientRect().left; offY=e.clientY-timeElement.getBoundingClientRect().top; e.preventDefault(); });
+      document.addEventListener("mousemove", e => {
+        if (isDrag) {
+          const rect = timeElement.getBoundingClientRect();
+          let left = e.clientX-offX;
+          let top = e.clientY-offY;
+          const maxLeft = window.innerWidth - rect.width;
+          const maxTop = window.innerHeight - rect.height;
+          if (left < 0) left = 0;
+          if (top < 0) top = 0;
+          if (left > maxLeft) left = maxLeft;
+          if (top > maxTop) top = maxTop;
+          timeElement.style.left = `${left}px`;
+          timeElement.style.top = `${top}px`;
+          timeElement.style.bottom = "auto";
+          timeElement.style.right = "auto";
+        }
+      }, { signal });
+      document.addEventListener("mouseup", () => { isDrag=false; }, { signal });
+      document.body.appendChild(timeElement);
+      const updateClock = () => { timeElement.textContent = new Date().toLocaleTimeString(); };
+      updateClock();
+      timeElement._interval = setInterval(updateClock, 1000);
+    } else if (timeElement) {
+      clearInterval(timeElement._interval);
+      timeElement.remove();
+      timeElement = null;
+    }
+  });
+}
+
+const ARMOR_SLOT_LABELS = ['Helmet', 'Chestplate', 'Leggings', 'Boots'];
+const ARMOR_ROMAN = ['', 'I', 'II', 'III', 'IV', 'V'];
+const ARMOR_SPRITESHEET_URL = 'https://miniblox.io/textures/spritesheet.36511680aea3.png';
+const ARMOR_SPRITESHEET_SIZE = 1024;
+const ARMOR_ICON_TILE_SIZE = 16;
+const ARMOR_ICON_DISPLAY_SIZE = 24;
+
+const ARMOR_ENCHANT_ABBR = {
+  protection: 'Prot', fire_protection: 'Fire Prot',
+  feather_falling: 'Feath Fall', blast_protection: 'Blast Prot',
+  projectile_protection: 'Proj Prot', respiration: 'Resp',
+  aqua_affinity: 'Aqua Aff', thorns: 'Thorns',
+  depth_strider: 'Depth Str', soul_speed: 'Soul Speed',
+  swift_sneak: 'Swift Sneak', unbreaking: 'Unb',
+  mending: 'Mend',
+};
+
+const armorHudColorForPercent = p => p >= 60 ? '#2ecc71' : p >= 30 ? '#f39c12' : '#e74c3c';
+const armorHudFormatEnchantName = s => s.split('_').map(w => w[0].toUpperCase() + w.slice(1)).join(' ');
+function armorHudGetEnchantLabels(slot) {
+  const list = slot.data?.ench;
+  if (!list || !list.length || !unsafeWindow.Enchantment) return [];
+  return list.map(e => {
+    const def = unsafeWindow.Enchantment.getEnchantmentById(e.id);
+    const rawName = def?.name;
+    const fullName = rawName ? armorHudFormatEnchantName(rawName) : `Enchant ${e.id}`;
+    const shortName = rawName && ARMOR_ENCHANT_ABBR[rawName] ? ARMOR_ENCHANT_ABBR[rawName] : fullName;
+    const roman = ARMOR_ROMAN[e.lvl] || e.lvl;
+    return {
+      short: `${shortName} ${roman}`,
+      full: `${fullName} ${roman}`
+    };
+  });
+}
+
+function armorHudGetIconStyle(itemName) {
+  const spriteMap = unsafeWindow.spriteMap;
+  if (!spriteMap || !spriteMap.get) return '';
+  const sprite = spriteMap.get(itemName);
+  if (!sprite) return '';
+  const pixelX = sprite.x * sprite.size;
+  const pixelY = sprite.y * sprite.size;
+  const scale = ARMOR_ICON_DISPLAY_SIZE / ARMOR_ICON_TILE_SIZE;
+  const bgWidth = ARMOR_SPRITESHEET_SIZE * scale;
+  const bgHeight = ARMOR_SPRITESHEET_SIZE * scale;
+  const posX = -pixelX * scale;
+  const posY = -pixelY * scale;
+  return `width:${ARMOR_ICON_DISPLAY_SIZE}px;height:${ARMOR_ICON_DISPLAY_SIZE}px;background-image:url('${ARMOR_SPRITESHEET_URL}');background-position:${posX}px ${posY}px;background-size:${bgWidth}px ${bgHeight}px;image-rendering:pixelated;flex-shrink:0;`;
+}
+
+createModule(MODULE_NAMES.ARMOR_HUD, "Shows armor durability percentages, enchantments and icons.");
+const armorHudModule = [...gridContainer.children].find(c => c.dataset.moduleName === MODULE_NAMES.ARMOR_HUD);
+let isArmorHudActive = false;
+let armorHudEl = null;
+let armorHudInterval = null;
+let armorHudDrag = false;
+let armorHudOffX = 0;
+let armorHudOffY = 0;
+
+function armorHudRender() {
+  if (!armorHudEl) return;
+  if (!/\/join\//.test(window.location.pathname)) {
+    armorHudEl.style.display = 'none';
+    return;
+  }
+  const fiber = Object.values(document.querySelector("#react") || {})[0];
+  const armor = fiber?.updateQueue?.baseState?.element?.props?.game?.player?.inventory?.armor;
+  if (armorHudDocked && !armorHudDrag) {
+    const size = armorHudIconSize > 0 ? armorHudIconSize : 32;
+    const gap = armorHudGap;
+    Object.assign(armorHudEl.style, {
+      display: 'flex', bottom: '90px', top: 'auto', right: '20px', left: 'auto',
+      cursor: 'default', width: (size * 4 + gap * 3) + 'px', minWidth: 'auto',
+      height: size + 'px', padding: '0', background: 'transparent', border: 'none',
+      backdropFilter: 'none', gap: gap + 'px', opacity: armorHudOpacity,
+    });
+    armorHudEl.innerHTML = Array.from({length: 4}, (_, i) => {
+      const slot = armor?.[i];
+      const base = `width:${size}px;height:${size}px;background:rgba(0,0,0,${armorHudBgOpacity});border:1px solid rgba(255,255,255,0.2);border-radius:4px;position:relative;display:flex;align-items:center;justify-content:center;flex-shrink:0;`;
+      if (!slot) return `<div style="${base}"></div>`;
+      const percent = slot.item?.maxDurability ? Math.round((1 - (slot.itemDamage || 0) / slot.item.maxDurability) * 100) : 100;
+      return `<div style="${base}"><div style="${armorHudGetIconStyle(slot.item?.name)}"></div><div style="position:absolute;bottom:1px;right:2px;font-size:9px;font-weight:700;color:${armorHudColorForPercent(percent)};text-shadow:0 0 3px rgba(0,0,0,0.9);">${percent}%</div></div>`;
+    }).join('');
+    return;
+  }
+  if (!armor) {
+    armorHudEl.style.display = 'none';
+    return;
+  }
+  armorHudEl.style.display = 'block';
+  armorHudEl.style.opacity = armorHudOpacity;
+  armorHudEl.innerHTML = `<div style="font-weight:600;margin-bottom:8px;letter-spacing:0.5px;color:${guiPrimaryColor};">Armor HUD</div>` +
+    Array.from({length: 4}, (_, i) => {
+      const slot = armor[i];
+      const label = ARMOR_SLOT_LABELS[i];
+      if (!slot) return `<div style="display:flex;align-items:center;gap:10px;opacity:0.4;padding:4px 0;"><div style="width:${ARMOR_ICON_DISPLAY_SIZE}px;height:${ARMOR_ICON_DISPLAY_SIZE}px;flex-shrink:0;"></div><span style="flex:1;">${label}</span><span>empty</span></div>`;
+      const percent = slot.item?.maxDurability ? Math.round((1 - (slot.itemDamage || 0) / slot.item.maxDurability) * 100) : 100;
+      const enchants = armorHudGetEnchantLabels(slot);
+      return `<div style="display:flex;align-items:center;gap:10px;padding:4px 0;"><div style="${armorHudGetIconStyle(slot.item?.name)}"></div><div style="flex:1;min-width:0;"><div style="display:flex;justify-content:space-between;gap:12px;"><span>${slot.item?.displayName || label}</span><span style="color:${armorHudColorForPercent(percent)};font-weight:600;">${percent}%</span></div>${enchants.length ? `<div style="opacity:0.7;font-size:11px;">${enchants.map(e => `<span title="${e.full}" style="cursor:default;">${e.short}</span>`).join(', ')}</div>` : ''}</div></div>`;
+    }).join('');
+}
+
+if (armorHudModule && armorHudModule._toggleWrap) {
+  const armorHudDockBtn = document.createElement('div');
+  armorHudDockBtn.id = 'armor-hud-dock-btn';
+  armorHudDockBtn.innerHTML = '<i class="fa fa-thumb-tack"></i>';
+  armorHudDockBtn.title = 'Dock to bottom-right';
+  armorHudDockBtn.style.cssText = `font-size:14px;cursor:pointer;flex-shrink:0;margin-left:10px;color:${armorHudDocked ? guiPrimaryColor : '#666'};text-shadow:${armorHudDocked ? `0 0 8px ${guiPrimaryColor}80` : 'none'};transition:color 0.15s ease,text-shadow 0.15s ease,transform 0.15s ease;`;
+  armorHudDockBtn.addEventListener('mouseenter', () => { if (!armorHudDocked) armorHudDockBtn.style.color = guiPrimaryColor; armorHudDockBtn.style.transform = 'scale(1.15)'; });
+  armorHudDockBtn.addEventListener('mouseleave', () => { if (!armorHudDocked) armorHudDockBtn.style.color = '#666'; armorHudDockBtn.style.transform = 'scale(1)'; });
+  armorHudDockBtn.addEventListener('click', e => {
+    e.stopPropagation();
+    if (!armorHudEl) { showNotification('Enable Armor HUD first'); return; }
+    const docking = !armorHudDocked;
+    if (docking && !/\/join\//.test(window.location.pathname)) { showNotification('You must be in a match to dock'); return; }
+    armorHudDocked = docking;
+    localStorage.setItem('uv2-armorhud-docked', docking);
+    if (!docking) {
+      armorHudEl.style.cssText = 'position:fixed;top:100px;right:20px;left:auto;padding:10px 14px;background:rgba(0,0,0,0.6);backdrop-filter:blur(8px);border:1px solid rgba(255,255,255,0.15);border-radius:8px;z-index:9999;cursor:move;user-select:none;font-family:Segoe UI,Roboto,sans-serif;font-size:14px;color:white;min-width:220px;';
+      armorHudEl.style.display = 'block';
+      armorHudDockBtn.style.color = '#666';
+      armorHudDockBtn.style.textShadow = 'none';
+    } else {
+      armorHudRender();
+      armorHudDockBtn.style.color = guiPrimaryColor;
+      armorHudDockBtn.style.textShadow = `0 0 8px ${guiPrimaryColor}80`;
+    }
+    const statusText = document.querySelector('#armor-hud-status-text');
+    const statusBtn = document.querySelector('#armor-hud-status-btn');
+    if (statusText) statusText.textContent = armorHudDocked ? 'Status: Docked' : 'Status: Floating';
+    if (statusBtn) statusBtn.textContent = armorHudDocked ? 'Undock' : 'Dock Now';
+  });
+  armorHudModule.insertBefore(armorHudDockBtn, armorHudModule._toggleWrap);
+}
+
+let armorHudController = null;
+if (armorHudModule) {
+  armorHudModule.addEventListener("click", () => {
+    isArmorHudActive = !isArmorHudActive;
+    if (armorHudController) { armorHudController.abort(); armorHudController = null; }
+    if (isArmorHudActive) {
+      armorHudController = new AbortController();
+      const signal = armorHudController.signal;
+      armorHudEl = document.createElement('div');
+      armorHudEl.id = 'armor-hud';
+      armorHudEl.style.cssText = 'position:fixed;top:100px;right:20px;left:auto;padding:10px 14px;background:rgba(0,0,0,0.6);backdrop-filter:blur(8px);border:1px solid rgba(255,255,255,0.15);border-radius:8px;z-index:9999;cursor:move;user-select:none;font-family:Segoe UI,Roboto,sans-serif;font-size:14px;color:white;min-width:220px;display:none;';
+      document.body.appendChild(armorHudEl);
+      armorHudEl.addEventListener('mousedown', e => {
+        if (armorHudDocked) return;
+        armorHudDrag = true;
+        armorHudOffX = e.clientX - armorHudEl.getBoundingClientRect().left;
+        armorHudOffY = e.clientY - armorHudEl.getBoundingClientRect().top;
+        e.preventDefault();
+      });
+      document.addEventListener('mousemove', e => {
+        if (!armorHudDrag || !armorHudEl) return;
+        const rect = armorHudEl.getBoundingClientRect();
+        let left = Math.min(Math.max(e.clientX - armorHudOffX, 0), window.innerWidth - rect.width);
+        let top = Math.min(Math.max(e.clientY - armorHudOffY, 0), window.innerHeight - rect.height);
+        armorHudEl.style.left = left + 'px';
+        armorHudEl.style.top = top + 'px';
+        armorHudEl.style.right = 'auto';
+      }, { signal });
+      document.addEventListener('mouseup', () => { armorHudDrag = false; }, { signal });
+      armorHudInterval = setInterval(armorHudRender, 500);
+      armorHudRender();
+    } else {
+      if (armorHudInterval) clearInterval(armorHudInterval);
+      if (armorHudEl) { armorHudEl.remove(); armorHudEl = null; }
+    }
+  });
+}
+sortModulesByFavorite();
+
+  function checkIsVpn(callback) {
+    try {
+      GM_xmlhttpRequest({
+        method: "GET",
+        url: "http://ip-api.com/json/?fields=status,proxy,hosting,query",
+        timeout: 5000,
+        onload(r) {
+          try {
+            const data = JSON.parse(r.responseText);
+            const flagged = data.status === "success" && (data.proxy === true || data.hosting === true);
+            callback(flagged);
+          } catch (e) { callback(false); }
+        },
+        onerror() { callback(false); },
+        ontimeout() { callback(false); }
+      });
+    } catch (e) { callback(false); }
+  }
+
+  function showVpnGate(onContinue) {
+    const existing = document.getElementById('uv2-vpn-gate');
+    if (existing) existing.remove();
+
+    if (document.pointerLockElement) {
+      try { document.exitPointerLock(); } catch (e) {}
+    }
+
+    const overlay = document.createElement('div');
+    overlay.id = 'uv2-vpn-gate';
+    overlay.style.cssText = [
+      'position:fixed;inset:0;z-index:100000;',
+      'display:flex;align-items:center;justify-content:center;',
+      'background:rgba(0,0,0,0.35);backdrop-filter:blur(8px);-webkit-backdrop-filter:blur(8px);',
+      'opacity:0;transition:opacity 0.2s ease;'
+    ].join('');
+
+    const box = document.createElement('div');
+    box.style.cssText = [
+      'background:#141414;border:1px solid rgba(255,255,255,0.08);border-radius:10px;',
+      'padding:28px 32px;max-width:360px;width:90%;text-align:center;',
+      'box-shadow:0 24px 60px rgba(0,0,0,0.7);font-family:MinibloxFont,sans-serif;color:#fff;'
+    ].join('');
+
+    const gateTitle = document.createElement('div');
+    gateTitle.textContent = 'VPN Detected!';
+    gateTitle.style.cssText = 'font-size:22px;color:#e74c3c;margin-bottom:10px;text-shadow:0 0 12px rgba(231,76,60,0.5);';
+    box.appendChild(gateTitle);
+
+    const desc = document.createElement('div');
+    desc.textContent = "We detected that your connection is coming through a VPN/proxy. Please turn it off.";
+    desc.style.cssText = 'font-size:13px;color:#888;margin-bottom:22px;line-height:1.5;';
+    box.appendChild(desc);
+
+    const dontShowRow = document.createElement('label');
+    dontShowRow.style.cssText = 'display:flex;align-items:center;justify-content:center;gap:7px;margin-bottom:18px;cursor:pointer;user-select:none;font-size:12px;color:#888;';
+    const dontShowCheckbox = document.createElement('input');
+    dontShowCheckbox.type = 'checkbox';
+    dontShowCheckbox.style.cssText = 'accent-color:#e74c3c;width:14px;height:14px;cursor:pointer;';
+    const dontShowLabel = document.createElement('span');
+    dontShowLabel.textContent = "Don't show this again";
+    dontShowRow.appendChild(dontShowCheckbox);
+    dontShowRow.appendChild(dontShowLabel);
+    box.appendChild(dontShowRow);
+
+    const btnRow = document.createElement('div');
+    btnRow.style.cssText = 'display:flex;gap:10px;justify-content:center;';
+
+    const ignoreBtn = document.createElement('button');
+ignoreBtn.textContent = 'Ignore';
+ignoreBtn.style.cssText = 'background:#7fff00;color:#111;border:none;border-radius:6px;padding:10px 18px;font-size:14px;font-weight:600;cursor:pointer;font-family:MinibloxFont,sans-serif;transition:transform 0.15s ease;';
+ignoreBtn.addEventListener('mouseenter', () => { ignoreBtn.style.transform = 'scale(1.03)'; });
+ignoreBtn.addEventListener('mouseleave', () => { ignoreBtn.style.transform = 'scale(1)'; });
+
+const notVpnBtn = document.createElement('button');
+notVpnBtn.textContent = "I'm not using a VPN";
+notVpnBtn.style.cssText = 'background:#2a2a2a;color:#fff;border:1px solid #444;border-radius:6px;padding:10px 18px;font-size:14px;cursor:pointer;font-family:MinibloxFont,sans-serif;transition:background 0.15s ease;';
+notVpnBtn.addEventListener('mouseenter', () => { notVpnBtn.style.background = '#3a3a3a'; });
+notVpnBtn.addEventListener('mouseleave', () => { notVpnBtn.style.background = '#2a2a2a'; });
+
+    function dismiss() {
+      overlay.style.opacity = '0';
+      setTimeout(() => overlay.remove(), 200);
+    }
+
+    function persistDontShowAgain() {
+      if (!dontShowCheckbox.checked) return;
+      settings.vpnWarning = false;
+      localStorage.setItem('uv2-setting-vpnwarning', 'false');
+      const toggle = document.querySelector('#uv2-toggle-vpnwarning');
+      if (toggle) toggle.checked = false;
+    }
+
+    ignoreBtn.addEventListener('click', () => {
+      vpnGateDismissed = true;
+      persistDontShowAgain();
+      dismiss();
+      if (typeof onContinue === 'function') onContinue();
+    });
+
+    notVpnBtn.addEventListener('click', () => {
+      window.open('https://discord.com/channels/1328755084066160831/1474909551810842715', '_blank');
+      vpnGateDismissed = true;
+      persistDontShowAgain();
+      dismiss();
+      if (typeof onContinue === 'function') onContinue();
+    });
+
+    btnRow.appendChild(ignoreBtn);
+    btnRow.appendChild(notVpnBtn);
+    box.appendChild(btnRow);
+    overlay.appendChild(box);
+    document.body.appendChild(overlay);
+    setTimeout(() => { overlay.style.opacity = '1'; }, 10);
+  }
+
+  function openUI() {
+  const existingBar = document.getElementById('uv2-bind-bar');
+  if (existingBar) { existingBar.remove(); isBinding = false; }
+  ui.style.display = 'flex';
+  ui.classList.remove('uv2-animate-out');
+  ui.classList.add('uv2-animate-in');
+}
+
+function closeUI() {
+  if (closeUITimeout) { clearTimeout(closeUITimeout); closeUITimeout = null; }
+  ui.classList.replace('uv2-animate-in', 'uv2-animate-out');
+  closeUITimeout = setTimeout(() => {
+    ui.style.display = 'none';
+    ui.classList.remove('uv2-animate-out');
+    uiAnimating = false;
+    closeUITimeout = null;
+  }, 150);
+  uiAnimating = true;
+}
+
+function toggleUI() {
+  if (!introFinished || uiAnimating) return;
+  if (uiVisible) {
+    uiVisible = false;
+    closeUI();
+  } else if (vpnGateDismissed || !settings.vpnWarning) {
+    uiVisible = true;
+    openUI();
+  } else {
+    checkIsVpn(isVpn => {
+      if (isVpn) {
+        showVpnGate(() => { uiVisible = true; openUI(); });
+      } else {
+        uiVisible = true;
+        openUI();
+      }
+    });
+  }
+}
+    document.addEventListener("keydown", event => {
+    const isUiKey = (uiKeybind === 'backtick' && event.key === '`') || (uiKeybind === 'rshift' && event.key === 'Shift' && event.location === 2) || (uiKeybind === 'backslash' && event.key === '\\');
+    if (isUiKey) toggleUI();
+    for (let moduleName in moduleBindings) {
+      if (moduleBindings[moduleName] === event.key) {
+        const now = Date.now();
+        if (!lastKeyPressTime[moduleName] || now - lastKeyPressTime[moduleName] > 200) {
+          const mc = [...gridContainer.children].find(c => c.dataset.moduleName === moduleName);
+          if (mc) mc.click();
+          lastKeyPressTime[moduleName] = now;
+        }
+      }
+    }
+  });
+
+  function restoreModuleStates() {
+    if (!settings.saving) return;
+    isRestoring = true;
+    [...gridContainer.children].forEach(mc => {
+      const savedName = mc.dataset.moduleName;
+      if (!savedName) return;
+      const savedVal = localStorage.getItem('uv2-module-' + savedName);
+      if (savedVal === 'true' && !mc._uv2Active) mc.click();
+      else if (savedVal === 'false' && mc._uv2Active) mc.click();
+    });
+    isRestoring = false;
+  }
+  function saveAllModuleStates() {
+    [...gridContainer.children].forEach(mc => {
+      const savedName = mc.dataset.moduleName;
+      if (!savedName) return;
+      localStorage.setItem('uv2-module-' + savedName, mc._uv2Active ? 'true' : 'false');
+    });
+  }
+  function waitAndRestoreModuleStates() {
+    let attempts = 0;
+    const poll = setInterval(() => {
+      attempts++;
+      if (getGameChat() || attempts >= 40) {
+        clearInterval(poll);
+        restoreModuleStates();
+      }
+    }, 500);
+  }
+  waitAndRestoreModuleStates();
+
+  let afkTriggered = false;
+  let afkAudio = null;
+  let afkAntiAfkWasOff = false;
+  let afkGraceUntil = 0;
+ function showToast(msg, color, duration = 3500) {
+  const existing = document.getElementById('uv2-toast');
+  if (existing) existing.remove();
+  const toast = document.createElement('div');
+  toast.id = 'uv2-toast';
+  toast.textContent = msg;
+  Object.assign(toast.style, {
+    position: 'fixed', top: '-60px', left: '50%', transform: 'translateX(-50%)',
+    background: color, color: '#fff', padding: '10px 22px',
+    borderRadius: '8px', fontSize: '15px', fontFamily: 'MinibloxFont, sans-serif',
+    zIndex: '99999', transition: 'top 0.5s ease, opacity 0.5s ease', opacity: '0',
+    whiteSpace: 'nowrap', boxShadow: '0 4px 16px rgba(0,0,0,0.5)',
+  });
+  document.body.appendChild(toast);
+  setTimeout(() => { toast.style.top = '18px'; toast.style.opacity = '1'; }, 20);
+  setTimeout(() => { toast.style.top = '-60px'; toast.style.opacity = '0'; }, duration);
+  setTimeout(() => { if (toast.parentNode) toast.remove(); }, duration + 700);
+}
+
+function sendAfkChatMessage(msg) {
+  try {
+    const inputs = document.querySelectorAll("input");
+    let chatInput = null;
+    inputs.forEach(i => {
+      if (i.placeholder && i.placeholder.toLowerCase().includes('chat')) chatInput = i;
+    });
+    if (chatInput) {
+      const propsKey = Object.keys(chatInput).find(k => k.startsWith("__reactProps") || k.startsWith("__reactFiber"));
+      if (propsKey) {
+        const props = chatInput[propsKey];
+        const reactProps = props && props.memoizedProps ? props.memoizedProps : props;
+        if (reactProps && reactProps.onChange) {
+          reactProps.onChange({ target: { value: msg } });
+          setTimeout(() => {
+            if (reactProps.onKeyDown) {
+              reactProps.onKeyDown({
+                key: 'Enter',
+                keyCode: 13,
+                which: 13,
+                bubbles: true,
+                target: { value: msg },
+                nativeEvent: { isComposing: false },
+                preventDefault: () => {}
+              });
+            }
+          }, 300);
+          return;
+        }
+      }
+    }
+  } catch(e) {}
+  try {
+    const reactRoot = document.querySelector("#react");
+    if (!reactRoot) return;
+    const fiber = Object.values(reactRoot)[0];
+    const game = fiber && fiber.updateQueue && fiber.updateQueue.baseState && fiber.updateQueue.baseState.element && fiber.updateQueue.baseState.element.props && fiber.updateQueue.baseState.element.props.game;
+    if (game && game.chat && typeof game.chat.addChat === "function") {
+      game.chat.addChat({ text: msg });
+    }
+  } catch(e) {}
+}
+
+function onAfkTriggered() {
+  if (afkTriggered) return;
+  if (!/\/join\//.test(window.location.pathname)) {
+    afkTimer = setTimeout(onAfkTriggered, afkDelay * 1000);
+    return;
+  }
+  afkTriggered = true;
+  afkGraceUntil = Date.now() + 2000;
+  showToast('Anti-AFK enabled', '#e74c3c');
+  if (settings.afkChat) sendAfkChatMessage("I am Currently AFK, Be back momentarily.");
+  const afkMod = [...gridContainer.children].find(c => c.dataset.moduleName === MODULE_NAMES.ANTI_AFK);
+  if (afkMod && !afkMod._uv2Active) {
+    afkAntiAfkWasOff = true;
+    afkMod.click();
+  } else {
+    afkAntiAfkWasOff = false;
+  }
+  if (settings.afkMusic) {
+    afkAudio = new Audio('https://raw.githubusercontent.com/wytlines100/UnverifiedV2/refs/heads/main/AfkSong.mp3');
+    afkAudio.loop = true;
+    afkAudio.volume = 0;
+    afkAudio.play().catch(() => {});
+    let vol = 0;
+    const fadeIn = setInterval(() => {
+      vol = Math.min(1, vol + 0.05);
+      afkAudio.volume = vol;
+      if (vol >= 1) clearInterval(fadeIn);
+    }, 100);
+  }
+}
+
+function onUserReturn() {
+  if (!afkTriggered) return;
+  afkTriggered = false;
+  if (afkAudio) {
+    const audio = afkAudio;
+    afkAudio = null;
+    let vol = audio.volume;
+    const fadeOut = setInterval(() => {
+      vol = Math.max(0, vol - 0.05);
+      audio.volume = vol;
+      if (vol <= 0) {
+        clearInterval(fadeOut);
+        audio.pause();
+        audio.src = '';
+      }
+    }, 100);
+  }
+  if (afkAntiAfkWasOff) {
+    const afkMod = [...gridContainer.children].find(c => c.dataset.moduleName === MODULE_NAMES.ANTI_AFK);
+    if (afkMod && afkMod._uv2Active) {
+      afkMod.click();
+      showToast('Anti-AFK disabled. Welcome Back!', '#2ecc71');
+    }
+    afkAntiAfkWasOff = false;
+  }
+}
+
+function _afkActivityHandler(e) {
+  if (!settings.autoAfk) return;
+  if (!e.isTrusted) return;
+  if (Date.now() < afkGraceUntil) return;
+  onUserReturn();
+  clearTimeout(afkTimer);
+  afkTimer = setTimeout(onAfkTriggered, afkDelay * 1000);
+}
+
+const _afkEvents = ['mousemove', 'keydown', 'mousedown', 'wheel'];
+function startAfkDetector() {
+  _afkEvents.forEach(evt => window.addEventListener(evt, _afkActivityHandler));
+  clearTimeout(afkTimer);
+  afkTimer = setTimeout(onAfkTriggered, afkDelay * 1000);
+}
+
+function stopAfkDetector() {
+  _afkEvents.forEach(evt => window.removeEventListener(evt, _afkActivityHandler));
+  clearTimeout(afkTimer);
+  afkTimer = null;
+  if (afkTriggered) {
+    afkTriggered = false;
+    if (afkAntiAfkWasOff) {
+      const afkMod = [...gridContainer.children].find(c => c.dataset.moduleName === MODULE_NAMES.ANTI_AFK);
+      if (afkMod && afkMod._uv2Active) afkMod.click();
+      afkAntiAfkWasOff = false;
+    }
+  }
+}
+if (settings.autoAfk) startAfkDetector();
+})();
